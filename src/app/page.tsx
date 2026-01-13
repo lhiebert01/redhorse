@@ -6,7 +6,22 @@ export default function Home() {
   const paymentLink = process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK || '#';
 
   return (
-    <main className="min-h-screen bg-fire-gradient relative">
+    <main className="min-h-screen bg-fire-gradient relative overflow-hidden">
+      {/* Background Watermark - Faded Fire Horse */}
+      <div
+        className="fixed inset-0 z-0 pointer-events-none"
+        style={{
+          backgroundImage: 'url(/hero-fire-horse.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          opacity: 0.08,
+          filter: 'blur(2px)',
+        }}
+      />
+      {/* Gradient overlay to blend watermark */}
+      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-black/50 via-transparent to-black/70" />
+
       {/* Admin Test Button - Gear Icon */}
       <a
         href="/admin-test"
@@ -34,7 +49,7 @@ export default function Home() {
         </svg>
       </a>
 
-      <div className="max-w-lg mx-auto px-4 py-8 flex flex-col items-center min-h-screen">
+      <div className="max-w-lg mx-auto px-4 py-8 flex flex-col items-center min-h-screen relative z-10">
         {/* Hero Title */}
         <h1 className="text-4xl md:text-5xl font-bold text-fire-gold tracking-tighter text-glow-gold text-center mt-4 mb-4">
           RED HORSE
