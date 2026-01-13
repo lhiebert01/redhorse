@@ -127,7 +127,7 @@ function RevealContent() {
           backgroundSize: '105%',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat',
-          opacity: 0.35,
+          opacity: 0.55,
           filter: 'blur(1px)',
         }}
       />

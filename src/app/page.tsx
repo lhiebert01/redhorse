@@ -15,7 +15,7 @@ export default function Home() {
           backgroundSize: '105%',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat',
-          opacity: 0.35,
+          opacity: 0.55,
           filter: 'blur(1px)',
         }}
       />
@@ -138,7 +138,7 @@ export default function Home() {
         </div>
 
         {/* Footer / Disclaimer */}
-        <footer className="text-center text-xs text-gray-600 max-w-sm">
+        <footer className="text-center text-sm text-white font-bold max-w-sm">
           <p>
             Strictly for entertainment purposes only. AI-generated artwork.
             <br />
@@ -146,10 +146,10 @@ export default function Home() {
           </p>
           <p className="mt-2">© 2026 Red Horse Oracle. 18+.</p>
           <div className="mt-3 space-x-4">
-            <a href="/terms" className="hover:text-gray-400 underline">
+            <a href="/terms" className="hover:text-fire-gold underline">
               Terms
             </a>
-            <a href="/privacy" className="hover:text-gray-400 underline">
+            <a href="/privacy" className="hover:text-fire-gold underline">
               Privacy
             </a>
           </div>
