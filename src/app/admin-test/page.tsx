@@ -32,6 +32,25 @@ function AdminTestContent() {
     }
   }, [skipPin]);
 
+  // Auto-format date input (MM/DD/YYYY)
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+
+    // Remove all non-numeric characters
+    const numbers = value.replace(/\D/g, '');
+
+    // Auto-format with slashes
+    if (numbers.length <= 2) {
+      value = numbers;
+    } else if (numbers.length <= 4) {
+      value = `${numbers.slice(0, 2)}/${numbers.slice(2)}`;
+    } else {
+      value = `${numbers.slice(0, 2)}/${numbers.slice(2, 4)}/${numbers.slice(4, 8)}`;
+    }
+
+    setBirthDate(value);
+  };
+
   const handlePinSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (pin === '142857') {
@@ -141,13 +160,14 @@ function AdminTestContent() {
             <input
               type="text"
               value={birthDate}
-              onChange={(e) => setBirthDate(e.target.value)}
+              onChange={handleDateChange}
               placeholder="MM/DD/YYYY"
               className="w-full bg-black border border-red-900/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-fire-gold"
+              maxLength={10}
               required
             />
             <p className="text-xs text-gray-500 mt-1">
-              Example: 03/14/1958 or 1990-05-15
+              Just type numbers - slashes auto-added
             </p>
           </div>
 
