@@ -557,11 +557,14 @@ git add -A && git commit -m "message" && git push origin main
 ## API Keys Reference
 
 - **Gemini API Key:** Stored in Vercel as `GEMINI_API_KEY`
-- **Current Key (Jan 2026):** `AIzaSyAE75HbUm6Db6YoKNx-0R16qUluNF6jpso`
+- **NEVER put API keys in this file or any committed file!**
 - **Project:** redhorse (projects/854958522483)
 
-**Note:** Previous key was leaked and disabled. If issues occur, generate new key at:
-https://aistudio.google.com/app/apikey
+**To generate new key:** https://aistudio.google.com/app/apikey
+
+**IMPORTANT:** Google automatically scans public GitHub repos and disables any API keys found. Always store keys ONLY in:
+1. Vercel Environment Variables (for production)
+2. Local `.env.local` file (gitignored, for development)
 
 ---
 
