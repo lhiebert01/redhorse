@@ -134,3 +134,4 @@ For support, email support@redhorseoracle.com
 ---
 
 *"The Fire Horse returns. Your Oracle awaits."* 🔥🐎
+
