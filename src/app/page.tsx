@@ -10,7 +10,7 @@ export default function Home() {
       {/* Admin Test Button - Gear Icon */}
       <a
         href="/admin-test"
-        className="absolute top-4 right-4 p-2 text-gray-600 hover:text-fire-gold transition-colors opacity-30 hover:opacity-100"
+        className="absolute top-4 right-4 p-3 text-gray-400 hover:text-fire-gold transition-all duration-300 opacity-50 hover:opacity-100 hover:rotate-90"
         title="Admin Test"
       >
         <svg
