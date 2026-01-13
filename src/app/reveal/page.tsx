@@ -118,11 +118,6 @@ function RevealContent() {
 
   return (
     <div className="min-h-screen bg-fire-gradient text-fire-gold flex flex-col items-center p-4 py-12">
-      <h1 className="text-3xl md:text-4xl font-bold mb-2 text-center text-glow-gold">
-        YOUR 2026 DECREE
-      </h1>
-      <p className="text-red-400 text-sm mb-8">The Oracle has spoken</p>
-
       <TalismanDisplay prophecy={prophecy} />
 
       <div className="mt-8 text-center">
