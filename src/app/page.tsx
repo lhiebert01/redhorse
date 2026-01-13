@@ -59,21 +59,12 @@ export default function Home() {
 
         {/* Hero Image */}
         <div className="relative w-full max-w-sm mb-6">
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10 rounded-2xl" />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/assets/Year-of-the-Horse-2026-v2.jpeg"
             alt="Year of the Fire Horse 2026 - Talisman of Divine Protection"
             className="w-full h-auto rounded-2xl border-2 border-fire-gold/50 shadow-2xl shadow-red-900/50"
           />
-          <div className="absolute bottom-4 left-0 right-0 z-20 text-center">
-            <p className="text-white text-sm font-semibold drop-shadow-lg">
-              The Fire Horse returns once every 60 years.
-            </p>
-            <p className="text-red-400 text-xs drop-shadow-lg">
-              Chaos is coming. Do not guess your destiny.
-            </p>
-          </div>
         </div>
 
         {/* Product Card */}
