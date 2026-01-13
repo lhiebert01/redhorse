@@ -56,17 +56,36 @@ export default function Home() {
 
         {/* Product Card */}
         <div className="w-full border-glow bg-black/60 backdrop-blur-sm p-8 rounded-2xl space-y-6 mb-8">
+          {/* Section Header */}
+          <div className="text-center">
+            <p className="text-fire-gold font-bold text-lg">Choose Your Path</p>
+            <p className="text-gray-400 text-xs">Select one mode at checkout</p>
+          </div>
+
           {/* Product Modes */}
-          <div className="space-y-4">
+          <div className="space-y-3">
             {Object.values(PRODUCT_MODES).map((mode) => (
               <div
                 key={mode.id}
-                className="flex items-center gap-4 text-red-200 hover:text-white transition-colors"
+                className="bg-red-950/30 border border-red-900/30 rounded-xl p-4 hover:border-fire-gold/50 transition-colors"
               >
-                <span className="text-3xl">{mode.emoji}</span>
-                <div>
-                  <span className="font-bold text-fire-gold">{mode.tagline}:</span>
-                  <span className="ml-2 text-sm">{mode.description}</span>
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl">{mode.emoji}</span>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-fire-gold">{mode.name}</span>
+                      <span className="text-gray-500 text-xs">({mode.tagline})</span>
+                    </div>
+                    <p className="text-white text-sm font-semibold mt-1">
+                      → {mode.description}
+                    </p>
+                    <p className="text-gray-400 text-xs mt-1">
+                      {mode.fullDescription}
+                    </p>
+                    <p className="text-red-400 text-xs mt-1 italic">
+                      Example: &quot;{mode.example}&quot;
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}

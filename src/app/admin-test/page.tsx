@@ -4,10 +4,10 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 const FOCUS_MODES = [
-  { id: 'wealth', name: 'Wealth Mode', description: 'Generate 6 Lucky Numbers' },
-  { id: 'power', name: 'Power Mode', description: 'Get Your Strategic Motto' },
-  { id: 'love', name: 'Love Mode', description: 'Receive Your Relationship Decree' },
-  { id: 'shield', name: 'Shield Mode', description: 'Obtain Your Protective Mantra' },
+  { id: 'wealth', name: 'Wealth Mode', description: '6 Lucky Numbers (XX-XX-XX-XX-XX-XX)' },
+  { id: 'power', name: 'Power Mode', description: '3-Word Strategic Motto (e.g., STRIKE THE NORTH)' },
+  { id: 'love', name: 'Love Mode', description: '4-Word Love Phrase (e.g., LOVE FINDS YOU WORTHY)' },
+  { id: 'shield', name: 'Shield Mode', description: '3-Word Protective Mantra (e.g., FIRE SHIELDS ME)' },
 ];
 
 export default function AdminTestPage() {

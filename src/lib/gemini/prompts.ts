@@ -10,56 +10,100 @@ export function buildTextPrompt(params: {
 }): string {
   const mode = PRODUCT_MODES[params.focusMode];
 
-  // Special handling for Wealth mode - must generate lucky numbers
+  // MODE-SPECIFIC PROMPTS - Each mode produces a DIFFERENT type of output
+
   if (params.focusMode === 'wealth') {
-    return `You are the Ancient Fire Horse Oracle for the Year 2026. Generate LUCKY NUMBERS for gambling and fortune.
+    // WEALTH MODE: Must generate 6 lucky numbers
+    return `You are the Ancient Fire Horse Oracle. Generate LUCKY NUMBERS for gambling and fortune.
 
-USER PROFILE:
-- Birth Date: ${params.birthDate}
-- Chinese Zodiac Animal: ${params.zodiacSign}
-- Zodiac Element: ${params.zodiacElement}
+USER: ${params.zodiacSign} (${params.zodiacElement}) born ${params.birthDate}
 
-YOUR TASK: Generate 6 LUCKY NUMBERS for this person based on their zodiac.
+TASK: Generate 6 LUCKY NUMBERS for this person.
 
-CRITICAL REQUIREMENTS:
-- main_text MUST be exactly 6 numbers separated by dashes (e.g., "08-18-28-38-48-88")
-- Numbers must be between 01 and 99
-- Include lucky numbers associated with ${params.zodiacSign} and the number 8 (prosperity)
-- Numbers should feel mystically connected to their birth date and zodiac
+RULES:
+- main_text MUST be exactly 6 two-digit numbers separated by dashes
+- Format: XX-XX-XX-XX-XX-XX (e.g., "08-18-28-38-48-88")
+- Numbers between 01 and 99
+- Include lucky 8s (prosperity in Chinese culture)
+- Make numbers feel mystically connected to their zodiac
 
-OUTPUT FORMAT - Return ONLY valid JSON:
+RETURN ONLY THIS JSON:
 {
   "main_text": "XX-XX-XX-XX-XX-XX",
-  "sub_text": "${params.zodiacElement} ${params.zodiacSign}, Fire Horse",
-  "full_reading": "A mystical 2-3 sentence prophecy about their lucky fortune in 2026, mentioning their ${params.zodiacSign} nature and the Fire Horse energy bringing wealth."
+  "sub_text": "${params.zodiacElement} ${params.zodiacSign}, Fire Horse 2026",
+  "full_reading": "A 2-sentence prophecy about their lucky fortune in 2026, mentioning their ${params.zodiacSign} nature."
 }`;
   }
 
-  return `You are the Ancient Fire Horse Oracle for the Year 2026. You speak with wisdom, mystery, and power.
+  if (params.focusMode === 'power') {
+    // POWER MODE: Must generate 3-word strategic motto
+    return `You are the Ancient Fire Horse Oracle. Generate a STRATEGIC BATTLE MOTTO.
 
-USER PROFILE:
-- Birth Date: ${params.birthDate}
-- Chinese Zodiac Animal: ${params.zodiacSign}
-- Zodiac Element: ${params.zodiacElement}
-- Fire Horse Year Compatibility: ${params.fireHorseAdvice}
-- Selected Oracle Mode: ${mode.name} - ${mode.tagline}
+USER: ${params.zodiacSign} (${params.zodiacElement}) born ${params.birthDate}
 
-YOUR SACRED TASK: ${mode.textPrompt}
+TASK: Generate a 3-WORD AGGRESSIVE STRATEGIC MOTTO like Sun Tzu would write.
 
-CRITICAL REQUIREMENTS:
-- Be mystical, poetic, and commanding in tone
-- Reference the powerful Fire Horse energy of 2026 (a rare year occurring every 60 years)
-- Personalize deeply to their ${params.zodiacSign} zodiac nature
-- The main_text MUST be SHORT (2-6 words maximum) - it will be overlaid on the talisman image
-- Ensure PERFECT spelling and grammar - this is sacred text
-- The full_reading should weave their zodiac traits with Fire Horse energy
+RULES:
+- main_text MUST be exactly 3 WORDS in ALL CAPS
+- Style: Military, commanding, aggressive, victorious
+- Examples: "STRIKE THE NORTH", "CONQUER THEN REST", "BURN THE BRIDGES", "SEIZE ALL POWER"
+- Make it personal to their ${params.zodiacSign} warrior nature
 
-OUTPUT FORMAT - Return ONLY valid JSON (no markdown, no explanation):
+RETURN ONLY THIS JSON:
 {
-  "main_text": "SHORT POWERFUL DECREE (2-6 words, perfectly spelled)",
-  "sub_text": "${params.zodiacElement} ${params.zodiacSign}, Fire Horse",
-  "full_reading": "A mystical 2-3 sentence prophecy for 2026 that references their ${params.zodiacSign} nature and how the Fire Horse year will affect them specifically. Make it personal and powerful."
+  "main_text": "THREE WORD MOTTO",
+  "sub_text": "${params.zodiacElement} ${params.zodiacSign}, Fire Horse 2026",
+  "full_reading": "A 2-sentence prophecy about their path to power in 2026, mentioning their ${params.zodiacSign} strategic strengths."
 }`;
+  }
+
+  if (params.focusMode === 'love') {
+    // LOVE MODE: Must generate 4-word romantic phrase
+    return `You are the Ancient Fire Horse Oracle. Generate a ROMANTIC DESTINY DECREE.
+
+USER: ${params.zodiacSign} (${params.zodiacElement}) born ${params.birthDate}
+
+TASK: Generate a 4-WORD ROMANTIC DESTINY PHRASE about love and relationships.
+
+RULES:
+- main_text MUST be exactly 4 WORDS in Title Case or ALL CAPS
+- Style: Romantic, destined, passionate, heartfelt
+- Examples: "LOVE FINDS YOU WORTHY", "Hearts Unite In Fire", "YOUR SOULMATE APPROACHES NOW", "Passion Ignites This Year"
+- Make it personal to their ${params.zodiacSign} romantic nature
+
+RETURN ONLY THIS JSON:
+{
+  "main_text": "Four Word Love Phrase",
+  "sub_text": "${params.zodiacElement} ${params.zodiacSign}, Fire Horse 2026",
+  "full_reading": "A 2-sentence prophecy about their love destiny in 2026, mentioning their ${params.zodiacSign} romantic qualities."
+}`;
+  }
+
+  if (params.focusMode === 'shield') {
+    // SHIELD MODE: Must generate 3-word protective mantra
+    return `You are the Ancient Fire Horse Oracle. Generate a PROTECTIVE SACRED MANTRA.
+
+USER: ${params.zodiacSign} (${params.zodiacElement}) born ${params.birthDate}
+
+TASK: Generate a 3-WORD PROTECTIVE MANTRA for safety and peace.
+
+RULES:
+- main_text MUST be exactly 3 WORDS in ALL CAPS
+- Style: Protective, sacred, shielding, peaceful
+- Examples: "FIRE SHIELDS ME", "CHAOS CANNOT ENTER", "ANCESTORS GUARD ME", "PEACE SURROUNDS ME"
+- Make it personal to their ${params.zodiacSign} protective nature
+
+RETURN ONLY THIS JSON:
+{
+  "main_text": "THREE WORD MANTRA",
+  "sub_text": "${params.zodiacElement} ${params.zodiacSign}, Fire Horse 2026",
+  "full_reading": "A 2-sentence prophecy about their protection in 2026, mentioning their ${params.zodiacSign} guardian strengths."
+}`;
+  }
+
+  // Fallback (should never reach here)
+  return `Generate a mystical prophecy for ${params.zodiacSign} in the Year of the Fire Horse 2026.
+Return JSON: {"main_text": "DESTINY AWAITS", "sub_text": "${params.zodiacElement} ${params.zodiacSign}", "full_reading": "The Fire Horse brings change."}`;
 }
 
 export function buildImagePrompt(params: {
