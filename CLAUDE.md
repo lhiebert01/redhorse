@@ -411,3 +411,140 @@ This project's Gemini implementation is modeled after `C:\src\neo-storyteller`:
 - Same `@google/genai` package
 - Same `gemini-3-pro-preview` and `gemini-3-pro-image-preview` models
 - Similar API structure for content generation
+
+---
+
+## Session Update: January 13, 2026
+
+### What Was Completed This Session
+
+#### 1. Sophisticated Art Style System for Image Generation
+Completely rewrote `src/lib/gemini/prompts.ts` with:
+
+**Art Styles (randomly selected):**
+- **Dunhuang** - Mogao Cave mural style with Apsaras, floating silk ribbons
+- **Ink Wash** - Traditional Chinese shuimo with ethereal brush strokes
+- **Song Dynasty** - Meticulous gongbi brushwork, elegant and refined
+- **Tang Dynasty** - Opulent imperial style, bold and ornamental
+
+**Mode-Specific Visual Themes:**
+| Mode | Atmosphere | Symbols |
+|------|-----------|---------|
+| Wealth | Abundance, prosperity | Gold ingots, peonies, koi fish, lucky coins |
+| Power | Authority, dominance | Mountain peaks, storm clouds, war banners |
+| Love | Romance, harmony | Peach blossoms, mandarin ducks, red threads |
+| Shield | Protection, sacred | Bagua mirrors, Fu lions, protective seals |
+
+**Zodiac Animals:** All 12 animals with Chinese characters (鼠牛虎兔龙蛇马羊猴鸡狗猪) and cultural descriptions
+
+#### 2. Admin Test Loop Enhancement
+- Added "Generate Another Test" button on reveal page
+- `skip_pin=true` URL param allows returning to admin console without re-entering PIN
+- Flow: Gear → PIN → Generate → View Result → "Generate Another Test" → Repeat
+
+#### 3. Image Assets & Background Watermark
+**All images now in `/public/assets/`:**
+- `Year-of-Horse-Hero-Image1.jpeg` through `Image9.jpeg`
+- `Year-of-the-Horse-2026-v2.jpeg` (new Dunhuang-style hero image)
+- `hero-fire-horse.jpg` (original, kept for reference)
+- `og-image.jpg` (original, kept for reference)
+
+**Background Watermark:**
+- Uses `Year-of-Horse-Hero-Image3.jpeg` (Medallion layout with all 12 zodiac animals)
+- Applied to both landing page and reveal page
+- Settings: 35% opacity, 105% size, 1px blur
+- Gradient overlay for blending
+
+#### 4. Updated Hero Image
+- New hero: `Year-of-the-Horse-2026-v2.jpeg`
+- Vertical Dunhuang-style talisman with built-in text
+- Removed redundant overlay text
+
+#### 5. Updated OG Image
+- Changed to `Year-of-Horse-Hero-Image3.jpeg` for better social sharing
+- Shows all 12 zodiac animals clearly (good for "which one are you?" virality)
+
+---
+
+## NEXT STEPS: Testing Required
+
+### Priority 1: Test All Four Path Modes
+Use the admin test console to verify each mode generates correct output:
+
+**Test Procedure:**
+1. Go to https://redhorse-omega.vercel.app/
+2. Click gear icon (top-right, subtle)
+3. Enter PIN: `142857`
+4. For each mode, test with a sample birth date (e.g., `03/15/1990`)
+
+**Expected Results:**
+
+| Mode | Main Text Format | Example |
+|------|-----------------|---------|
+| **Wealth** | 6 two-digit numbers: XX-XX-XX-XX-XX-XX | `08-18-28-38-48-88` |
+| **Power** | 3-word motto in ALL CAPS | `STRIKE THE NORTH` |
+| **Love** | 4-word phrase in Title Case or CAPS | `LOVE FINDS YOU WORTHY` |
+| **Shield** | 3-word mantra in ALL CAPS | `FIRE SHIELDS ME` |
+
+**Check For:**
+- [ ] Text matches expected format for each mode
+- [ ] Image generates successfully (not blank/error)
+- [ ] Image has Fire Horse as central figure
+- [ ] Image has user's zodiac animal as secondary element
+- [ ] Art style looks authentic Chinese (Dunhuang/Song/Tang/Ink Wash)
+- [ ] Text overlays are legible on the image
+- [ ] Colors are vibrant (reds, golds, blues, greens)
+
+### Priority 2: Verify Image Quality
+The new prompts should produce museum-quality Dunhuang-style images:
+- Fire Horse wreathed in flames as dominant figure
+- User's zodiac animal complementing the composition
+- Traditional Chinese art aesthetic
+- Ornate borders and medallion framing
+- Proper color palettes (vermilion, gold, azurite blue, malachite green)
+
+### Priority 3: Check Save Talisman Feature
+- Click "Save Talisman" button on reveal page
+- Verify downloaded image is complete (not cut off)
+- Verify image includes the full talisman display
+
+### Priority 4: Social Sharing Test
+- Share the URL on social media or use a preview tool
+- Verify OG image shows the Medallion layout with all 12 zodiac animals
+
+---
+
+## Known Issues / Watch For
+
+1. **Gemini API Rate Limits** - If testing too quickly, may hit rate limits
+2. **Image Generation Time** - Takes 30-60 seconds; don't interrupt
+3. **Text Accuracy** - Gemini may occasionally not follow exact format; prompts have been tightened but verify
+
+---
+
+## Quick Commands
+
+```bash
+# Run locally
+npm run dev
+
+# Type check before push
+npx tsc --noEmit
+
+# Push changes
+git add -A && git commit -m "message" && git push origin main
+
+# Check Vercel deployment status
+# Visit: https://vercel.com/dashboard
+```
+
+---
+
+## API Keys Reference
+
+- **Gemini API Key:** Stored in Vercel as `GEMINI_API_KEY`
+- **Current Key (Jan 2026):** `AIzaSyAE75HbUm6Db6YoKNx-0R16qUluNF6jpso`
+- **Project:** redhorse (projects/854958522483)
+
+**Note:** Previous key was leaked and disabled. If issues occur, generate new key at:
+https://aistudio.google.com/app/apikey
