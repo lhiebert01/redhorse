@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import Image from 'next/image';
 import html2canvas from 'html2canvas';
 import { Prophecy } from '@/types/prophecy';
 import ShareButtons from './ShareButtons';
@@ -21,18 +20,32 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
     setIsCapturing(true);
 
     try {
+      // Wait a moment for any rendering to complete
+      await new Promise(resolve => setTimeout(resolve, 100));
+
       // Use html2canvas to capture the full talisman card
       const canvas = await html2canvas(talismanRef.current, {
         backgroundColor: '#0a0000',
         scale: 2, // Higher quality
         useCORS: true, // Allow cross-origin images
-        allowTaint: true,
+        allowTaint: false,
         logging: false,
+        imageTimeout: 15000,
+        onclone: (clonedDoc) => {
+          // Ensure images are fully loaded in the clone
+          const images = clonedDoc.getElementsByTagName('img');
+          for (let i = 0; i < images.length; i++) {
+            images[i].style.opacity = '1';
+          }
+        }
       });
 
       // Convert to blob and download
       canvas.toBlob((blob) => {
-        if (!blob) return;
+        if (!blob) {
+          console.error('Failed to create blob');
+          return;
+        }
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -80,29 +93,32 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
         </h1>
         <p className="text-red-400 text-sm mb-6">The Oracle has spoken</p>
 
-        {/* Talisman Image */}
+        {/* Talisman Image - Using regular img for html2canvas compatibility */}
         <div className="relative border-4 border-fire-gold rounded-2xl overflow-hidden shadow-2xl glow-gold bg-black">
           {prophecy.image_url ? (
             <>
               {!imageLoaded && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black">
+                <div className="absolute inset-0 flex items-center justify-center bg-black z-10">
                   <div className="animate-pulse text-fire-gold">Loading talisman...</div>
                 </div>
               )}
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={prophecy.image_url}
                 alt="Your Fire Horse Talisman"
-                width={400}
-                height={711}
-                className={`w-full h-auto transition-opacity duration-500 ${
+                crossOrigin="anonymous"
+                className={`w-full max-w-[400px] h-auto transition-opacity duration-500 ${
                   imageLoaded ? 'opacity-100' : 'opacity-0'
                 }`}
                 onLoad={() => setImageLoaded(true)}
-                priority
+                onError={() => {
+                  console.error('Image failed to load');
+                  setImageLoaded(true); // Show anyway
+                }}
               />
             </>
           ) : (
-            <div className="w-full aspect-[9/16] bg-gradient-to-b from-red-950 to-black flex items-center justify-center">
+            <div className="w-[400px] aspect-[9/16] bg-gradient-to-b from-red-950 to-black flex items-center justify-center">
               <p className="text-red-600">Image unavailable</p>
             </div>
           )}
