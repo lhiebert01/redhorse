@@ -414,7 +414,21 @@ This project's Gemini implementation is modeled after `C:\src\neo-storyteller`:
 
 ---
 
-## Session Update: January 13, 2026
+## Session Update: January 13, 2026 (Evening)
+
+### Current Status: READY FOR TESTING
+
+**What's Working:**
+- Landing page with new Dunhuang-style hero image
+- Background watermark (55% opacity, Medallion layout with all 12 zodiac animals)
+- OG images for LinkedIn and Facebook (Image 2 - Fire Horse centered)
+- Admin test console with loop feature (no PIN re-entry needed)
+- Footer disclaimer (white, bold, visible)
+- Social sharing previews verified on LinkedIn Post Inspector and Facebook Sharing Debugger
+
+**Live URL:** https://redhorse-omega.vercel.app/
+
+---
 
 ### What Was Completed This Session
 
@@ -548,3 +562,72 @@ git add -A && git commit -m "message" && git push origin main
 
 **Note:** Previous key was leaked and disabled. If issues occur, generate new key at:
 https://aistudio.google.com/app/apikey
+
+---
+
+## Final Session State (January 13, 2026 - End of Day)
+
+### Completed & Verified:
+- [x] Sophisticated art style system (Dunhuang, Ink Wash, Song, Tang Dynasty)
+- [x] Mode-specific visual themes and symbols in prompts
+- [x] Admin test console with "Generate Another Test" loop
+- [x] All image assets in `/public/assets/`
+- [x] Background watermark at 55% opacity (Medallion layout)
+- [x] New hero image: `Year-of-the-Horse-2026-v2.jpeg` (Dunhuang talisman)
+- [x] OG image: `Year-of-Horse-Hero-Image2.jpeg` (Fire Horse head visible)
+- [x] LinkedIn Post Inspector - VERIFIED WORKING
+- [x] Facebook Sharing Debugger - VERIFIED WORKING
+- [x] Footer text white/bold and visible
+- [x] Fixed metadataBase URL (hardcoded to redhorse-omega.vercel.app)
+
+### Tomorrow's Testing Checklist:
+1. **Test All Four Path Modes via Admin Console:**
+   - Gear icon → PIN: `142857` → Test each mode
+   - Wealth: Should generate 6 lucky numbers (XX-XX-XX-XX-XX-XX)
+   - Power: Should generate 3-word motto (STRIKE THE NORTH)
+   - Love: Should generate 4-word phrase (LOVE FINDS YOU WORTHY)
+   - Shield: Should generate 3-word mantra (FIRE SHIELDS ME)
+
+2. **Verify Image Quality:**
+   - Fire Horse as central dominant figure
+   - User's zodiac animal as secondary element
+   - Authentic Chinese art style (Dunhuang/Song/Tang/Ink Wash)
+   - Vibrant colors (vermilion, gold, azurite blue)
+   - Text overlays legible
+
+3. **Test Save Talisman Feature:**
+   - Download should capture full talisman (not cut off)
+
+4. **Test Full Payment Flow (if ready):**
+   - Stripe checkout → webhook → prophecy generation → reveal page
+
+### Image Assets Reference:
+| File | Purpose |
+|------|---------|
+| `Year-of-the-Horse-2026-v2.jpeg` | Hero image on landing page |
+| `Year-of-Horse-Hero-Image2.jpeg` | OG image for social sharing |
+| `Year-of-Horse-Hero-Image3.jpeg` | Background watermark |
+| `hero-fire-horse.jpg` | Original hero (archived) |
+| `og-image.jpg` | Original OG (archived) |
+
+### Quick Start Tomorrow:
+```bash
+# Navigate to project
+cd /mnt/c/src/redhorse
+
+# Check status
+git status
+
+# Pull any changes
+git pull origin main
+
+# Run locally if needed
+npm run dev
+```
+
+### Admin Test Console Quick Access:
+1. https://redhorse-omega.vercel.app/
+2. Click gear icon (top-right)
+3. PIN: `142857`
+4. Select birth date and mode
+5. Generate → View result → "Generate Another Test" to loop
