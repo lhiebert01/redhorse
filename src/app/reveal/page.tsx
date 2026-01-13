@@ -10,6 +10,7 @@ import GeneratingState from '@/components/reveal/GeneratingState';
 function RevealContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('session_id');
+  const fromAdmin = searchParams.get('from') === 'admin';
 
   const [prophecy, setProphecy] = useState<Prophecy | null>(null);
   const [status, setStatus] = useState<'loading' | 'generating' | 'ready' | 'error'>('loading');
@@ -120,13 +121,30 @@ function RevealContent() {
     <div className="min-h-screen bg-fire-gradient text-fire-gold flex flex-col items-center p-4 py-12">
       <TalismanDisplay prophecy={prophecy} />
 
-      <div className="mt-8 text-center">
-        <a
-          href="/"
-          className="text-gray-500 text-sm hover:text-gray-300 underline"
-        >
-          Get another reading
-        </a>
+      <div className="mt-8 text-center space-y-4">
+        {fromAdmin ? (
+          <>
+            <a
+              href="/admin-test?skip_pin=true"
+              className="block bg-fire-gold text-black font-bold px-8 py-3 rounded-xl hover:scale-105 transition-transform"
+            >
+              Generate Another Test
+            </a>
+            <a
+              href="/"
+              className="block text-gray-500 text-sm hover:text-gray-300 underline"
+            >
+              Return to Home
+            </a>
+          </>
+        ) : (
+          <a
+            href="/"
+            className="text-gray-500 text-sm hover:text-gray-300 underline"
+          >
+            Get another reading
+          </a>
+        )}
       </div>
     </div>
   );

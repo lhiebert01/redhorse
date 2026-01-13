@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
 const FOCUS_MODES = [
   { id: 'wealth', name: 'Wealth Mode', description: '6 Lucky Numbers (XX-XX-XX-XX-XX-XX)' },
@@ -10,8 +11,11 @@ const FOCUS_MODES = [
   { id: 'shield', name: 'Shield Mode', description: '3-Word Protective Mantra (e.g., FIRE SHIELDS ME)' },
 ];
 
-export default function AdminTestPage() {
+function AdminTestContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const skipPin = searchParams.get('skip_pin') === 'true';
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
@@ -20,6 +24,13 @@ export default function AdminTestPage() {
   const [focusMode, setFocusMode] = useState('wealth');
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState('');
+
+  // Auto-authenticate if coming back from reveal page
+  useEffect(() => {
+    if (skipPin) {
+      setIsAuthenticated(true);
+    }
+  }, [skipPin]);
 
   const handlePinSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,8 +65,8 @@ export default function AdminTestPage() {
         throw new Error(data.error || 'Generation failed');
       }
 
-      // Redirect to reveal page with the session ID
-      router.push(`/reveal?session_id=${data.sessionId}`);
+      // Redirect to reveal page with the session ID and admin flag
+      router.push(`/reveal?session_id=${data.sessionId}&from=admin`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
       setIsGenerating(false);
@@ -201,5 +212,22 @@ export default function AdminTestPage() {
         </a>
       </div>
     </div>
+  );
+}
+
+function LoadingState() {
+  return (
+    <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4">
+      <div className="animate-spin text-4xl">🔥</div>
+      <p className="text-gray-400 mt-4">Loading...</p>
+    </div>
+  );
+}
+
+export default function AdminTestPage() {
+  return (
+    <Suspense fallback={<LoadingState />}>
+      <AdminTestContent />
+    </Suspense>
   );
 }

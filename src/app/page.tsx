@@ -10,7 +10,7 @@ export default function Home() {
       {/* Admin Test Button - Gear Icon */}
       <a
         href="/admin-test"
-        className="absolute top-4 right-4 p-3 text-gray-400 hover:text-fire-gold transition-all duration-300 opacity-50 hover:opacity-100 hover:rotate-90"
+        className="absolute top-4 right-4 p-3 text-gray-400 hover:text-fire-gold transition-all duration-300 opacity-50 hover:opacity-100 hover:rotate-90 z-20"
         title="Admin Test"
       >
         <svg
@@ -34,28 +34,35 @@ export default function Home() {
         </svg>
       </a>
 
-      <div className="max-w-lg mx-auto px-4 py-12 flex flex-col items-center justify-center min-h-screen">
-        {/* Hero Section */}
-        <div className="text-center space-y-6 mb-10">
-          <h1 className="text-5xl md:text-6xl font-bold text-fire-gold tracking-tighter text-glow-gold">
-            RED HORSE
-            <br />
-            ORACLE
-          </h1>
+      <div className="max-w-lg mx-auto px-4 py-8 flex flex-col items-center min-h-screen">
+        {/* Hero Title */}
+        <h1 className="text-4xl md:text-5xl font-bold text-fire-gold tracking-tighter text-glow-gold text-center mt-4 mb-4">
+          RED HORSE
+          <br />
+          ORACLE
+        </h1>
 
-          <p className="text-white text-lg opacity-90 leading-relaxed">
-            The Fire Horse returns once every 60 years.
-            <br />
-            <span className="text-red-400">Chaos is coming.</span>
-            <br />
-            <span className="font-bold text-fire-gold text-glow-gold">
-              Do not guess your destiny.
-            </span>
-          </p>
+        {/* Hero Image */}
+        <div className="relative w-full max-w-sm mb-6">
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10 rounded-2xl" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/hero-fire-horse.jpg"
+            alt="Year of the Fire Horse 2026 - Sacred Talisman"
+            className="w-full h-auto rounded-2xl border-2 border-fire-gold/50 shadow-2xl shadow-red-900/50"
+          />
+          <div className="absolute bottom-4 left-0 right-0 z-20 text-center">
+            <p className="text-white text-sm font-semibold drop-shadow-lg">
+              The Fire Horse returns once every 60 years.
+            </p>
+            <p className="text-red-400 text-xs drop-shadow-lg">
+              Chaos is coming. Do not guess your destiny.
+            </p>
+          </div>
         </div>
 
         {/* Product Card */}
-        <div className="w-full border-glow bg-black/60 backdrop-blur-sm p-8 rounded-2xl space-y-6 mb-8">
+        <div className="w-full border-glow bg-black/80 backdrop-blur-sm p-6 rounded-2xl space-y-5 mb-6">
           {/* Section Header */}
           <div className="text-center">
             <p className="text-fire-gold font-bold text-lg">Choose Your Path</p>
@@ -67,23 +74,19 @@ export default function Home() {
             {Object.values(PRODUCT_MODES).map((mode) => (
               <div
                 key={mode.id}
-                className="bg-red-950/30 border border-red-900/30 rounded-xl p-4 hover:border-fire-gold/50 transition-colors"
+                className="bg-red-950/40 border border-red-900/30 rounded-xl p-3 hover:border-fire-gold/50 transition-colors"
               >
                 <div className="flex items-start gap-3">
                   <span className="text-2xl">{mode.emoji}</span>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-fire-gold">{mode.name}</span>
-                      <span className="text-gray-500 text-xs">({mode.tagline})</span>
+                      <span className="font-bold text-fire-gold text-sm">{mode.name}</span>
                     </div>
-                    <p className="text-white text-sm font-semibold mt-1">
-                      → {mode.description}
+                    <p className="text-white text-sm font-semibold">
+                      {mode.description}
                     </p>
-                    <p className="text-gray-400 text-xs mt-1">
-                      {mode.fullDescription}
-                    </p>
-                    <p className="text-red-400 text-xs mt-1 italic">
-                      Example: &quot;{mode.example}&quot;
+                    <p className="text-gray-500 text-xs italic">
+                      e.g., &quot;{mode.example}&quot;
                     </p>
                   </div>
                 </div>
@@ -113,15 +116,15 @@ export default function Home() {
           </a>
 
           {/* Trust Badges */}
-          <div className="flex justify-center gap-6 text-xs text-gray-500">
-            <span>🔒 Secure Payment</span>
-            <span>⚡ Instant Delivery</span>
-            <span>🎨 AI Generated</span>
+          <div className="flex justify-center gap-4 text-xs text-gray-500">
+            <span>🔒 Secure</span>
+            <span>⚡ Instant</span>
+            <span>🎨 AI Art</span>
           </div>
         </div>
 
         {/* Social Proof */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <p className="text-red-400 text-sm italic">
             &quot;The Oracle revealed my path. I won $500 the next day.&quot;
           </p>
@@ -136,7 +139,7 @@ export default function Home() {
             Not financial, legal, or gambling advice.
           </p>
           <p className="mt-2">© 2026 Red Horse Oracle. 18+.</p>
-          <div className="mt-4 space-x-4">
+          <div className="mt-3 space-x-4">
             <a href="/terms" className="hover:text-gray-400 underline">
               Terms
             </a>
