@@ -66,7 +66,7 @@ export async function generateProphecy(options: GenerateOptions): Promise<Genera
   // Extract image from response
   let imageData: string | null = null;
   for (const part of imageResponse.candidates?.[0]?.content?.parts || []) {
-    if (part.inlineData) {
+    if (part.inlineData?.data) {
       imageData = part.inlineData.data;
       break;
     }
