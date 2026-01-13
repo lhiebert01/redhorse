@@ -20,8 +20,9 @@ export const ErrorCodes = {
 
 export function isRetryableError(error: unknown): boolean {
   if (error instanceof ProphecyError) {
-    return [ErrorCodes.GENERATION_FAILED, ErrorCodes.STORAGE_ERROR].includes(
-      error.code as (typeof ErrorCodes)[keyof typeof ErrorCodes]
+    return (
+      error.code === ErrorCodes.GENERATION_FAILED ||
+      error.code === ErrorCodes.STORAGE_ERROR
     );
   }
 
