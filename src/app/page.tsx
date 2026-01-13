@@ -15,12 +15,12 @@ export default function Home() {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
-          opacity: 0.08,
-          filter: 'blur(2px)',
+          opacity: 0.25,
+          filter: 'blur(1px)',
         }}
       />
       {/* Gradient overlay to blend watermark */}
-      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-black/50 via-transparent to-black/70" />
+      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-black/30 via-transparent to-black/40" />
 
       {/* Admin Test Button - Gear Icon */}
       <a
