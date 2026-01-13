@@ -7,15 +7,15 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-fire-gradient relative overflow-hidden">
-      {/* Background Watermark - Faded Fire Horse */}
+      {/* Background Watermark - Zodiac Medallion */}
       <div
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
-          backgroundImage: 'url(/hero-fire-horse.jpg)',
-          backgroundSize: '60%',
+          backgroundImage: 'url(/assets/Year-of-Horse-Hero-Image3.jpeg)',
+          backgroundSize: 'contain',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat',
-          opacity: 0.25,
+          opacity: 0.15,
           filter: 'blur(1px)',
         }}
       />
