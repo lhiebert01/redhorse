@@ -634,3 +634,141 @@ npm run dev
 3. PIN: `142857`
 4. Select birth date and mode
 5. Generate → View result → "Generate Another Test" to loop
+
+---
+
+## 2026 Growth Projections & Launch Objectives
+
+### Market Opportunity
+- **Chinese New Year 2026:** January 29 (Year of the Fire Horse begins)
+- **Fire Horse Rarity:** Only occurs every 60 years (last: 1966, next: 2086)
+- **Price Point:** $8.88 (auspicious number, impulse buy)
+- **Target Markets:** Chinese diaspora, astrology enthusiasts, gamblers, spiritual seekers
+
+### Monthly Revenue Projections
+
+| Month | Visitors | Purchases | Revenue | Growth Driver |
+|-------|----------|-----------|---------|---------------|
+| **Jan** | 5,000 | 250 (5%) | $2,220 | Pre-CNY buzz, soft launch |
+| **Feb** | 25,000 | 1,500 (6%) | $13,320 | 🔥 CNY peak, viral sharing |
+| **Mar** | 15,000 | 900 (6%) | $7,992 | Post-CNY momentum |
+| **Apr** | 8,000 | 400 (5%) | $3,552 | Steady organic |
+| **May** | 6,000 | 300 (5%) | $2,664 | Spring plateau |
+| **Jun** | 10,000 | 600 (6%) | $5,328 | Mid-year fortune refresh |
+| **Jul** | 7,000 | 350 (5%) | $3,108 | Summer lull |
+| **Aug** | 8,000 | 400 (5%) | $3,552 | Back-to-school decisions |
+| **Sep** | 12,000 | 720 (6%) | $6,394 | Mid-Autumn Festival |
+| **Oct** | 9,000 | 450 (5%) | $3,996 | Q4 planning |
+| **Nov** | 15,000 | 900 (6%) | $7,992 | Holiday gift season |
+| **Dec** | 20,000 | 1,200 (6%) | $10,656 | Year-end prophecies |
+
+### 2026 Annual Targets
+
+| Metric | Conservative | Viral Hit Scenario |
+|--------|--------------|-------------------|
+| **Total Visitors** | 140,000 | 500,000+ |
+| **Total Purchases** | 7,970 | 30,000+ |
+| **Gross Revenue** | $70,774 | $266,400+ |
+| **Avg Conversion** | 5.7% | 6%+ |
+
+### Revenue Milestones
+- **$10K:** Month 2 (February CNY peak)
+- **$25K cumulative:** End of Q1
+- **$50K cumulative:** End of Q3
+- **$70K+ cumulative:** End of 2026
+
+---
+
+## Launch Objectives (Pre-Launch: Now - Jan 28)
+
+### Week 1-2: Technical Completion
+- [ ] Test all 4 path modes (Wealth, Power, Love, Shield)
+- [ ] Verify Stripe payment flow end-to-end
+- [ ] Test Save Talisman download feature
+- [ ] Mobile responsiveness testing
+- [ ] Load testing for traffic spikes
+
+### Week 3-4: Content & SEO
+- [ ] Create 5-10 sample talismans for marketing
+- [ ] Write SEO-optimized landing page copy
+- [ ] Set up Google Analytics / tracking
+- [ ] Create social media accounts (Instagram, TikTok, Twitter)
+- [ ] Prepare press release / launch announcement
+
+### Pre-CNY Push (Jan 15-28)
+- [ ] Influencer outreach (astrology, Chinese culture creators)
+- [ ] Schedule social media posts for CNY
+- [ ] Set up paid ad campaigns (Facebook, Instagram)
+- [ ] Email list building with lead magnet
+
+---
+
+## Post-Launch Objectives (Feb - Dec 2026)
+
+### Phase 1: CNY Launch (Jan 29 - Feb 28)
+- [ ] Monitor conversion rates and optimize
+- [ ] Respond to customer feedback
+- [ ] A/B test landing page elements
+- [ ] Amplify viral content / user shares
+- [ ] Track and fix any bugs
+
+### Phase 2: Growth & Optimization (Mar - Jun)
+- [ ] Analyze top-performing traffic sources
+- [ ] Implement referral program
+- [ ] Add email remarketing for abandoned carts
+- [ ] Create seasonal promotions (Qingming, Dragon Boat)
+- [ ] Expand to additional languages (Chinese, Vietnamese)
+
+### Phase 3: Expansion (Jul - Dec)
+- [ ] Add new product modes (Career, Health, Family)
+- [ ] Premium tier ($18.88 or $88.88) with extras
+- [ ] Physical print-on-demand talismans
+- [ ] Corporate/bulk gifting packages
+- [ ] Partner with casinos / gambling platforms
+- [ ] Prepare for Year of the Fire Goat 2027
+
+---
+
+## Viral Growth Strategies
+
+### Organic Viral Triggers
+1. **Shareable AI Art:** Museum-quality talismans people want to post
+2. **"Which zodiac are you?":** Identity-based social sharing
+3. **Lucky Number Wins:** Gamblers share wins → social proof
+4. **60-Year FOMO:** "Fire Horse only every 60 years" urgency
+5. **Gift Giving:** Send talismans to friends/family
+
+### Paid Acquisition Channels
+| Channel | Target Audience | Est. CPA |
+|---------|----------------|----------|
+| Facebook/Instagram | Chinese diaspora 25-55 | $2-5 |
+| TikTok | Gen Z astrology fans | $1-3 |
+| Google Ads | "Chinese zodiac 2026" searchers | $3-6 |
+| WeChat/Weibo | Mainland China (if applicable) | $1-4 |
+
+### Influencer Strategy
+- **Micro-influencers (10K-100K):** Free talisman + affiliate code
+- **Mid-tier (100K-500K):** $200-500 sponsored post
+- **Major (500K+):** Revenue share partnership
+
+---
+
+## Key Success Metrics to Track
+
+### Daily Metrics
+- Visitors, Page views, Bounce rate
+- Stripe checkout initiated vs completed
+- AI generation success rate
+- Error rates / failed generations
+
+### Weekly Metrics
+- Conversion rate by traffic source
+- Revenue and average order value
+- Social shares / viral coefficient
+- Customer feedback themes
+
+### Monthly Metrics
+- Total revenue vs projection
+- Customer acquisition cost (CAC)
+- Lifetime value (single purchase = $8.88)
+- Net promoter score (if surveyed)
