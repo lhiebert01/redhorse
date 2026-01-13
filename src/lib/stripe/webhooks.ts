@@ -25,15 +25,38 @@ export function extractCustomFields(session: Stripe.Checkout.Session): {
 } {
   const customFields = (session as { custom_fields?: Array<{
     key: string;
+    label?: { custom: string };
     text?: { value: string };
     dropdown?: { value: string };
   }> }).custom_fields || [];
 
-  const dobField = customFields.find((f) => f.key === 'dob');
-  const focusField = customFields.find((f) => f.key === 'focus');
+  // Log custom fields for debugging
+  console.log('Custom fields received:', JSON.stringify(customFields, null, 2));
 
-  return {
-    birthDate: dobField?.text?.value || 'Unknown',
-    focusMode: focusField?.dropdown?.value?.toLowerCase() || 'wealth',
-  };
+  // Find DOB field - look for keys containing 'birth', 'dob', or 'date'
+  const dobField = customFields.find((f) => {
+    const key = f.key.toLowerCase();
+    return key.includes('birth') || key.includes('dob') || key === 'date_of_birth';
+  });
+
+  // Find focus/path field - look for keys containing 'path', 'focus', or 'choose'
+  const focusField = customFields.find((f) => {
+    const key = f.key.toLowerCase();
+    return key.includes('path') || key.includes('focus') || key.includes('choose');
+  });
+
+  // Extract values
+  const birthDate = dobField?.text?.value || 'Unknown';
+  let focusMode = focusField?.dropdown?.value?.toLowerCase() || 'wealth';
+
+  // Normalize focus mode value
+  if (focusMode.includes('wealth')) focusMode = 'wealth';
+  else if (focusMode.includes('power')) focusMode = 'power';
+  else if (focusMode.includes('love')) focusMode = 'love';
+  else if (focusMode.includes('shield')) focusMode = 'shield';
+  else focusMode = 'wealth'; // default
+
+  console.log(`Extracted - DOB: ${birthDate}, Focus: ${focusMode}`);
+
+  return { birthDate, focusMode };
 }
