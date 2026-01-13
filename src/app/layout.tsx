@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://redhorse-omega.vercel.app';
+// Hardcoded to ensure correct OG image URLs - env var was causing issues
+const siteUrl = 'https://redhorse-omega.vercel.app';
 
 export const metadata: Metadata = {
   title: 'Red Horse Oracle | Year of the Fire Horse 2026',
