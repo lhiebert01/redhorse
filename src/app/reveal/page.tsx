@@ -124,10 +124,10 @@ function RevealContent() {
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
           backgroundImage: 'url(/assets/Year-of-Horse-Hero-Image3.jpeg)',
-          backgroundSize: 'contain',
+          backgroundSize: '105%',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat',
-          opacity: 0.12,
+          opacity: 0.35,
           filter: 'blur(1px)',
         }}
       />
