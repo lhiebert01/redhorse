@@ -62,8 +62,8 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10 rounded-2xl" />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/assets/hero-fire-horse.jpg"
-            alt="Year of the Fire Horse 2026 - Sacred Talisman"
+            src="/assets/Year-of-the-Horse-2026-v2.jpeg"
+            alt="Year of the Fire Horse 2026 - Talisman of Divine Protection"
             className="w-full h-auto rounded-2xl border-2 border-fire-gold/50 shadow-2xl shadow-red-900/50"
           />
           <div className="absolute bottom-4 left-0 right-0 z-20 text-center">
