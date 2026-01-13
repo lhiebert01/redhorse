@@ -1,17 +1,12 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenAI } from '@google/genai';
 
 if (!process.env.GEMINI_API_KEY) {
   throw new Error('GEMINI_API_KEY is not set');
 }
 
-export const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+// Initialize Gemini AI client
+export const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-// Text generation model (fast, cheap)
-export function getTextModel() {
-  return genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
-}
-
-// Image generation model
-export function getImageModel() {
-  return genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
-}
+// Model constants - using Gemini 3 Pro for high quality
+export const TEXT_MODEL = 'gemini-3-pro-preview';
+export const IMAGE_MODEL = 'gemini-3-pro-image-preview';
