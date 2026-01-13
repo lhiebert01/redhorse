@@ -238,6 +238,149 @@ Edit `src/app/page.tsx`
 
 ---
 
+## TypeScript Best Practices (Lessons Learned)
+
+### ALWAYS Use Optional Chaining Properly
+
+**BAD - Will cause build errors:**
+```typescript
+// This fails if inlineData.data could be undefined
+let imageData: string | null = null;
+if (part.inlineData) {
+  imageData = part.inlineData.data;  // ERROR: undefined not assignable to string | null
+}
+```
+
+**GOOD - Proper optional chaining:**
+```typescript
+let imageData: string | null = null;
+if (part.inlineData?.data) {  // Check both inlineData AND data exist
+  imageData = part.inlineData.data;
+}
+```
+
+### Avoid Type Mismatches
+
+**BAD:**
+```typescript
+// Declaring as string | null but assigning potentially undefined
+let value: string | null = someObject.property;  // property might be undefined
+```
+
+**GOOD:**
+```typescript
+// Use nullish coalescing to handle undefined
+let value: string | null = someObject.property ?? null;
+
+// Or declare to accept undefined
+let value: string | null | undefined = someObject.property;
+```
+
+### Don't Extend Incompatible Types
+
+**BAD:**
+```typescript
+// This fails if CheckoutSession has conflicting properties
+interface MySession extends Stripe.Checkout.Session {
+  custom_fields: CustomField[];  // ERROR if Session already has custom_fields with different type
+}
+```
+
+**GOOD:**
+```typescript
+// Create a standalone interface instead
+interface CustomField {
+  key: string;
+  type: 'text' | 'dropdown' | 'numeric';
+  text?: { value: string };
+  dropdown?: { value: string };
+}
+
+// Use type assertion when needed
+const fields = session.custom_fields as CustomField[];
+```
+
+### Handle Array Methods Safely
+
+**BAD:**
+```typescript
+// .includes() on array of specific strings vs general string
+const codes = ['ERROR_A', 'ERROR_B'] as const;
+if (codes.includes(error.code)) {  // ERROR: string not assignable to 'ERROR_A' | 'ERROR_B'
+```
+
+**GOOD:**
+```typescript
+// Use explicit comparisons
+if (error.code === 'ERROR_A' || error.code === 'ERROR_B') {
+  // ...
+}
+
+// Or cast appropriately
+if ((codes as readonly string[]).includes(error.code)) {
+  // ...
+}
+```
+
+### Always Check External API Responses
+
+When working with external APIs (Gemini, Stripe, etc.), always assume properties might be missing:
+
+```typescript
+// BAD - assumes structure exists
+const text = response.candidates[0].content.parts[0].text;
+
+// GOOD - safe navigation
+const text = response.candidates?.[0]?.content?.parts?.[0]?.text;
+if (!text) {
+  throw new Error('No text in response');
+}
+```
+
+### Use `as const` for Literal Types
+
+```typescript
+// BAD - inferred as string[]
+const MODES = ['wealth', 'power', 'love', 'shield'];
+
+// GOOD - inferred as readonly ['wealth', 'power', 'love', 'shield']
+const MODES = ['wealth', 'power', 'love', 'shield'] as const;
+```
+
+### Pre-Build Type Checking
+
+Before pushing, run type check locally:
+```bash
+npm run type-check
+# or
+npx tsc --noEmit
+```
+
+### Common Patterns in This Project
+
+**Gemini API Response Handling:**
+```typescript
+// Always check nested properties exist
+for (const part of response.candidates?.[0]?.content?.parts || []) {
+  if (part.inlineData?.data) {
+    // Safe to use part.inlineData.data here
+  }
+  if (part.text) {
+    // Safe to use part.text here
+  }
+}
+```
+
+**Stripe Webhook Field Extraction:**
+```typescript
+// Fields might not exist or have unexpected structure
+const customFields = session.custom_fields || [];
+const dobField = customFields.find(f => f.key?.toLowerCase().includes('birth'));
+const birthDate = dobField?.text?.value || dobField?.dropdown?.value || '';
+```
+
+---
+
 ## Troubleshooting
 
 ### Vercel Not Deploying
