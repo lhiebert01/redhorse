@@ -118,10 +118,27 @@ function RevealContent() {
   }
 
   return (
-    <div className="min-h-screen bg-fire-gradient text-fire-gold flex flex-col items-center p-4 py-12">
-      <TalismanDisplay prophecy={prophecy} />
+    <div className="min-h-screen bg-fire-gradient text-fire-gold flex flex-col items-center p-4 py-12 relative overflow-hidden">
+      {/* Background Watermark - Zodiac Medallion */}
+      <div
+        className="fixed inset-0 z-0 pointer-events-none"
+        style={{
+          backgroundImage: 'url(/assets/Year-of-Horse-Hero-Image3.jpeg)',
+          backgroundSize: 'contain',
+          backgroundPosition: 'center center',
+          backgroundRepeat: 'no-repeat',
+          opacity: 0.12,
+          filter: 'blur(1px)',
+        }}
+      />
+      {/* Gradient overlay to blend watermark */}
+      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-black/30 via-transparent to-black/40" />
 
-      <div className="mt-8 text-center space-y-4">
+      <div className="relative z-10">
+        <TalismanDisplay prophecy={prophecy} />
+      </div>
+
+      <div className="mt-8 text-center space-y-4 relative z-10">
         {fromAdmin ? (
           <>
             <a

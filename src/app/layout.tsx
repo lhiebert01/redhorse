@@ -29,10 +29,10 @@ export const metadata: Metadata = {
     siteName: 'Red Horse Oracle',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/assets/Year-of-Horse-Hero-Image3.jpeg',
         width: 1200,
         height: 630,
-        alt: 'Year of the Fire Horse 2026 - Sacred Talisman',
+        alt: 'Year of the Fire Horse 2026 - Chinese Zodiac Oracle with 12 Animals',
       },
     ],
   },
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Red Horse Oracle | Fire Horse 2026',
     description: 'The Fire Horse returns every 60 years. Unlock your sacred prophecy for $8.88',
-    images: ['/og-image.jpg'],
+    images: ['/assets/Year-of-Horse-Hero-Image3.jpeg'],
   },
   robots: {
     index: true,
