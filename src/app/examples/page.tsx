@@ -42,69 +42,156 @@ export default function ExamplesPage() {
       />
       <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-black/30 via-transparent to-black/40" />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4 py-8">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 py-6">
         {/* Back Link */}
-        <div className="text-center mb-6">
+        <div className="text-center mb-4">
           <a href="/" className="text-fire-gold hover:text-yellow-300 text-sm">
             ← Back to Home
           </a>
         </div>
 
-        {/* SECTION 1: The Teaser Question */}
-        <section className="text-center mb-12">
-          <h1 className="text-3xl md:text-5xl font-bold text-fire-gold text-glow-gold mb-6">
-            Were You Born in the Year of the...
+        {/* SECTION 1: BIG HERO - Once in 60 Years */}
+        <section className="text-center mb-8">
+          <h1 className="text-4xl md:text-6xl font-bold text-fire-gold text-glow-gold mb-4">
+            2026 is the Year of the
           </h1>
-          <div className="flex flex-wrap justify-center gap-3 mb-6">
-            {ZODIAC_ANIMALS.map((animal) => (
-              <span
-                key={animal.name}
-                className="bg-black/60 border border-fire-gold/40 px-4 py-2 rounded-full text-white hover:border-fire-gold hover:scale-105 transition-all cursor-default"
-              >
-                <span className="mr-2">{animal.emoji}</span>
-                <span className="font-bold text-fire-gold">{animal.name}</span>
-                <span className="text-gray-400 ml-1">{animal.chinese}</span>
-              </span>
-            ))}
-          </div>
-          <p className="text-gray-300 text-sm">
-            Find your birth year below to discover your zodiac animal
+          <h2 className="text-5xl md:text-7xl font-bold text-white text-glow-gold mb-4">
+            Fire Horse 火马年
+          </h2>
+          <p className="text-2xl md:text-3xl text-fire-gold font-bold mb-4">
+            A Once-in-60-Year Opportunity
+          </p>
+          <p className="text-gray-200 text-lg max-w-2xl mx-auto">
+            The Fire Horse returns only once every 60 years. Its blazing energy can ignite your
+            <span className="text-yellow-400 font-bold"> wealth</span>,
+            amplify your <span className="text-red-400 font-bold">power</span>,
+            transform your <span className="text-pink-400 font-bold">love life</span>, or
+            strengthen your <span className="text-blue-400 font-bold">protection</span>.
           </p>
         </section>
 
-        {/* SECTION 2: Master Zodiac Chart */}
-        <section className="mb-12">
+        {/* SECTION 2: $8.88 CTA with Stripe Graphic */}
+        <section className="mb-10">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/assets/Red-Horse-Oracle-Stripe-Graphic.jpeg"
+              alt="Fire Horse Oracle - Four Modes: Wealth, Power, Love, Shield - $8.88"
+              className="w-full max-w-sm rounded-2xl border-2 border-fire-gold/50 shadow-2xl"
+            />
+            <div className="text-center md:text-left">
+              <p className="text-white text-xl mb-2">Choose Your Path:</p>
+              <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-4">
+                <span className="bg-black/60 px-3 py-1 rounded-full text-yellow-400 text-sm">🎲 Wealth</span>
+                <span className="bg-black/60 px-3 py-1 rounded-full text-red-500 text-sm">⚔️ Power</span>
+                <span className="bg-black/60 px-3 py-1 rounded-full text-pink-400 text-sm">❤️ Love</span>
+                <span className="bg-black/60 px-3 py-1 rounded-full text-blue-400 text-sm">🛡️ Shield</span>
+              </div>
+              <a
+                href="/"
+                className="inline-block bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600
+                           text-black font-bold text-xl py-4 px-8 rounded-xl
+                           hover:scale-105 active:scale-95 transition-all duration-200
+                           shadow-xl shadow-yellow-500/30"
+              >
+                Get Your Prophecy - $8.88
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 3: EXAMPLES - See What Others Have Received */}
+        <section className="mb-10">
+          <h2 className="text-3xl md:text-4xl font-bold text-fire-gold text-glow-gold text-center mb-2">
+            See What Others Have Received
+          </h2>
+          <p className="text-gray-300 text-center mb-6">
+            Real prophecies from all 12 zodiac signs. Click any card to see the full talisman.
+          </p>
+          <p className="text-gray-500 text-sm text-center italic mb-6">
+            *Hypothetical examples with fictional names for demonstration.
+          </p>
+
+          {/* Examples Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {EXAMPLE_PEOPLE.map((person) => (
+              <div
+                key={person.id}
+                onClick={() => setSelectedPerson(person.id)}
+                className="bg-black/70 border border-fire-gold/30 rounded-2xl p-4 cursor-pointer hover:border-fire-gold hover:scale-[1.02] transition-all duration-300"
+              >
+                {/* Person Header */}
+                <div className="flex items-center gap-3 mb-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`/assets/zodiac/${person.zodiac}.jpeg`}
+                    alt={person.zodiac}
+                    className="w-14 h-14 rounded-full border-2 border-fire-gold/50 object-cover"
+                  />
+                  <div className="flex-1">
+                    <h3 className="text-fire-gold font-bold">{person.name}</h3>
+                    <p className="text-gray-400 text-sm">
+                      {person.element} {person.zodiac.charAt(0).toUpperCase() + person.zodiac.slice(1)} {person.zodiacChinese}
+                    </p>
+                  </div>
+                  <span className="text-2xl">{MODE_EMOJI[person.mode]}</span>
+                </div>
+
+                {/* Prophecy */}
+                <div className="bg-red-950/50 rounded-lg p-2 mb-2">
+                  <p className="text-fire-gold font-bold text-center">
+                    {person.mainText}
+                  </p>
+                </div>
+
+                {/* Mode Badge */}
+                <div className="flex items-center justify-between">
+                  <span className={`text-sm font-bold ${MODE_COLOR[person.mode]}`}>
+                    {person.mode.charAt(0).toUpperCase() + person.mode.slice(1)} Mode
+                  </span>
+                  <span className="text-fire-gold text-xs">View Talisman →</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* SECTION 4: Find Your Zodiac Sign */}
+        <section className="mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold text-fire-gold text-center mb-2">
+            What&apos;s Your Chinese Zodiac Sign?
+          </h2>
+          <p className="text-gray-300 text-center mb-6">
+            Find your birth year to discover your zodiac animal
+          </p>
+
+          {/* Master Chart */}
           <div className="flex justify-center mb-6">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/assets/zodiac/Fire-Horse-2026-Chart.jpeg"
               alt="Year of the Fire Horse 2026 - All 12 Zodiac Animals"
-              className="w-full max-w-2xl rounded-2xl border-2 border-fire-gold/50 shadow-2xl"
+              className="w-full max-w-xl rounded-2xl border-2 border-fire-gold/50 shadow-2xl"
             />
           </div>
-        </section>
 
-        {/* SECTION 3: Zodiac Year Finder */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-fire-gold text-center mb-6">
-            Find Your Chinese Zodiac Animal
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {/* Zodiac Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {ZODIAC_ANIMALS.map((animal) => (
               <div
                 key={animal.name}
-                className="bg-black/70 border border-fire-gold/30 rounded-xl p-4 hover:border-fire-gold transition-all"
+                className="bg-black/70 border border-fire-gold/30 rounded-xl p-3 hover:border-fire-gold transition-all"
               >
-                <div className="flex items-center gap-2 mb-2">
+                <div className="flex items-center gap-2 mb-1">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={`/assets/zodiac/${animal.name.toLowerCase()}.jpeg`}
                     alt={animal.name}
-                    className="w-12 h-12 rounded-full border border-fire-gold/50 object-cover"
+                    className="w-10 h-10 rounded-full border border-fire-gold/50 object-cover"
                   />
                   <div>
-                    <span className="text-fire-gold font-bold">{animal.name}</span>
-                    <span className="text-white ml-1">{animal.chinese}</span>
+                    <span className="text-fire-gold font-bold text-sm">{animal.name}</span>
+                    <span className="text-white ml-1 text-sm">{animal.chinese}</span>
                   </div>
                 </div>
                 <p className="text-gray-400 text-xs leading-relaxed">
@@ -115,149 +202,17 @@ export default function ExamplesPage() {
           </div>
         </section>
 
-        {/* SECTION 4: The Marketing Pitch */}
-        <section className="mb-12 text-center">
-          <div className="bg-gradient-to-r from-red-950/80 via-black/80 to-red-950/80 border-2 border-fire-gold rounded-2xl p-8 max-w-3xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-              2026 is the Year of the <span className="text-fire-gold">Fire Horse</span>
-            </h2>
-            <p className="text-xl text-fire-gold font-bold mb-4">
-              A Once-in-60-Year Opportunity
-            </p>
-            <p className="text-gray-200 text-lg mb-6">
-              The Fire Horse returns only once every 60 years. Its blazing energy can ignite
-              your <span className="text-yellow-400 font-bold">wealth</span>,
-              amplify your <span className="text-red-400 font-bold">power</span>,
-              transform your <span className="text-pink-400 font-bold">love life</span>, or
-              strengthen your <span className="text-blue-400 font-bold">protection</span>.
-            </p>
-            <p className="text-white text-lg font-semibold">
-              Which blessing will YOU seek from the Fire Horse Oracle?
-            </p>
-          </div>
-        </section>
-
-        {/* SECTION 5: The Four Modes with Stripe Graphic */}
-        <section className="mb-12">
-          <div className="flex justify-center mb-6">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/assets/Red-Horse-Oracle-Stripe-Graphic.jpeg"
-              alt="Fire Horse Oracle - Four Modes: Wealth, Power, Love, Shield"
-              className="w-full max-w-lg rounded-2xl border-2 border-fire-gold/50 shadow-2xl"
-            />
-          </div>
-          <div className="flex flex-wrap justify-center gap-4">
-            <div className="flex items-center gap-2 bg-black/60 px-4 py-2 rounded-full">
-              <span>🎲</span>
-              <span className="text-yellow-400 font-bold">Wealth</span>
-              <span className="text-gray-400 text-sm">6 Lucky Numbers</span>
-            </div>
-            <div className="flex items-center gap-2 bg-black/60 px-4 py-2 rounded-full">
-              <span>⚔️</span>
-              <span className="text-red-500 font-bold">Power</span>
-              <span className="text-gray-400 text-sm">3-Word Battle Motto</span>
-            </div>
-            <div className="flex items-center gap-2 bg-black/60 px-4 py-2 rounded-full">
-              <span>❤️</span>
-              <span className="text-pink-400 font-bold">Love</span>
-              <span className="text-gray-400 text-sm">4-Word Love Decree</span>
-            </div>
-            <div className="flex items-center gap-2 bg-black/60 px-4 py-2 rounded-full">
-              <span>🛡️</span>
-              <span className="text-blue-400 font-bold">Shield</span>
-              <span className="text-gray-400 text-sm">3-Word Protective Mantra</span>
-            </div>
-          </div>
-        </section>
-
-        {/* SECTION 6: Examples Introduction */}
-        <section className="mb-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-fire-gold text-glow-gold mb-4">
-            See What Others Have Received
-          </h2>
-          <p className="text-white text-lg max-w-2xl mx-auto mb-2">
-            Here are examples of people from all 12 zodiac signs who consulted the Fire Horse Oracle.
-            Each received a personalized talisman with their unique prophecy.
-          </p>
-          <p className="text-gray-400 text-sm italic">
-            *These are hypothetical examples with fictional names for demonstration purposes.
-          </p>
-        </section>
-
-        {/* SECTION 7: Examples Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {EXAMPLE_PEOPLE.map((person) => (
-            <div
-              key={person.id}
-              onClick={() => setSelectedPerson(person.id)}
-              className="bg-black/70 border border-fire-gold/30 rounded-2xl p-4 cursor-pointer hover:border-fire-gold hover:scale-105 transition-all duration-300"
-            >
-              {/* Person Header */}
-              <div className="flex items-center gap-3 mb-3">
-                {/* Zodiac Icon */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={`/assets/zodiac/${person.zodiac}.jpeg`}
-                  alt={person.zodiac}
-                  className="w-16 h-16 rounded-full border-2 border-fire-gold/50 object-cover"
-                />
-                <div className="flex-1">
-                  <h3 className="text-fire-gold font-bold text-lg">{person.name}</h3>
-                  <p className="text-gray-400 text-sm">
-                    {person.element} {person.zodiac.charAt(0).toUpperCase() + person.zodiac.slice(1)} {person.zodiacChinese}
-                  </p>
-                  <p className="text-gray-500 text-xs">DOB: {person.dob}</p>
-                </div>
-              </div>
-
-              {/* Mode Badge */}
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-xl">{MODE_EMOJI[person.mode]}</span>
-                <span className={`font-bold ${MODE_COLOR[person.mode]}`}>
-                  {person.mode.charAt(0).toUpperCase() + person.mode.slice(1)} Mode
-                </span>
-              </div>
-
-              {/* Main Text / Prophecy */}
-              <div className="bg-red-950/50 rounded-lg p-2 mb-2">
-                <p className="text-fire-gold font-bold text-center text-sm">
-                  {person.mainText}
-                </p>
-              </div>
-
-              {/* Testimonial Preview */}
-              <p className="text-gray-300 text-xs italic line-clamp-2">
-                &quot;{person.testimonial.substring(0, 60)}...&quot;
-              </p>
-
-              {/* Click to View */}
-              <p className="text-fire-gold text-xs mt-3 text-center">
-                Click to view talisman →
-              </p>
-            </div>
-          ))}
-        </div>
-
-        {/* SECTION 8: Final CTA */}
-        <section className="text-center mb-12">
-          <div className="bg-gradient-to-r from-yellow-900/50 via-red-900/50 to-yellow-900/50 border-2 border-fire-gold rounded-2xl p-8 max-w-2xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-              Ready to Receive <span className="text-fire-gold">Your</span> Prophecy?
-            </h2>
-            <p className="text-gray-200 mb-6">
-              The Fire Horse awaits. One payment. One talisman. One destiny revealed.
-            </p>
-            <a
-              href="/"
-              className="inline-block bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600
-                         text-black font-bold text-xl py-4 px-8 rounded-xl
-                         hover:scale-105 active:scale-95 transition-all duration-200
-                         shadow-xl shadow-yellow-500/30"
-            >
-              Get Your Own Prophecy - $8.88
-            </a>
-          </div>
+        {/* Final CTA */}
+        <section className="text-center mb-8">
+          <a
+            href="/"
+            className="inline-block bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600
+                       text-black font-bold text-xl py-4 px-8 rounded-xl
+                       hover:scale-105 active:scale-95 transition-all duration-200
+                       shadow-xl shadow-yellow-500/30"
+          >
+            Get Your Own Prophecy - $8.88
+          </a>
         </section>
 
         {/* Footer */}
