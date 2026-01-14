@@ -271,98 +271,133 @@ export default function ExamplesPage() {
         </footer>
       </div>
 
-      {/* Modal for viewing talisman */}
+      {/* Modal for viewing talisman with sidebar */}
       {selectedExample && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90"
+          className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-4 bg-black/90"
           onClick={() => setSelectedPerson(null)}
         >
           <div
-            className="bg-black/95 border-2 border-fire-gold rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 relative"
+            className="bg-black/95 border-2 border-fire-gold rounded-2xl max-w-6xl w-full max-h-[95vh] overflow-y-auto relative"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Back Button - Prominent */}
+            {/* Close Button - Fixed Top Right */}
             <button
               onClick={() => setSelectedPerson(null)}
-              className="w-full bg-fire-gold/20 hover:bg-fire-gold/30 border border-fire-gold text-fire-gold font-bold py-3 px-6 rounded-xl mb-4 flex items-center justify-center gap-2 transition-all"
+              className="absolute top-3 right-3 z-10 bg-black/80 hover:bg-fire-gold/30 border border-fire-gold text-fire-gold font-bold w-10 h-10 rounded-full flex items-center justify-center transition-all text-xl"
+              title="Close (or press Enter)"
             >
-              <span className="text-xl">←</span>
-              <span>Back to All Examples</span>
+              ✕
             </button>
 
-            {/* Person Info */}
-            <div className="flex items-center gap-4 mb-4">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={`/assets/zodiac/${selectedExample.zodiac}.jpeg`}
-                alt={selectedExample.zodiac}
-                className="w-20 h-20 rounded-full border-2 border-fire-gold object-cover"
-              />
-              <div>
-                <h2 className="text-fire-gold font-bold text-2xl">{selectedExample.name}</h2>
-                <p className="text-white">
-                  {selectedExample.element} {selectedExample.zodiac.charAt(0).toUpperCase() + selectedExample.zodiac.slice(1)} {selectedExample.zodiacChinese}
-                </p>
-                <p className="text-gray-400 text-sm">Born: {selectedExample.dob} (Age {selectedExample.age})</p>
+            {/* Two Column Layout */}
+            <div className="flex flex-col lg:flex-row">
+              {/* LEFT: Talisman Image */}
+              <div className="lg:w-1/2 p-4 lg:p-6 flex items-center justify-center bg-gradient-to-br from-red-950/30 to-black/50">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={selectedExample.talismanImage}
+                  alt={`${selectedExample.name}'s Fire Horse Talisman`}
+                  className="w-full max-w-md rounded-xl border-2 border-fire-gold/50 shadow-2xl"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/assets/zodiac/Fire-Horse-2026-Chart.jpeg';
+                  }}
+                />
               </div>
-            </div>
 
-            {/* Mode Info */}
-            <div className="flex items-center gap-2 mb-4 bg-red-950/40 p-3 rounded-xl">
-              <span className="text-2xl">{MODE_EMOJI[selectedExample.mode]}</span>
-              <div>
-                <span className={`font-bold text-lg ${MODE_COLOR[selectedExample.mode]}`}>
-                  {selectedExample.mode.charAt(0).toUpperCase() + selectedExample.mode.slice(1)} Mode
-                </span>
-                <span className="text-gray-400 ml-2">• {selectedExample.modeLabel}</span>
+              {/* RIGHT: Sidebar Explainer */}
+              <div className="lg:w-1/2 p-4 lg:p-6 flex flex-col">
+                {/* Header */}
+                <div className="mb-4">
+                  <p className="text-gray-400 text-sm uppercase tracking-wide mb-1">Example Prophecy</p>
+                  <h2 className="text-2xl md:text-3xl font-bold text-fire-gold">{selectedExample.name}</h2>
+                </div>
+
+                {/* Zodiac Info with Image */}
+                <div className="bg-red-950/40 rounded-xl p-4 mb-4">
+                  <p className="text-gray-300 text-sm mb-3">Born in the Year of the...</p>
+                  <div className="flex items-center gap-4">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`/assets/zodiac/${selectedExample.zodiac}.jpeg`}
+                      alt={selectedExample.zodiac}
+                      className="w-20 h-20 rounded-xl border-2 border-fire-gold object-cover"
+                    />
+                    <div>
+                      <p className="text-fire-gold font-bold text-2xl">
+                        {selectedExample.zodiac.charAt(0).toUpperCase() + selectedExample.zodiac.slice(1)} {selectedExample.zodiacChinese}
+                      </p>
+                      <p className="text-gray-400">
+                        {selectedExample.element} Element
+                      </p>
+                      <p className="text-gray-500 text-sm">
+                        DOB: {selectedExample.dob} (Age {selectedExample.age})
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mode Explanation */}
+                <div className="bg-black/50 border border-fire-gold/30 rounded-xl p-4 mb-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-3xl">{MODE_EMOJI[selectedExample.mode]}</span>
+                    <div>
+                      <p className={`font-bold text-xl ${MODE_COLOR[selectedExample.mode]}`}>
+                        {selectedExample.mode.charAt(0).toUpperCase() + selectedExample.mode.slice(1)} Mode
+                      </p>
+                      <p className="text-gray-400 text-sm">{selectedExample.modeLabel}</p>
+                    </div>
+                  </div>
+                  <p className="text-white text-sm leading-relaxed">
+                    {selectedExample.mode === 'wealth' && (
+                      <>This talisman reveals <span className="text-yellow-400 font-bold">6 Lucky Numbers</span> channeled by the Fire Horse for {selectedExample.name}&apos;s fortune in 2026.</>
+                    )}
+                    {selectedExample.mode === 'power' && (
+                      <>This talisman bestows a <span className="text-red-400 font-bold">3-Word Strategic Battle Motto</span> from the Fire Horse to fuel {selectedExample.name}&apos;s ambitions.</>
+                    )}
+                    {selectedExample.mode === 'love' && (
+                      <>This talisman delivers a <span className="text-pink-400 font-bold">4-Word Love Decree</span> from the Fire Horse to guide {selectedExample.name}&apos;s heart.</>
+                    )}
+                    {selectedExample.mode === 'shield' && (
+                      <>This talisman grants a <span className="text-blue-400 font-bold">3-Word Protective Mantra</span> from the Fire Horse to shield {selectedExample.name} from harm.</>
+                    )}
+                  </p>
+                </div>
+
+                {/* The Prophecy */}
+                <div className="bg-gradient-to-r from-red-950/60 to-red-900/40 border border-fire-gold rounded-xl p-4 mb-4">
+                  <p className="text-gray-400 text-xs uppercase tracking-wide mb-1">The Prophecy</p>
+                  <p className="text-fire-gold font-bold text-xl md:text-2xl text-center">
+                    {selectedExample.mainText}
+                  </p>
+                </div>
+
+                {/* Testimonial */}
+                <div className="bg-black/30 rounded-xl p-4 mb-4 flex-grow">
+                  <p className="text-white italic">
+                    &quot;{selectedExample.testimonial}&quot;
+                  </p>
+                  <p className="text-fire-gold text-sm mt-2 text-right">
+                    — {selectedExample.name}
+                  </p>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <button
+                    onClick={() => setSelectedPerson(null)}
+                    className="flex-1 bg-transparent border-2 border-fire-gold text-fire-gold font-bold py-3 px-4 rounded-xl hover:bg-fire-gold/20 transition-all flex items-center justify-center gap-2"
+                  >
+                    <span>←</span> See More Examples
+                  </button>
+                  <a
+                    href="/"
+                    className="flex-1 bg-fire-gold text-black font-bold py-3 px-4 rounded-xl hover:scale-105 transition-transform text-center"
+                  >
+                    Get Your Own Prophecy
+                  </a>
+                </div>
               </div>
-            </div>
-
-            {/* Talisman Image */}
-            <div className="mb-4">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={selectedExample.talismanImage}
-                alt={`${selectedExample.name}'s Fire Horse Talisman`}
-                className="w-full rounded-xl border border-fire-gold/50"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/assets/zodiac/Fire-Horse-2026-Chart.jpeg';
-                }}
-              />
-            </div>
-
-            {/* Testimonial */}
-            <div className="bg-red-950/30 p-4 rounded-xl mb-4">
-              <p className="text-white italic text-lg">
-                &quot;{selectedExample.testimonial}&quot;
-              </p>
-              <p className="text-fire-gold text-sm mt-2 text-right">
-                — {selectedExample.name}, {selectedExample.zodiac.charAt(0).toUpperCase() + selectedExample.zodiac.slice(1)}
-              </p>
-            </div>
-
-            {/* Share Link */}
-            {selectedExample.revealLink && (
-              <div className="bg-black/50 p-3 rounded-xl mb-4">
-                <p className="text-gray-400 text-xs mb-1">Share this prophecy:</p>
-                <p className="text-fire-gold text-sm break-all">{selectedExample.revealLink}</p>
-              </div>
-            )}
-
-            {/* CTA */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <button
-                onClick={() => setSelectedPerson(null)}
-                className="bg-transparent border-2 border-fire-gold text-fire-gold font-bold py-3 px-6 rounded-xl hover:bg-fire-gold/20 transition-all"
-              >
-                ← See More Examples
-              </button>
-              <a
-                href="/"
-                className="inline-block bg-fire-gold text-black font-bold py-3 px-6 rounded-xl hover:scale-105 transition-transform text-center"
-              >
-                Get Your Own Prophecy
-              </a>
             </div>
           </div>
         </div>
