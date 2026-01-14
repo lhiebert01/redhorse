@@ -104,17 +104,23 @@ export default function ExamplesPage() {
               </div>
 
               {/* Mode Badge */}
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-2 mb-2">
                 <span className="text-xl">{MODE_EMOJI[person.mode]}</span>
                 <span className={`font-bold ${MODE_COLOR[person.mode]}`}>
                   {person.mode.charAt(0).toUpperCase() + person.mode.slice(1)} Mode
                 </span>
-                <span className="text-gray-500 text-sm">• {person.modeLabel}</span>
+              </div>
+
+              {/* Main Text / Prophecy */}
+              <div className="bg-red-950/50 rounded-lg p-2 mb-2">
+                <p className="text-fire-gold font-bold text-center text-sm">
+                  {person.mainText}
+                </p>
               </div>
 
               {/* Testimonial Preview */}
-              <p className="text-white text-sm italic line-clamp-2">
-                &quot;{person.testimonial.substring(0, 80)}...&quot;
+              <p className="text-gray-300 text-xs italic line-clamp-2">
+                &quot;{person.testimonial.substring(0, 60)}...&quot;
               </p>
 
               {/* Click to View */}
