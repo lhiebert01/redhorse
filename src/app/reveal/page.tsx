@@ -139,17 +139,18 @@ function RevealContent() {
         <TalismanDisplay prophecy={prophecy} />
       </div>
 
-      {/* Zodiac Summary Section - temporarily disabled for debugging */}
-      {/* {prophecy.zodiac_sign && (
+      {/* Zodiac Summary Section */}
+      {prophecy.zodiac_sign && (
         <div className="relative z-10">
           <ZodiacSummary
             zodiacSign={prophecy.zodiac_sign}
             zodiacElement={prophecy.zodiac_element}
           />
         </div>
-      )} */}
+      )}
 
-      <div className="mt-8 text-center space-y-4 relative z-10">
+      {/* Navigation Buttons */}
+      <div className="mt-8 text-center space-y-4 relative z-10 w-full max-w-md">
         {fromAdmin ? (
           <>
             <a
@@ -160,18 +161,32 @@ function RevealContent() {
             </a>
             <a
               href="/"
-              className="block text-gray-500 text-sm hover:text-gray-300 underline"
+              className="block text-gray-400 hover:text-fire-gold underline"
             >
               Return to Home
             </a>
           </>
         ) : (
-          <a
-            href="/"
-            className="text-gray-500 text-sm hover:text-gray-300 underline"
-          >
-            Get another reading
-          </a>
+          <>
+            <a
+              href="/"
+              className="block bg-fire-gold text-black font-bold px-8 py-3 rounded-xl hover:scale-105 transition-transform"
+            >
+              Return to Home
+            </a>
+            <a
+              href={process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK || '/'}
+              className="block border-2 border-fire-gold text-fire-gold font-bold px-8 py-3 rounded-xl hover:bg-fire-gold hover:text-black transition-all"
+            >
+              Get Another Reading
+            </a>
+            <a
+              href="/examples"
+              className="block text-gray-400 hover:text-fire-gold underline text-sm"
+            >
+              View Examples Gallery
+            </a>
+          </>
         )}
       </div>
     </div>

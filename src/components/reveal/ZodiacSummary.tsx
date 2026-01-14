@@ -1,9 +1,10 @@
 'use client';
 
-import Image from 'next/image';
 import {
   ZodiacAnimal,
   ZodiacElement,
+  ZODIAC_ANIMALS,
+  ZODIAC_ELEMENTS,
   ZODIAC_CHINESE,
   ELEMENT_CHINESE,
   ZODIAC_PROFILES,
@@ -15,17 +16,39 @@ interface ZodiacSummaryProps {
   zodiacElement?: string | null;
 }
 
+// Helper to normalize and validate zodiac sign
+function normalizeZodiacSign(sign: string): ZodiacAnimal | null {
+  if (!sign) return null;
+  const normalized = sign.charAt(0).toUpperCase() + sign.slice(1).toLowerCase();
+  return ZODIAC_ANIMALS.includes(normalized as ZodiacAnimal) ? (normalized as ZodiacAnimal) : null;
+}
+
+// Helper to normalize and validate element
+function normalizeElement(element: string | null | undefined): ZodiacElement | null {
+  if (!element) return null;
+  const normalized = element.charAt(0).toUpperCase() + element.slice(1).toLowerCase();
+  return ZODIAC_ELEMENTS.includes(normalized as ZodiacElement) ? (normalized as ZodiacElement) : null;
+}
+
 export default function ZodiacSummary({ zodiacSign, zodiacElement }: ZodiacSummaryProps) {
-  // Validate zodiac sign
-  const animal = zodiacSign as ZodiacAnimal;
-  const element = zodiacElement as ZodiacElement | null;
+  // Validate and normalize zodiac sign
+  const animal = normalizeZodiacSign(zodiacSign);
+  const element = normalizeElement(zodiacElement);
+
+  // Return null if invalid zodiac sign
+  if (!animal) {
+    console.warn('ZodiacSummary: Invalid zodiac sign:', zodiacSign);
+    return null;
+  }
 
   const profile = ZODIAC_PROFILES[animal];
   const relation = FIRE_HORSE_RELATIONS[animal];
-  const animalChinese = ZODIAC_CHINESE[animal];
-  const elementChinese = element ? ELEMENT_CHINESE[element] : '';
+  const animalChinese = ZODIAC_CHINESE[animal] || '';
+  const elementChinese = element ? (ELEMENT_CHINESE[element] || '') : '';
 
+  // Safety check
   if (!profile || !relation) {
+    console.warn('ZodiacSummary: No profile or relation for:', animal);
     return null;
   }
 
@@ -72,11 +95,11 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement }: ZodiacSumma
         {/* Animal Image and Title */}
         <div className="flex items-center gap-4">
           <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-fire-gold shadow-lg">
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src={`/assets/zodiac/${animal.toLowerCase()}.jpeg`}
               alt={`${animal} zodiac`}
-              fill
-              className="object-cover"
+              className="w-full h-full object-cover"
             />
           </div>
           <div>
