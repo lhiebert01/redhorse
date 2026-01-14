@@ -538,7 +538,7 @@ export default function ExamplesPage() {
               </div>
 
               <p className="text-gray-400 text-xs text-center italic">
-                Red Horse Oracle is the only worldwide app delivering AI-powered zodiac experiences with complete Privacy by Design.
+                The FIRST, ONLY, and BEST Google Gemini 3 Pro app delivering AI-powered zodiac experiences with COMPLETE Privacy by Design.
               </p>
             </div>
 

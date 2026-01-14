@@ -194,8 +194,8 @@ export default function PrivacyPage() {
               </li>
             </ul>
             <p className="mt-4 text-gray-300">
-              Red Horse Oracle is the <strong className="text-fire-gold">only worldwide app</strong> delivering AI-powered
-              Chinese zodiac experiences with complete privacy by design.
+              Red Horse Oracle is the <strong className="text-fire-gold">FIRST, ONLY, and BEST</strong> Google Gemini 3 Pro app delivering AI-powered
+              Chinese zodiac experiences with <strong className="text-green-400">COMPLETE Privacy by Design</strong>.
             </p>
           </section>
 

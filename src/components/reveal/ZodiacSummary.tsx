@@ -180,7 +180,7 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement }: ZodiacSumma
           </ul>
         </div>
         <p className="text-gray-500 text-xs italic text-center">
-          The only worldwide app delivering complete privacy with AI-powered zodiac forecasts.
+          The FIRST, ONLY, and BEST Google Gemini 3 Pro app with COMPLETE Privacy by Design.
         </p>
       </div>
     </div>
