@@ -57,9 +57,8 @@ export async function generateProphecy(options: GenerateOptions): Promise<Genera
       parts: [{ text: imagePrompt }],
     },
     config: {
-      imageConfig: {
-        aspectRatio: '9:16', // Vertical talisman format
-      },
+      // Note: Aspect ratio is specified in the prompt for vertical 9:16 talisman format
+      responseModalities: ['image', 'text'],
     },
   });
 

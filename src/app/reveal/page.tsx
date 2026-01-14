@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { getSupabaseClient } from '@/lib/supabase/client';
 import { Prophecy } from '@/types/prophecy';
 import TalismanDisplay from '@/components/reveal/TalismanDisplay';
+import ZodiacSummary from '@/components/reveal/ZodiacSummary';
 import GeneratingState from '@/components/reveal/GeneratingState';
 
 function RevealContent() {
@@ -137,6 +138,16 @@ function RevealContent() {
       <div className="relative z-10">
         <TalismanDisplay prophecy={prophecy} />
       </div>
+
+      {/* Zodiac Summary Section */}
+      {prophecy.zodiac_sign && (
+        <div className="relative z-10">
+          <ZodiacSummary
+            zodiacSign={prophecy.zodiac_sign}
+            zodiacElement={prophecy.zodiac_element}
+          />
+        </div>
+      )}
 
       <div className="mt-8 text-center space-y-4 relative z-10">
         {fromAdmin ? (
