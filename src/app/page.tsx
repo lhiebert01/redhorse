@@ -137,6 +137,23 @@ export default function Home() {
           </a>
         </div>
 
+        {/* Privacy by Design Notice */}
+        <a
+          href="/privacy"
+          className="w-full bg-green-900/20 border border-green-700/50 rounded-xl p-4 mb-6 hover:border-green-500 transition-colors block"
+        >
+          <div className="flex items-start gap-3">
+            <span className="text-2xl">🛡️</span>
+            <div>
+              <p className="text-green-400 font-bold text-sm">Privacy by Design</p>
+              <p className="text-gray-400 text-xs mt-1">
+                <strong className="text-white">No personal data stored.</strong> Your birth date is used only to calculate your zodiac sign and is <strong className="text-green-400">never retained</strong>. No names, no DOB, no PII ever appears on your Oracle.
+              </p>
+              <p className="text-gray-500 text-xs mt-1 underline">Learn more →</p>
+            </div>
+          </div>
+        </a>
+
         {/* Social Proof */}
         <div className="text-center mb-6">
           <p className="text-red-400 text-sm italic">
