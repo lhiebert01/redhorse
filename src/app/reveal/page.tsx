@@ -139,15 +139,15 @@ function RevealContent() {
         <TalismanDisplay prophecy={prophecy} />
       </div>
 
-      {/* Zodiac Summary Section */}
-      {prophecy.zodiac_sign && (
+      {/* Zodiac Summary Section - temporarily disabled for debugging */}
+      {/* {prophecy.zodiac_sign && (
         <div className="relative z-10">
           <ZodiacSummary
             zodiacSign={prophecy.zodiac_sign}
             zodiacElement={prophecy.zodiac_element}
           />
         </div>
-      )}
+      )} */}
 
       <div className="mt-8 text-center space-y-4 relative z-10">
         {fromAdmin ? (
