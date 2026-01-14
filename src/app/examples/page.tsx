@@ -21,6 +21,7 @@ const ZODIAC_ANIMALS = [
 
 export default function ExamplesPage() {
   const [selectedPerson, setSelectedPerson] = useState<number | null>(null);
+  const [showFullImage, setShowFullImage] = useState(false);
 
   const selectedExample = selectedPerson !== null
     ? EXAMPLE_PEOPLE.find(p => p.id === selectedPerson)
@@ -238,7 +239,7 @@ export default function ExamplesPage() {
       {selectedExample && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-4 bg-black/90"
-          onClick={() => setSelectedPerson(null)}
+          onClick={() => { setSelectedPerson(null); setShowFullImage(false); }}
         >
           <div
             className="bg-black/95 border-2 border-fire-gold rounded-2xl max-w-6xl w-full max-h-[95vh] overflow-y-auto relative"
@@ -246,7 +247,7 @@ export default function ExamplesPage() {
           >
             {/* Close Button - Fixed Top Right */}
             <button
-              onClick={() => setSelectedPerson(null)}
+              onClick={() => { setSelectedPerson(null); setShowFullImage(false); }}
               className="absolute top-3 right-3 z-10 bg-black/80 hover:bg-fire-gold/30 border border-fire-gold text-fire-gold font-bold w-10 h-10 rounded-full flex items-center justify-center transition-all text-xl"
               title="Close (or press Enter)"
             >
@@ -255,17 +256,31 @@ export default function ExamplesPage() {
 
             {/* Two Column Layout */}
             <div className="flex flex-col lg:flex-row">
-              {/* LEFT: Talisman Image */}
-              <div className="lg:w-1/2 p-4 lg:p-6 flex items-center justify-center bg-gradient-to-br from-red-950/30 to-black/50">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={selectedExample.talismanImage}
-                  alt={`${selectedExample.name}'s Fire Horse Talisman`}
-                  className="w-full max-w-md rounded-xl border-2 border-fire-gold/50 shadow-2xl"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = '/assets/zodiac/Fire-Horse-2026-Chart.jpeg';
-                  }}
-                />
+              {/* LEFT: Talisman Image - Clickable for Full Size */}
+              <div className="lg:w-1/2 p-4 lg:p-6 flex flex-col items-center justify-center bg-gradient-to-br from-red-950/30 to-black/50">
+                <div
+                  className="relative cursor-pointer group"
+                  onClick={() => setShowFullImage(true)}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={selectedExample.talismanImage}
+                    alt={`${selectedExample.name}'s Fire Horse Talisman`}
+                    className="w-full max-w-md rounded-xl border-2 border-fire-gold/50 shadow-2xl group-hover:border-fire-gold transition-all"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/assets/zodiac/Fire-Horse-2026-Chart.jpeg';
+                    }}
+                  />
+                  {/* Hover overlay */}
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all rounded-xl flex items-center justify-center">
+                    <span className="opacity-0 group-hover:opacity-100 transition-all bg-black/80 text-fire-gold font-bold px-4 py-2 rounded-xl border border-fire-gold">
+                      🔍 VIEW FULL SIZE
+                    </span>
+                  </div>
+                </div>
+                <p className="text-gray-400 text-xs mt-2 text-center">
+                  Click image to view full size
+                </p>
               </div>
 
               {/* RIGHT: Sidebar Explainer */}
@@ -364,7 +379,7 @@ export default function ExamplesPage() {
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-3">
                   <button
-                    onClick={() => setSelectedPerson(null)}
+                    onClick={() => { setSelectedPerson(null); setShowFullImage(false); }}
                     className="flex-1 bg-transparent border-2 border-fire-gold text-fire-gold font-bold py-3 px-4 rounded-xl hover:bg-fire-gold/20 transition-all flex items-center justify-center gap-2"
                   >
                     <span>←</span> See More Examples
@@ -378,6 +393,50 @@ export default function ExamplesPage() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Full Size Image Lightbox */}
+      {showFullImage && selectedExample && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/95"
+          onClick={() => setShowFullImage(false)}
+        >
+          {/* Close Button */}
+          <button
+            onClick={() => setShowFullImage(false)}
+            className="absolute top-4 right-4 z-10 bg-fire-gold hover:bg-yellow-400 text-black font-bold w-12 h-12 rounded-full flex items-center justify-center transition-all text-2xl shadow-lg"
+          >
+            ✕
+          </button>
+
+          {/* Back Button */}
+          <button
+            onClick={() => setShowFullImage(false)}
+            className="absolute top-4 left-4 z-10 bg-black/80 hover:bg-fire-gold/30 border border-fire-gold text-fire-gold font-bold px-4 py-2 rounded-xl flex items-center gap-2 transition-all"
+          >
+            <span>←</span> Back
+          </button>
+
+          {/* Full Size Image */}
+          <div className="max-w-4xl max-h-[90vh] flex flex-col items-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={selectedExample.talismanImage}
+              alt={`${selectedExample.name}'s Fire Horse Talisman - Full Size`}
+              className="max-w-full max-h-[85vh] object-contain rounded-xl border-2 border-fire-gold shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = '/assets/zodiac/Fire-Horse-2026-Chart.jpeg';
+              }}
+            />
+            <p className="text-fire-gold font-bold mt-4 text-center text-lg">
+              {selectedExample.name}&apos;s Fire Horse Talisman
+            </p>
+            <p className="text-gray-400 text-sm text-center">
+              Click anywhere or press the X to close
+            </p>
           </div>
         </div>
       )}
