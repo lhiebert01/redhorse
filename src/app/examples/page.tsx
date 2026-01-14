@@ -278,8 +278,16 @@ export default function ExamplesPage() {
                     </span>
                   </div>
                 </div>
-                <p className="text-gray-400 text-xs mt-2 text-center">
-                  Click image to view full size
+                {/* Explicit Button to View Full Size */}
+                <button
+                  onClick={() => setShowFullImage(true)}
+                  className="mt-3 bg-gradient-to-r from-fire-gold/20 to-yellow-600/20 hover:from-fire-gold/40 hover:to-yellow-600/40 border border-fire-gold text-fire-gold font-bold py-2 px-6 rounded-xl transition-all flex items-center gap-2"
+                >
+                  <span>🔍</span>
+                  <span>VIEW FULL SIZE IMAGE</span>
+                </button>
+                <p className="text-gray-500 text-xs mt-1 text-center">
+                  See the complete high-resolution artwork
                 </p>
               </div>
 
