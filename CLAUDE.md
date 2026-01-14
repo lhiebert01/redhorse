@@ -772,3 +772,95 @@ npm run dev
 - Customer acquisition cost (CAC)
 - Lifetime value (single purchase = $8.88)
 - Net promoter score (if surveyed)
+
+---
+
+## Session Update: January 14, 2026
+
+### Major Feature: Examples Gallery
+
+**New Page:** `/examples` - https://redhorse-omega.vercel.app/examples
+
+A complete marketing gallery showcasing all 12 zodiac animals with real generated talismans.
+
+#### Gallery Features:
+- **12 Example Talismans** - One for each zodiac animal
+- **All 4 Modes Represented** - 3 Wealth, 3 Power, 3 Love, 3 Shield
+- **Full-Size Image Lightbox** - Click to view high-resolution artwork
+- **Interactive Sidebar** - Explains each talisman's significance
+- **Zodiac Year Finder** - Help users discover their sign
+
+#### Page Structure:
+1. **Hero Section** - "2026 is the Year of the Fire Horse - A Once-in-60-Year Opportunity"
+2. **CTA with Stripe Graphic** - $8.88 pricing with mode badges
+3. **Examples Grid** - 12 clickable cards with "CLICK TO EXPAND" buttons
+4. **Zodiac Finder** - Master chart + year lookup grid
+
+#### Example Modal Features:
+- Two-column layout (image left, explainer right)
+- "VIEW FULL SIZE IMAGE" button with lightbox
+- Value proposition explaining masterpiece artwork
+- Zodiac info with animal image
+- Mode-specific explanation
+- Prophecy highlight
+- Testimonial quote
+- Action buttons (See More / Get Your Own)
+
+### New Files Created:
+
+| File | Purpose |
+|------|---------|
+| `src/app/examples/page.tsx` | Examples gallery page |
+| `src/constants/examples.ts` | 12 example people data |
+| `src/app/api/export-examples/route.ts` | API to fetch example data |
+| `public/assets/examples/*.png` | 12 generated talisman images |
+| `public/assets/zodiac/*.jpeg` | 12 zodiac animal images + chart |
+| `public/assets/Red-Horse-Oracle-Stripe-Graphic.jpeg` | Stripe checkout graphic |
+| `docs/FEATURES.md` | Detailed feature documentation |
+| `docs/DESIGN.md` | Design philosophy documentation |
+| `docs/ANNOUNCEMENT.md` | Press release / blog post |
+
+### Generated Examples:
+
+| Zodiac | Name | Mode | Prophecy |
+|--------|------|------|----------|
+| Rat | Michael Johnson | Wealth | 04-15-28-38-68-84 |
+| Ox | Jennifer Smith | Power | BREAK THE RANK |
+| Tiger | David Williams | Love | FIERCE LOVE CLAIMS YOU |
+| Rabbit | Sarah Davis | Shield | FLAME SHIELDS PEACE |
+| Dragon | James Miller | Wealth | 08-17-28-58-66-88 |
+| Snake | Emily Brown | Power | STRIKE FROM SILENCE |
+| Horse | Robert Jones | Love | WILD HEARTS BECOME ONE |
+| Goat | Lisa Anderson | Shield | PEACE IS ARMOR |
+| Monkey | William Taylor | Wealth | 09-18-28-68-80-88 |
+| Rooster | Maria Garcia | Power | DROWN ALL RIVALS |
+| Dog | Christopher Lee | Love | FAITHFUL HEART FINDS HOME |
+| Pig | Jessica Martinez | Shield | ROOTS ANCHOR PEACE |
+
+### Testing Status:
+
+- [x] Wealth Mode - Verified (6 lucky numbers format)
+- [x] Power Mode - Verified (3-word motto in CAPS)
+- [x] Love Mode - Verified (4-word decree in CAPS)
+- [ ] Shield Mode - Pending final test
+
+### Documentation Created:
+
+1. **README.md** - Completely rewritten with badges, examples, comprehensive docs
+2. **docs/FEATURES.md** - Detailed feature breakdown
+3. **docs/DESIGN.md** - Design philosophy and UX principles
+4. **docs/ANNOUNCEMENT.md** - Press release for launch
+
+### Assets Added:
+
+**Zodiac Images:** `/public/assets/zodiac/`
+- rat.jpeg, ox.jpeg, tiger.jpeg, rabbit.jpeg
+- dragon.jpeg, snake.jpeg, horse.jpeg, goat.jpeg
+- monkey.jpeg, rooster.jpeg, dog.jpeg, pig.jpeg
+- Fire-Horse-2026-Chart.jpeg (master chart)
+
+**Example Talismans:** `/public/assets/examples/`
+- 12 generated PNG files (one per zodiac)
+
+**Marketing:** `/public/assets/`
+- Red-Horse-Oracle-Stripe-Graphic.jpeg (checkout graphic showing all 4 modes)
