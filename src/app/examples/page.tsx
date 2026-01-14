@@ -281,12 +281,13 @@ export default function ExamplesPage() {
             className="bg-black/95 border-2 border-fire-gold rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 relative"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close Button */}
+            {/* Back Button - Prominent */}
             <button
               onClick={() => setSelectedPerson(null)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl"
+              className="w-full bg-fire-gold/20 hover:bg-fire-gold/30 border border-fire-gold text-fire-gold font-bold py-3 px-6 rounded-xl mb-4 flex items-center justify-center gap-2 transition-all"
             >
-              ✕
+              <span className="text-xl">←</span>
+              <span>Back to All Examples</span>
             </button>
 
             {/* Person Info */}
@@ -349,10 +350,16 @@ export default function ExamplesPage() {
             )}
 
             {/* CTA */}
-            <div className="text-center">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <button
+                onClick={() => setSelectedPerson(null)}
+                className="bg-transparent border-2 border-fire-gold text-fire-gold font-bold py-3 px-6 rounded-xl hover:bg-fire-gold/20 transition-all"
+              >
+                ← See More Examples
+              </button>
               <a
                 href="/"
-                className="inline-block bg-fire-gold text-black font-bold py-3 px-6 rounded-xl hover:scale-105 transition-transform"
+                className="inline-block bg-fire-gold text-black font-bold py-3 px-6 rounded-xl hover:scale-105 transition-transform text-center"
               >
                 Get Your Own Prophecy
               </a>
