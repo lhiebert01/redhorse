@@ -117,8 +117,7 @@ export default function ExamplesPage() {
             {EXAMPLE_PEOPLE.map((person) => (
               <div
                 key={person.id}
-                onClick={() => setSelectedPerson(person.id)}
-                className="bg-black/70 border border-fire-gold/30 rounded-2xl p-4 cursor-pointer hover:border-fire-gold hover:scale-[1.02] transition-all duration-300"
+                className="bg-black/70 border border-fire-gold/30 rounded-2xl p-4 hover:border-fire-gold transition-all duration-300"
               >
                 {/* Person Header */}
                 <div className="flex items-center gap-3 mb-3">
@@ -138,19 +137,28 @@ export default function ExamplesPage() {
                 </div>
 
                 {/* Prophecy */}
-                <div className="bg-red-950/50 rounded-lg p-2 mb-2">
+                <div className="bg-red-950/50 rounded-lg p-2 mb-3">
                   <p className="text-fire-gold font-bold text-center">
                     {person.mainText}
                   </p>
                 </div>
 
                 {/* Mode Badge */}
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between mb-3">
                   <span className={`text-sm font-bold ${MODE_COLOR[person.mode]}`}>
                     {person.mode.charAt(0).toUpperCase() + person.mode.slice(1)} Mode
                   </span>
-                  <span className="text-fire-gold text-xs">View Talisman →</span>
                 </div>
+
+                {/* CLICK TO EXPAND Button */}
+                <button
+                  onClick={() => setSelectedPerson(person.id)}
+                  className="w-full bg-gradient-to-r from-fire-gold/20 to-yellow-600/20 hover:from-fire-gold/40 hover:to-yellow-600/40 border-2 border-fire-gold text-fire-gold font-bold py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-2 hover:scale-[1.02]"
+                >
+                  <span className="text-lg">🔍</span>
+                  <span>CLICK TO EXPAND</span>
+                  <span className="text-lg">→</span>
+                </button>
               </div>
             ))}
           </div>
@@ -264,8 +272,24 @@ export default function ExamplesPage() {
               <div className="lg:w-1/2 p-4 lg:p-6 flex flex-col">
                 {/* Header */}
                 <div className="mb-4">
-                  <p className="text-gray-400 text-sm uppercase tracking-wide mb-1">Example Prophecy</p>
-                  <h2 className="text-2xl md:text-3xl font-bold text-fire-gold">{selectedExample.name}</h2>
+                  <p className="text-gray-400 text-sm uppercase tracking-wide mb-1">Personalized Fire Horse Oracle</p>
+                  <h2 className="text-2xl md:text-3xl font-bold text-fire-gold">{selectedExample.name}&apos;s Talisman</h2>
+                </div>
+
+                {/* Value Proposition */}
+                <div className="bg-gradient-to-r from-yellow-900/30 to-red-900/30 border border-fire-gold/50 rounded-xl p-4 mb-4">
+                  <p className="text-white text-sm leading-relaxed">
+                    <span className="text-fire-gold font-bold">Masterpiece Chinese Zodiac Artwork</span> — Each talisman is a
+                    <span className="text-yellow-400 font-bold"> one-of-a-kind</span>, personalized image created specifically for
+                    the recipient&apos;s birthday and Chinese zodiac sign as it relates to the
+                    <span className="text-fire-gold font-bold"> Year of the Fire Horse 2026</span>.
+                  </p>
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    <span className="bg-black/50 text-gray-300 text-xs px-2 py-1 rounded-full">📥 Download</span>
+                    <span className="bg-black/50 text-gray-300 text-xs px-2 py-1 rounded-full">🔗 Share</span>
+                    <span className="bg-black/50 text-gray-300 text-xs px-2 py-1 rounded-full">🖨️ Print</span>
+                    <span className="bg-black/50 text-gray-300 text-xs px-2 py-1 rounded-full">✨ Unique</span>
+                  </div>
                 </div>
 
                 {/* Zodiac Info with Image */}
@@ -328,8 +352,8 @@ export default function ExamplesPage() {
                 </div>
 
                 {/* Testimonial */}
-                <div className="bg-black/30 rounded-xl p-4 mb-4 flex-grow">
-                  <p className="text-white italic">
+                <div className="bg-black/30 rounded-xl p-4 mb-4">
+                  <p className="text-white italic text-sm">
                     &quot;{selectedExample.testimonial}&quot;
                   </p>
                   <p className="text-fire-gold text-sm mt-2 text-right">
