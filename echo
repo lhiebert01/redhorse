@@ -1,0 +1,1 @@
+Generating Example 1: Michael Johnson (Rat - Wealth) - DOB: 03/15/1984 curl -s -X POST https://redhorse-omega.vercel.app/api/admin-test  -H Content-Type: application/json  -d {"pin":"142857","birthDate":"03/15/1984","focusMode":"wealth"}
