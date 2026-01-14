@@ -10,7 +10,10 @@
 
 *Personalized Chinese Zodiac Talismans for the Once-in-60-Year Fire Horse Year*
 
-[Live Demo](https://redhorse-omega.vercel.app/) | [See Examples](https://redhorse-omega.vercel.app/examples) | [Documentation](./docs/)
+![Privacy by Design](https://img.shields.io/badge/Privacy-By%20Design-22C55E?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-PRODUCTION%20LIVE-success?style=for-the-badge)
+
+[Live Demo](https://redhorse-omega.vercel.app/) | [See Examples](https://redhorse-omega.vercel.app/examples) | [Privacy Policy](https://redhorse-omega.vercel.app/privacy)
 
 </div>
 
@@ -34,12 +37,20 @@ Each talisman is a **one-of-a-kind masterpiece** of Chinese zodiac artwork, pers
 ## Features
 
 ### AI-Generated Masterpiece Artwork
-- **Stunning visuals** powered by Google Gemini 2.0 Flash image generation
+- **Stunning visuals** powered by Google Gemini 3 Pro image generation
 - **Culturally authentic** Chinese zodiac representations
 - **All 12 zodiac animals** with traditional symbolism and artistry
 - **Randomized art styles**: Ink wash, Song Dynasty, Dunhuang murals, Tang Dynasty
 - **Personalized prophecy** based on zodiac sign and Fire Horse compatibility
 - **Downloadable, shareable, printable** high-resolution images
+
+### Privacy by Design - KEY DIFFERENTIATOR
+- **FIRST, ONLY, BEST** Google Gemini 3 Pro zodiac app with complete privacy
+- **Zero PII stored** - Your birth date is used to calculate zodiac, then immediately discarded
+- **No names on Oracle** - We never ask for or display your name
+- **Safe to share publicly** - Your Oracle contains no personally identifiable information
+- **No tracking cookies** - Beyond secure Stripe checkout
+- **Simplified compliance** - GDPR/CCPA friendly by design
 
 ### Examples Gallery
 - **12 complete examples** showcasing all zodiac animals
@@ -51,9 +62,11 @@ Each talisman is a **one-of-a-kind masterpiece** of Chinese zodiac artwork, pers
 ### Reveal Experience
 - **Real-time generation status** with animated progress
 - **Beautiful talisman display** with decree and mystical reading
+- **Zodiac Summary** - Personalized 2026 Fire Horse forecast with characteristics and strengths
 - **Save Talisman** - Downloads complete card as image
 - **Share** - Native sharing or copy to clipboard
 - **Share to X/Twitter** - Pre-formatted tweet with prophecy link
+- **Navigation buttons** - Return home, get another reading, view examples
 
 ### Payment & Integration
 - **$8.88 price point** (auspicious number in Chinese culture)
@@ -70,10 +83,10 @@ Each talisman is a **one-of-a-kind masterpiece** of Chinese zodiac artwork, pers
 | Styling | Tailwind CSS |
 | Database | Supabase (PostgreSQL) |
 | Storage | Supabase Storage |
-| Payments | Stripe Payment Links |
-| AI Text | Google Gemini 2.0 Flash |
-| AI Images | Google Gemini 2.0 Flash (Imagen) |
-| Hosting | Vercel |
+| Payments | Stripe Payment Links (LIVE) |
+| AI Text | Google Gemini 3 Pro |
+| AI Images | Google Gemini 3 Pro (Native) |
+| Hosting | Vercel Edge Network |
 
 ## Quick Start
 
@@ -200,9 +213,12 @@ All 12 animals with authentic representations:
 ## Documentation
 
 - **[CLAUDE.md](./CLAUDE.md)** - Development guide for AI assistants
+- **[docs/EXEC-SUMMARY.md](./docs/EXEC-SUMMARY.md)** - Executive summary and document index
+- **[docs/NEXT-STEPS.md](./docs/NEXT-STEPS.md)** - Launch preparation checklist
 - **[docs/FEATURES.md](./docs/FEATURES.md)** - Detailed feature documentation
 - **[docs/DESIGN.md](./docs/DESIGN.md)** - Design philosophy and UX principles
 - **[docs/ANNOUNCEMENT.md](./docs/ANNOUNCEMENT.md)** - Press release and introduction
+- **[docs/RELEASE-NOTES.md](./docs/RELEASE-NOTES.md)** - Version history and changelog
 
 ## Deployment
 

@@ -1,34 +1,48 @@
 # Red Horse Oracle - Next Steps Plan
 
-**Created:** January 14, 2026 (Late Night)
-**For:** Tomorrow's Work Session
+**Last Updated:** January 14, 2026 (Evening)
+**Status:** PRODUCTION LIVE - Planning Marketing Launch
 
 ---
 
-## Priority 1: Production Launch Preparation
+## COMPLETED: Production Launch Preparation
 
-### 1.1 Stripe Production Setup
-- [ ] Switch from Stripe Test Mode to Live Mode
-- [ ] Create new Live Mode product ($8.88)
-- [ ] Create new Live Mode Payment Link with custom fields:
-  - Text: "Date of Birth (MM/DD/YYYY)" - Key: `dob`
-  - Dropdown: "Choose Your Path" - Key: `focus` (Wealth, Power, Love, Shield)
-- [ ] Update Payment Link redirect URL to production domain
-- [ ] Create new Live Mode webhook endpoint
-- [ ] Update Vercel environment variables:
-  - `STRIPE_SECRET_KEY` → Live key (sk_live_...)
+### 1.1 Stripe Production Setup - DONE
+- [x] Switch from Stripe Test Mode to Live Mode
+- [x] Create new Live Mode product ($8.88)
+- [x] Create new Live Mode Payment Link with custom fields:
+  - Text: "Date of Birth (MM/DD/YYYY)"
+  - Dropdown: "Choose Your Path" (Wealth, Power, Love, Shield)
+- [x] Configure Payment Link redirect URL
+- [x] Create Live Mode webhook endpoint
+- [x] Update Vercel environment variables:
+  - `STRIPE_SECRET_KEY` → Live key
   - `STRIPE_WEBHOOK_SECRET` → Live webhook secret
   - `NEXT_PUBLIC_STRIPE_PAYMENT_LINK` → Live payment link
 
-### 1.2 Stripe Product Catalog Enhancement
+### 1.2 Privacy by Design - DONE
+- [x] Complete Privacy Policy rewrite
+- [x] Added "FIRST | ONLY | BEST" tagline to landing page
+- [x] Added Privacy Info button + modal to Examples page
+- [x] Added Privacy notice to ZodiacSummary component
+
+### 1.3 Zodiac Summary Feature - DONE
+- [x] Created ZodiacSummary component
+- [x] Added 2026 forecasts for all 12 zodiac animals
+- [x] Added characteristics and strengths
+- [x] Fixed production bug (case-sensitivity)
+
+### 1.4 Navigation & UX - DONE
+- [x] Added navigation buttons for regular users on reveal page
+
+### 1.5 Stripe Product Catalog Enhancement (Optional)
 - [ ] Upload compelling product image: `Red-Horse-Oracle-Stripe-Graphic.jpeg`
-- [ ] Write compelling product description:
-  > "Fire Horse Oracle Prophecy - Personalized AI-generated talisman for the Year of the Fire Horse 2026. Choose your path: Wealth (6 Lucky Numbers), Power (Strategic Motto), Love (Destiny Decree), or Shield (Protective Mantra). One-of-a-kind masterpiece Chinese zodiac artwork. Once-in-60-year opportunity!"
+- [ ] Write compelling product description
 - [ ] Set product metadata for better analytics
 
 ---
 
-## Priority 2: Domain & DNS Setup
+## Priority 1: Domain & DNS Setup (NEXT)
 
 ### 2.1 Domain Purchase Options
 Suggested domains to check availability:
@@ -240,21 +254,23 @@ Create content for multiple platforms:
 
 ---
 
-## Tomorrow's Priority Order
+## Next Session Priority Order
 
-### Morning Session (2-3 hours)
-1. **Stripe Production Setup** - Switch to live mode
-2. **Domain Purchase** - Buy and configure
-3. **OG Images** - Finalize and test
+### Session 1: Domain & Analytics (2-3 hours)
+1. **Domain Purchase** - Buy redhorseoracle.com or alternative
+2. **DNS Configuration** - Point domain to Vercel
+3. **Google Analytics** - Set up GA4 tracking
+4. **Update URLs** - Webhook, payment link redirect
 
-### Afternoon Session (2-3 hours)
-4. **Google Analytics** - Set up tracking
-5. **SEO Basics** - Meta tags, sitemap
-6. **LinkedIn Article** - Write and post
+### Session 2: SEO & Content (2-3 hours)
+5. **SEO Optimization** - Meta tags, sitemap, structured data
+6. **LinkedIn Article** - "I Built the World's First AI Fire Horse Oracle"
+7. **Medium Article** - Technical deep-dive
 
-### Evening Session (1-2 hours)
-7. **Product Hunt Prep** - Assets and copy
-8. **Ad Account Setup** - Facebook Pixel, Google Ads
+### Session 3: Marketing Prep (2-3 hours)
+8. **Product Hunt Prep** - Assets, copy, screenshot gallery
+9. **Ad Account Setup** - Facebook Business Manager, Google Ads
+10. **Influencer List** - Identify astrology/Chinese culture creators
 
 ---
 
@@ -279,24 +295,25 @@ git add -A && git commit -m "message" && git push origin main
 
 ---
 
-## Environment Variables Checklist (Production)
+## Environment Variables Status (Production)
 
 ```env
-# Supabase (already live)
+# Supabase - LIVE
 NEXT_PUBLIC_SUPABASE_URL=https://ykptxslgxlsbvpbeujfu.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=<keep current>
-SUPABASE_SERVICE_ROLE_KEY=<keep current>
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<configured>
+SUPABASE_SERVICE_ROLE_KEY=<configured>
 
-# Stripe (UPDATE TO LIVE)
-STRIPE_SECRET_KEY=sk_live_...  # CHANGE FROM sk_test_
-STRIPE_WEBHOOK_SECRET=whsec_... # NEW LIVE WEBHOOK
-NEXT_PUBLIC_STRIPE_PAYMENT_LINK=https://buy.stripe.com/live_... # NEW LIVE LINK
+# Stripe - LIVE (COMPLETED Jan 14)
+STRIPE_SECRET_KEY=sk_live_...  # LIVE
+STRIPE_WEBHOOK_SECRET=whsec_bsrjO6waD0dD7aHeMcp8XJK9BZKxa7a4  # LIVE
+NEXT_PUBLIC_STRIPE_PAYMENT_LINK=https://buy.stripe.com/7sIdUP8Og5p31EY3cc  # LIVE
 
-# Gemini (already live)
-GEMINI_API_KEY=<keep current>
+# Gemini - LIVE
+GEMINI_API_KEY=<configured>
 
-# App URL (UPDATE AFTER DOMAIN)
-NEXT_PUBLIC_APP_URL=https://redhorseoracle.com  # UPDATE TO NEW DOMAIN
+# App URL - UPDATE AFTER DOMAIN PURCHASE
+NEXT_PUBLIC_APP_URL=https://redhorse-omega.vercel.app  # Current
+# NEXT_PUBLIC_APP_URL=https://redhorseoracle.com  # After domain purchase
 ```
 
 ---
@@ -319,6 +336,25 @@ NEXT_PUBLIC_APP_URL=https://redhorseoracle.com  # UPDATE TO NEW DOMAIN
 
 ---
 
-*Rest well! Big day tomorrow.* 🔥🐴
+## Current Status Summary
+
+**PRODUCTION IS LIVE!** Real payments are being processed.
+
+**Completed:**
+- Stripe production setup
+- Privacy by Design implementation
+- ZodiacSummary feature
+- All documentation updated
+
+**Next Priority:**
+1. Domain purchase (redhorseoracle.com)
+2. Google Analytics
+3. SEO optimization
+4. Content marketing (LinkedIn, Medium)
+5. Product Hunt preparation
+
+---
+
+*The Fire Horse awaits. Launch is imminent.* 🔥🐴
 
 火马年 2026
