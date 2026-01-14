@@ -127,6 +127,14 @@ export default function Home() {
             <span>⚡ Instant</span>
             <span>🎨 AI Art</span>
           </div>
+
+          {/* See Examples Link */}
+          <a
+            href="/examples"
+            className="block text-center text-fire-gold hover:text-yellow-300 font-semibold underline underline-offset-4"
+          >
+            👁️ See Examples from All 12 Zodiac Signs
+          </a>
         </div>
 
         {/* Social Proof */}
