@@ -73,16 +73,40 @@ export default function FreeReadingPage() {
 
       <div className="max-w-2xl mx-auto px-4 py-8">
         {!result ? (
-          /* Birth Date Input Form */
-          <div className="bg-red-950/30 border border-red-900/50 rounded-2xl p-8">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="text-center">
-                <label className="block text-fire-gold text-lg font-semibold mb-2">
-                  Enter Your Birth Date
-                </label>
-                <p className="text-gray-400 text-sm mb-4">
-                  Used only to calculate your zodiac sign - never stored
-                </p>
+          <>
+            {/* Privacy Promise - Before Form */}
+            <div className="bg-green-900/30 border-2 border-green-500/50 rounded-2xl p-5 mb-6">
+              <div className="flex items-center justify-center gap-3 mb-3">
+                <span className="text-3xl">🛡️</span>
+                <h2 className="text-green-400 text-xl font-bold">ZERO DATA RETAINED</h2>
+              </div>
+              <p className="text-white text-center text-sm leading-relaxed mb-3">
+                The <span className="text-green-400 font-bold">ONLY</span> Red Horse Oracle with{' '}
+                <span className="text-green-400 font-bold">COMPLETE Privacy by Design</span>.
+                Your birth date is processed <span className="text-green-400 font-semibold">locally in your browser</span>{' '}
+                to calculate your zodiac sign and is <span className="text-green-400 font-semibold">immediately discarded</span>.
+              </p>
+              <p className="text-gray-300 text-center text-xs mb-4">
+                No names. No DOB stored. No PII. No tracking. No cookies. Nothing.
+              </p>
+              <a
+                href="/privacy"
+                className="block w-full max-w-xs mx-auto bg-green-600 hover:bg-green-500 text-white font-bold text-base py-3 rounded-xl text-center transition-colors"
+              >
+                🔒 VIEW OUR PRIVACY POLICY
+              </a>
+            </div>
+
+            {/* Birth Date Input Form */}
+            <div className="bg-red-950/30 border border-red-900/50 rounded-2xl p-8">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="text-center">
+                  <label className="block text-fire-gold text-lg font-semibold mb-2">
+                    Enter Your Birth Date
+                  </label>
+                  <p className="text-gray-400 text-sm mb-4">
+                    Calculated locally in your browser - never sent to any server
+                  </p>
                 <input
                   type="date"
                   value={birthDate}
@@ -102,6 +126,7 @@ export default function FreeReadingPage() {
               </p>
             </form>
           </div>
+          </>
         ) : (
           /* Results Section */
           <div className="space-y-8">
@@ -224,17 +249,27 @@ export default function FreeReadingPage() {
               </p>
             </div>
 
-            {/* Privacy Reinforcement */}
-            <div className="bg-green-900/20 border border-green-700/50 rounded-xl p-4">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <span className="text-lg">🛡️</span>
-                <p className="text-green-400 text-sm font-bold">Privacy by Design</p>
+            {/* Privacy Reinforcement - Enhanced */}
+            <div className="bg-green-900/30 border-2 border-green-500/50 rounded-2xl p-5">
+              <div className="flex items-center justify-center gap-3 mb-3">
+                <span className="text-3xl">🛡️</span>
+                <h3 className="text-green-400 text-xl font-bold">YOUR DATA? ALREADY GONE.</h3>
               </div>
-              <p className="text-gray-300 text-xs text-center">
-                Your birth date was used only to calculate your zodiac sign and was{' '}
-                <span className="text-green-400 font-semibold">immediately discarded</span>.
-                No email required. No account needed. No data stored.
+              <p className="text-white text-center text-sm leading-relaxed mb-3">
+                Your birth date was processed <span className="text-green-400 font-semibold">locally in your browser</span>{' '}
+                and was <span className="text-green-400 font-semibold">immediately discarded</span> after calculating your zodiac sign.
               </p>
+              <p className="text-gray-300 text-center text-xs mb-4">
+                We are the <span className="text-green-400 font-bold">ONLY</span> Red Horse Oracle with{' '}
+                <span className="text-green-400 font-bold">COMPLETE Privacy by Design</span>.
+                No data stored. No tracking. No cookies. Nothing retained.
+              </p>
+              <a
+                href="/privacy"
+                className="block w-full max-w-xs mx-auto bg-green-600 hover:bg-green-500 text-white font-bold text-base py-3 rounded-xl text-center transition-colors"
+              >
+                🔒 VIEW OUR PRIVACY POLICY
+              </a>
             </div>
 
             {/* Try Again */}
