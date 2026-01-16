@@ -219,7 +219,7 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-bold text-white mb-3">11. Contact Us</h2>
             <p className="text-gray-300">
               For privacy-related inquiries, please contact:{' '}
-              <span className="text-fire-gold">privacy@redhorseoracle.com</span>
+              <a href="mailto:lindsay.hiebert@gmail.com" className="text-fire-gold hover:underline">privacy@redhorseoracle.com</a>
             </p>
           </section>
         </div>

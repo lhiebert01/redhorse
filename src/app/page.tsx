@@ -51,11 +51,17 @@ export default function Home() {
 
       <div className="max-w-lg mx-auto px-4 py-8 flex flex-col items-center min-h-screen relative z-10">
         {/* Hero Title */}
-        <h1 className="text-4xl md:text-5xl font-bold text-fire-gold tracking-tighter text-glow-gold text-center mt-4 mb-4">
+        <h1 className="text-4xl md:text-5xl font-bold text-fire-gold tracking-tighter text-glow-gold text-center mt-4 mb-2">
           RED HORSE
           <br />
           ORACLE
         </h1>
+
+        {/* Value Prop - Right after title */}
+        <p className="text-center text-white text-sm font-semibold mb-4 px-4">
+          The world&apos;s first <span className="text-green-400">Google Gemini 3 Pro</span> zodiac app with{' '}
+          <span className="text-green-400">COMPLETE Privacy by Design</span>
+        </p>
 
         {/* Hero Image */}
         <div className="relative w-full max-w-sm mb-6">
@@ -140,19 +146,22 @@ export default function Home() {
         {/* Privacy by Design Notice - KEY DIFFERENTIATOR */}
         <a
           href="/privacy"
-          className="w-full bg-green-900/20 border border-green-700/50 rounded-xl p-4 mb-6 hover:border-green-500 transition-colors block"
+          className="w-full bg-green-900/30 border border-green-500/50 rounded-xl p-4 mb-6 hover:border-green-400 transition-colors block"
         >
           <div className="flex items-start gap-3">
             <span className="text-2xl">🛡️</span>
             <div>
-              <p className="text-green-400 font-bold text-sm">FIRST | ONLY | BEST</p>
-              <p className="text-white text-xs font-semibold mt-1">
-                The world&apos;s first Google Gemini 3 Pro zodiac app with <span className="text-green-400">COMPLETE Privacy by Design</span>
+              <p className="text-green-400 font-bold text-sm mb-1">
+                The ONLY Red Horse Oracle with COMPLETE Privacy by Design
               </p>
-              <p className="text-gray-400 text-xs mt-1">
-                <strong className="text-white">Zero data stored.</strong> Your birth date calculates your zodiac and is <strong className="text-green-400">immediately discarded</strong>. No names, no DOB, no PII ever.
+              <p className="text-white text-sm leading-relaxed">
+                <strong>Zero data stored.</strong> Your birth date calculates your zodiac and is{' '}
+                <span className="text-green-400 font-semibold">immediately discarded</span>.
               </p>
-              <p className="text-gray-500 text-xs mt-1 underline">Learn more →</p>
+              <p className="text-white text-sm mt-1">
+                No names. No DOB. No PII ever.
+              </p>
+              <p className="text-green-300 text-xs mt-2 underline font-semibold">Learn more →</p>
             </div>
           </div>
         </a>
