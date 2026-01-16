@@ -2,19 +2,22 @@ import { ZodiacAnimal } from './zodiac-data';
 
 /**
  * Limited Edition Oracle Configuration
- * Each zodiac sign has a staggered closing date and limited slots
+ * Each zodiac sign + mode combination has 888 editions
  * Numbers use auspicious Chinese numerology (8 = prosperity)
  */
 
 export interface EditionConfig {
   animal: ZodiacAnimal;
-  totalSlots: number;
+  totalSlots: number; // 888 per mode (Wealth/Power/Love/Shield)
   closingDate: string; // ISO date
   closingDateDisplay: string; // Human readable
   chineseChar: string;
 }
 
-// 888 editions per zodiac sign = 10,656 total oracles EVER
+export type OracleMode = 'wealth' | 'power' | 'love' | 'shield';
+
+// 888 editions per zodiac sign PER MODE = 42,624 total oracles EVER
+// 888 × 12 zodiac signs × 4 modes = 42,624
 // 888 is the most auspicious Chinese number (prosperity/wealth)
 // Staggered closing dates throughout 2026
 export const EDITION_CONFIG: Record<ZodiacAnimal, EditionConfig> = {

@@ -304,7 +304,9 @@ export default function FreeReadingPage() {
                 Will YOU Claim Your Authentic<br />{result.element} {result.animal} × Fire Horse Oracle?
               </h3>
               <p className="text-gray-300 text-lg mb-4">
-                Only <span className="text-fire-gold font-bold">{EDITION_CONFIG[result.animal].totalSlots}</span> authentic {result.element} {result.animal} Oracles will EVER be created for the Year of the Fire Horse.
+                Only <span className="text-fire-gold font-bold">{EDITION_CONFIG[result.animal].totalSlots}</span> of each oracle type will EVER be minted for {result.element} {result.animal}.
+                <br />
+                <span className="text-gray-400 text-sm">888 Wealth × 888 Power × 888 Love × 888 Shield</span>
                 <br />
                 <span className="text-red-400">Each one numbered. Each one unique. Each one YOURS.</span>
               </p>
@@ -334,7 +336,7 @@ export default function FreeReadingPage() {
               </div>
 
               <p className="text-white text-sm font-semibold">
-                Only {EDITION_CONFIG[result.animal].totalSlots} people will EVER own an authentic {result.element} {result.animal} × Fire Horse Oracle. Will you be one of them?
+                Only {EDITION_CONFIG[result.animal].totalSlots} of each mode (Wealth, Power, Love, Shield) will EVER be minted for {result.element} {result.animal}. Will you claim yours?
               </p>
             </div>
 

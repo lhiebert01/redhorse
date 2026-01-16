@@ -52,18 +52,20 @@ export async function POST(request: Request) {
     const zodiac = getChineseZodiac(birthDate);
     const fireHorseReading = getFireHorseReading(zodiac.animal, zodiac.element);
 
-    // Get edition number for this zodiac sign (count existing + 1)
+    // Get edition number for this zodiac sign + mode combination (count existing + 1)
+    // Each zodiac + mode combo has 888 editions (e.g., 888 Metal Rat Wealth, 888 Metal Rat Power, etc.)
     const { count: existingCount } = await supabase
       .from('prophecies')
       .select('*', { count: 'exact', head: true })
       .eq('zodiac_sign', zodiac.animal)
+      .eq('focus_mode', focusMode)
       .eq('status', 'completed');
 
     const editionNumber = (existingCount || 0) + 1;
     const editionConfig = EDITION_CONFIG[zodiac.animal as ZodiacAnimal];
     const totalEditions = editionConfig?.totalSlots || 888;
 
-    console.log(`Assigning edition #${editionNumber} of ${totalEditions} for ${zodiac.animal}`);
+    console.log(`Assigning edition #${editionNumber} of ${totalEditions} for ${zodiac.animal} ${focusMode}`);
 
     // Create pending record with session_id and edition number
     const { data: prophecy, error: insertError } = await supabase
