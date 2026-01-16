@@ -155,11 +155,21 @@ export default function Home() {
             See your zodiac forecast instantly - no payment required
           </p>
 
-          {/* Divider */}
-          <div className="flex items-center gap-3">
-            <div className="flex-1 border-t border-gray-700" />
-            <span className="text-gray-500 text-xs">or get the full experience</span>
-            <div className="flex-1 border-t border-gray-700" />
+          {/* Divider with Call to Action */}
+          <div className="text-center py-2">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="flex-1 border-t border-fire-gold/30" />
+              <span className="text-fire-gold text-xs">✦</span>
+              <div className="flex-1 border-t border-fire-gold/30" />
+            </div>
+            <p className="text-white font-bold text-base md:text-lg leading-snug">
+              Ready for your real, complete, authenticated
+              <br />
+              <span className="text-fire-gold">Limited Edition Red Horse Oracle?</span>
+            </p>
+            <p className="text-gray-400 text-sm mt-1">
+              Take a chance. Get your true prophecy.
+            </p>
           </div>
 
           {/* Paid CTA Button */}
@@ -170,7 +180,7 @@ export default function Home() {
                        hover:scale-105 active:scale-95 transition-all duration-200
                        shadow-xl shadow-yellow-500/30 glow-gold"
           >
-            UNLOCK YOUR PROPHECY - $8.88
+            🔥 GET MY ORACLE - $8.88
           </a>
 
           {/* Trust Badges */}
