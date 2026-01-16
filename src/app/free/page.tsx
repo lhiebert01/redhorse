@@ -201,10 +201,97 @@ export default function FreeReadingPage() {
               </p>
             </div>
 
+            {/* Authenticity Seal */}
+            <div className="bg-black border-2 border-fire-gold rounded-2xl p-6 text-center relative overflow-hidden">
+              {/* Watermark Background */}
+              <div className="absolute inset-0 opacity-5 flex items-center justify-center">
+                <span className="text-[200px] text-fire-gold">馬</span>
+              </div>
+
+              <div className="relative z-10">
+                {/* Seal Badge */}
+                <div className="inline-block bg-gradient-to-br from-yellow-600 via-yellow-500 to-yellow-600 rounded-full p-1 mb-4">
+                  <div className="bg-black rounded-full px-6 py-3 border-2 border-fire-gold">
+                    <p className="text-fire-gold font-bold text-xs tracking-widest">✦ AUTHENTICATED ✦</p>
+                  </div>
+                </div>
+
+                <h3 className="text-fire-gold text-2xl font-bold mb-2">
+                  THE ONLY AUTHENTIC
+                </h3>
+                <h2 className="text-white text-3xl font-bold mb-3">
+                  RED HORSE ORACLE
+                </h2>
+
+                <div className="flex flex-wrap justify-center gap-2 mb-4">
+                  <span className="bg-red-900/50 border border-red-700 text-red-300 text-xs px-3 py-1 rounded-full">🔥 FIRST</span>
+                  <span className="bg-green-900/50 border border-green-700 text-green-300 text-xs px-3 py-1 rounded-full">🛡️ ONLY</span>
+                  <span className="bg-yellow-900/50 border border-yellow-700 text-yellow-300 text-xs px-3 py-1 rounded-full">⭐ BEST</span>
+                </div>
+
+                <p className="text-gray-300 text-sm mb-2">
+                  Powered by <span className="text-green-400 font-bold">Google Gemini 3 Pro</span>
+                </p>
+                <p className="text-gray-400 text-xs">
+                  Complete Privacy by Design • Zero Data Stored • Museum-Quality AI Art
+                </p>
+              </div>
+            </div>
+
+            {/* Courage Challenge CTA */}
+            <div className="bg-gradient-to-br from-red-950 via-red-900 to-black border-2 border-red-500 rounded-2xl p-6 text-center">
+              {/* Urgency Warning */}
+              <div className="bg-red-900/80 border border-red-500 rounded-lg px-4 py-2 mb-4 inline-block">
+                <p className="text-red-200 text-xs font-bold uppercase tracking-wider">
+                  ⚠️ LIMITED TIME: This Oracle Closes December 31, 2026 ⚠️
+                </p>
+              </div>
+
+              <p className="text-red-400 text-sm uppercase tracking-widest mb-2">
+                The Fire Horse Demands Courage
+              </p>
+              <h3 className="text-white text-2xl md:text-3xl font-bold mb-4">
+                Will YOU Be Bold Enough<br />To Know Your 2026 Destiny?
+              </h3>
+              <p className="text-gray-300 text-lg mb-4">
+                The Fire Horse returns <span className="text-fire-gold font-bold">once every 60 years</span>.
+                <br />
+                <span className="text-red-400">This is YOUR moment. Your ONE chance until 2086.</span>
+              </p>
+
+              {/* Countdown Context */}
+              <div className="bg-black/70 border border-fire-gold/50 rounded-xl p-4 mb-4">
+                <p className="text-fire-gold text-sm font-bold mb-1">🔥 Year of the Fire Horse: 2026</p>
+                <p className="text-gray-400 text-xs">
+                  Next Fire Horse year: <span className="text-red-400 font-bold">2086</span> (60 years from now)
+                </p>
+                <p className="text-gray-500 text-xs mt-1">
+                  This app will be <span className="text-red-400">permanently archived</span> after 2026.
+                </p>
+              </div>
+
+              <p className="text-gray-400 text-sm italic mb-4">
+                &ldquo;Fortune favors the bold. The Fire Horse respects COURAGE.&rdquo;
+              </p>
+
+              <div className="bg-black/50 border border-gray-700 rounded-xl p-4 mb-4">
+                <p className="text-gray-400 text-xs uppercase tracking-widest mb-2">The Question Is:</p>
+                <p className="text-white text-xl font-bold">
+                  Are you someone who <span className="text-red-400">ACTS</span>?
+                  <br />
+                  Or someone who <span className="text-gray-500">waits and wonders?</span>
+                </p>
+              </div>
+
+              <p className="text-gray-500 text-xs">
+                Don&apos;t let 2026 pass without YOUR authentic Fire Horse prophecy.
+              </p>
+            </div>
+
             {/* Sample Talisman Preview */}
             <div className="bg-gradient-to-br from-yellow-900/20 to-red-900/20 border border-fire-gold/50 rounded-2xl p-6">
               <p className="text-fire-gold text-sm uppercase tracking-widest mb-3 text-center">
-                Your Personalized Oracle Awaits
+                Your REAL, COMPLETE Oracle Awaits
               </p>
               <div className="relative w-full max-w-sm mx-auto mb-4">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -240,12 +327,18 @@ export default function FreeReadingPage() {
               {/* CTA Button */}
               <a
                 href={paymentLink}
-                className="block w-full bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 text-black font-bold text-xl py-4 rounded-xl text-center hover:scale-105 active:scale-95 transition-all duration-200 shadow-xl shadow-yellow-500/30"
+                className="block w-full bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 text-black font-bold text-xl py-5 rounded-xl text-center hover:scale-105 active:scale-95 transition-all duration-200 shadow-xl shadow-yellow-500/30 border-2 border-yellow-400"
               >
-                GET MY ORACLE - $8.88
+                🔥 I HAVE THE COURAGE - GET MY ORACLE
               </a>
-              <p className="text-center text-gray-400 text-xs mt-2">
-                One-time payment. Instant delivery. Privacy by design.
+              <p className="text-fire-gold text-center text-lg font-bold mt-2">
+                $8.88 <span className="text-gray-400 text-sm font-normal">• The Number of Fortune</span>
+              </p>
+              <p className="text-center text-gray-400 text-xs mt-1">
+                One-time payment. Instant delivery. Authentic prophecy. Privacy by design.
+              </p>
+              <p className="text-center text-red-400 text-xs mt-2 font-semibold">
+                ⏰ Available only until December 31, 2026
               </p>
             </div>
 
