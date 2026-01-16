@@ -58,23 +58,32 @@ export default function Home() {
         </h1>
 
         {/* Tagline */}
-        <p className="text-red-400 text-lg md:text-xl font-semibold tracking-wide mb-4 text-center">
-          丙午年 · Year of the Fire Horse 2026
-        </p>
+        <div className="text-center mb-4">
+          <p className="text-red-300 text-4xl md:text-5xl font-bold tracking-wider mb-1">
+            丙午年
+          </p>
+          <p className="text-fire-gold text-xl md:text-2xl font-semibold tracking-wide">
+            Year of the Fire Horse 2026
+          </p>
+        </div>
 
         {/* Value Prop Badge */}
-        <div className="bg-black/60 backdrop-blur-sm border border-fire-gold/40 rounded-xl px-5 py-4 mb-6">
-          <p className="text-center text-white text-sm md:text-base font-medium mb-2">
-            🔥 World&apos;s First{' '}
-            <span className="text-fire-gold font-bold">Authenticated Limited Edition</span>{' '}
+        <div className="bg-black/60 backdrop-blur-sm border-2 border-fire-gold/50 rounded-xl px-5 py-5 mb-6">
+          <p className="text-center text-white text-lg md:text-xl font-bold mb-1">
+            🔥 World&apos;s First
+          </p>
+          <p className="text-center text-fire-gold text-xl md:text-2xl font-bold mb-1">
+            Authenticated Limited Edition
+          </p>
+          <p className="text-center text-white text-lg md:text-xl font-bold mb-3">
             AI Zodiac Oracle
           </p>
-          <div className="flex flex-wrap justify-center gap-2 mb-2">
-            <span className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-[10px] px-2 py-1 rounded">✦ NUMBERED EDITIONS</span>
-            <span className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-[10px] px-2 py-1 rounded">🖼️ VERIFIABLE ART</span>
-            <span className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-[10px] px-2 py-1 rounded">📜 PROVENANCE</span>
+          <div className="flex flex-wrap justify-center gap-2 mb-3">
+            <span className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-xs px-3 py-1.5 rounded">✦ NUMBERED EDITIONS</span>
+            <span className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-xs px-3 py-1.5 rounded">🖼️ VERIFIABLE ART</span>
+            <span className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-xs px-3 py-1.5 rounded">📜 PROVENANCE</span>
           </div>
-          <p className="text-center text-green-400 text-xs font-semibold">
+          <p className="text-center text-green-400 text-sm font-semibold">
             🛡️ 100% PII-FREE • Privacy by Design • Maker&apos;s Mark Authenticated
           </p>
         </div>
