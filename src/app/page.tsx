@@ -176,27 +176,26 @@ export default function Home() {
         </div>
 
         {/* Privacy by Design Notice - KEY DIFFERENTIATOR */}
-        <a
-          href="/privacy"
-          className="w-full bg-green-900/30 border border-green-500/50 rounded-xl p-4 mb-6 hover:border-green-400 transition-colors block"
-        >
+        <div className="w-full bg-green-900/30 border border-green-500/50 rounded-xl p-4 mb-6">
           <div className="flex items-start gap-3">
             <span className="text-2xl">🛡️</span>
             <div>
-              <p className="text-green-400 font-bold text-sm mb-1">
+              <p className="text-green-400 font-bold text-sm mb-2">
                 The ONLY Red Horse Oracle with COMPLETE Privacy by Design
               </p>
               <p className="text-white text-sm leading-relaxed">
                 <strong>Zero data stored.</strong> Your birth date calculates your zodiac and is{' '}
-                <span className="text-green-400 font-semibold">immediately discarded</span>.
+                <span className="text-green-400 font-semibold">immediately discarded</span>. No names. No DOB. No PII ever.
               </p>
-              <p className="text-white text-sm mt-1">
-                No names. No DOB. No PII ever.
-              </p>
-              <p className="text-green-300 text-xs mt-2 underline font-semibold">Learn more →</p>
+              <a
+                href="/privacy"
+                className="inline-block mt-3 bg-green-600 hover:bg-green-500 text-white font-bold text-sm px-4 py-2 rounded-lg transition-colors"
+              >
+                LEARN MORE →
+              </a>
             </div>
           </div>
-        </a>
+        </div>
 
         {/* Social Proof */}
         <div className="text-center mb-6">
