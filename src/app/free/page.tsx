@@ -19,6 +19,7 @@ export default function FreeReadingPage() {
     animal: ZodiacAnimal;
     element: ZodiacElement;
   } | null>(null);
+  const [showPriceExplainer, setShowPriceExplainer] = useState(false);
 
   const paymentLink = process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK || '#';
 
@@ -383,12 +384,29 @@ export default function FreeReadingPage() {
               <p className="text-fire-gold text-center text-2xl font-bold mt-2">
                 $8.88
               </p>
-              <p className="text-center text-white text-sm font-semibold mt-1">
-                The Luckiest Number in Chinese Culture
-              </p>
-              <p className="text-center text-gray-300 text-xs mt-1">
-                八 (8) sounds like 发 (fā) meaning &ldquo;prosperity&rdquo; — triple 8s = triple fortune
-              </p>
+
+              {/* Interactive Price Explainer */}
+              <button
+                onClick={() => setShowPriceExplainer(!showPriceExplainer)}
+                className="mt-2 mx-auto block bg-red-900/50 hover:bg-red-900/70 border border-fire-gold/50 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all"
+              >
+                {showPriceExplainer ? '✓ Now you know!' : '🤔 Why $8.88? Tap to discover...'}
+              </button>
+
+              {showPriceExplainer && (
+                <div className="mt-3 bg-black/60 border border-fire-gold/30 rounded-xl p-4 text-center animate-fade-in">
+                  <p className="text-fire-gold text-sm font-bold mb-1">
+                    The Luckiest Number in Chinese Culture
+                  </p>
+                  <p className="text-white text-sm">
+                    八 (8) sounds like 发 (fā) — meaning <span className="text-fire-gold font-semibold">&ldquo;prosperity&rdquo;</span>
+                  </p>
+                  <p className="text-gray-300 text-xs mt-2">
+                    Triple 8s (888) = Triple Fortune. This is why Chinese gifts, prices, and lucky numbers always feature 8s.
+                  </p>
+                </div>
+              )}
+
               <p className="text-center text-white text-sm font-semibold mt-3">
                 One-time payment. Instant delivery. Authentic prophecy. Privacy by design.
               </p>
