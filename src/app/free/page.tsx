@@ -18,8 +18,6 @@ export default function FreeReadingPage() {
     animal: ZodiacAnimal;
     element: ZodiacElement;
   } | null>(null);
-  const [email, setEmail] = useState('');
-  const [emailSubmitted, setEmailSubmitted] = useState(false);
 
   const paymentLink = process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK || '#';
 
@@ -33,30 +31,6 @@ export default function FreeReadingPage() {
         animal: zodiac.animal as ZodiacAnimal,
         element: zodiac.element as ZodiacElement,
       });
-    }
-  };
-
-  const handleEmailSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !result) return;
-
-    // Store email in Supabase (simple insert)
-    try {
-      const response = await fetch('/api/capture-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          zodiac_sign: result.animal,
-          zodiac_element: result.element,
-        }),
-      });
-      if (response.ok) {
-        setEmailSubmitted(true);
-      }
-    } catch (error) {
-      console.error('Email capture error:', error);
-      setEmailSubmitted(true); // Still show success to user
     }
   };
 
@@ -250,39 +224,18 @@ export default function FreeReadingPage() {
               </p>
             </div>
 
-            {/* Email Capture for Non-Converters */}
-            {!emailSubmitted ? (
-              <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
-                <p className="text-gray-300 text-center mb-4">
-                  Not ready yet? Save your reading for later.
-                </p>
-                <form onSubmit={handleEmailSubmit} className="flex gap-2">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    className="flex-1 bg-black border border-gray-700 rounded-lg px-4 py-2 text-white focus:border-fire-gold focus:outline-none"
-                    required
-                  />
-                  <button
-                    type="submit"
-                    className="bg-fire-gold text-black font-semibold px-6 py-2 rounded-lg hover:bg-yellow-400 transition-colors"
-                  >
-                    Save
-                  </button>
-                </form>
-                <p className="text-gray-500 text-xs text-center mt-2">
-                  We&apos;ll send you a reminder before Chinese New Year.
-                </p>
+            {/* Privacy Reinforcement */}
+            <div className="bg-green-900/20 border border-green-700/50 rounded-xl p-4">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <span className="text-lg">🛡️</span>
+                <p className="text-green-400 text-sm font-bold">Privacy by Design</p>
               </div>
-            ) : (
-              <div className="bg-green-900/30 border border-green-700/50 rounded-xl p-6 text-center">
-                <p className="text-green-400 font-semibold">
-                  Saved! We&apos;ll remind you before Chinese New Year 2026.
-                </p>
-              </div>
-            )}
+              <p className="text-gray-300 text-xs text-center">
+                Your birth date was used only to calculate your zodiac sign and was{' '}
+                <span className="text-green-400 font-semibold">immediately discarded</span>.
+                No email required. No account needed. No data stored.
+              </p>
+            </div>
 
             {/* Try Again */}
             <button
