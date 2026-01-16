@@ -319,7 +319,7 @@ export default function FreeReadingPage() {
                 </p>
               </div>
 
-              <p className="text-gray-400 text-sm italic mb-4">
+              <p className="text-white text-base font-semibold italic mb-4">
                 &ldquo;Fortune favors the bold. The Fire Horse respects COURAGE.&rdquo;
               </p>
 
@@ -332,7 +332,7 @@ export default function FreeReadingPage() {
                 </p>
               </div>
 
-              <p className="text-gray-500 text-xs">
+              <p className="text-white text-sm font-semibold">
                 Only {EDITION_CONFIG[result.animal].totalSlots} people will EVER own an authentic {result.element} {result.animal} × Fire Horse Oracle. Will you be one of them?
               </p>
             </div>
@@ -380,10 +380,16 @@ export default function FreeReadingPage() {
               >
                 🔥 I HAVE THE COURAGE - GET MY ORACLE
               </a>
-              <p className="text-fire-gold text-center text-lg font-bold mt-2">
-                $8.88 <span className="text-gray-400 text-sm font-normal">• The Number of Fortune</span>
+              <p className="text-fire-gold text-center text-2xl font-bold mt-2">
+                $8.88
               </p>
-              <p className="text-center text-gray-400 text-xs mt-1">
+              <p className="text-center text-white text-sm font-semibold mt-1">
+                The Luckiest Number in Chinese Culture
+              </p>
+              <p className="text-center text-gray-300 text-xs mt-1">
+                八 (8) sounds like 发 (fā) meaning &ldquo;prosperity&rdquo; — triple 8s = triple fortune
+              </p>
+              <p className="text-center text-white text-sm font-semibold mt-3">
                 One-time payment. Instant delivery. Authentic prophecy. Privacy by design.
               </p>
               <p className="text-center text-red-400 text-xs mt-2 font-semibold">
