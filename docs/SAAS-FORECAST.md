@@ -139,15 +139,71 @@
 
 ---
 
-## Operating Costs (Monthly)
+## Complete Infrastructure & Resource Costs
 
-| Service | Free Tier | At Scale |
-|---------|-----------|----------|
-| Vercel | $0 | $20/mo |
-| Supabase | $0 | $25/mo |
-| Domain (yearly) | - | $15/yr |
-| **Monthly Total** | **$0** | **~$46/mo** |
-| **Yearly Total** | **$15** | **~$565** |
+### Tech Stack Overview
+
+| Layer | Service | Purpose |
+|-------|---------|---------|
+| **Frontend** | Next.js 14 (App Router) | React framework with SSR |
+| **Language** | TypeScript | Type-safe JavaScript |
+| **Styling** | Tailwind CSS | Utility-first CSS |
+| **Hosting** | Vercel | Serverless deployment |
+| **Database** | Supabase PostgreSQL | User data, prophecies |
+| **Storage** | Supabase Storage | Talisman images (PNG) |
+| **Payments** | Stripe Payment Links | $8.88 checkout |
+| **AI Text** | Gemini 3 Pro Preview | Prophecy generation |
+| **AI Image** | Gemini 3 Pro Image Preview | Talisman artwork |
+| **Domain** | GoDaddy | redhorseoracle.com |
+| **Git/CI** | GitHub | Version control, auto-deploy |
+
+### AI Models (Google Gemini)
+
+| Model | Model ID | Use Case | Cost |
+|-------|----------|----------|------|
+| **Text** | `gemini-3-pro-preview` | Prophecy, lucky numbers, mantras | $1.25/1M input, $5.00/1M output |
+| **Image** | `gemini-3-pro-image-preview` | Talisman artwork (9:16) | **$0.134/image (1K/2K)** |
+
+**Package:** `@google/genai`
+**Note:** Gemini 3 Flash does NOT support image generation - Pro Image is required.
+
+### Fixed Operating Costs (Monthly)
+
+| Service | Free Tier Limit | Pro Tier Cost | When to Upgrade |
+|---------|-----------------|---------------|-----------------|
+| **Vercel** | 100GB bandwidth | $20/mo | >100K visitors/mo |
+| **Supabase** | 500MB DB, 1GB storage | $25/mo | >500 prophecies or >1GB images |
+| **GitHub** | Unlimited public repos | Free | Never (public repo) |
+| **Domain** | N/A | $15/year | Annual renewal |
+
+### Variable Costs (Per Transaction)
+
+| Service | Rate | Per $8.88 Sale |
+|---------|------|----------------|
+| **Stripe** | 2.9% + $0.30 | $0.56 |
+| **Gemini 3 Pro Image** | $0.134/image | $0.134 |
+| **Gemini 3 Pro Text** | ~$0.01/request | $0.01 |
+| **Supabase Storage** | Free up to 1GB | ~$0.00 |
+| **Total Variable** | - | **$0.71** |
+
+### Monthly Cost Projections by Volume
+
+| Sales/Month | Gemini AI | Stripe | Vercel | Supabase | **Total Cost** | **Net Revenue** |
+|-------------|-----------|--------|--------|----------|----------------|-----------------|
+| 50 | $7 | $28 | $0 | $0 | $35 | $409 |
+| 100 | $14 | $56 | $0 | $0 | $70 | $818 |
+| 500 | $72 | $280 | $0 | $0 | $352 | $4,088 |
+| 1,000 | $145 | $560 | $0 | $25 | $730 | $8,150 |
+| 2,000 | $290 | $1,120 | $20 | $25 | $1,455 | $16,285 |
+| 5,000 | $725 | $2,800 | $20 | $25 | $3,570 | $40,830 |
+
+### Annual Infrastructure Budget
+
+| Scenario | Fixed Costs | Variable (Est.) | Total Annual |
+|----------|-------------|-----------------|--------------|
+| **Minimal** | $15 (domain) | $500 | ~$515 |
+| **Medium** | $315 (domain + some months Pro) | $5,000 | ~$5,315 |
+| **High Volume** | $555 (domain + Vercel + Supabase) | $20,000 | ~$20,555 |
 
 **Note:** Free tiers should cover most of the Fire Horse year unless traffic is exceptionally high.
 

@@ -12,15 +12,52 @@ Red Horse Oracle is a viral SaaS application that generates personalized AI tali
 
 ## Quick Reference
 
-### Tech Stack
-- **Framework:** Next.js 14 (App Router)
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS
-- **Database:** Supabase (PostgreSQL)
-- **Storage:** Supabase Storage (talismans bucket)
-- **Payments:** Stripe Payment Links
-- **AI:** Google Gemini 3 Pro (text + image generation)
-- **Hosting:** Vercel
+### Tech Stack & Resource Costs
+
+| Category | Service | Tier | Monthly Cost |
+|----------|---------|------|--------------|
+| **Framework** | Next.js 14 (App Router) | - | Free |
+| **Language** | TypeScript | - | Free |
+| **Styling** | Tailwind CSS | - | Free |
+| **Hosting** | Vercel | Hobby | Free (up to $20/mo at scale) |
+| **Database** | Supabase PostgreSQL | Free/Pro | Free → $25/mo |
+| **Storage** | Supabase Storage | Free/Pro | Free → included in Pro |
+| **Payments** | Stripe | Pay-as-you-go | 2.9% + $0.30/transaction |
+| **Domain** | GoDaddy (redhorseoracle.com) | Annual | ~$15/year |
+| **Git/CI** | GitHub | Free | Free |
+| **AI Text** | Gemini 3 Pro Preview | Pay-as-you-go | ~$0.01/request |
+| **AI Image** | Gemini 3 Pro Image Preview | Pay-as-you-go | **$0.134/image** |
+
+### AI Models (Google Gemini)
+
+| Purpose | Model ID | Cost |
+|---------|----------|------|
+| **Text Generation** | `gemini-3-pro-preview` | $1.25/1M input, $5.00/1M output |
+| **Image Generation** | `gemini-3-pro-image-preview` | $0.134/image (1K/2K), $0.24/image (4K) |
+
+**Package:** `@google/genai` (NOT `@google/generative-ai`)
+**Client:** `src/lib/gemini/client.ts`
+
+### Cost Per Oracle Generated
+
+| Component | Cost |
+|-----------|------|
+| Gemini 3 Pro Image (1K/2K) | $0.134 |
+| Gemini 3 Pro Text | ~$0.01 |
+| Stripe (2.9% + $0.30) | $0.56 |
+| **Total Cost** | **$0.71** |
+| **Price Charged** | $8.88 |
+| **Net Profit** | **$8.17 (92% margin)** |
+
+### Monthly Operating Costs (Estimated)
+
+| Scenario | Vercel | Supabase | Gemini | Stripe | Total |
+|----------|--------|----------|--------|--------|-------|
+| **Low (100 sales)** | $0 | $0 | $14 | $56 | ~$70 |
+| **Medium (500 sales)** | $0 | $0 | $72 | $280 | ~$352 |
+| **High (2000 sales)** | $20 | $25 | $290 | $1,120 | ~$1,455 |
+
+**Note:** Variable costs (Gemini, Stripe) scale with sales. Fixed costs (Vercel, Supabase) only kick in at high volume.
 
 ### Key Files
 | Purpose | File Path |
