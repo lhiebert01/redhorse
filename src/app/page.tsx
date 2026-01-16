@@ -51,17 +51,28 @@ export default function Home() {
 
       <div className="max-w-lg mx-auto px-4 py-8 flex flex-col items-center min-h-screen relative z-10">
         {/* Hero Title */}
-        <h1 className="text-4xl md:text-5xl font-bold text-fire-gold tracking-tighter text-glow-gold text-center mt-4 mb-2">
+        <h1 className="text-5xl md:text-6xl font-bold text-fire-gold tracking-tighter text-glow-gold text-center mt-4 mb-3">
           RED HORSE
           <br />
           ORACLE
         </h1>
 
-        {/* Value Prop - Right after title */}
-        <p className="text-center text-white text-sm font-semibold mb-4 px-4">
-          The world&apos;s first <span className="text-green-400">Google Gemini 3 Pro</span> zodiac app with{' '}
-          <span className="text-green-400">COMPLETE Privacy by Design</span>
+        {/* Tagline */}
+        <p className="text-red-400 text-lg md:text-xl font-semibold tracking-wide mb-4 text-center">
+          丙午年 · Year of the Fire Horse 2026
         </p>
+
+        {/* Value Prop Badge */}
+        <div className="bg-black/60 backdrop-blur-sm border border-fire-gold/40 rounded-xl px-5 py-3 mb-6">
+          <p className="text-center text-white text-sm md:text-base font-medium">
+            🔥 World&apos;s First{' '}
+            <span className="text-fire-gold font-bold">Google Gemini 3 Pro</span>{' '}
+            Zodiac App
+          </p>
+          <p className="text-center text-green-400 text-xs md:text-sm font-semibold mt-1">
+            🛡️ COMPLETE Privacy by Design
+          </p>
+        </div>
 
         {/* Hero Image */}
         <div className="relative w-full max-w-sm mb-6">
