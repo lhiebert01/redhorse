@@ -379,7 +379,7 @@ export default function FreeReadingPage() {
                 href={paymentLink}
                 className="block w-full bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 text-black font-bold text-xl py-5 rounded-xl text-center hover:scale-105 active:scale-95 transition-all duration-200 shadow-xl shadow-yellow-500/30 border-2 border-yellow-400"
               >
-                🔥 I HAVE THE COURAGE - GET MY ORACLE
+                🔥 I BET ON MYSELF — GET MY ORACLE
               </a>
               <p className="text-fire-gold text-center text-2xl font-bold mt-2">
                 $8.88
