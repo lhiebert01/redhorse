@@ -116,7 +116,28 @@ export default function Home() {
             <p className="text-gray-500 text-xs mt-1">The number of fortune</p>
           </div>
 
-          {/* CTA Button */}
+          {/* Free Reading CTA - Primary */}
+          <a
+            href="/free"
+            className="block w-full bg-gradient-to-r from-green-600 via-green-500 to-green-600
+                       text-white font-bold text-xl py-4 rounded-xl text-center
+                       hover:scale-105 active:scale-95 transition-all duration-200
+                       shadow-xl shadow-green-500/30 border-2 border-green-400"
+          >
+            🔮 FREE: DISCOVER YOUR 2026 DESTINY
+          </a>
+          <p className="text-center text-gray-400 text-xs -mt-2">
+            See your zodiac forecast instantly - no payment required
+          </p>
+
+          {/* Divider */}
+          <div className="flex items-center gap-3">
+            <div className="flex-1 border-t border-gray-700" />
+            <span className="text-gray-500 text-xs">or get the full experience</span>
+            <div className="flex-1 border-t border-gray-700" />
+          </div>
+
+          {/* Paid CTA Button */}
           <a
             href={paymentLink}
             className="block w-full bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600
@@ -124,7 +145,7 @@ export default function Home() {
                        hover:scale-105 active:scale-95 transition-all duration-200
                        shadow-xl shadow-yellow-500/30 glow-gold"
           >
-            UNLOCK YOUR PROPHECY
+            UNLOCK YOUR PROPHECY - $8.88
           </a>
 
           {/* Trust Badges */}
