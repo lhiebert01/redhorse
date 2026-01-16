@@ -1282,4 +1282,75 @@ Red Horse Oracle is positioned as:
 
 ---
 
+## Session Update: January 16, 2026 (Afternoon)
+
+### Status: PRODUCTION READY - Payment Flow Verified
+
+**Live URL:** https://www.redhorseoracle.com (note: www required for webhook)
+
+### Completed This Session
+
+#### 1. Save Zodiac Forecast Feature
+- Added "Save Zodiac Forecast" button to paid reveal page
+- Captures zodiac card (image, strengths, characteristics, forecast, wisdom) as PNG
+- Uses html2canvas for high-quality capture
+- Downloads as `fire-horse-2026-{element}-{animal}-forecast.png`
+- **PAID ONLY** - Not available on free reading page
+
+#### 2. Edition System Fixes
+- **Unified closing date:** All zodiac signs now close February 17, 2027 (end of Fire Horse year)
+- Previously had staggered dates (Feb-Dec 2026) - now consistent
+- ~397 days remaining for all signs
+
+#### 3. Simplified Messaging
+- Removed redundant "888 Wealth × 888 Power × 888 Love × 888 Shield"
+- Now just: "Only 888 of each oracle type will EVER be minted"
+
+#### 4. Webhook Fix (Critical)
+- **Issue:** Webhook returning 307 redirect, oracle not generating
+- **Root cause:** Domain redirects `redhorseoracle.com` → `www.redhorseoracle.com`
+- **Fix:** Changed Stripe webhook URL to `https://www.redhorseoracle.com/api/webhook`
+- **Result:** Payment flow now works end-to-end
+
+### Downloadable Assets (Paid Users Only)
+Users can now save TWO items:
+1. **Save Talisman** - AI-generated artwork + prophecy + edition badge
+2. **Save Zodiac Forecast** - Personalized zodiac reading card
+
+### Revenue Model
+
+#### Maximum Potential (Sold Out)
+| Metric | Value |
+|--------|-------|
+| Total Oracles | 42,624 (888 × 12 signs × 4 modes) |
+| Price | $8.88 |
+| **MAX Gross Revenue** | **$378,501** |
+
+#### Costs Per Sale
+- Stripe (2.9% + $0.30): ~$0.56
+- Gemini API: ~$0.02
+- **Net per sale: ~$8.30**
+
+#### Projections
+| Scenario | Sales | Gross | Net |
+|----------|-------|-------|-----|
+| Conservative (5%) | 2,131 | $18,923 | ~$17,700 |
+| Medium (15%) | 6,394 | $56,778 | ~$53,100 |
+| Viral (40%) | 17,050 | $151,404 | ~$141,500 |
+| Sold Out (100%) | 42,624 | $378,501 | ~$354,000 |
+
+### Files Modified This Session
+- `src/components/reveal/ZodiacSummary.tsx` - Added Save Zodiac Forecast
+- `src/constants/editions.ts` - Unified closing dates to Feb 17, 2027
+- `src/app/free/page.tsx` - Simplified edition messaging
+
+### Next Session: Launch Planning
+- Hacker News "Show HN" post
+- Reddit posts (r/SideProject, r/ChineseZodiac)
+- LinkedIn article
+- Product Hunt listing
+- Influencer outreach strategy
+
+---
+
 *火马年 2026 - Year of the Fire Horse*
