@@ -1328,16 +1328,18 @@ Users can now save TWO items:
 
 #### Costs Per Sale
 - Stripe (2.9% + $0.30): ~$0.56
-- Gemini API: ~$0.02
-- **Net per sale: ~$8.30**
+- Gemini 3 Pro Image: ~$0.134 (1K/2K resolution)
+- Gemini 3 Pro Text: ~$0.01
+- **Total cost: ~$0.71**
+- **Net per sale: ~$8.17**
 
-#### Projections
-| Scenario | Sales | Gross | Net |
-|----------|-------|-------|-----|
-| Conservative (5%) | 2,131 | $18,923 | ~$17,700 |
-| Medium (15%) | 6,394 | $56,778 | ~$53,100 |
-| Viral (40%) | 17,050 | $151,404 | ~$141,500 |
-| Sold Out (100%) | 42,624 | $378,501 | ~$354,000 |
+#### Projections (Updated with accurate Gemini 3 Pro costs)
+| Scenario | Sales | Gross | Net (~$8.17/sale) |
+|----------|-------|-------|-------------------|
+| Conservative (5%) | 2,131 | $18,923 | ~$17,410 |
+| Medium (15%) | 6,394 | $56,778 | ~$52,240 |
+| Viral (40%) | 17,050 | $151,404 | ~$139,300 |
+| Sold Out (100%) | 42,624 | $378,501 | ~$348,240 |
 
 ### Files Modified This Session
 - `src/components/reveal/ZodiacSummary.tsx` - Added Save Zodiac Forecast
