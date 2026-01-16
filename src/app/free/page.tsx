@@ -298,9 +298,7 @@ export default function FreeReadingPage() {
                 Will YOU Claim Your Authentic<br />{result.element} {result.animal} × Fire Horse Oracle?
               </h3>
               <p className="text-gray-300 text-lg mb-4">
-                Only <span className="text-fire-gold font-bold">{EDITION_CONFIG[result.animal].totalSlots}</span> of each oracle type will EVER be minted for {result.element} {result.animal}.
-                <br />
-                <span className="text-gray-400 text-sm">888 Wealth × 888 Power × 888 Love × 888 Shield</span>
+                Only <span className="text-fire-gold font-bold">888</span> of each oracle type will EVER be minted for {result.element} {result.animal}.
                 <br />
                 <span className="text-red-400">Each one numbered. Each one unique. Each one YOURS.</span>
               </p>
