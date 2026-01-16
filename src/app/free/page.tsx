@@ -11,6 +11,7 @@ import {
   FIRE_HORSE_RELATIONS,
 } from '@/constants/zodiac-data';
 import { PRODUCT_MODES } from '@/constants/modes';
+import { EDITION_CONFIG, getRemainingSlots, getDaysRemaining } from '@/constants/editions';
 
 export default function FreeReadingPage() {
   const [birthDate, setBirthDate] = useState('');
@@ -78,16 +79,21 @@ export default function FreeReadingPage() {
             <div className="bg-green-900/30 border-2 border-green-500/50 rounded-2xl p-5 mb-6">
               <div className="flex items-center justify-center gap-3 mb-3">
                 <span className="text-3xl">🛡️</span>
-                <h2 className="text-green-400 text-xl font-bold">ZERO DATA RETAINED</h2>
+                <h2 className="text-green-400 text-xl font-bold">100% PII-FREE</h2>
               </div>
               <p className="text-white text-center text-sm leading-relaxed mb-3">
-                The <span className="text-green-400 font-bold">ONLY</span> Red Horse Oracle with{' '}
+                The <span className="text-green-400 font-bold">ONLY</span> Authenticated Limited Edition Oracle with{' '}
                 <span className="text-green-400 font-bold">COMPLETE Privacy by Design</span>.
                 Your birth date is processed <span className="text-green-400 font-semibold">locally in your browser</span>{' '}
-                to calculate your zodiac sign and is <span className="text-green-400 font-semibold">immediately discarded</span>.
+                and is <span className="text-green-400 font-semibold">immediately discarded</span>.
               </p>
-              <p className="text-gray-300 text-center text-xs mb-4">
-                No names. No DOB stored. No PII. No tracking. No cookies. Nothing.
+              <div className="flex flex-wrap justify-center gap-2 mb-3">
+                <span className="bg-green-900/50 border border-green-700 text-green-300 text-[10px] px-2 py-1 rounded">✓ ZERO DATA STORED</span>
+                <span className="bg-green-900/50 border border-green-700 text-green-300 text-[10px] px-2 py-1 rounded">✓ NO TRACKING</span>
+                <span className="bg-green-900/50 border border-green-700 text-green-300 text-[10px] px-2 py-1 rounded">✓ NO COOKIES</span>
+              </div>
+              <p className="text-gray-400 text-center text-xs mb-4">
+                Verifiable Digital Art • Provenance Tracked • Maker&apos;s Mark Authenticated
               </p>
               <a
                 href="/privacy"
@@ -201,49 +207,91 @@ export default function FreeReadingPage() {
               </p>
             </div>
 
-            {/* Authenticity Seal */}
-            <div className="bg-black border-2 border-fire-gold rounded-2xl p-6 text-center relative overflow-hidden">
-              {/* Watermark Background */}
-              <div className="absolute inset-0 opacity-5 flex items-center justify-center">
-                <span className="text-[200px] text-fire-gold">馬</span>
+            {/* Limited Edition Certificate */}
+            <div className="bg-gradient-to-br from-black via-gray-950 to-black border-2 border-fire-gold rounded-2xl p-6 relative overflow-hidden">
+              {/* Watermark Background - User's zodiac character */}
+              <div className="absolute inset-0 opacity-[0.03] flex items-center justify-center pointer-events-none">
+                <span className="text-[250px] text-fire-gold font-serif">{EDITION_CONFIG[result.animal].chineseChar}</span>
+              </div>
+
+              {/* Maker's Mark / Seal - Top Right Corner */}
+              <div className="absolute top-3 right-3 opacity-80">
+                <div className="w-16 h-16 border-2 border-fire-gold/60 rounded-full flex items-center justify-center bg-black/80 rotate-12">
+                  <div className="text-center">
+                    <p className="text-fire-gold text-[8px] font-bold leading-tight">RED HORSE</p>
+                    <p className="text-red-500 text-lg leading-none">馬</p>
+                    <p className="text-fire-gold text-[6px]">2026</p>
+                  </div>
+                </div>
               </div>
 
               <div className="relative z-10">
-                {/* Seal Badge */}
-                <div className="inline-block bg-gradient-to-br from-yellow-600 via-yellow-500 to-yellow-600 rounded-full p-1 mb-4">
-                  <div className="bg-black rounded-full px-6 py-3 border-2 border-fire-gold">
-                    <p className="text-fire-gold font-bold text-xs tracking-widest">✦ AUTHENTICATED ✦</p>
+                {/* Header */}
+                <div className="text-center mb-4">
+                  <p className="text-gray-500 text-xs uppercase tracking-[0.3em] mb-1">Certificate of Authenticity</p>
+                  <div className="inline-block bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-600 rounded-full px-4 py-1">
+                    <p className="text-black font-bold text-xs tracking-widest">✦ LIMITED EDITION ✦</p>
                   </div>
                 </div>
 
-                <h3 className="text-fire-gold text-2xl font-bold mb-2">
-                  THE ONLY AUTHENTIC
+                {/* Main Title */}
+                <h3 className="text-fire-gold text-xl font-bold text-center mb-1">
+                  AUTHENTIC {result.animal.toUpperCase()} ORACLE
                 </h3>
-                <h2 className="text-white text-3xl font-bold mb-3">
-                  RED HORSE ORACLE
-                </h2>
+                <p className="text-center text-4xl mb-3">{EDITION_CONFIG[result.animal].chineseChar}</p>
 
-                <div className="flex flex-wrap justify-center gap-2 mb-4">
-                  <span className="bg-red-900/50 border border-red-700 text-red-300 text-xs px-3 py-1 rounded-full">🔥 FIRST</span>
-                  <span className="bg-green-900/50 border border-green-700 text-green-300 text-xs px-3 py-1 rounded-full">🛡️ ONLY</span>
-                  <span className="bg-yellow-900/50 border border-yellow-700 text-yellow-300 text-xs px-3 py-1 rounded-full">⭐ BEST</span>
+                {/* Edition Stats */}
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  <div className="bg-red-950/50 border border-red-800 rounded-lg p-3 text-center">
+                    <p className="text-red-400 text-2xl font-bold">{getRemainingSlots(result.animal)}</p>
+                    <p className="text-gray-400 text-xs">Slots Remaining</p>
+                    <p className="text-gray-500 text-[10px]">of {EDITION_CONFIG[result.animal].totalSlots} total</p>
+                  </div>
+                  <div className="bg-yellow-950/50 border border-yellow-800 rounded-lg p-3 text-center">
+                    <p className="text-fire-gold text-2xl font-bold">{getDaysRemaining(result.animal)}</p>
+                    <p className="text-gray-400 text-xs">Days Left</p>
+                    <p className="text-gray-500 text-[10px]">Closes {EDITION_CONFIG[result.animal].closingDateDisplay}</p>
+                  </div>
                 </div>
 
-                <p className="text-gray-300 text-sm mb-2">
-                  Powered by <span className="text-green-400 font-bold">Google Gemini 3 Pro</span>
-                </p>
-                <p className="text-gray-400 text-xs">
-                  Complete Privacy by Design • Zero Data Stored • Museum-Quality AI Art
-                </p>
+                {/* Urgency Alert */}
+                <div className="bg-red-900/60 border border-red-500 rounded-lg px-3 py-2 mb-4">
+                  <p className="text-red-200 text-xs text-center font-semibold">
+                    ⚠️ {result.animal} Edition closes <span className="text-white">{EDITION_CONFIG[result.animal].closingDateDisplay}</span>
+                  </p>
+                </div>
+
+                {/* What You Get */}
+                <div className="text-center mb-4">
+                  <p className="text-gray-400 text-xs uppercase tracking-widest mb-2">Your Numbered Edition Includes:</p>
+                  <div className="flex flex-wrap justify-center gap-2">
+                    <span className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-xs px-2 py-1 rounded">Unique Edition #</span>
+                    <span className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-xs px-2 py-1 rounded">Maker&apos;s Mark</span>
+                    <span className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-xs px-2 py-1 rounded">AI Talisman Art</span>
+                    <span className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-xs px-2 py-1 rounded">Sacred Prophecy</span>
+                  </div>
+                </div>
+
+                {/* Authenticity Footer */}
+                <div className="border-t border-gray-800 pt-3 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs">🔥</span>
+                    <span className="text-gray-500 text-[10px]">FIRST • ONLY • BEST</span>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-gray-500 text-[10px]">Verified by</p>
+                    <p className="text-fire-gold text-xs font-bold">redhorseoracle.com</p>
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Courage Challenge CTA */}
             <div className="bg-gradient-to-br from-red-950 via-red-900 to-black border-2 border-red-500 rounded-2xl p-6 text-center">
-              {/* Urgency Warning */}
+              {/* Urgency Warning - Specific to their zodiac */}
               <div className="bg-red-900/80 border border-red-500 rounded-lg px-4 py-2 mb-4 inline-block">
                 <p className="text-red-200 text-xs font-bold uppercase tracking-wider">
-                  ⚠️ LIMITED TIME: This Oracle Closes December 31, 2026 ⚠️
+                  ⚠️ {result.animal.toUpperCase()} EDITION: Only {getRemainingSlots(result.animal)} of {EDITION_CONFIG[result.animal].totalSlots} Remaining ⚠️
                 </p>
               </div>
 
@@ -251,22 +299,22 @@ export default function FreeReadingPage() {
                 The Fire Horse Demands Courage
               </p>
               <h3 className="text-white text-2xl md:text-3xl font-bold mb-4">
-                Will YOU Be Bold Enough<br />To Know Your 2026 Destiny?
+                Will YOU Claim Your<br />Numbered {result.animal} Oracle?
               </h3>
               <p className="text-gray-300 text-lg mb-4">
-                The Fire Horse returns <span className="text-fire-gold font-bold">once every 60 years</span>.
+                Only <span className="text-fire-gold font-bold">{EDITION_CONFIG[result.animal].totalSlots}</span> authentic {result.animal} Oracles will EVER be created.
                 <br />
-                <span className="text-red-400">This is YOUR moment. Your ONE chance until 2086.</span>
+                <span className="text-red-400">Each one numbered. Each one unique. Each one YOURS.</span>
               </p>
 
               {/* Countdown Context */}
               <div className="bg-black/70 border border-fire-gold/50 rounded-xl p-4 mb-4">
-                <p className="text-fire-gold text-sm font-bold mb-1">🔥 Year of the Fire Horse: 2026</p>
+                <p className="text-fire-gold text-sm font-bold mb-1">🔥 {result.animal} Edition Closes: {EDITION_CONFIG[result.animal].closingDateDisplay}</p>
                 <p className="text-gray-400 text-xs">
-                  Next Fire Horse year: <span className="text-red-400 font-bold">2086</span> (60 years from now)
+                  After this date, <span className="text-red-400 font-bold">NO MORE {result.animal} Oracles</span> will be minted.
                 </p>
                 <p className="text-gray-500 text-xs mt-1">
-                  This app will be <span className="text-red-400">permanently archived</span> after 2026.
+                  Next Fire Horse year: <span className="text-red-400">2086</span> — Will you even be alive?
                 </p>
               </div>
 
@@ -279,12 +327,12 @@ export default function FreeReadingPage() {
                 <p className="text-white text-xl font-bold">
                   Are you someone who <span className="text-red-400">ACTS</span>?
                   <br />
-                  Or someone who <span className="text-gray-500">waits and wonders?</span>
+                  Or someone who <span className="text-gray-500">lets opportunity pass?</span>
                 </p>
               </div>
 
               <p className="text-gray-500 text-xs">
-                Don&apos;t let 2026 pass without YOUR authentic Fire Horse prophecy.
+                {getRemainingSlots(result.animal)} people will own an authentic {result.animal} Oracle. Will you be one of them?
               </p>
             </div>
 

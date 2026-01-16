@@ -7,6 +7,8 @@ import { getChineseZodiac, getFireHorseReading } from '@/lib/zodiac/calculator';
 import { validateFocusMode } from '@/lib/utils/validation';
 import { withRetry } from '@/lib/utils/retry';
 import { FocusMode } from '@/constants/modes';
+import { EDITION_CONFIG } from '@/constants/editions';
+import { ZodiacAnimal } from '@/constants/zodiac-data';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60; // Allow up to 60 seconds for AI generation
@@ -50,7 +52,20 @@ export async function POST(request: Request) {
     const zodiac = getChineseZodiac(birthDate);
     const fireHorseReading = getFireHorseReading(zodiac.animal, zodiac.element);
 
-    // Create pending record with session_id for tracking
+    // Get edition number for this zodiac sign (count existing + 1)
+    const { count: existingCount } = await supabase
+      .from('prophecies')
+      .select('*', { count: 'exact', head: true })
+      .eq('zodiac_sign', zodiac.animal)
+      .eq('status', 'completed');
+
+    const editionNumber = (existingCount || 0) + 1;
+    const editionConfig = EDITION_CONFIG[zodiac.animal as ZodiacAnimal];
+    const totalEditions = editionConfig?.totalSlots || 888;
+
+    console.log(`Assigning edition #${editionNumber} of ${totalEditions} for ${zodiac.animal}`);
+
+    // Create pending record with session_id and edition number
     const { data: prophecy, error: insertError } = await supabase
       .from('prophecies')
       .insert({
@@ -62,6 +77,8 @@ export async function POST(request: Request) {
         zodiac_sign: zodiac.animal,
         zodiac_element: zodiac.element,
         fire_horse_relation: fireHorseReading.relation,
+        edition_number: editionNumber,
+        total_editions: totalEditions,
         status: 'processing',
       })
       .select()

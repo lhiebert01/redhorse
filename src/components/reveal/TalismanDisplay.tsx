@@ -4,6 +4,8 @@ import { useState, useRef } from 'react';
 import html2canvas from 'html2canvas';
 import { Prophecy } from '@/types/prophecy';
 import ShareButtons from './ShareButtons';
+import { EDITION_CONFIG } from '@/constants/editions';
+import { ZodiacAnimal } from '@/constants/zodiac-data';
 
 interface TalismanDisplayProps {
   prophecy: Prophecy;
@@ -84,14 +86,34 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
       {/* Capturable Talisman Card */}
       <div
         ref={talismanRef}
-        className="flex flex-col items-center w-full p-6 rounded-2xl"
+        className="flex flex-col items-center w-full p-6 rounded-2xl relative"
         style={{ backgroundColor: '#0a0000' }}
       >
+        {/* Maker's Mark - Top Right Corner */}
+        <div className="absolute top-4 right-4">
+          <div className="w-14 h-14 border-2 border-fire-gold/60 rounded-full flex items-center justify-center bg-black/80 rotate-12">
+            <div className="text-center">
+              <p className="text-fire-gold text-[6px] font-bold leading-tight">RED HORSE</p>
+              <p className="text-red-500 text-sm leading-none">馬</p>
+              <p className="text-fire-gold text-[5px]">2026</p>
+            </div>
+          </div>
+        </div>
+
         {/* Header */}
         <h1 className="text-3xl md:text-4xl font-bold mb-2 text-center text-fire-gold text-glow-gold">
           YOUR 2026 DECREE
         </h1>
-        <p className="text-red-400 text-sm mb-6">The Oracle has spoken</p>
+        <p className="text-red-400 text-sm mb-2">The Oracle has spoken</p>
+
+        {/* Edition Badge */}
+        {prophecy.edition_number && prophecy.total_editions && (
+          <div className="bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 rounded-full px-4 py-1 mb-4">
+            <p className="text-black text-xs font-bold tracking-wide">
+              ✦ LIMITED EDITION #{prophecy.edition_number} of {prophecy.total_editions} ✦
+            </p>
+          </div>
+        )}
 
         {/* Talisman Image - Using regular img for html2canvas compatibility */}
         <div className="relative border-4 border-fire-gold rounded-2xl overflow-hidden shadow-2xl glow-gold bg-black">
@@ -153,6 +175,25 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
               </p>
             </div>
           )}
+
+          {/* Authenticity Certificate Footer */}
+          <div className="border-t border-fire-gold/30 pt-4 mt-4 w-full">
+            <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2">
+                <span className="text-fire-gold">🔥</span>
+                <span className="text-gray-500">AUTHENTIC • VERIFIED • {prophecy.zodiac_sign?.toUpperCase()}</span>
+              </div>
+              <div className="text-right">
+                <p className="text-gray-600 text-[10px]">Minted by</p>
+                <p className="text-fire-gold font-bold">redhorseoracle.com</p>
+              </div>
+            </div>
+            {prophecy.edition_number && (
+              <p className="text-center text-gray-600 text-[10px] mt-2">
+                Certificate #{prophecy.id.slice(0, 8).toUpperCase()} • Year of the Fire Horse 2026
+              </p>
+            )}
+          </div>
         </div>
       </div>
 

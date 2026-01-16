@@ -16,6 +16,8 @@ export interface Prophecy {
   full_reading: string | null;
   image_url: string | null;
   image_storage_path: string | null;
+  edition_number: number | null;  // Limited edition number (e.g., 127)
+  total_editions: number | null;  // Total editions for this sign (e.g., 888)
   status: 'pending' | 'processing' | 'completed' | 'failed';
   error_message: string | null;
   retry_count: number;
