@@ -1,5 +1,119 @@
 # Red Horse Oracle - Release Notes
 
+## Version 1.1.0 - Limited Edition System (January 16, 2026)
+
+**Status:** PRODUCTION READY - TESTING PHASE
+**Release Date:** January 16, 2026
+
+---
+
+### Highlights
+
+This release adds the **Limited Edition Oracle System** with numbered editions, maker's mark authentication, and provenance tracking. This positions Red Horse Oracle as authenticated digital art, not just a fortune app.
+
+---
+
+### New Features
+
+#### Limited Edition System
+- **888 editions per zodiac sign** (10,656 total oracles EVER)
+- Unique edition numbers assigned at generation (e.g., "#127 of 888")
+- Staggered closing dates per zodiac throughout 2026
+- Database tracking: `edition_number`, `total_editions` columns
+
+| Zodiac | Closing Date | Total Editions |
+|--------|--------------|----------------|
+| Rat | February 28, 2026 | 888 |
+| Ox | March 31, 2026 | 888 |
+| Tiger | April 30, 2026 | 888 |
+| Rabbit | May 31, 2026 | 888 |
+| Dragon | June 30, 2026 | 888 |
+| Snake | July 31, 2026 | 888 |
+| Horse | August 31, 2026 | 888 |
+| Goat | September 30, 2026 | 888 |
+| Monkey | October 31, 2026 | 888 |
+| Rooster | November 30, 2026 | 888 |
+| Dog | December 15, 2026 | 888 |
+| Pig | December 31, 2026 | 888 |
+
+#### Maker's Mark & Provenance
+- Visual Maker's Mark seal on every talisman (RED HORSE 馬 2026)
+- Certificate of Authenticity footer with certificate ID
+- "AUTHENTIC • VERIFIED • [ZODIAC]" branding
+- "Minted by redhorseoracle.com" attribution
+
+#### Certificate of Authenticity (Free Reading Page)
+- Limited Edition Certificate preview before purchase
+- Shows slots remaining and days until closing
+- Zodiac-specific watermark background
+- "What You Get" section: Edition #, Maker's Mark, AI Talisman, Prophecy
+
+#### Courage-Based Marketing
+- "The Fire Horse Demands Courage" messaging
+- "Will YOU Be Bold Enough To Know Your 2026 Destiny?"
+- "Are you someone who ACTS? Or someone who waits and wonders?"
+- Urgency: "This app will be permanently archived after 2026"
+
+#### Enhanced Value Proposition
+- "Authenticated Limited Edition AI Zodiac Oracle"
+- Badges: NUMBERED EDITIONS | VERIFIABLE ART | PROVENANCE
+- "100% PII-FREE • Privacy by Design • Maker's Mark Authenticated"
+
+#### Free Reading Funnel Enhancements
+- "100% PII-FREE" header with privacy badges
+- "ZERO DATA STORED • NO TRACKING • NO COOKIES" chips
+- "Verifiable Digital Art • Provenance Tracked • Maker's Mark Authenticated"
+- Enhanced privacy section after results: "YOUR DATA? ALREADY GONE."
+
+#### Custom Domain
+- Live at: https://redhorseoracle.com
+- DNS configured via GoDaddy
+- Vercel deployment connected
+
+---
+
+### Technical Changes
+
+#### New Files
+| File | Purpose |
+|------|---------|
+| `src/constants/editions.ts` | Edition config per zodiac (dates, slots, Chinese chars) |
+
+#### Modified Files
+| File | Changes |
+|------|---------|
+| `src/types/prophecy.ts` | Added `edition_number`, `total_editions` fields |
+| `src/app/api/webhook/route.ts` | Assigns edition # based on completed count per zodiac |
+| `src/components/reveal/TalismanDisplay.tsx` | Edition badge + Maker's Mark + Certificate footer |
+| `src/app/free/page.tsx` | Limited Edition Certificate, courage CTA, privacy messaging |
+| `src/app/page.tsx` | Enhanced value prop with authentication messaging |
+| `src/app/sitemap.ts` | Added /free page |
+| `src/app/layout.tsx` | Updated siteUrl to redhorseoracle.com |
+
+#### Database Changes (Supabase)
+```sql
+ALTER TABLE prophecies ADD COLUMN edition_number INTEGER;
+ALTER TABLE prophecies ADD COLUMN total_editions INTEGER DEFAULT 888;
+```
+
+#### Stripe Configuration
+- Webhook URL: `https://redhorseoracle.com/api/webhook`
+- Payment Link redirect: `https://redhorseoracle.com/reveal?session_id={CHECKOUT_SESSION_ID}`
+
+---
+
+### Configuration Checklist
+
+- [x] Custom domain (redhorseoracle.com) configured
+- [x] Supabase columns added (edition_number, total_editions)
+- [x] Stripe webhook updated to new domain
+- [x] Payment Link redirect updated to new domain
+- [ ] End-to-end payment flow testing
+- [ ] All 4 oracle modes tested
+- [ ] Marketing launch
+
+---
+
 ## Version 1.0.0 - Production Launch (January 14, 2026)
 
 **Status:** PRODUCTION LIVE
@@ -37,13 +151,6 @@ This release marks the **production launch** of Red Horse Oracle, the world's fi
 - Privacy notice integrated into ZodiacSummary
 - Data flow: DOB → Calculate Zodiac → Discard DOB → Generate Oracle
 
-#### Navigation Improvements
-- Added navigation buttons on reveal page for regular users:
-  - "Return to Home"
-  - "Get Another Reading"
-  - "View Examples Gallery"
-- Admin users retain "Generate Another Test" flow
-
 #### Expanded Zodiac Data
 - Added characteristics for all 12 zodiac animals
 - Added core strengths (4 traits per animal)
@@ -52,68 +159,11 @@ This release marks the **production launch** of Red Horse Oracle, the world's fi
 
 ---
 
-### Bug Fixes
-
-#### ZodiacSummary Case-Sensitivity Fix
-- **Issue:** Component crashed in production when zodiac sign had different casing
-- **Solution:** Added `normalizeZodiacSign()` and `normalizeElement()` helper functions
-- **Result:** Component now handles all casing variations correctly
-
----
-
-### Technical Changes
-
-#### Files Added
-| File | Purpose |
-|------|---------|
-| `src/components/reveal/ZodiacSummary.tsx` | Zodiac forecast component |
-| `docs/RELEASE-NOTES.md` | This file |
-
-#### Files Modified
-| File | Changes |
-|------|---------|
-| `src/app/page.tsx` | Added Privacy by Design banner with "FIRST \| ONLY \| BEST" |
-| `src/app/privacy/page.tsx` | Complete rewrite - Privacy by Design focus |
-| `src/app/reveal/page.tsx` | Added ZodiacSummary, navigation buttons |
-| `src/app/examples/page.tsx` | Added Privacy Info button + modal |
-| `src/constants/zodiac-data.ts` | Expanded with profiles, forecasts, strengths |
-| `CLAUDE.md` | Added January 14 evening session notes |
-| `README.md` | Added Privacy by Design section, updated tech stack |
-| `docs/EXEC-SUMMARY.md` | Updated status to PRODUCTION LIVE |
-| `docs/NEXT-STEPS.md` | Marked Stripe setup complete, reorganized priorities |
-
-#### Environment Variables (Production)
-```env
-STRIPE_SECRET_KEY=sk_live_...
-STRIPE_WEBHOOK_SECRET=whsec_bsrjO6waD0dD7aHeMcp8XJK9BZKxa7a4
-NEXT_PUBLIC_STRIPE_PAYMENT_LINK=https://buy.stripe.com/7sIdUP8Og5p31EY3cc
-```
-
----
-
-### Known Issues
-
-#### Stripe Webhook Timeout
-- **Behavior:** Webhook shows "Timed out" in Stripe dashboard
-- **Cause:** AI generation takes 30-60 seconds, exceeding Stripe's timeout
-- **Impact:** None - Vercel function continues running and completes successfully
-- **Resolution:** Expected behavior; no fix needed
-
----
-
-### Upcoming in Next Release
-
-- [ ] Domain purchase (redhorseoracle.com)
-- [ ] Google Analytics integration
-- [ ] SEO optimization (sitemap, structured data)
-- [ ] Performance monitoring
-
----
-
 ## Version History
 
 | Version | Date | Description |
 |---------|------|-------------|
+| 1.1.0 | Jan 16, 2026 | Limited Edition system, Maker's Mark, custom domain |
 | 1.0.0 | Jan 14, 2026 | Production launch - Stripe live, Privacy by Design |
 | 0.9.0 | Jan 14, 2026 | Examples gallery, comprehensive documentation |
 | 0.8.0 | Jan 13, 2026 | Art style system, admin test loop, background watermark |

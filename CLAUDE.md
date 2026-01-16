@@ -4,7 +4,8 @@
 
 Red Horse Oracle is a viral SaaS application that generates personalized AI talismans for the Year of the Fire Horse 2026. Built with Next.js 14, TypeScript, Supabase, Stripe, and Google Gemini AI.
 
-**Live URL:** https://redhorse-omega.vercel.app/
+**Live URL:** https://redhorseoracle.com (custom domain)
+**Alt URL:** https://redhorse-omega.vercel.app/ (Vercel)
 **GitHub:** https://github.com/lhiebert01/redhorse
 
 ---
@@ -25,6 +26,7 @@ Red Horse Oracle is a viral SaaS application that generates personalized AI tali
 | Purpose | File Path |
 |---------|-----------|
 | Landing Page | `src/app/page.tsx` |
+| Free Reading | `src/app/free/page.tsx` |
 | Reveal Page | `src/app/reveal/page.tsx` |
 | Stripe Webhook | `src/app/api/webhook/route.ts` |
 | Admin Test API | `src/app/api/admin-test/route.ts` |
@@ -33,6 +35,8 @@ Red Horse Oracle is a viral SaaS application that generates personalized AI tali
 | Prophecy Generation | `src/lib/gemini/generate.ts` |
 | Zodiac Calculator | `src/lib/zodiac/calculator.ts` |
 | Product Modes | `src/constants/modes.ts` |
+| Edition Config | `src/constants/editions.ts` |
+| Talisman Display | `src/components/reveal/TalismanDisplay.tsx` |
 
 ---
 
@@ -83,11 +87,11 @@ git remote -v
 NEXT_PUBLIC_SUPABASE_URL=https://ykptxslgxlsbvpbeujfu.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<key>
 SUPABASE_SERVICE_ROLE_KEY=<key>
-STRIPE_SECRET_KEY=sk_test_...
+STRIPE_SECRET_KEY=sk_live_...  # LIVE MODE
 STRIPE_WEBHOOK_SECRET=whsec_...
-NEXT_PUBLIC_STRIPE_PAYMENT_LINK=https://buy.stripe.com/test_...
+NEXT_PUBLIC_STRIPE_PAYMENT_LINK=https://buy.stripe.com/5kQ8wPdmT73b54G1V124000
 GEMINI_API_KEY=<key>
-NEXT_PUBLIC_APP_URL=https://redhorse-omega.vercel.app
+NEXT_PUBLIC_APP_URL=https://redhorseoracle.com
 ```
 
 ### Local Development:
@@ -195,7 +199,9 @@ CREATE TABLE prophecies (
   image_storage_path TEXT,
   status TEXT DEFAULT 'pending',
   error_message TEXT,
-  completed_at TIMESTAMPTZ
+  completed_at TIMESTAMPTZ,
+  edition_number INTEGER,           -- Added Jan 16, 2026
+  total_editions INTEGER DEFAULT 888 -- Added Jan 16, 2026
 );
 ```
 
@@ -213,9 +219,10 @@ CREATE TABLE prophecies (
    - Options: Wealth, Power, Love, Shield
 
 ### Webhook
-- **URL:** `https://redhorse-omega.vercel.app/api/webhook`
+- **URL:** `https://redhorseoracle.com/api/webhook`
 - **Events:** `checkout.session.completed`
-- **Redirect URL:** `https://redhorse-omega.vercel.app/reveal?session_id={CHECKOUT_SESSION_ID}`
+- **Redirect URL:** `https://redhorseoracle.com/reveal?session_id={CHECKOUT_SESSION_ID}`
+- **Payment Link:** `https://buy.stripe.com/5kQ8wPdmT73b54G1V124000`
 
 ---
 
@@ -1064,3 +1071,215 @@ User enters DOB → Calculate Zodiac Sign → DISCARD DOB → Generate Oracle �
 | Privacy | https://redhorse-omega.vercel.app/privacy |
 | Terms | https://redhorse-omega.vercel.app/terms |
 | Admin Test | https://redhorse-omega.vercel.app/admin-test |
+
+---
+
+## Session Update: January 16, 2026 - Limited Edition System
+
+### Current Status: TESTING → MARKETING LAUNCH
+
+**Custom Domain Live:** https://redhorseoracle.com
+
+### Major Features Completed
+
+#### 1. Limited Edition Oracle System (888 per Zodiac)
+
+Created a numbered limited edition system like fine art lithographs:
+
+- **888 editions per zodiac sign** (10,656 total oracles EVER)
+- **Edition numbers** assigned at generation (e.g., "#127 of 888")
+- **Staggered closing dates** per zodiac throughout 2026
+
+**New File:** `src/constants/editions.ts`
+```typescript
+export const EDITION_CONFIG: Record<ZodiacAnimal, EditionConfig> = {
+  Rat: { totalSlots: 888, closingDate: '2026-02-28', chineseChar: '鼠' },
+  Ox: { totalSlots: 888, closingDate: '2026-03-31', chineseChar: '牛' },
+  // ... all 12 signs with staggered dates
+  Pig: { totalSlots: 888, closingDate: '2026-12-31', chineseChar: '猪' },
+};
+```
+
+**Closing Date Schedule:**
+| Zodiac | Closing Date |
+|--------|--------------|
+| Rat | February 28, 2026 |
+| Ox | March 31, 2026 |
+| Tiger | April 30, 2026 |
+| Rabbit | May 31, 2026 |
+| Dragon | June 30, 2026 |
+| Snake | July 31, 2026 |
+| Horse | August 31, 2026 |
+| Goat | September 30, 2026 |
+| Monkey | October 31, 2026 |
+| Rooster | November 30, 2026 |
+| Dog | December 15, 2026 |
+| Pig | December 31, 2026 |
+
+#### 2. Maker's Mark & Provenance
+
+Added authentication elements to every generated talisman:
+
+**TalismanDisplay.tsx Changes:**
+- **Maker's Mark Seal** - Circular seal in top-right corner: "RED HORSE 馬 2026"
+- **Edition Badge** - Gold gradient badge: "✦ LIMITED EDITION #X of 888 ✦"
+- **Certificate Footer** - "AUTHENTIC • VERIFIED • [ZODIAC]" + certificate ID
+- **Minted By** - "Minted by redhorseoracle.com"
+
+#### 3. Courage-Based Marketing
+
+Added urgency and challenge messaging throughout the app:
+
+**Free Reading Page (`/free`) Additions:**
+- "THE FIRE HORSE DEMANDS COURAGE" header
+- "Will YOU Be Bold Enough To Know Your 2026 Destiny?"
+- "Are you someone who ACTS? Or someone who waits and wonders?"
+- Limited Edition Certificate preview before purchase
+- Edition-specific countdown (slots remaining, days until closing)
+
+**Landing Page Value Prop:**
+- "Authenticated Limited Edition AI Zodiac Oracle"
+- Badges: NUMBERED EDITIONS | VERIFIABLE ART | PROVENANCE
+- "100% PII-FREE • Privacy by Design • Maker's Mark Authenticated"
+
+#### 4. Enhanced Privacy Messaging
+
+**Free Reading Page Privacy Sections:**
+- "100% PII-FREE" badge with privacy badges
+- "ZERO DATA RETAINED" section before form
+- "YOUR DATA? ALREADY GONE." section after results
+- "VIEW OUR PRIVACY POLICY" buttons
+
+#### 5. Database Schema Updates
+
+Added columns to Supabase `prophecies` table:
+```sql
+ALTER TABLE prophecies ADD COLUMN edition_number INTEGER;
+ALTER TABLE prophecies ADD COLUMN total_editions INTEGER DEFAULT 888;
+```
+
+**Updated `src/types/prophecy.ts`:**
+```typescript
+export interface Prophecy {
+  // ... existing fields
+  edition_number: number | null;  // Limited edition number
+  total_editions: number | null;  // Total editions for this sign (888)
+}
+```
+
+#### 6. Webhook Edition Assignment
+
+**`src/app/api/webhook/route.ts` Changes:**
+```typescript
+// Get edition number for this zodiac sign
+const { count: existingCount } = await supabase
+  .from('prophecies')
+  .select('*', { count: 'exact', head: true })
+  .eq('zodiac_sign', zodiac.animal)
+  .eq('status', 'completed');
+
+const editionNumber = (existingCount || 0) + 1;
+```
+
+#### 7. Stripe Configuration Updates
+
+Updated for custom domain `redhorseoracle.com`:
+
+- **Webhook URL:** `https://redhorseoracle.com/api/webhook`
+- **Payment Link Redirect:** `https://redhorseoracle.com/reveal?session_id={CHECKOUT_SESSION_ID}`
+- **Payment Link:** `https://buy.stripe.com/5kQ8wPdmT73b54G1V124000`
+
+### Files Modified This Session
+
+| File | Changes |
+|------|---------|
+| `src/constants/editions.ts` | NEW - Edition config for all 12 zodiac signs |
+| `src/types/prophecy.ts` | Added edition_number, total_editions fields |
+| `src/app/api/webhook/route.ts` | Edition number assignment logic |
+| `src/components/reveal/TalismanDisplay.tsx` | Maker's Mark, Edition badge, Certificate footer |
+| `src/app/free/page.tsx` | Limited Edition Certificate, courage CTA, privacy messaging |
+| `src/app/page.tsx` | Enhanced value prop with authentication messaging |
+| `src/app/layout.tsx` | Updated siteUrl to redhorseoracle.com |
+| `src/app/sitemap.ts` | Added /free page |
+
+### Bug Fix: Import Error
+
+**Error:** `Module '"@/lib/zodiac/calculator"' has no exported member 'calculateChineseZodiac'`
+**Fix:** Changed import to `getChineseZodiac` (the actual function name)
+
+### Documentation Updates
+
+Created/updated comprehensive documentation:
+
+| Document | Purpose |
+|----------|---------|
+| `docs/RELEASE-NOTES.md` | v1.1.0 Limited Edition System release |
+| `docs/TEST-PLAN.md` | Complete test scenarios for all flows |
+| `docs/NEXT-STEPS.md` | 4-phase launch plan with marketing templates |
+
+### Current URLs (Custom Domain)
+
+| Page | URL |
+|------|-----|
+| Production | https://redhorseoracle.com |
+| Free Reading | https://redhorseoracle.com/free |
+| Examples | https://redhorseoracle.com/examples |
+| Admin Test | https://redhorseoracle.com/admin-test |
+| Privacy | https://redhorseoracle.com/privacy |
+| Terms | https://redhorseoracle.com/terms |
+
+### Testing Phase Status
+
+See `docs/TEST-PLAN.md` for complete test scenarios.
+
+**Critical Path Testing:**
+- [ ] Payment Flow Test - Complete real $8.88 purchase
+- [ ] Webhook Processing - Verify 200 OK response
+- [ ] Edition Assignment - Confirm edition_number populated
+- [ ] Reveal Page - Edition badge + Maker's Mark display
+- [ ] Save Talisman - Download works correctly
+
+**4 Oracle Modes:**
+- [ ] Wealth (6 lucky numbers: XX-XX-XX-XX-XX-XX)
+- [ ] Power (3-word motto in CAPS)
+- [ ] Love (4-word decree in CAPS)
+- [ ] Shield (3-word mantra in CAPS)
+
+### Quick Start Commands
+
+```bash
+# Navigate to project
+cd /mnt/c/src/redhorse
+
+# Run locally
+npm run dev
+
+# Build check
+npm run build
+
+# Push changes
+git add -A && git commit -m "message" && git push origin main
+```
+
+### Admin Test Console
+
+1. https://redhorseoracle.com/admin-test (or click gear icon on landing page)
+2. PIN: `142857`
+3. Select birth date and mode
+4. Generate → View result with edition badge and Maker's Mark
+
+---
+
+## Key Differentiators Summary
+
+Red Horse Oracle is positioned as:
+
+1. **Authenticated Limited Edition Digital Art** - Numbered like fine art lithographs
+2. **Privacy by Design** - Zero PII stored, birth date immediately discarded
+3. **Maker's Mark & Provenance** - Certificate of authenticity on every oracle
+4. **60-Year Rarity** - Fire Horse only occurs every 60 years (1966 → 2026 → 2086)
+5. **Courage-Based Marketing** - "The Fire Horse Demands Courage"
+
+---
+
+*火马年 2026 - Year of the Fire Horse*
