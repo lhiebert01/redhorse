@@ -189,7 +189,7 @@ export default function Home() {
               </p>
               <a
                 href="/privacy"
-                className="inline-block mt-3 bg-green-600 hover:bg-green-500 text-white font-bold text-sm px-4 py-2 rounded-lg transition-colors"
+                className="inline-block mt-3 bg-green-600 hover:bg-green-500 text-white font-bold text-lg px-6 py-3 rounded-lg transition-colors shadow-lg"
               >
                 LEARN MORE →
               </a>
@@ -198,11 +198,11 @@ export default function Home() {
         </div>
 
         {/* Social Proof */}
-        <div className="text-center mb-6">
-          <p className="text-red-400 text-sm italic">
+        <div className="text-center mb-6 bg-black/40 backdrop-blur-sm border border-red-900/50 rounded-xl p-4">
+          <p className="text-red-300 text-xl md:text-2xl italic font-medium">
             &quot;The Oracle revealed my path. I won $500 the next day.&quot;
           </p>
-          <p className="text-gray-600 text-xs mt-1">— Fire Horse Believer</p>
+          <p className="text-gray-400 text-sm mt-2">— Fire Horse Believer (Fictional)</p>
         </div>
 
         {/* Footer / Disclaimer */}

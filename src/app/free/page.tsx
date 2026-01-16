@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { calculateChineseZodiac } from '@/lib/zodiac/calculator';
+import { getChineseZodiac } from '@/lib/zodiac/calculator';
 import {
   ZodiacAnimal,
   ZodiacElement,
@@ -25,7 +25,7 @@ export default function FreeReadingPage() {
     e.preventDefault();
     if (!birthDate) return;
 
-    const zodiac = calculateChineseZodiac(birthDate);
+    const zodiac = getChineseZodiac(birthDate);
     if (zodiac) {
       setResult({
         animal: zodiac.animal as ZodiacAnimal,
