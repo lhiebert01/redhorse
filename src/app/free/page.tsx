@@ -11,7 +11,7 @@ import {
   FIRE_HORSE_RELATIONS,
 } from '@/constants/zodiac-data';
 import { PRODUCT_MODES } from '@/constants/modes';
-import { EDITION_CONFIG, getRemainingSlots, getDaysRemaining } from '@/constants/editions';
+import { EDITION_CONFIG, getDaysRemaining } from '@/constants/editions';
 
 export default function FreeReadingPage() {
   const [birthDate, setBirthDate] = useState('');
@@ -242,18 +242,12 @@ export default function FreeReadingPage() {
                 <p className="text-center text-fire-gold text-xs mb-1">for the Year of the Fire Horse 2026</p>
                 <p className="text-center text-4xl mb-3">{EDITION_CONFIG[result.animal].chineseChar}</p>
 
-                {/* Edition Stats */}
-                <div className="grid grid-cols-2 gap-3 mb-4">
-                  <div className="bg-red-950/50 border border-red-800 rounded-lg p-3 text-center">
-                    <p className="text-red-400 text-2xl font-bold">{getRemainingSlots(result.animal)}</p>
-                    <p className="text-gray-400 text-xs">Slots Remaining</p>
-                    <p className="text-gray-500 text-[10px]">of {EDITION_CONFIG[result.animal].totalSlots} total</p>
-                  </div>
-                  <div className="bg-yellow-950/50 border border-yellow-800 rounded-lg p-3 text-center">
-                    <p className="text-fire-gold text-2xl font-bold">{getDaysRemaining(result.animal)}</p>
-                    <p className="text-gray-400 text-xs">Days Left</p>
-                    <p className="text-gray-500 text-[10px]">Closes {EDITION_CONFIG[result.animal].closingDateDisplay}</p>
-                  </div>
+                {/* Edition Stats - Time-based urgency only */}
+                <div className="bg-gradient-to-r from-red-950/50 via-yellow-950/50 to-red-950/50 border border-fire-gold/50 rounded-lg p-4 mb-4 text-center">
+                  <p className="text-fire-gold text-3xl font-bold">{getDaysRemaining(result.animal)}</p>
+                  <p className="text-white text-sm font-semibold">Days Remaining</p>
+                  <p className="text-gray-400 text-xs">Edition closes {EDITION_CONFIG[result.animal].closingDateDisplay}</p>
+                  <p className="text-gray-500 text-[10px] mt-1">888 per mode • Numbered & Authenticated</p>
                 </div>
 
                 {/* Urgency Alert */}
@@ -290,10 +284,10 @@ export default function FreeReadingPage() {
 
             {/* Courage Challenge CTA */}
             <div className="bg-gradient-to-br from-red-950 via-red-900 to-black border-2 border-red-500 rounded-2xl p-6 text-center">
-              {/* Urgency Warning - Specific to their zodiac */}
+              {/* Urgency Warning - Time-based */}
               <div className="bg-red-900/80 border border-red-500 rounded-lg px-4 py-2 mb-4 inline-block">
                 <p className="text-red-200 text-xs font-bold uppercase tracking-wider">
-                  ⚠️ {result.element.toUpperCase()} {result.animal.toUpperCase()}: Only {getRemainingSlots(result.animal)} of {EDITION_CONFIG[result.animal].totalSlots} Remaining ⚠️
+                  ⏰ {result.element.toUpperCase()} {result.animal.toUpperCase()} EDITION CLOSES {EDITION_CONFIG[result.animal].closingDateDisplay.toUpperCase()} ⏰
                 </p>
               </div>
 
