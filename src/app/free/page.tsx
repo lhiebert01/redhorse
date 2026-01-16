@@ -236,8 +236,9 @@ export default function FreeReadingPage() {
 
                 {/* Main Title */}
                 <h3 className="text-fire-gold text-xl font-bold text-center mb-1">
-                  AUTHENTIC {result.animal.toUpperCase()} ORACLE
+                  AUTHENTIC {result.element.toUpperCase()} {result.animal.toUpperCase()} ORACLE
                 </h3>
+                <p className="text-center text-fire-gold text-xs mb-1">for the Year of the Fire Horse 2026</p>
                 <p className="text-center text-4xl mb-3">{EDITION_CONFIG[result.animal].chineseChar}</p>
 
                 {/* Edition Stats */}
@@ -257,13 +258,13 @@ export default function FreeReadingPage() {
                 {/* Urgency Alert */}
                 <div className="bg-red-900/60 border border-red-500 rounded-lg px-3 py-2 mb-4">
                   <p className="text-red-200 text-xs text-center font-semibold">
-                    ⚠️ {result.animal} Edition closes <span className="text-white">{EDITION_CONFIG[result.animal].closingDateDisplay}</span>
+                    ⚠️ {result.element} {result.animal} × Fire Horse Edition closes <span className="text-white">{EDITION_CONFIG[result.animal].closingDateDisplay}</span>
                   </p>
                 </div>
 
                 {/* What You Get */}
                 <div className="text-center mb-4">
-                  <p className="text-gray-400 text-xs uppercase tracking-widest mb-2">Your Numbered Edition Includes:</p>
+                  <p className="text-gray-400 text-xs uppercase tracking-widest mb-2">Your Numbered {result.element} {result.animal} Edition Includes:</p>
                   <div className="flex flex-wrap justify-center gap-2">
                     <span className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-xs px-2 py-1 rounded">Unique Edition #</span>
                     <span className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-xs px-2 py-1 rounded">Maker&apos;s Mark</span>
@@ -291,7 +292,7 @@ export default function FreeReadingPage() {
               {/* Urgency Warning - Specific to their zodiac */}
               <div className="bg-red-900/80 border border-red-500 rounded-lg px-4 py-2 mb-4 inline-block">
                 <p className="text-red-200 text-xs font-bold uppercase tracking-wider">
-                  ⚠️ {result.animal.toUpperCase()} EDITION: Only {getRemainingSlots(result.animal)} of {EDITION_CONFIG[result.animal].totalSlots} Remaining ⚠️
+                  ⚠️ {result.element.toUpperCase()} {result.animal.toUpperCase()}: Only {getRemainingSlots(result.animal)} of {EDITION_CONFIG[result.animal].totalSlots} Remaining ⚠️
                 </p>
               </div>
 
@@ -299,19 +300,19 @@ export default function FreeReadingPage() {
                 The Fire Horse Demands Courage
               </p>
               <h3 className="text-white text-2xl md:text-3xl font-bold mb-4">
-                Will YOU Claim Your<br />Numbered {result.animal} Oracle?
+                Will YOU Claim Your Authentic<br />{result.element} {result.animal} × Fire Horse Oracle?
               </h3>
               <p className="text-gray-300 text-lg mb-4">
-                Only <span className="text-fire-gold font-bold">{EDITION_CONFIG[result.animal].totalSlots}</span> authentic {result.animal} Oracles will EVER be created.
+                Only <span className="text-fire-gold font-bold">{EDITION_CONFIG[result.animal].totalSlots}</span> authentic {result.element} {result.animal} Oracles will EVER be created for the Year of the Fire Horse.
                 <br />
                 <span className="text-red-400">Each one numbered. Each one unique. Each one YOURS.</span>
               </p>
 
               {/* Countdown Context */}
               <div className="bg-black/70 border border-fire-gold/50 rounded-xl p-4 mb-4">
-                <p className="text-fire-gold text-sm font-bold mb-1">🔥 {result.animal} Edition Closes: {EDITION_CONFIG[result.animal].closingDateDisplay}</p>
+                <p className="text-fire-gold text-sm font-bold mb-1">🔥 {result.element} {result.animal} Edition Closes: {EDITION_CONFIG[result.animal].closingDateDisplay}</p>
                 <p className="text-gray-400 text-xs">
-                  After this date, <span className="text-red-400 font-bold">NO MORE {result.animal} Oracles</span> will be minted.
+                  After this date, <span className="text-red-400 font-bold">NO MORE {result.animal} Oracles</span> will be minted for Fire Horse 2026.
                 </p>
                 <p className="text-gray-500 text-xs mt-1">
                   Next Fire Horse year: <span className="text-red-400">2086</span> — Will you even be alive?
@@ -332,30 +333,30 @@ export default function FreeReadingPage() {
               </div>
 
               <p className="text-gray-500 text-xs">
-                {getRemainingSlots(result.animal)} people will own an authentic {result.animal} Oracle. Will you be one of them?
+                Only {EDITION_CONFIG[result.animal].totalSlots} people will EVER own an authentic {result.element} {result.animal} × Fire Horse Oracle. Will you be one of them?
               </p>
             </div>
 
             {/* Sample Talisman Preview */}
             <div className="bg-gradient-to-br from-yellow-900/20 to-red-900/20 border border-fire-gold/50 rounded-2xl p-6">
               <p className="text-fire-gold text-sm uppercase tracking-widest mb-3 text-center">
-                Your REAL, COMPLETE Oracle Awaits
+                Your {result.element} {result.animal} × Fire Horse Oracle Awaits
               </p>
               <div className="relative w-full max-w-sm mx-auto mb-4">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`/assets/examples/${result.animal.toLowerCase()}.png`}
-                  alt={`${result.animal} Oracle Example`}
+                  alt={`${result.element} ${result.animal} Oracle Example`}
                   className="w-full h-auto rounded-xl border border-fire-gold/30"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent rounded-xl flex items-end justify-center pb-4">
                   <p className="text-white text-sm font-semibold">
-                    Sample {result.animal} Oracle
+                    Sample {result.element} {result.animal} × Fire Horse Oracle
                   </p>
                 </div>
               </div>
               <p className="text-gray-300 text-center text-sm mb-6">
-                Get YOUR unique AI-generated talisman with personalized prophecy
+                Your unique AI-generated {result.element} {result.animal} talisman for the Year of the Fire Horse
               </p>
 
               {/* The Four Paths */}
