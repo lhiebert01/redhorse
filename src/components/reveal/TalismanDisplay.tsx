@@ -42,6 +42,11 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
         }
       });
 
+      // Build consistent filename with zodiac info
+      const elementName = prophecy.zodiac_element ? `${prophecy.zodiac_element.toLowerCase()}-` : '';
+      const animalName = prophecy.zodiac_sign ? prophecy.zodiac_sign.toLowerCase() : 'unknown';
+      const filename = `fire-horse-2026-${elementName}${animalName}-talisman.png`;
+
       // Convert to blob and download
       canvas.toBlob((blob) => {
         if (!blob) {
@@ -51,7 +56,7 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `fire-horse-talisman-2026-${prophecy.id.slice(0, 8)}.png`;
+        a.download = filename;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -62,12 +67,16 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
       // Fallback to just downloading the image
       if (prophecy.image_url) {
         try {
+          const elementName = prophecy.zodiac_element ? `${prophecy.zodiac_element.toLowerCase()}-` : '';
+          const animalName = prophecy.zodiac_sign ? prophecy.zodiac_sign.toLowerCase() : 'unknown';
+          const fallbackFilename = `fire-horse-2026-${elementName}${animalName}-talisman.png`;
+
           const response = await fetch(prophecy.image_url);
           const blob = await response.blob();
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = `fire-horse-talisman-2026-${prophecy.id.slice(0, 8)}.png`;
+          a.download = fallbackFilename;
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
