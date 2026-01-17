@@ -108,7 +108,7 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
 
       <div className="relative z-10 flex flex-col items-center">
         {/* Logo */}
-        <div className="relative w-64 md:w-80 h-32 md:h-40 mb-4">
+        <div className="relative w-64 md:w-80 h-32 md:h-40 mb-1">
           <Image
             src="/assets/loading/logo-firehorse1.jpeg"
             alt="Red Horse Oracle"
@@ -121,7 +121,7 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
         {/* Zodiac info if available */}
         {zodiacSign && (
           <p
-            className="text-xl md:text-2xl font-bold mb-4 text-center uppercase tracking-wider"
+            className="text-xl md:text-2xl font-bold mb-2 text-center uppercase tracking-wider"
             style={{
               color: '#ffd700',
               textShadow: '0 0 20px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 165, 0, 0.6)',
@@ -132,7 +132,7 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
         )}
 
         {/* Fire Horse with Frame - PNG transparency - 25% BIGGER */}
-        <div className="relative w-96 h-96 md:w-[480px] md:h-[480px] mb-6">
+        <div className="relative w-96 h-96 md:w-[480px] md:h-[480px] mb-2">
           {/* Glow effect behind everything */}
           <div
             className="absolute inset-4 rounded-full animate-pulse"
@@ -172,7 +172,7 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
 
         {/* Zodiac Sign Display */}
         {zodiacSign && zodiacImagePath && (
-          <div className="flex items-center gap-4 mb-4 bg-black/40 px-6 py-3 rounded-full border border-fire-gold/40">
+          <div className="flex items-center gap-4 mb-2 bg-black/40 px-6 py-2 rounded-full border border-fire-gold/40">
             <div
               className="relative w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden border-2 border-fire-gold"
               style={{
@@ -203,7 +203,7 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
 
         {/* Loading Message */}
         <p
-          className="text-2xl md:text-3xl font-bold text-center mb-4 min-h-[3rem]"
+          className="text-2xl md:text-3xl font-bold text-center mb-2 min-h-[3rem]"
           style={{
             color: '#ffffff',
             textShadow: '0 0 20px rgba(255, 255, 255, 0.9), 0 0 40px rgba(255, 165, 0, 0.7), 0 0 60px rgba(255, 69, 0, 0.5)',
@@ -229,7 +229,7 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
 
         {/* Subtext */}
         <p
-          className="mt-6 text-lg md:text-xl text-center max-w-md font-medium"
+          className="mt-3 text-lg md:text-xl text-center max-w-md font-medium"
           style={{
             color: '#ffffff',
             textShadow: '0 0 15px rgba(255, 255, 255, 0.5)',
@@ -238,7 +238,7 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
           Your personalized Fire Horse talisman is being crafted.
         </p>
         <p
-          className="mt-2 text-base md:text-lg text-center font-medium"
+          className="mt-1 text-base md:text-lg text-center font-medium"
           style={{
             color: '#ffd700',
             textShadow: '0 0 10px rgba(255, 215, 0, 0.5)',
@@ -249,7 +249,7 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
 
         {/* Fun fact */}
         <div
-          className="mt-6 px-6 py-4 rounded-xl border border-fire-gold/40 max-w-md"
+          className="mt-4 px-6 py-3 rounded-xl border border-fire-gold/40 max-w-md"
           style={{
             background: 'rgba(0, 0, 0, 0.6)',
             backdropFilter: 'blur(10px)',
