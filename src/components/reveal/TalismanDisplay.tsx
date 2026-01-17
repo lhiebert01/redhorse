@@ -117,7 +117,7 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
 
         {/* Edition Badge */}
         {prophecy.edition_number && prophecy.total_editions && (
-          <div className="bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 rounded-full px-6 py-2 mb-4 flex items-center justify-center">
+          <div className="bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 rounded-full px-6 pt-1 pb-2.5 mb-4 flex items-center justify-center">
             <p className="text-black text-xs font-bold tracking-wide leading-none">
               ✦ LIMITED EDITION #{prophecy.edition_number} of {prophecy.total_editions} ✦
             </p>
