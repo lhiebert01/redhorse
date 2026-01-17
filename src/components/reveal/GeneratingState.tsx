@@ -64,19 +64,19 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
 
   return (
     <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4 relative overflow-hidden">
-      {/* Background - Same as landing page for brand consistency */}
+      {/* Background - Dark cloud/flame pattern */}
       <div
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
-          backgroundImage: 'url(/assets/Year-of-Horse-Hero-Image3.jpeg)',
+          backgroundImage: 'url(/assets/loading/background.jpeg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center center',
-          backgroundRepeat: 'no-repeat',
-          opacity: 0.55,
+          backgroundRepeat: 'repeat',
+          opacity: 0.5,
         }}
       />
       {/* Dark gradient overlay for depth and readability */}
-      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-black/50 via-black/30 to-black/60" />
+      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-black/40 via-black/20 to-black/50" />
 
       {/* Floating Ember Particles - PNG with transparency - BIGGER, FASTER, DENSER */}
       <div className="absolute inset-0 z-1 overflow-hidden pointer-events-none">
