@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { verifyWebhookSignature, extractCustomFields } from '@/lib/stripe/webhooks';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { generateProphecy } from '@/lib/gemini/generate';
+import { generateBrandedImage } from '@/lib/image/branded-generator';
 import { getChineseZodiac, getFireHorseReading } from '@/lib/zodiac/calculator';
 import { validateFocusMode } from '@/lib/utils/validation';
 import { withRetry } from '@/lib/utils/retry';
@@ -142,30 +143,86 @@ export async function POST(request: Request) {
       }
     );
 
-    console.log('AI generation complete, uploading image...');
+    console.log('AI generation complete, uploading images...');
 
-    // Convert base64 to blob and upload to Supabase Storage
-    const imageBuffer = Buffer.from(result.imageData, 'base64');
-    const imagePath = `${prophecy.id}.png`;
+    // Convert base64 to buffer
+    const rawImageBuffer = Buffer.from(result.imageData, 'base64');
+    const rawImagePath = `${prophecy.id}.png`;
+    const brandedImagePath = `${prophecy.id}-branded.png`;
+    const certificateId = prophecy.id.slice(0, 8).toUpperCase();
 
-    const { error: uploadError } = await supabase.storage
+    // Metadata to attach to storage objects for querying
+    const imageMetadata = {
+      prophecy_id: prophecy.id,
+      edition_number: String(editionNumber),
+      total_editions: String(totalEditions),
+      zodiac_sign: zodiac.animal,
+      zodiac_element: zodiac.element,
+      focus_mode: focusMode,
+      certificate_id: certificateId,
+      created_at: new Date().toISOString(),
+    };
+
+    // Upload raw image with metadata
+    const { error: rawUploadError } = await supabase.storage
       .from('talismans')
-      .upload(imagePath, imageBuffer, {
+      .upload(rawImagePath, rawImageBuffer, {
         contentType: 'image/png',
         upsert: true,
+        metadata: imageMetadata,
       });
 
-    if (uploadError) {
-      console.error('Image upload error:', uploadError);
-      // Continue anyway - we can still show the prophecy without the image
+    if (rawUploadError) {
+      console.error('Raw image upload error:', rawUploadError);
     }
 
-    // Get public URL
+    // Generate branded image with edition/certificate baked in
+    console.log('Generating branded image with edition info...');
+    let brandedImageUrl: string | null = null;
+    try {
+      const brandedImageBuffer = await generateBrandedImage({
+        rawImageBuffer,
+        editionNumber,
+        totalEditions,
+        certificateId,
+        zodiacSign: zodiac.animal,
+        zodiacElement: zodiac.element,
+        focusMode,
+        mainText: result.mainText,
+      });
+
+      // Upload branded image with metadata
+      const { error: brandedUploadError } = await supabase.storage
+        .from('talismans')
+        .upload(brandedImagePath, brandedImageBuffer, {
+          contentType: 'image/png',
+          upsert: true,
+          metadata: {
+            ...imageMetadata,
+            image_type: 'branded',
+          },
+        });
+
+      if (brandedUploadError) {
+        console.error('Branded image upload error:', brandedUploadError);
+      } else {
+        const { data: brandedUrlData } = supabase.storage
+          .from('talismans')
+          .getPublicUrl(brandedImagePath);
+        brandedImageUrl = brandedUrlData.publicUrl;
+        console.log('Branded image uploaded successfully');
+      }
+    } catch (brandedError) {
+      console.error('Failed to generate branded image:', brandedError);
+      // Continue without branded image - raw image still works
+    }
+
+    // Get public URL for raw image
     const { data: publicUrlData } = supabase.storage
       .from('talismans')
-      .getPublicUrl(imagePath);
+      .getPublicUrl(rawImagePath);
 
-    // Update record with generated content
+    // Update record with generated content and both image URLs
     const { error: updateError } = await supabase
       .from('prophecies')
       .update({
@@ -173,7 +230,9 @@ export async function POST(request: Request) {
         sub_text: result.subText,
         full_reading: result.fullReading,
         image_url: publicUrlData.publicUrl,
-        image_storage_path: imagePath,
+        image_storage_path: rawImagePath,
+        branded_image_url: brandedImageUrl,
+        branded_image_storage_path: brandedImageUrl ? brandedImagePath : null,
         status: 'completed',
         completed_at: new Date().toISOString(),
       })

@@ -1527,4 +1527,154 @@ rm -rf .next && npm run dev
 
 ---
 
+## Session Update: January 17, 2026 (Evening) - Branded Image Generation
+
+### Current Status: BRANDED IMAGES READY FOR TESTING
+
+### What Was Completed This Session
+
+#### 1. Server-Side Branded Image Generation
+
+Created a complete system to generate branded talisman images with edition/certificate info baked directly into the image for sharing.
+
+**New Module:** `src/lib/image/branded-generator.ts`
+
+Uses Sharp library to composite:
+- **Header:** Edition badge (✦ LIMITED EDITION #X of 888 ✦)
+- **Body:** Raw AI-generated talisman image
+- **Maker's Mark:** Circular seal overlay (RED HORSE 馬 2026)
+- **Footer:** Prophecy text, zodiac info, certificate number, branding
+
+**Generated Image Structure:**
+```
+┌──────────────────────────────────┐
+│  ✦ LIMITED EDITION #2 of 888 ✦  │  ← Header (edition badge)
+├──────────────────────────────────┤
+│                            [馬]  │  ← Maker's mark overlay
+│                                  │
+│     [AI-Generated Talisman]      │  ← Raw image
+│                                  │
+├──────────────────────────────────┤
+│     STRIKE FROM SILENCE          │  ← Prophecy text
+│   Earth Dragon • ⚔️ Power Oracle │  ← Zodiac + mode
+│ 🔥 AUTHENTIC • Certificate #ABC123│  ← Certificate
+│   redhorseoracle.com • 2026      │  ← Branding
+└──────────────────────────────────┘
+```
+
+#### 2. Dual Image Storage
+
+Webhook now stores TWO images per prophecy:
+- **Raw Image:** `{id}.png` - Just the AI artwork
+- **Branded Image:** `{id}-branded.png` - Complete with edition/certificate
+
+Both images have metadata attached to Supabase Storage for querying:
+```json
+{
+  "prophecy_id": "cff80c84-...",
+  "edition_number": "2",
+  "total_editions": "888",
+  "zodiac_sign": "Dragon",
+  "zodiac_element": "Earth",
+  "focus_mode": "power",
+  "certificate_id": "CFF80C84",
+  "created_at": "2026-01-17T..."
+}
+```
+
+#### 3. Share Talisman Image Button (Restored)
+
+Re-added "Share Talisman Image" button that:
+- Uses branded image URL (with edition/certificate baked in)
+- Tries native share with image file on mobile
+- Falls back to copying image URL on desktop
+
+#### 4. SuperAdmin Image Browser
+
+**New Page:** `/superadmin` (PIN protected: 142857)
+
+Features:
+- Browse all generated oracles in grid view
+- Filter by zodiac sign, element, oracle mode
+- Filter by edition number range (e.g., #1-10)
+- Toggle between Raw AI and Branded views
+- Click for full details: edition, certificate, prophecy, URLs
+- Quality control: verify image uniqueness and consistency
+
+**Use Cases:**
+- View first 5 Earth Dragon oracles
+- Check all Shield mode talismans
+- Compare images for quality control
+- Get URLs for any prophecy
+
+### Database Migration Required
+
+Run this SQL in Supabase:
+```sql
+ALTER TABLE prophecies
+ADD COLUMN IF NOT EXISTS branded_image_url TEXT,
+ADD COLUMN IF NOT EXISTS branded_image_storage_path TEXT;
+
+-- Indexes for SuperAdmin queries
+CREATE INDEX IF NOT EXISTS idx_prophecies_zodiac_edition
+ON prophecies (zodiac_sign, zodiac_element, edition_number)
+WHERE status = 'completed';
+```
+
+Full migration: `docs/migrations/002_branded_image_columns.sql`
+
+### New Files Created
+
+| File | Purpose |
+|------|---------|
+| `src/lib/image/branded-generator.ts` | Server-side branded image generation |
+| `src/app/superadmin/page.tsx` | SuperAdmin image browser (PIN: 142857) |
+| `docs/migrations/002_branded_image_columns.sql` | Database migration |
+
+### Files Modified
+
+| File | Changes |
+|------|---------|
+| `src/app/api/webhook/route.ts` | Generate & store branded image + metadata |
+| `src/components/reveal/ShareButtons.tsx` | Restored Share Talisman Image button |
+| `src/types/prophecy.ts` | Added branded_image_url fields |
+| `package.json` | Added sharp dependency |
+
+### Dependencies Added
+
+```bash
+npm install sharp
+npm install --save-dev @types/sharp
+```
+
+### Testing Checklist
+
+1. **Run Migration:**
+   - Execute SQL in Supabase Dashboard → SQL Editor
+
+2. **Test Generation:**
+   - Use admin test console to generate a new prophecy
+   - Verify branded image URL is populated
+   - Check branded image has edition badge, maker's mark, certificate
+
+3. **Test SuperAdmin:**
+   - Visit /superadmin
+   - Enter PIN: 142857
+   - Browse images, test filters
+   - Toggle Raw/Branded view
+
+4. **Test Share Button:**
+   - On reveal page, click "Share Talisman Image"
+   - Verify branded image URL is shared (not raw)
+
+### URLs
+
+| Page | URL |
+|------|-----|
+| SuperAdmin Browser | https://redhorseoracle.com/superadmin |
+| Production | https://redhorseoracle.com |
+| Admin Test | https://redhorseoracle.com/admin-test |
+
+---
+
 *火马年 2026 - Year of the Fire Horse*
