@@ -13,7 +13,7 @@
 ![Privacy by Design](https://img.shields.io/badge/Privacy-By%20Design-22C55E?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-PRODUCTION%20LIVE-success?style=for-the-badge)
 
-[Live Demo](https://redhorse-omega.vercel.app/) | [See Examples](https://redhorse-omega.vercel.app/examples) | [Privacy Policy](https://redhorse-omega.vercel.app/privacy)
+[Live Site](https://www.redhorseoracle.com) | [Free Reading](https://www.redhorseoracle.com/free) | [Examples](https://www.redhorseoracle.com/examples) | [Privacy](https://www.redhorseoracle.com/privacy)
 
 </div>
 
@@ -63,10 +63,24 @@ Each talisman is a **one-of-a-kind masterpiece** of Chinese zodiac artwork, pers
 - **Real-time generation status** with animated progress
 - **Beautiful talisman display** with decree and mystical reading
 - **Zodiac Summary** - Personalized 2026 Fire Horse forecast with characteristics and strengths
-- **Save Talisman** - Downloads complete card as image
+- **Save Talisman** - Downloads AI artwork as `fire-horse-2026-{element}-{animal}-talisman.png`
+- **Save Zodiac Forecast** - Downloads zodiac card as `fire-horse-2026-{element}-{animal}-forecast.png`
 - **Share** - Native sharing or copy to clipboard
 - **Share to X/Twitter** - Pre-formatted tweet with prophecy link
 - **Navigation buttons** - Return home, get another reading, view examples
+
+### Limited Edition System
+- **888 editions per zodiac per mode** (42,624 total possible)
+- **Numbered editions** - Each oracle shows "Edition #X of 888"
+- **Maker's Mark** - Certificate of authenticity on every oracle
+- **Closing date** - All editions close February 17, 2027 (end of Fire Horse year)
+
+### Analytics Dashboard (Admin)
+- **Access:** `/admin-analytics` (PIN required)
+- **Tracks:** Free readings and paid oracles by zodiac sign
+- **No PII collected** - Only counters for marketing purposes
+- **Auto-refresh** every 30 seconds
+- **Revenue tracking** - Shows gross revenue by zodiac sign
 
 ### Payment & Integration
 - **$8.88 price point** (auspicious number in Chinese culture)

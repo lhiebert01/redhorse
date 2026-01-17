@@ -1,13 +1,14 @@
 # Red Horse Oracle - Next Steps & Launch Plan
 
-**Last Updated:** January 16, 2026 (Afternoon)
-**Current Phase:** ✅ TESTING COMPLETE → MARKETING LAUNCH
+**Last Updated:** January 17, 2026
+**Current Phase:** ✅ PRODUCTION READY → MARKETING LAUNCH
+**Version:** 1.2.0
 
 ---
 
 ## Current Status Summary
 
-### ✅ COMPLETED (Jan 12-16)
+### ✅ COMPLETED (Jan 12-17)
 
 | Category | Tasks | Date |
 |----------|-------|------|
@@ -20,12 +21,16 @@
 | **SEO Foundation** | Sitemap, robots.txt, meta tags, JSON-LD | Jan 15 |
 | **Limited Edition System** | 888 per zodiac PER MODE, numbered editions | Jan 16 |
 | **Maker's Mark & Provenance** | Certificate of authenticity | Jan 16 |
-| **Courage-Based Marketing** | Urgency messaging, edition deadlines | Jan 16 |
 | **Database Schema** | edition_number, total_editions columns | Jan 16 |
 | **Stripe Configuration** | Webhook (www.redhorseoracle.com) | Jan 16 |
 | **Payment Flow Verified** | Real $8.88 purchase successful | Jan 16 |
 | **Save Zodiac Forecast** | Paid users can download zodiac card PNG | Jan 16 |
 | **Unified Closing Dates** | All signs close Feb 17, 2027 | Jan 16 |
+| **Analytics Dashboard** | Track free/paid oracles by zodiac sign | Jan 17 |
+| **Share Talisman Image** | Share direct Supabase image URL (paid only) | Jan 17 |
+| **Webhook Idempotency** | Prevent double-processing on retry | Jan 17 |
+| **Consistent Filenames** | element-animal-talisman/forecast.png | Jan 17 |
+| **User-Friendly Language** | PII → "Personally Identifiable Information" | Jan 17 |
 
 ---
 

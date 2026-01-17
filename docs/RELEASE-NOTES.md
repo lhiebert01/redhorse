@@ -1,8 +1,95 @@
 # Red Horse Oracle - Release Notes
 
+## Version 1.2.0 - Analytics & Sharing (January 17, 2026)
+
+**Status:** PRODUCTION LIVE
+**Release Date:** January 17, 2026
+
+---
+
+### Highlights
+
+This release adds **Analytics Tracking**, **Share Talisman Image** functionality, **Webhook Idempotency**, and numerous quality-of-life improvements.
+
+---
+
+### New Features
+
+#### Analytics Dashboard (Admin)
+- **Access:** `/admin-analytics` (PIN: 142857)
+- Tracks free readings and paid oracles by zodiac sign
+- Real-time counters with auto-refresh (30 seconds)
+- Revenue tracking by zodiac sign
+- No PII collected - only counters for marketing
+
+#### Share Talisman Image (Paid Users Only)
+- New gold "Share Talisman Image" button on reveal page
+- Shares direct Supabase Storage URL to the authenticated talisman
+- Includes edition number and zodiac info in share text
+- Separate X/Twitter button for image sharing
+- Free users can only share the app URL, not talisman images
+
+#### Save Zodiac Forecast (Paid Users Only)
+- New "Save Zodiac Forecast" button on reveal page
+- Downloads zodiac card as PNG with strengths, characteristics, forecast
+- Consistent filename: `fire-horse-2026-{element}-{animal}-forecast.png`
+
+#### Consistent File Naming
+- Talisman: `fire-horse-2026-{element}-{animal}-talisman.png`
+- Forecast: `fire-horse-2026-{element}-{animal}-forecast.png`
+- Users can identify zodiac sign from filename
+
+#### Webhook Idempotency Fix
+- Prevents double-processing if Stripe retries webhook
+- Checks if session_id already exists before processing
+- Handles race conditions with duplicate key detection
+- Fixes potential double-charge issues
+
+#### Edition System Updates
+- **Unified closing date:** All signs close February 17, 2027
+- Full Fire Horse year availability (Jan 29, 2026 - Feb 16, 2027)
+- 888 editions per zodiac per mode (42,624 total)
+
+#### UI Improvements
+- Updated "PII" to user-friendly language
+- "100% PII-FREE" now shows "(No Personally Identifiable Information)"
+- Simplified messaging throughout
+
+---
+
+### New Files
+
+| File | Purpose |
+|------|---------|
+| `src/app/admin-analytics/page.tsx` | Admin analytics dashboard |
+| `src/app/api/analytics/track/route.ts` | Increment analytics counters |
+| `src/app/api/analytics/stats/route.ts` | Get analytics stats (admin) |
+| `supabase/migrations/001_analytics_table.sql` | Analytics table schema |
+
+---
+
+### Technical Changes
+
+#### Database Changes (Supabase)
+```sql
+-- Run this SQL to create the analytics table
+CREATE TABLE oracle_analytics (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  composite_key TEXT UNIQUE NOT NULL,
+  zodiac_sign TEXT NOT NULL,
+  zodiac_element TEXT NOT NULL,
+  oracle_type TEXT NOT NULL,  -- 'free' or 'paid'
+  count INTEGER DEFAULT 1,
+  last_generated_at TIMESTAMPTZ DEFAULT NOW(),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+```
+
+---
+
 ## Version 1.1.0 - Limited Edition System (January 16, 2026)
 
-**Status:** PRODUCTION READY - TESTING PHASE
+**Status:** PRODUCTION READY
 **Release Date:** January 16, 2026
 
 ---
@@ -163,6 +250,7 @@ This release marks the **production launch** of Red Horse Oracle, the world's fi
 
 | Version | Date | Description |
 |---------|------|-------------|
+| 1.2.0 | Jan 17, 2026 | Analytics, Share Talisman Image, webhook idempotency |
 | 1.1.0 | Jan 16, 2026 | Limited Edition system, Maker's Mark, custom domain |
 | 1.0.0 | Jan 14, 2026 | Production launch - Stripe live, Privacy by Design |
 | 0.9.0 | Jan 14, 2026 | Examples gallery, comprehensive documentation |
