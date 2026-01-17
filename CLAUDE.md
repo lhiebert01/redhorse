@@ -65,6 +65,7 @@ Red Horse Oracle is a viral SaaS application that generates personalized AI tali
 | Landing Page | `src/app/page.tsx` |
 | Free Reading | `src/app/free/page.tsx` |
 | Reveal Page | `src/app/reveal/page.tsx` |
+| Preview Loading | `src/app/preview-loading/page.tsx` |
 | Stripe Webhook | `src/app/api/webhook/route.ts` |
 | Admin Test API | `src/app/api/admin-test/route.ts` |
 | Gemini Client | `src/lib/gemini/client.ts` |
@@ -74,6 +75,8 @@ Red Horse Oracle is a viral SaaS application that generates personalized AI tali
 | Product Modes | `src/constants/modes.ts` |
 | Edition Config | `src/constants/editions.ts` |
 | Talisman Display | `src/components/reveal/TalismanDisplay.tsx` |
+| Generating State | `src/components/reveal/GeneratingState.tsx` |
+| Share Buttons | `src/components/reveal/ShareButtons.tsx` |
 
 ---
 
@@ -1389,6 +1392,138 @@ Users can now save TWO items:
 - LinkedIn article
 - Product Hunt listing
 - Influencer outreach strategy
+
+---
+
+## Session Update: January 17, 2026 - Enhanced Loading Experience
+
+### Current Status: PRODUCTION READY
+
+### What Was Completed This Session
+
+#### 1. Immersive Generating/Loading Page Enhancement
+
+Completely redesigned the loading page that displays while Gemini 3 Pro generates the talisman after payment. The page now provides an engaging, visually stunning waiting experience.
+
+**Visual Elements Added:**
+- **Dark Cloud Background** - Mystical cloud/flame pattern at 50% opacity (`/assets/loading/background.jpeg`)
+- **Bouncing Fire Horse** - Transparent PNG inside rotating fire frame (580x580px on desktop)
+- **20 Floating Ember Particles** - Fire embers with transparency floating upward
+- **Red Horse Oracle Logo** - Branded header image
+
+**Information Display:**
+- **Zodiac Title** - "Fire Dragon × Fire Horse" (element + sign) in gold with glow effect
+- **Status Messages** - Two styled lines:
+  - "Your personalized Fire Horse talisman is being crafted." (white with glow)
+  - "This typically takes 30-60 seconds." (gold with glow)
+- **Generating For Button** - Shows zodiac image + element + sign label (380px wide)
+- **Rotating Oracle Messages** - Cycling mystical messages every 2.5 seconds
+- **Progress Dots** - 5 bouncing gold dots
+- **Did You Know Box** - Fun fact about Fire Horse rarity (warm gradient background)
+
+**CSS Animations:**
+- `bounce-horse` - 2s vertical bounce cycle
+- `spin-slow` - Frame rotates 360° over 60 seconds
+- `float-ember` - Particles rise from bottom with fade in/out
+
+#### 2. Preview Loading Page
+
+Created `/preview-loading` page to test loading animation locally without payment.
+
+**File:** `src/app/preview-loading/page.tsx`
+```typescript
+'use client';
+import GeneratingState from '@/components/reveal/GeneratingState';
+
+export default function PreviewLoadingPage() {
+  return (
+    <GeneratingState
+      zodiacSign="Dragon"
+      zodiacElement="Fire"
+      focusMode="wealth"
+    />
+  );
+}
+```
+
+#### 3. Share Button Simplification
+
+Removed "Share Talisman Image" button because the raw Supabase image URL doesn't include the Maker's Mark, Certificate, or Edition badge. Users were sharing unbranded images.
+
+**Current Share Options:**
+- "Share Page" - Shares the reveal page URL (full branded experience)
+- "𝕏" - Quick share to Twitter/X
+
+**Future Enhancement:** Server-side branded image generation for Phase II.
+
+### Key Files Modified
+
+| File | Changes |
+|------|---------|
+| `src/components/reveal/GeneratingState.tsx` | Complete redesign with animations, PNG transparency, styled text |
+| `src/components/reveal/ShareButtons.tsx` | Removed "Share Talisman Image" button |
+| `src/app/preview-loading/page.tsx` | NEW - Test loading animation without payment |
+
+### New Assets Added
+
+**Directory:** `/public/assets/loading/`
+
+| File | Purpose |
+|------|---------|
+| `fire-horse-bouncing-3.png` | Bouncing horse (transparent background) |
+| `fire-frame.png` | Rotating frame (transparent center) |
+| `ember1.png` - `ember6.png` | 6 ember variations (transparent) |
+| `background.jpeg` | Dark cloud/flame pattern |
+| `logo-firehorse1.jpeg` | Red Horse Oracle logo |
+
+### Lessons Learned This Session
+
+#### PNG Transparency vs JPEG
+
+**Issue:** AI-generated images with "transparent backgrounds" were JPEGs with visible checkered patterns (the Photoshop transparency indicator rendered as actual pixels).
+
+**Solution:** JPEGs don't support transparency. Must convert to PNG format with actual transparency removed.
+
+**Rule:** Always use PNG for images that need transparent backgrounds. JPEG format cannot store alpha channel data.
+
+#### CSS Animation Layering
+
+**Issue:** Fire frame was blocking/occluding the bouncing horse inside it because the frame's center was solid (checkered pattern).
+
+**Solution:** The frame PNG must have a transparent center hole, not just transparent edges.
+
+**Rule:** For overlay animations, ensure inner elements can show through by using actual transparency.
+
+#### Browser Cache During Development
+
+**Issue:** Changes to CSS, images, and components weren't appearing despite successful compilation.
+
+**Solutions:**
+1. Clear `.next` cache: `rm -rf .next && npm run dev`
+2. Hard refresh: `Ctrl+Shift+R` (Windows/Linux)
+3. Incognito window: `Ctrl+Shift+N` bypasses all caching
+4. Kill and restart dev server
+
+**Rule:** When visual changes don't appear, always clear caches before debugging code.
+
+#### Preview Pages for Testing
+
+**Pattern:** Created `/preview-loading` to test the loading animation without making a real payment. Useful for isolated component testing.
+
+**Future applications:**
+- `/preview-talisman` - Test talisman display
+- `/preview-zodiac` - Test zodiac summary
+
+### Quick Start
+
+```bash
+# Test loading animation locally
+npm run dev
+# Visit http://localhost:3000/preview-loading
+
+# Clear cache and restart if changes don't appear
+rm -rf .next && npm run dev
+```
 
 ---
 

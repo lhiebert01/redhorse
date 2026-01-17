@@ -193,7 +193,7 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
         {/* Zodiac Sign Display - WIDER BUTTON */}
         {zodiacSign && zodiacImagePath && (
           <div
-            className="flex items-center justify-center gap-5 mb-1 px-12 py-3 rounded-full border-2 border-fire-gold/50"
+            className="flex items-center justify-center gap-5 mb-8 px-12 py-3 rounded-full border-2 border-fire-gold/50"
             style={{
               background: 'linear-gradient(135deg, rgba(100, 50, 20, 0.8) 0%, rgba(60, 20, 10, 0.85) 100%)',
               minWidth: '380px',
@@ -230,7 +230,7 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
 
         {/* Loading Message */}
         <p
-          className="text-2xl md:text-3xl font-bold text-center mb-2 min-h-[3rem]"
+          className="text-2xl md:text-3xl font-bold text-center mb-3 min-h-[3rem]"
           style={{
             color: '#ffffff',
             textShadow: '0 0 20px rgba(255, 255, 255, 0.9), 0 0 40px rgba(255, 165, 0, 0.7), 0 0 60px rgba(255, 69, 0, 0.5)',
@@ -240,7 +240,7 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
         </p>
 
         {/* Progress Indicator */}
-        <div className="mt-2 flex gap-3">
+        <div className="mt-3 flex gap-3">
           {[0, 1, 2, 3, 4].map((i) => (
             <div
               key={i}

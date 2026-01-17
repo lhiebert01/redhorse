@@ -163,13 +163,36 @@ After selecting a mode:
 4. Confirms oracle mode selection
 5. Completes payment
 
-### 3. Reveal Experience
+### 3. Generation Loading Experience
 
-After payment:
+After payment, users see an immersive animated loading page while the AI generates their talisman:
 
-1. **Redirected to Reveal Page** with session ID
-2. **Generation Status** shows animated progress
-3. **Prophecy Revealed** - Talisman image appears with:
+**Visual Elements:**
+- **Dark Cloud Background** - Mystical dark cloud/flame pattern at 50% opacity
+- **Bouncing Fire Horse** - Animated PNG horse inside rotating fire frame (580x580px)
+- **Floating Embers** - 20 fire particles floating upward with transparency
+- **Red Horse Oracle Logo** - Branded header image
+
+**Information Display:**
+- **Zodiac Title** - "Fire Dragon × Fire Horse" (element + sign) in gold with glow
+- **Status Messages** - Two lines of styled text:
+  - "Your personalized Fire Horse talisman is being crafted." (white)
+  - "This typically takes 30-60 seconds." (gold)
+- **Generating For Button** - Shows zodiac image + "Fire [Animal]" label
+- **Rotating Oracle Messages** - Cycling mystical messages like "Summoning the Fire Horse Oracle..."
+- **Progress Dots** - Bouncing gold dots indicating activity
+- **Did You Know Box** - Fun fact about Fire Horse rarity (once every 60 years)
+
+**Animations:**
+- `bounce-horse` - Gentle vertical bounce (2s cycle)
+- `spin-slow` - Frame rotates 360° over 60 seconds
+- `float-ember` - Embers rise from bottom with fade in/out
+
+### 4. Reveal Experience
+
+After generation completes:
+
+1. **Prophecy Revealed** - Talisman image appears with:
    - Full masterpiece artwork
    - Prophecy decree prominently displayed
    - Mystical Fire Horse reading

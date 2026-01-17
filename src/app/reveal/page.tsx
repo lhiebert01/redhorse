@@ -8,6 +8,9 @@ import TalismanDisplay from '@/components/reveal/TalismanDisplay';
 import ZodiacSummary from '@/components/reveal/ZodiacSummary';
 import GeneratingState from '@/components/reveal/GeneratingState';
 
+// Minimum time to show loading animation (15 seconds)
+const MIN_LOADING_TIME_MS = 15000;
+
 function RevealContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('session_id');
@@ -16,6 +19,8 @@ function RevealContent() {
   const [prophecy, setProphecy] = useState<Prophecy | null>(null);
   const [status, setStatus] = useState<'loading' | 'generating' | 'ready' | 'error'>('loading');
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [loadingStartTime] = useState<number>(Date.now());
+  const [minTimeElapsed, setMinTimeElapsed] = useState<boolean>(false);
 
   const fetchProphecy = useCallback(async () => {
     if (!sessionId) return;
@@ -95,6 +100,19 @@ function RevealContent() {
     };
   }, [sessionId, fetchProphecy]);
 
+  // Ensure minimum loading time for the animation
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMinTimeElapsed(true);
+    }, MIN_LOADING_TIME_MS);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Calculate if we should show loading (either not ready OR min time hasn't elapsed)
+  const shouldShowLoading = (status === 'loading' || status === 'generating') ||
+    (status === 'ready' && !minTimeElapsed);
+
   if (status === 'error') {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center text-center p-4">
@@ -110,7 +128,7 @@ function RevealContent() {
     );
   }
 
-  if (status === 'loading' || status === 'generating') {
+  if (shouldShowLoading) {
     return (
       <GeneratingState
         zodiacSign={prophecy?.zodiac_sign}
