@@ -111,7 +111,13 @@ function RevealContent() {
   }
 
   if (status === 'loading' || status === 'generating') {
-    return <GeneratingState />;
+    return (
+      <GeneratingState
+        zodiacSign={prophecy?.zodiac_sign}
+        zodiacElement={prophecy?.zodiac_element}
+        focusMode={prophecy?.focus_mode}
+      />
+    );
   }
 
   if (!prophecy) {
