@@ -6,6 +6,7 @@ import { Prophecy } from '@/types/prophecy';
 import { ZODIAC_ANIMALS, ZODIAC_ELEMENTS, ZodiacAnimal, ZodiacElement } from '@/constants/zodiac-data';
 
 const SUPERADMIN_PIN = '142857';
+const AUTH_STORAGE_KEY = 'superadmin_authenticated';
 
 interface Filters {
   zodiacSign: ZodiacAnimal | 'all';
@@ -19,6 +20,14 @@ export default function SuperAdminPage() {
   const [authenticated, setAuthenticated] = useState(false);
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
+
+  // Check sessionStorage on mount for persisted authentication
+  useEffect(() => {
+    const stored = sessionStorage.getItem(AUTH_STORAGE_KEY);
+    if (stored === 'true') {
+      setAuthenticated(true);
+    }
+  }, []);
   const [prophecies, setProphecies] = useState<Prophecy[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<Prophecy | null>(null);
@@ -35,10 +44,17 @@ export default function SuperAdminPage() {
     e.preventDefault();
     if (pin === SUPERADMIN_PIN) {
       setAuthenticated(true);
+      sessionStorage.setItem(AUTH_STORAGE_KEY, 'true');
       setPinError('');
     } else {
       setPinError('Invalid PIN');
     }
+  };
+
+  const handleLogout = () => {
+    setAuthenticated(false);
+    sessionStorage.removeItem(AUTH_STORAGE_KEY);
+    setPin('');
   };
 
   const fetchProphecies = async () => {
@@ -120,12 +136,36 @@ export default function SuperAdminPage() {
     <div className="min-h-screen bg-black text-white p-4">
       {/* Header */}
       <div className="max-w-7xl mx-auto mb-8">
-        <h1 className="text-3xl font-bold text-fire-gold mb-2">
-          🔥 SuperAdmin Image Browser
-        </h1>
-        <p className="text-gray-400">
-          Browse and quality-check generated talismans by zodiac, edition, and mode
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-fire-gold mb-2">
+              🔥 SuperAdmin Image Browser
+            </h1>
+            <p className="text-gray-400">
+              Browse and quality-check generated talismans by zodiac, edition, and mode
+            </p>
+          </div>
+          <div className="flex items-center gap-4">
+            <a
+              href="/admin-test"
+              className="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors"
+            >
+              + Generate Test Oracle
+            </a>
+            <button
+              onClick={() => fetchProphecies()}
+              className="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors"
+            >
+              🔄 Refresh
+            </button>
+            <button
+              onClick={handleLogout}
+              className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm transition-colors"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Filters */}

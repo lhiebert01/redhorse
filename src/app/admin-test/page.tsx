@@ -11,6 +11,9 @@ const FOCUS_MODES = [
   { id: 'shield', name: 'Shield Mode', description: '3-Word Protective Mantra (e.g., FIRE SHIELDS ME)' },
 ];
 
+// Shared authentication key with SuperAdmin
+const AUTH_STORAGE_KEY = 'superadmin_authenticated';
+
 function AdminTestContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -25,10 +28,16 @@ function AdminTestContent() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState('');
 
-  // Auto-authenticate if coming back from reveal page
+  // Check sessionStorage on mount OR auto-authenticate if skip_pin
   useEffect(() => {
     if (skipPin) {
       setIsAuthenticated(true);
+      sessionStorage.setItem(AUTH_STORAGE_KEY, 'true');
+    } else {
+      const stored = sessionStorage.getItem(AUTH_STORAGE_KEY);
+      if (stored === 'true') {
+        setIsAuthenticated(true);
+      }
     }
   }, [skipPin]);
 
@@ -55,6 +64,7 @@ function AdminTestContent() {
     e.preventDefault();
     if (pin === '142857') {
       setIsAuthenticated(true);
+      sessionStorage.setItem(AUTH_STORAGE_KEY, 'true');
       setPinError('');
     } else {
       setPinError('Invalid PIN');
@@ -224,12 +234,21 @@ function AdminTestContent() {
           </div>
         )}
 
-        <a
-          href="/"
-          className="block text-center text-gray-500 text-sm mt-8 hover:text-gray-300"
-        >
-          Return to Home
-        </a>
+        <div className="flex gap-4 mt-8 justify-center">
+          <a
+            href="/superadmin"
+            className="text-fire-gold text-sm hover:text-yellow-400 font-medium"
+          >
+            📊 Image Browser
+          </a>
+          <span className="text-gray-600">|</span>
+          <a
+            href="/"
+            className="text-gray-500 text-sm hover:text-gray-300"
+          >
+            Return to Home
+          </a>
+        </div>
       </div>
     </div>
   );
