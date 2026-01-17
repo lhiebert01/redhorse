@@ -117,8 +117,8 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
 
         {/* Edition Badge */}
         {prophecy.edition_number && prophecy.total_editions && (
-          <div className="bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 rounded-full px-4 py-1 mb-4">
-            <p className="text-black text-xs font-bold tracking-wide">
+          <div className="bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 rounded-full px-6 py-2 mb-4 flex items-center justify-center">
+            <p className="text-black text-xs font-bold tracking-wide leading-none">
               ✦ LIMITED EDITION #{prophecy.edition_number} of {prophecy.total_editions} ✦
             </p>
           </div>
@@ -198,7 +198,7 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
               </div>
             </div>
             {prophecy.edition_number && (
-              <p className="text-center text-gray-600 text-[10px] mt-2">
+              <p className="text-center text-white text-xs font-bold mt-3">
                 Certificate #{prophecy.id.slice(0, 8).toUpperCase()} • Year of the Fire Horse 2026
               </p>
             )}
