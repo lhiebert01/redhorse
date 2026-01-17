@@ -39,6 +39,7 @@ export default function SuperAdminPage() {
     editionFrom: 1,
     editionTo: 888,
   });
+  const [backfillStatus, setBackfillStatus] = useState<string | null>(null);
 
   const handlePinSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,6 +56,27 @@ export default function SuperAdminPage() {
     setAuthenticated(false);
     sessionStorage.removeItem(AUTH_STORAGE_KEY);
     setPin('');
+  };
+
+  const handleBackfillEditions = async () => {
+    setBackfillStatus('Running backfill...');
+    try {
+      const response = await fetch('/api/admin/backfill-editions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin: SUPERADMIN_PIN }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setBackfillStatus(`✅ ${data.message}: ${data.updated} updated, ${data.alreadyCorrect} already correct`);
+        // Refresh the list
+        fetchProphecies();
+      } else {
+        setBackfillStatus(`❌ Error: ${data.error}`);
+      }
+    } catch (error) {
+      setBackfillStatus(`❌ Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   };
 
   const fetchProphecies = async () => {
@@ -145,13 +167,19 @@ export default function SuperAdminPage() {
               Browse and quality-check generated talismans by zodiac, edition, and mode
             </p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 flex-wrap">
             <a
               href="/admin-test"
               className="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors"
             >
               + Generate Test Oracle
             </a>
+            <button
+              onClick={handleBackfillEditions}
+              className="bg-purple-700 hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors"
+            >
+              🔢 Backfill Editions
+            </button>
             <button
               onClick={() => fetchProphecies()}
               className="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors"
@@ -166,6 +194,23 @@ export default function SuperAdminPage() {
             </button>
           </div>
         </div>
+
+        {/* Backfill Status */}
+        {backfillStatus && (
+          <div className={`mt-4 p-3 rounded-lg text-sm ${
+            backfillStatus.startsWith('✅') ? 'bg-green-900/50 text-green-300' :
+            backfillStatus.startsWith('❌') ? 'bg-red-900/50 text-red-300' :
+            'bg-blue-900/50 text-blue-300'
+          }`}>
+            {backfillStatus}
+            <button
+              onClick={() => setBackfillStatus(null)}
+              className="ml-4 text-gray-400 hover:text-white"
+            >
+              ✕
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Filters */}
