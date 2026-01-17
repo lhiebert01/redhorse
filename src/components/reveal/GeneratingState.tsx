@@ -30,9 +30,18 @@ const MODE_MESSAGES: Record<string, string[]> = {
   shield: ['Protection manifests...', 'Sacred shields form...', 'Guardian spirits gather...'],
 };
 
+// Ember images for floating particles
+const EMBER_IMAGES = [
+  '/assets/loading/ember1.jpeg',
+  '/assets/loading/ember2.jpeg',
+  '/assets/loading/ember3.jpeg',
+  '/assets/loading/ember4.jpeg',
+  '/assets/loading/ember5.jpeg',
+  '/assets/loading/ember6.jpeg',
+];
+
 export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }: GeneratingStateProps) {
   const [messageIndex, setMessageIndex] = useState(0);
-  const [showModeMessage, setShowModeMessage] = useState(false);
 
   // Combine general messages with mode-specific ones
   const modeKey = focusMode?.toLowerCase();
@@ -43,7 +52,6 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
   useEffect(() => {
     const interval = setInterval(() => {
       setMessageIndex((prev) => (prev + 1) % allMessages.length);
-      setShowModeMessage(Math.random() > 0.5);
     }, 2500);
 
     return () => clearInterval(interval);
@@ -56,137 +64,118 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
 
   return (
     <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4 relative overflow-hidden">
-      {/* Background with subtle branding */}
+      {/* Background Pattern - Chinese clouds and flames */}
       <div
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
-          backgroundImage: 'url(/assets/Year-of-Horse-Hero-Image3.jpeg)',
+          backgroundImage: 'url(/assets/loading/background.jpeg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center center',
-          backgroundRepeat: 'no-repeat',
-          opacity: 0.15,
-          filter: 'blur(3px)',
+          backgroundRepeat: 'repeat',
+          opacity: 0.4,
         }}
       />
-      {/* Dark gradient overlay */}
-      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-black via-black/80 to-black" />
+      {/* Dark gradient overlay for depth */}
+      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-black/60 via-transparent to-black/70" />
+      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-r from-black/40 via-transparent to-black/40" />
 
-      {/* Fire particles effect */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+      {/* Floating Ember Particles */}
+      <div className="absolute inset-0 z-1 overflow-hidden pointer-events-none">
+        {[...Array(12)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-2 h-2 rounded-full animate-float"
+            className="absolute animate-float-ember"
             style={{
-              left: `${Math.random() * 100}%`,
-              bottom: '-10px',
-              background: `radial-gradient(circle, ${
-                ['#ff6b35', '#f7c331', '#ff4500', '#ffd700'][Math.floor(Math.random() * 4)]
-              }, transparent)`,
-              animationDuration: `${3 + Math.random() * 4}s`,
-              animationDelay: `${Math.random() * 3}s`,
-              opacity: 0.6,
+              left: `${5 + (i * 8)}%`,
+              bottom: '-60px',
+              width: '40px',
+              height: '60px',
+              animationDuration: `${4 + Math.random() * 3}s`,
+              animationDelay: `${i * 0.4}s`,
+              opacity: 0.7,
             }}
-          />
+          >
+            <Image
+              src={EMBER_IMAGES[i % EMBER_IMAGES.length]}
+              alt=""
+              width={40}
+              height={60}
+              className="object-contain"
+              style={{ filter: 'brightness(1.2)' }}
+            />
+          </div>
         ))}
       </div>
 
       <div className="relative z-10 flex flex-col items-center">
-        {/* Title */}
-        <h1
-          className="text-3xl md:text-4xl font-bold text-white mb-2 tracking-wide text-center"
-          style={{
-            textShadow: '0 0 20px rgba(255, 165, 0, 0.8), 0 0 40px rgba(255, 69, 0, 0.6), 0 0 60px rgba(255, 0, 0, 0.4)',
-          }}
-        >
-          CRAFTING YOUR ORACLE
-        </h1>
+        {/* Logo */}
+        <div className="relative w-64 md:w-80 h-32 md:h-40 mb-4">
+          <Image
+            src="/assets/loading/logo-firehorse1.jpeg"
+            alt="Red Horse Oracle"
+            fill
+            className="object-contain"
+            priority
+          />
+        </div>
 
         {/* Zodiac info if available */}
         {zodiacSign && (
           <p
-            className="text-xl md:text-2xl font-semibold mb-6 text-center"
+            className="text-xl md:text-2xl font-bold mb-4 text-center uppercase tracking-wider"
             style={{
               color: '#ffd700',
-              textShadow: '0 0 15px rgba(255, 215, 0, 0.7), 0 0 30px rgba(255, 165, 0, 0.5)',
+              textShadow: '0 0 20px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 165, 0, 0.6)',
             }}
           >
             {zodiacElement && `${zodiacElement} `}{zodiacSign} × Fire Horse
           </p>
         )}
 
-        {/* Bouncing Fire Horse with enhanced effects */}
-        <div className="relative w-48 h-48 md:w-56 md:h-56 mb-8">
-          {/* Outer fire glow rings */}
-          <div
-            className="absolute inset-0 rounded-full animate-pulse"
-            style={{
-              background: 'radial-gradient(circle, rgba(255, 69, 0, 0.4) 0%, rgba(255, 0, 0, 0.2) 50%, transparent 70%)',
-              filter: 'blur(20px)',
-              transform: 'scale(1.5)',
-            }}
-          />
-          <div
-            className="absolute inset-0 rounded-full animate-pulse"
-            style={{
-              background: 'radial-gradient(circle, rgba(255, 165, 0, 0.5) 0%, rgba(255, 69, 0, 0.3) 40%, transparent 60%)',
-              filter: 'blur(15px)',
-              animationDelay: '0.3s',
-              transform: 'scale(1.3)',
-            }}
-          />
-          <div
-            className="absolute inset-0 rounded-full animate-pulse"
-            style={{
-              background: 'radial-gradient(circle, rgba(255, 215, 0, 0.6) 0%, rgba(255, 165, 0, 0.3) 30%, transparent 50%)',
-              filter: 'blur(10px)',
-              animationDelay: '0.6s',
-              transform: 'scale(1.1)',
-            }}
-          />
-
-          {/* Fire Horse Image with bounce and glow */}
-          <div
-            className="absolute inset-0 flex items-center justify-center animate-bounce-slow"
-          >
-            <div
-              className="relative w-36 h-36 md:w-44 md:h-44 rounded-full overflow-hidden border-4 border-fire-gold"
-              style={{
-                boxShadow: '0 0 30px rgba(255, 165, 0, 0.8), 0 0 60px rgba(255, 69, 0, 0.6), inset 0 0 30px rgba(255, 215, 0, 0.3)',
-              }}
-            >
-              <Image
-                src="/assets/zodiac/horse.jpeg"
-                alt="Fire Horse"
-                fill
-                className="object-cover"
-                style={{
-                  filter: 'saturate(1.3) brightness(1.1)',
-                }}
-              />
-              {/* Fire overlay on horse */}
-              <div
-                className="absolute inset-0 animate-flicker"
-                style={{
-                  background: 'linear-gradient(to top, rgba(255, 69, 0, 0.3), transparent 60%)',
-                }}
-              />
-            </div>
+        {/* Fire Horse with Frame */}
+        <div className="relative w-72 h-72 md:w-96 md:h-96 mb-6">
+          {/* Fire Frame */}
+          <div className="absolute inset-0 z-10 pointer-events-none animate-spin-slow">
+            <Image
+              src="/assets/loading/fire-frame.jpeg"
+              alt=""
+              fill
+              className="object-contain"
+              style={{ opacity: 0.9 }}
+            />
           </div>
 
-          {/* Fire emoji accents */}
-          <div className="absolute -top-2 left-1/2 -translate-x-1/2 text-3xl animate-bounce" style={{ animationDelay: '0.1s' }}>🔥</div>
-          <div className="absolute top-1/4 -left-4 text-2xl animate-bounce" style={{ animationDelay: '0.3s' }}>🔥</div>
-          <div className="absolute top-1/4 -right-4 text-2xl animate-bounce" style={{ animationDelay: '0.5s' }}>🔥</div>
+          {/* Glow effect behind horse */}
+          <div
+            className="absolute inset-8 rounded-full animate-pulse"
+            style={{
+              background: 'radial-gradient(circle, rgba(255, 165, 0, 0.4) 0%, rgba(255, 69, 0, 0.2) 50%, transparent 70%)',
+              filter: 'blur(20px)',
+            }}
+          />
+
+          {/* Bouncing Fire Horse */}
+          <div className="absolute inset-8 z-20 animate-bounce-horse">
+            <Image
+              src="/assets/loading/fire-horse-bouncing2.jpeg"
+              alt="Fire Horse"
+              fill
+              className="object-contain drop-shadow-2xl"
+              style={{
+                filter: 'drop-shadow(0 0 30px rgba(255, 165, 0, 0.8)) drop-shadow(0 0 60px rgba(255, 69, 0, 0.5))',
+              }}
+              priority
+            />
+          </div>
         </div>
 
         {/* Zodiac Sign Display */}
         {zodiacSign && zodiacImagePath && (
-          <div className="flex items-center gap-4 mb-6">
+          <div className="flex items-center gap-4 mb-4 bg-black/40 px-6 py-3 rounded-full border border-fire-gold/40">
             <div
-              className="relative w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-2 border-fire-gold/60"
+              className="relative w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden border-2 border-fire-gold"
               style={{
-                boxShadow: '0 0 20px rgba(255, 165, 0, 0.5)',
+                boxShadow: '0 0 20px rgba(255, 165, 0, 0.6)',
               }}
             >
               <Image
@@ -196,13 +185,13 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
                 className="object-cover"
               />
             </div>
-            <div className="text-center">
-              <p className="text-white text-sm uppercase tracking-widest opacity-80">Your Sign</p>
+            <div>
+              <p className="text-white/70 text-xs uppercase tracking-widest">Generating for</p>
               <p
                 className="text-2xl md:text-3xl font-bold"
                 style={{
                   color: '#ffd700',
-                  textShadow: '0 0 10px rgba(255, 215, 0, 0.6)',
+                  textShadow: '0 0 15px rgba(255, 215, 0, 0.7)',
                 }}
               >
                 {zodiacSign}
@@ -211,106 +200,108 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
           </div>
         )}
 
-        {/* Loading Message - BIGGER & BRIGHTER */}
+        {/* Loading Message */}
         <p
-          className="text-2xl md:text-3xl font-bold text-center mb-4 min-h-[2.5rem]"
+          className="text-2xl md:text-3xl font-bold text-center mb-4 min-h-[3rem]"
           style={{
             color: '#ffffff',
-            textShadow: '0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 165, 0, 0.6), 0 0 60px rgba(255, 69, 0, 0.4)',
+            textShadow: '0 0 20px rgba(255, 255, 255, 0.9), 0 0 40px rgba(255, 165, 0, 0.7), 0 0 60px rgba(255, 69, 0, 0.5)',
           }}
         >
           {allMessages[messageIndex]}
         </p>
 
-        {/* Progress Indicator - Bigger & Brighter */}
-        <div className="mt-4 flex gap-3">
+        {/* Progress Indicator */}
+        <div className="mt-2 flex gap-3">
           {[0, 1, 2, 3, 4].map((i) => (
             <div
               key={i}
               className="w-4 h-4 rounded-full animate-bounce"
               style={{
                 backgroundColor: '#ffd700',
-                boxShadow: '0 0 15px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 165, 0, 0.5)',
+                boxShadow: '0 0 15px rgba(255, 215, 0, 0.9), 0 0 30px rgba(255, 165, 0, 0.6)',
                 animationDelay: `${i * 0.15}s`,
               }}
             />
           ))}
         </div>
 
-        {/* Subtext - Brighter */}
+        {/* Subtext */}
         <p
-          className="mt-8 text-lg md:text-xl text-center max-w-md"
+          className="mt-6 text-lg md:text-xl text-center max-w-md font-medium"
           style={{
-            color: 'rgba(255, 255, 255, 0.9)',
-            textShadow: '0 0 10px rgba(255, 255, 255, 0.3)',
+            color: '#ffffff',
+            textShadow: '0 0 15px rgba(255, 255, 255, 0.5)',
           }}
         >
           Your personalized Fire Horse talisman is being crafted.
         </p>
         <p
-          className="mt-2 text-base md:text-lg text-center"
+          className="mt-2 text-base md:text-lg text-center font-medium"
           style={{
-            color: 'rgba(255, 215, 0, 0.8)',
+            color: '#ffd700',
+            textShadow: '0 0 10px rgba(255, 215, 0, 0.5)',
           }}
         >
           This typically takes 30-60 seconds.
         </p>
 
-        {/* Fun fact or tip */}
+        {/* Fun fact */}
         <div
-          className="mt-8 px-6 py-3 rounded-xl border border-fire-gold/30 max-w-sm"
+          className="mt-6 px-6 py-4 rounded-xl border border-fire-gold/40 max-w-md"
           style={{
-            background: 'rgba(0, 0, 0, 0.5)',
+            background: 'rgba(0, 0, 0, 0.6)',
+            backdropFilter: 'blur(10px)',
           }}
         >
-          <p className="text-sm text-center text-white/70">
-            <span className="text-fire-gold">Did you know?</span> The Fire Horse year occurs only once every 60 years. The last was 1966, the next will be 2086.
+          <p className="text-base text-center" style={{ color: '#e5e5e5' }}>
+            <span className="text-fire-gold font-bold">Did you know?</span> The Fire Horse year occurs only once every 60 years. The last was 1966, the next will be 2086.
           </p>
         </div>
       </div>
 
       {/* Custom CSS for animations */}
       <style jsx>{`
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0) translateX(0);
+        @keyframes float-ember {
+          0% {
+            transform: translateY(0) translateX(0) rotate(0deg);
             opacity: 0;
           }
           10% {
-            opacity: 0.6;
+            opacity: 0.7;
           }
           90% {
-            opacity: 0.6;
+            opacity: 0.7;
           }
           100% {
-            transform: translateY(-100vh) translateX(${Math.random() > 0.5 ? '' : '-'}${Math.random() * 50}px);
+            transform: translateY(-100vh) translateX(30px) rotate(20deg);
             opacity: 0;
           }
         }
-        @keyframes bounce-slow {
+        @keyframes bounce-horse {
           0%, 100% {
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
           }
           50% {
-            transform: translateY(-15px);
+            transform: translateY(-20px) scale(1.02);
           }
         }
-        @keyframes flicker {
-          0%, 100% {
-            opacity: 0.3;
+        @keyframes spin-slow {
+          0% {
+            transform: rotate(0deg);
           }
-          50% {
-            opacity: 0.5;
+          100% {
+            transform: rotate(360deg);
           }
         }
-        .animate-float {
-          animation: float linear infinite;
+        .animate-float-ember {
+          animation: float-ember linear infinite;
         }
-        .animate-bounce-slow {
-          animation: bounce-slow 1.5s ease-in-out infinite;
+        .animate-bounce-horse {
+          animation: bounce-horse 2s ease-in-out infinite;
         }
-        .animate-flicker {
-          animation: flicker 0.5s ease-in-out infinite;
+        .animate-spin-slow {
+          animation: spin-slow 60s linear infinite;
         }
       `}</style>
     </div>
