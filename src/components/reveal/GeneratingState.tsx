@@ -131,19 +131,19 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
               {zodiacElement && `${zodiacElement} `}{zodiacSign} × Fire Horse
             </p>
             <p
-              className="text-base md:text-lg font-semibold mt-1"
+              className="text-lg md:text-xl font-medium mt-1"
               style={{
-                color: '#ffa500',
-                textShadow: '0 0 15px rgba(255, 165, 0, 0.6), 0 0 30px rgba(255, 100, 0, 0.4)',
+                color: '#ffffff',
+                textShadow: '0 0 15px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 200, 100, 0.3)',
               }}
             >
               Your personalized Fire Horse talisman is being crafted.
             </p>
             <p
-              className="text-sm md:text-base font-medium"
+              className="text-base md:text-lg font-medium"
               style={{
-                color: '#ffcc66',
-                textShadow: '0 0 10px rgba(255, 200, 100, 0.5)',
+                color: '#ffd700',
+                textShadow: '0 0 15px rgba(255, 215, 0, 0.6), 0 0 30px rgba(255, 165, 0, 0.4)',
               }}
             >
               This typically takes 30-60 seconds.
