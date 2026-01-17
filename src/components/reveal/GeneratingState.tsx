@@ -72,35 +72,35 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
           backgroundSize: 'cover',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat',
-          opacity: 0.35,
+          opacity: 0.55,
         }}
       />
       {/* Dark gradient overlay for depth and readability */}
-      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
+      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-black/50 via-black/30 to-black/60" />
 
-      {/* Floating Ember Particles - PNG with transparency */}
+      {/* Floating Ember Particles - PNG with transparency - BIGGER, FASTER, DENSER */}
       <div className="absolute inset-0 z-1 overflow-hidden pointer-events-none">
-        {[...Array(12)].map((_, i) => (
+        {[...Array(20)].map((_, i) => (
           <div
             key={i}
             className="absolute animate-float-ember"
             style={{
-              left: `${5 + (i * 8)}%`,
-              bottom: '-50px',
-              width: '35px',
-              height: '50px',
-              animationDuration: `${4 + Math.random() * 3}s`,
-              animationDelay: `${i * 0.4}s`,
-              opacity: 0.8,
+              left: `${2 + (i * 5)}%`,
+              bottom: '-80px',
+              width: '55px',
+              height: '75px',
+              animationDuration: `${2.5 + Math.random() * 2}s`,
+              animationDelay: `${i * 0.25}s`,
+              opacity: 0.85,
             }}
           >
             <Image
               src={EMBER_IMAGES[i % EMBER_IMAGES.length]}
               alt=""
-              width={35}
-              height={50}
+              width={55}
+              height={75}
               className="object-contain"
-              style={{ filter: 'brightness(1.3) drop-shadow(0 0 8px rgba(255, 165, 0, 0.8))' }}
+              style={{ filter: 'brightness(1.4) drop-shadow(0 0 12px rgba(255, 165, 0, 0.9))' }}
             />
           </div>
         ))}
