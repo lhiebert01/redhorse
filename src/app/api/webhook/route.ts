@@ -48,6 +48,31 @@ export async function POST(request: Request) {
   console.log(`Processing prophecy for ${email}, DOB: ${birthDate}, Focus: ${focusMode}`);
 
   try {
+    // IDEMPOTENCY CHECK: Check if prophecy already exists for this session
+    const { data: existingProphecy } = await supabase
+      .from('prophecies')
+      .select('id, status')
+      .eq('stripe_session_id', session.id)
+      .single();
+
+    if (existingProphecy) {
+      if (existingProphecy.status === 'completed') {
+        console.log(`Prophecy already completed for session ${session.id}, skipping`);
+        return NextResponse.json({ received: true, skipped: true, reason: 'already_completed' });
+      }
+
+      if (existingProphecy.status === 'processing') {
+        // Another webhook is already processing this - avoid race condition
+        console.log(`Prophecy already processing for session ${session.id}, skipping`);
+        return NextResponse.json({ received: true, skipped: true, reason: 'already_processing' });
+      }
+
+      // Status is 'failed' - we could retry, but for now just log and skip
+      // to avoid double-charging complexity
+      console.log(`Prophecy previously failed for session ${session.id}, skipping duplicate`);
+      return NextResponse.json({ received: true, skipped: true, reason: 'previously_failed' });
+    }
+
     // Calculate zodiac
     const zodiac = getChineseZodiac(birthDate);
     const fireHorseReading = getFireHorseReading(zodiac.animal, zodiac.element);
@@ -87,6 +112,11 @@ export async function POST(request: Request) {
       .single();
 
     if (insertError) {
+      // Check if it's a duplicate key error (race condition with another webhook)
+      if (insertError.code === '23505') {
+        console.log(`Duplicate session_id detected (race condition), skipping: ${session.id}`);
+        return NextResponse.json({ received: true, skipped: true, reason: 'duplicate_key' });
+      }
       console.error('Database insert error:', insertError);
       throw insertError;
     }
@@ -154,6 +184,40 @@ export async function POST(request: Request) {
     }
 
     console.log(`Prophecy completed successfully: ${prophecy.id}`);
+
+    // Track paid oracle generation for analytics (non-blocking)
+    try {
+      const analyticsKey = `${zodiac.animal}-${zodiac.element}-paid`;
+      const { data: existingAnalytics } = await supabase
+        .from('oracle_analytics')
+        .select('id, count')
+        .eq('composite_key', analyticsKey)
+        .single();
+
+      if (existingAnalytics) {
+        await supabase
+          .from('oracle_analytics')
+          .update({
+            count: existingAnalytics.count + 1,
+            last_generated_at: new Date().toISOString()
+          })
+          .eq('id', existingAnalytics.id);
+      } else {
+        await supabase
+          .from('oracle_analytics')
+          .insert({
+            composite_key: analyticsKey,
+            zodiac_sign: zodiac.animal,
+            zodiac_element: zodiac.element,
+            oracle_type: 'paid',
+            count: 1,
+            last_generated_at: new Date().toISOString()
+          });
+      }
+    } catch (analyticsErr) {
+      // Don't fail the webhook for analytics errors
+      console.error('Analytics tracking error (non-fatal):', analyticsErr);
+    }
 
   } catch (error) {
     console.error('Prophecy generation failed:', error);

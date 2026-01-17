@@ -23,7 +23,7 @@ export default function FreeReadingPage() {
 
   const paymentLink = process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK || '#';
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!birthDate) return;
 
@@ -32,6 +32,20 @@ export default function FreeReadingPage() {
       setResult({
         animal: zodiac.animal as ZodiacAnimal,
         element: zodiac.element as ZodiacElement,
+      });
+
+      // Track free oracle generation (non-blocking, fire-and-forget)
+      // No PII sent - only zodiac sign and element
+      fetch('/api/analytics/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          zodiacSign: zodiac.animal,
+          zodiacElement: zodiac.element,
+          type: 'free'
+        })
+      }).catch(() => {
+        // Silently ignore errors - analytics shouldn't affect user experience
       });
     }
   };
@@ -78,9 +92,12 @@ export default function FreeReadingPage() {
           <>
             {/* Privacy Promise - Before Form */}
             <div className="bg-green-900/30 border-2 border-green-500/50 rounded-2xl p-5 mb-6">
-              <div className="flex items-center justify-center gap-3 mb-3">
-                <span className="text-3xl">🛡️</span>
-                <h2 className="text-green-400 text-xl font-bold">100% PII-FREE</h2>
+              <div className="text-center mb-3">
+                <div className="flex items-center justify-center gap-3">
+                  <span className="text-3xl">🛡️</span>
+                  <h2 className="text-green-400 text-xl font-bold">100% PII-FREE</h2>
+                </div>
+                <p className="text-gray-400 text-xs">(No Personally Identifiable Information Collected)</p>
               </div>
               <p className="text-white text-center text-sm leading-relaxed mb-3">
                 The <span className="text-green-400 font-bold">ONLY</span> Authenticated Limited Edition Oracle with{' '}

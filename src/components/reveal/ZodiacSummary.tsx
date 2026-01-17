@@ -247,7 +247,7 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement }: ZodiacSumma
           <ul className="text-gray-400 text-xs space-y-1">
             <li>✓ Your birth date was used only to calculate your zodiac sign</li>
             <li>✓ Your birth date was <span className="text-green-400 font-semibold">immediately discarded</span> - never stored</li>
-            <li>✓ No names, DOBs, or PII appear on this Oracle</li>
+            <li>✓ No names, birthdays, or personal info appear on this Oracle</li>
             <li>✓ Safe to download and share publicly</li>
           </ul>
         </div>

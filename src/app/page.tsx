@@ -84,7 +84,7 @@ export default function Home() {
             <span className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-xs px-3 py-1.5 rounded">📜 PROVENANCE</span>
           </div>
           <p className="text-center text-green-400 text-sm font-semibold">
-            🛡️ 100% PII-FREE • Privacy by Design • Maker&apos;s Mark Authenticated
+            🛡️ Zero Personal Data Stored • Privacy by Design • Maker&apos;s Mark Authenticated
           </p>
         </div>
 
@@ -209,7 +209,7 @@ export default function Home() {
               </p>
               <p className="text-white text-sm leading-relaxed">
                 <strong>Zero data stored.</strong> Your birth date calculates your zodiac and is{' '}
-                <span className="text-green-400 font-semibold">immediately discarded</span>. No names. No DOB. No PII ever.
+                <span className="text-green-400 font-semibold">immediately discarded</span>. No names, birthdays, or personal data ever stored.
               </p>
               <a
                 href="/privacy"
