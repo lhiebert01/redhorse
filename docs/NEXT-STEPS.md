@@ -234,6 +234,195 @@ NEXT_PUBLIC_GA_MEASUREMENT_ID=<to be added>
 
 ---
 
+## 🏆 PHASE 5: ANTHROPIC CLAUDE SHOWCASE AWARD
+
+**Strategic Objective:** Position Red Horse Oracle as a showcase example of how to build KILLER AI apps that generate INCOME and GO VIRAL using Claude Code
+
+### Goal Statement
+Win recognition from Anthropic as a demonstration of:
+1. **Claude Code as Development Partner** - Entire app built collaboratively with Claude
+2. **Viral AI Consumer App** - Replicating Lensa-level virality ($50M+ potential)
+3. **Revenue-Generating SaaS** - Profitable AI business model at $8.88/user
+4. **Cultural Moment Capitalization** - Fire Horse year (once every 60 years)
+
+### Why This App Qualifies
+
+| Criteria | Red Horse Oracle Evidence |
+|----------|---------------------------|
+| Built with Claude | 100% designed & coded collaboratively |
+| Revenue Generating | Live Stripe payments, $8.88/oracle |
+| Viral Potential | Shareable AI art, zodiac identity, FOMO |
+| Technical Excellence | Next.js 14, Supabase, Gemini AI integration |
+| Privacy by Design | Zero PII stored, ethical AI implementation |
+| Limited Edition Scarcity | 888 per zodiac per mode = urgency |
+
+### Submission Targets
+
+#### 1. Anthropic Economic Futures Research Awards
+- **Grant Range:** $10,000 - $50,000
+- **Focus:** Empirical research on AI's economic impacts
+- **Angle:** Case study on AI-powered micro-SaaS revenue generation
+- **Bonus:** $5,000 Claude API credits
+- **Action:** Submit proposal highlighting Red Horse Oracle as economic case study
+
+#### 2. Code with Claude Events
+- **Previous Event:** July 15, 2025
+- **Action:** Monitor for 2026 announcements
+- **Preparation:** Document full development journey with Claude Code
+
+#### 3. Anthropic Blog / Case Study Feature
+- **Action:** Reach out to Anthropic comms team
+- **Pitch:** "From Zero to Viral: Building a Fire Horse Oracle with Claude"
+- **Assets:** Screenshots of Claude Code sessions, revenue metrics, user testimonials
+
+---
+
+## 🔥 VIRAL MARKETING PLAYBOOK
+
+### Research Insights (January 2026)
+
+Based on analysis of successful viral AI apps and current market trends:
+
+#### Lensa AI Case Study - Key Learnings
+- **Revenue:** $50M+ from "Magic Avatars" feature
+- **Peak:** $8M per day at viral height
+- **Margin:** 50¢ cost per avatar pack, $3.99+ price = ~87% margin
+- **Strategy:**
+  - Launched during peak AI interest (Nov 2022 alongside ChatGPT)
+  - Seeded influencers with free avatars → unpaid promotion
+  - Leveraged FOMO from seeing friends' unique results
+  - Identity-based sharing ("this is MY avatar")
+
+#### What Makes Apps Go Viral in 2026
+1. **"Make-Me-the-Hero"** - Generative tools outperform by making participation the hook
+2. **Low Friction** - Instant creation + instant sharing = winning combo
+3. **Cultural Relevance** - Timing with cultural moments (CNY, Fire Horse)
+4. **Hyper-Personalization** - Unique results create sharing urgency
+5. **Viral Loops** - Each user brings others through natural sharing
+
+### Red Horse Oracle Viral Advantages
+
+| Factor | Our Implementation |
+|--------|-------------------|
+| Identity Hook | "Your zodiac sign + Fire Horse decree" |
+| Shareability | Museum-quality AI art people WANT to post |
+| FOMO | 60-year cycle + 888 limited editions |
+| Cultural Timing | CNY 2026 peak (Jan 29 - Feb 15) |
+| Price Point | $8.88 impulse buy (auspicious number) |
+| Personalization | Unique talisman for each birth date |
+
+### Viral Content Strategy
+
+#### TikTok / Instagram Reels
+- **Format:** "Which Fire Horse zodiac are you?" carousel/video
+- **Hook:** Bold statement in first 3 seconds
+- **Action:** Partner with astrology micro-influencers (10K-100K followers)
+- **Target:** @maren.altman style astrology content creators
+
+#### Twitter/X Threads
+- **Format:** "The Year of the Fire Horse only comes every 60 years. Here's what it means for each zodiac:"
+- **Visuals:** Generated talismans as images
+- **CTA:** Link to /free reading
+
+#### "Crying Horse" Trend Opportunity
+- The "Crying Horse" mascot went viral in China
+- **Angle:** Create "Hopeful Fire Horse" counter-narrative
+- **Messaging:** "Don't just cry about 2026 - get your Fire Horse prophecy"
+
+### Influencer Seeding Strategy
+
+| Tier | Followers | Approach | Cost |
+|------|-----------|----------|------|
+| Nano | 1K-10K | Free oracle + affiliate code | $0 |
+| Micro | 10K-100K | Free oracle + $50-100 | $50-100 |
+| Mid | 100K-500K | Sponsored post | $200-500 |
+| Macro | 500K+ | Revenue share partnership | % of sales |
+
+**Target Niches:**
+- Astrology/zodiac content creators
+- Chinese culture enthusiasts
+- Spiritual/wellness influencers
+- Asian-American lifestyle creators
+
+### Paid Acquisition Targets
+
+| Channel | Audience | Est. CPA | Budget |
+|---------|----------|----------|--------|
+| Facebook/Instagram | Chinese diaspora 25-55 | $2-5 | $500/mo |
+| TikTok Ads | Gen Z astrology fans | $1-3 | $300/mo |
+| Google Ads | "Chinese zodiac 2026" | $3-6 | $200/mo |
+
+### Viral Loop Implementation
+
+```
+User sees friend's talisman on social media
+    ↓
+Clicks link → lands on /examples or /free
+    ↓
+Gets free zodiac preview → sees their sign
+    ↓
+Buys $8.88 full oracle (5-6% conversion)
+    ↓
+Receives unique talisman with edition number
+    ↓
+Shares on social media ("I'm #47 of 888!")
+    ↓
+Friends see post → cycle repeats
+```
+
+---
+
+## 📋 VIRAL MARKETING ACTION ITEMS
+
+### Week 1 (Jan 18-24)
+- [ ] Create social media accounts (Twitter, Instagram, TikTok)
+- [ ] Prepare 12 sample talisman images for posting (1 per zodiac)
+- [ ] Write 5 TikTok video scripts ("Which zodiac are you?" format)
+- [ ] Identify 20 astrology micro-influencers to contact
+- [ ] Draft influencer outreach template
+
+### Week 2 (Jan 25-31) - PRE-CNY PUSH
+- [ ] Send outreach to 20 influencers with free oracle offers
+- [ ] Post first TikTok video (goal: 10K views)
+- [ ] Post Instagram carousel of all 12 zodiac talismans
+- [ ] Schedule 3 tweets/day during CNY buildup
+- [ ] Launch Facebook ad campaign ($100 test budget)
+
+### Week 3 (Feb 1-7) - CNY PEAK
+- [ ] Monitor viral metrics hourly during CNY
+- [ ] Amplify any organic viral content
+- [ ] Respond to all comments/mentions within 1 hour
+- [ ] Document user testimonials for social proof
+- [ ] A/B test ad creatives based on performance
+
+### Week 4+ (Feb 8+) - OPTIMIZE
+- [ ] Analyze which content performed best
+- [ ] Double down on winning channels
+- [ ] Implement referral program if justified by metrics
+- [ ] Prepare Anthropic case study submission
+
+---
+
+## 📊 Success Metrics for Showcase Award
+
+| Metric | Target | Timeframe |
+|--------|--------|-----------|
+| Total Revenue | $10,000+ | Q1 2026 |
+| Unique Visitors | 50,000+ | Q1 2026 |
+| Conversion Rate | 5%+ | Ongoing |
+| Social Shares | 5,000+ | CNY period |
+| Media Mentions | 5+ | Q1 2026 |
+| User Testimonials | 50+ | Q1 2026 |
+
+### Documentation for Anthropic Submission
+- [ ] Screenshot Claude Code development sessions
+- [ ] Track all revenue with Stripe dashboard exports
+- [ ] Record user testimonials (with permission)
+- [ ] Document technical architecture decisions
+- [ ] Write blog post: "How We Built Red Horse Oracle with Claude Code"
+
+---
+
 ## Quick Commands
 
 ```bash
