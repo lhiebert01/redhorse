@@ -121,7 +121,7 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
         {/* Zodiac info if available */}
         {zodiacSign && (
           <p
-            className="text-xl md:text-2xl font-bold mb-2 text-center uppercase tracking-wider"
+            className="text-xl md:text-2xl font-bold mb-0 text-center uppercase tracking-wider"
             style={{
               color: '#ffd700',
               textShadow: '0 0 20px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 165, 0, 0.6)',
@@ -131,8 +131,8 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
           </p>
         )}
 
-        {/* Fire Horse with Frame - PNG transparency - 25% BIGGER */}
-        <div className="relative w-96 h-96 md:w-[480px] md:h-[480px] mb-2">
+        {/* Fire Horse with Frame - PNG transparency - 30% BIGGER */}
+        <div className="relative w-[420px] h-[420px] md:w-[580px] md:h-[580px] my-0">
           {/* Glow effect behind everything */}
           <div
             className="absolute inset-4 rounded-full animate-pulse"
@@ -170,9 +170,16 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
           </div>
         </div>
 
-        {/* Zodiac Sign Display */}
+        {/* Zodiac Sign Display - WIDER BUTTON */}
         {zodiacSign && zodiacImagePath && (
-          <div className="flex items-center gap-4 mb-2 bg-black/40 px-6 py-2 rounded-full border border-fire-gold/40">
+          <div
+            className="flex items-center justify-center gap-5 mb-1 px-12 py-3 rounded-full border-2 border-fire-gold/50"
+            style={{
+              background: 'linear-gradient(135deg, rgba(100, 50, 20, 0.8) 0%, rgba(60, 20, 10, 0.85) 100%)',
+              minWidth: '380px',
+              boxShadow: '0 0 20px rgba(255, 165, 0, 0.3)',
+            }}
+          >
             <div
               className="relative w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden border-2 border-fire-gold"
               style={{
@@ -186,16 +193,16 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
                 className="object-cover"
               />
             </div>
-            <div>
-              <p className="text-white/70 text-xs uppercase tracking-widest">Generating for</p>
+            <div className="text-center">
+              <p className="text-white/80 text-sm uppercase tracking-widest">Generating for</p>
               <p
-                className="text-2xl md:text-3xl font-bold"
+                className="text-2xl md:text-3xl font-bold uppercase"
                 style={{
                   color: '#ffd700',
                   textShadow: '0 0 15px rgba(255, 215, 0, 0.7)',
                 }}
               >
-                {zodiacSign}
+                {zodiacElement} {zodiacSign}
               </p>
             </div>
           </div>
@@ -247,17 +254,17 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
           This typically takes 30-60 seconds.
         </p>
 
-        {/* Fun fact */}
+        {/* Fun fact - MORE COLOR */}
         <div
-          className="mt-4 px-6 py-3 rounded-xl border border-fire-gold/50 max-w-md"
+          className="mt-3 px-8 py-4 rounded-xl border-2 border-fire-gold/60 max-w-lg"
           style={{
-            background: 'linear-gradient(135deg, rgba(139, 69, 19, 0.7) 0%, rgba(80, 20, 10, 0.8) 50%, rgba(50, 10, 5, 0.85) 100%)',
+            background: 'linear-gradient(135deg, rgba(180, 80, 20, 0.9) 0%, rgba(140, 50, 15, 0.92) 50%, rgba(100, 30, 10, 0.95) 100%)',
             backdropFilter: 'blur(10px)',
-            boxShadow: '0 0 20px rgba(255, 165, 0, 0.2), inset 0 0 30px rgba(0, 0, 0, 0.3)',
+            boxShadow: '0 0 30px rgba(255, 140, 0, 0.4), inset 0 0 20px rgba(255, 100, 0, 0.25)',
           }}
         >
-          <p className="text-base text-center" style={{ color: '#f5f5f5' }}>
-            <span className="text-fire-gold font-bold">Did you know?</span> The Fire Horse year occurs only once every 60 years. The last was 1966, the next will be 2086.
+          <p className="text-base text-center font-medium" style={{ color: '#ffffff' }}>
+            <span className="text-yellow-300 font-bold">Did you know?</span> The Fire Horse year occurs only once every 60 years. The last was 1966, the next will be 2086.
           </p>
         </div>
       </div>
