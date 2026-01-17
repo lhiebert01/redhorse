@@ -131,8 +131,8 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
           </p>
         )}
 
-        {/* Fire Horse with Frame - PNG transparency */}
-        <div className="relative w-80 h-80 md:w-96 md:h-96 mb-6">
+        {/* Fire Horse with Frame - PNG transparency - 25% BIGGER */}
+        <div className="relative w-96 h-96 md:w-[480px] md:h-[480px] mb-6">
           {/* Glow effect behind everything */}
           <div
             className="absolute inset-4 rounded-full animate-pulse"
