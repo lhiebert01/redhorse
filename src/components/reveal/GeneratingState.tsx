@@ -249,13 +249,14 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
 
         {/* Fun fact */}
         <div
-          className="mt-4 px-6 py-3 rounded-xl border border-fire-gold/40 max-w-md"
+          className="mt-4 px-6 py-3 rounded-xl border border-fire-gold/50 max-w-md"
           style={{
-            background: 'rgba(0, 0, 0, 0.6)',
+            background: 'linear-gradient(135deg, rgba(139, 69, 19, 0.7) 0%, rgba(80, 20, 10, 0.8) 50%, rgba(50, 10, 5, 0.85) 100%)',
             backdropFilter: 'blur(10px)',
+            boxShadow: '0 0 20px rgba(255, 165, 0, 0.2), inset 0 0 30px rgba(0, 0, 0, 0.3)',
           }}
         >
-          <p className="text-base text-center" style={{ color: '#e5e5e5' }}>
+          <p className="text-base text-center" style={{ color: '#f5f5f5' }}>
             <span className="text-fire-gold font-bold">Did you know?</span> The Fire Horse year occurs only once every 60 years. The last was 1966, the next will be 2086.
           </p>
         </div>
