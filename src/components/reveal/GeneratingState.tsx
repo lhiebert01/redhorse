@@ -108,7 +108,7 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
 
       <div className="relative z-10 flex flex-col items-center">
         {/* Logo */}
-        <div className="relative w-64 md:w-80 h-32 md:h-40 mb-1">
+        <div className="relative w-64 md:w-80 h-32 md:h-40 mb-0">
           <Image
             src="/assets/loading/logo-firehorse1.jpeg"
             alt="Red Horse Oracle"
@@ -118,17 +118,28 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
           />
         </div>
 
-        {/* Zodiac info if available */}
+        {/* Zodiac info + Subtext together */}
         {zodiacSign && (
-          <p
-            className="text-xl md:text-2xl font-bold mb-0 text-center uppercase tracking-wider"
-            style={{
-              color: '#ffd700',
-              textShadow: '0 0 20px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 165, 0, 0.6)',
-            }}
-          >
-            {zodiacElement && `${zodiacElement} `}{zodiacSign} × Fire Horse
-          </p>
+          <div className="text-center mb-0">
+            <p
+              className="text-xl md:text-2xl font-bold uppercase tracking-wider"
+              style={{
+                color: '#ffd700',
+                textShadow: '0 0 20px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 165, 0, 0.6)',
+              }}
+            >
+              {zodiacElement && `${zodiacElement} `}{zodiacSign} × Fire Horse
+            </p>
+            <p
+              className="text-base md:text-lg font-medium mt-1"
+              style={{
+                color: 'rgba(255, 255, 255, 0.9)',
+                textShadow: '0 0 10px rgba(255, 255, 255, 0.4)',
+              }}
+            >
+              Your personalized Fire Horse talisman is being crafted. This typically takes 30-60 seconds.
+            </p>
+          </div>
         )}
 
         {/* Fire Horse with Frame - PNG transparency - 30% BIGGER */}
@@ -233,26 +244,6 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
             />
           ))}
         </div>
-
-        {/* Subtext */}
-        <p
-          className="mt-3 text-lg md:text-xl text-center max-w-md font-medium"
-          style={{
-            color: '#ffffff',
-            textShadow: '0 0 15px rgba(255, 255, 255, 0.5)',
-          }}
-        >
-          Your personalized Fire Horse talisman is being crafted.
-        </p>
-        <p
-          className="mt-1 text-base md:text-lg text-center font-medium"
-          style={{
-            color: '#ffd700',
-            textShadow: '0 0 10px rgba(255, 215, 0, 0.5)',
-          }}
-        >
-          This typically takes 30-60 seconds.
-        </p>
 
         {/* Fun fact - MORE COLOR */}
         <div
