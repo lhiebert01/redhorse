@@ -30,14 +30,14 @@ const MODE_MESSAGES: Record<string, string[]> = {
   shield: ['Protection manifests...', 'Sacred shields form...', 'Guardian spirits gather...'],
 };
 
-// CSS-based ember colors (until PNG transparencies are ready)
-const EMBER_COLORS = [
-  '#ff6b35',
-  '#f7c331',
-  '#ff4500',
-  '#ffd700',
-  '#ff8c00',
-  '#ffb347',
+// Ember PNG images with transparency
+const EMBER_IMAGES = [
+  '/assets/loading/ember1.png',
+  '/assets/loading/ember2.png',
+  '/assets/loading/ember3.png',
+  '/assets/loading/ember4.png',
+  '/assets/loading/ember5.png',
+  '/assets/loading/ember6.png',
 ];
 
 export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }: GeneratingStateProps) {
@@ -79,24 +79,31 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
       <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-black/60 via-transparent to-black/70" />
       <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-r from-black/40 via-transparent to-black/40" />
 
-      {/* Floating Ember Particles - CSS only */}
+      {/* Floating Ember Particles - PNG with transparency */}
       <div className="absolute inset-0 z-1 overflow-hidden pointer-events-none">
-        {[...Array(15)].map((_, i) => (
+        {[...Array(12)].map((_, i) => (
           <div
             key={i}
             className="absolute animate-float-ember"
             style={{
-              left: `${3 + (i * 6.5)}%`,
-              bottom: '-20px',
-              width: `${8 + (i % 3) * 4}px`,
-              height: `${12 + (i % 3) * 6}px`,
-              background: `radial-gradient(ellipse, ${EMBER_COLORS[i % EMBER_COLORS.length]}, transparent)`,
-              borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
-              boxShadow: `0 0 ${10 + (i % 3) * 5}px ${EMBER_COLORS[i % EMBER_COLORS.length]}`,
-              animationDuration: `${3 + Math.random() * 4}s`,
-              animationDelay: `${i * 0.3}s`,
+              left: `${5 + (i * 8)}%`,
+              bottom: '-50px',
+              width: '35px',
+              height: '50px',
+              animationDuration: `${4 + Math.random() * 3}s`,
+              animationDelay: `${i * 0.4}s`,
+              opacity: 0.8,
             }}
-          />
+          >
+            <Image
+              src={EMBER_IMAGES[i % EMBER_IMAGES.length]}
+              alt=""
+              width={35}
+              height={50}
+              className="object-contain"
+              style={{ filter: 'brightness(1.3) drop-shadow(0 0 8px rgba(255, 165, 0, 0.8))' }}
+            />
+          </div>
         ))}
       </div>
 
@@ -125,34 +132,39 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
           </p>
         )}
 
-        {/* Fire Horse - Clean layout without overlapping frame */}
-        <div className="relative w-72 h-72 md:w-80 md:h-80 mb-6">
-          {/* Glow effect behind horse */}
-          <div
-            className="absolute inset-0 rounded-full animate-pulse"
-            style={{
-              background: 'radial-gradient(circle, rgba(255, 165, 0, 0.5) 0%, rgba(255, 69, 0, 0.3) 40%, transparent 70%)',
-              filter: 'blur(25px)',
-            }}
-          />
+        {/* Fire Horse with Frame - PNG transparency */}
+        <div className="relative w-80 h-80 md:w-96 md:h-96 mb-6">
+          {/* Glow effect behind everything */}
           <div
             className="absolute inset-4 rounded-full animate-pulse"
             style={{
-              background: 'radial-gradient(circle, rgba(255, 215, 0, 0.4) 0%, rgba(255, 165, 0, 0.2) 50%, transparent 70%)',
-              filter: 'blur(15px)',
-              animationDelay: '0.5s',
+              background: 'radial-gradient(circle, rgba(255, 165, 0, 0.5) 0%, rgba(255, 69, 0, 0.3) 50%, transparent 70%)',
+              filter: 'blur(30px)',
             }}
           />
 
-          {/* Bouncing Fire Horse */}
-          <div className="absolute inset-0 animate-bounce-horse">
+          {/* Fire Frame - slowly rotating */}
+          <div className="absolute inset-0 animate-spin-slow">
             <Image
-              src="/assets/loading/fire-horse-bouncing-3.jpeg"
+              src="/assets/loading/fire-frame.png"
+              alt=""
+              fill
+              className="object-contain"
+              style={{
+                filter: 'drop-shadow(0 0 10px rgba(255, 165, 0, 0.6))',
+              }}
+            />
+          </div>
+
+          {/* Bouncing Fire Horse - centered inside frame */}
+          <div className="absolute inset-12 animate-bounce-horse">
+            <Image
+              src="/assets/loading/fire-horse-bouncing-3.png"
               alt="Fire Horse"
               fill
               className="object-contain"
               style={{
-                filter: 'drop-shadow(0 0 20px rgba(255, 165, 0, 0.9)) drop-shadow(0 0 40px rgba(255, 69, 0, 0.6))',
+                filter: 'drop-shadow(0 0 25px rgba(255, 165, 0, 0.9)) drop-shadow(0 0 50px rgba(255, 69, 0, 0.6))',
               }}
               priority
             />
