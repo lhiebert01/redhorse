@@ -290,6 +290,60 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement }: ZodiacSumma
         {isCapturing ? 'Capturing...' : 'Save Zodiac Forecast'}
       </button>
 
+      {/* BONUS: Zodiac Digital Art Card */}
+      <div className="bg-gradient-to-b from-purple-950/60 to-black/80 border-2 border-purple-500/50 rounded-2xl p-5 space-y-4">
+        <div className="text-center">
+          <p className="text-xs text-purple-400 uppercase tracking-widest mb-1">★ Exclusive Bonus ★</p>
+          <h3 className="text-xl font-bold text-purple-300">Your Zodiac Digital Art Card</h3>
+          <p className="text-gray-400 text-sm mt-1">Collectible artwork included with your purchase</p>
+        </div>
+
+        {/* Individual Zodiac Card */}
+        <div className="relative rounded-xl overflow-hidden border border-purple-500/30 shadow-lg shadow-purple-500/20">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={`/assets/zodiac-badges/${element?.toLowerCase()}-${animal.toLowerCase()}.jpeg`}
+            alt={`${element} ${animal} Zodiac Card`}
+            className="w-full h-auto"
+          />
+        </div>
+
+        {/* Download Card Button */}
+        <button
+          onClick={() => {
+            const link = document.createElement('a');
+            link.href = `/assets/zodiac-badges/${element?.toLowerCase()}-${animal.toLowerCase()}.jpeg`;
+            link.download = `${element?.toLowerCase()}-${animal.toLowerCase()}-zodiac-card.jpeg`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }}
+          className="w-full bg-gradient-to-r from-purple-700 via-purple-600 to-purple-700 text-white font-bold py-3 px-6 rounded-xl
+                     hover:from-purple-600 hover:via-purple-500 hover:to-purple-600
+                     hover:scale-[1.02] active:scale-95 transition-all
+                     flex items-center justify-center gap-2 shadow-lg shadow-purple-500/30"
+        >
+          <span>🎴</span>
+          Download Your Zodiac Card
+        </button>
+
+        {/* Collection Panel Preview */}
+        <div className="pt-4 border-t border-purple-500/30">
+          <p className="text-center text-gray-400 text-sm mb-3">Your {animal} Collection</p>
+          <div className="relative rounded-xl overflow-hidden border border-purple-500/20">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`/assets/zodiac-badges/${animal.toLowerCase()}-collection.jpeg`}
+              alt={`${animal} Collection Panel`}
+              className="w-full h-auto opacity-90"
+            />
+          </div>
+          <p className="text-center text-gray-500 text-xs mt-2 italic">
+            All 5 elements of the {animal} • Wood • Fire • Earth • Metal • Water
+          </p>
+        </div>
+      </div>
+
       {/* Privacy Notice */}
       <div className="bg-green-900/30 border border-green-600/60 rounded-xl p-5 space-y-4">
         <div className="flex items-center justify-center gap-2">
