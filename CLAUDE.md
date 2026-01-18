@@ -1754,4 +1754,169 @@ npm install --save-dev @types/sharp
 
 ---
 
+## Session Update: January 18, 2026 - FREE Page Overhaul & Zodiac Digital Art Cards
+
+### Current Status: FREE PAGE DRAMATICALLY IMPROVED
+
+### What Was Completed This Session
+
+#### 1. Zodiac Digital Art Cards (60 Cards + 12 Collections)
+Created and organized complete zodiac badge collection:
+- **60 individual cards:** All 5 elements × 12 animals (wood-rat.jpeg, fire-ox.jpeg, etc.)
+- **12 collection panels:** One per animal showing all 5 elements
+- **Location:** `/public/assets/zodiac-badges/`
+- **Source images:** `/public/assets/zodiac-badge-source-images/` (83 originals)
+- **Naming convention:** `{element}-{animal}.jpeg` and `{animal}-collection.jpeg`
+
+**Scripts created:**
+- `scripts/rename_zodiac_images.py` - Copies and renames source images with proper naming
+
+#### 2. FREE Page Complete Redesign (`/src/app/free/page.tsx`)
+
+**New Hero Section:**
+- Gold-bordered card: "HERE IS YOUR FREE ORACLE for the Year of the Fire Horse 2026"
+- Shows "You are a [Element] [Animal]" with Chinese characters
+- Prominent visual impact
+
+**Share CTA Section (Purple):**
+- "Don't Miss Out on the Limited Edition Oracle for 2026!"
+- GET YOURS NOW — $8.88 button
+- "Share This — Please! Supplies won't last. Only 888 per zodiac sign."
+- Social share buttons: X (Twitter), Facebook, Share Link (native share API)
+
+**Green Glowing FREE ORACLE Card:**
+- Animated pulsing green border effect
+- "YOUR FREE ORACLE" badge
+- User's zodiac digital art card (clear, no blur, with light watermark)
+- Title: "Privacy by Design — Your [Element] [Animal]"
+- Full forecast (all sentences, not truncated)
+- Oracle wisdom quote
+- Core strengths badges
+- Upsell: "Want a more detailed, personalized reading?"
+
+**Visual Equation Section:**
+- [User's Zodiac Card] + [Fire Horse Card] = Your Unique Masterpiece
+- Both cards shown as thumbnails (w-36) with watermarks
+- Large green "See Examples" button
+- Links to /examples gallery
+
+**Multiple CTAs Throughout:**
+- Position 1: After hero title (Share CTA)
+- Position 2: After FREE oracle card (Immediate CTA)
+- Position 3: Courage Challenge section
+- Position 4: Visual equation with final CTA button
+
+#### 3. Zodiac Card Integration in Reveal Page
+Added bonus zodiac card section to `ZodiacSummary.tsx`:
+- Purple-themed "Exclusive Bonus" section for paid users
+- Shows user's matching zodiac digital art card
+- Download button for the card
+- Collection panel preview showing all 5 elements
+
+#### 4. Simple-Named Example Images
+Created simple-named copies for dynamic loading:
+- `/public/assets/examples/rat.png`, `ox.png`, `tiger.png`, etc.
+- Maps to existing full-named files (e.g., `michael-johnson-rat-wealth.png`)
+- Enables `/assets/examples/${animal.toLowerCase()}.png` references
+
+### Key Design Decisions
+
+**Zodiac Cards as Marketing + Value-Add (NOT $0.99 product):**
+- Decision: Use zodiac cards for marketing and as downloadable bonus for $8.88 purchasers
+- Reason: $0.99 price point loses ~33% to Stripe fees, causes product confusion
+- Implementation: Free preview (watermarked) + download with purchase
+
+**Full Forecast in FREE Version:**
+- Decision: Show complete forecast (all sentences) instead of preview
+- Reason: Provide real value, build trust, differentiate with AI-generated art
+- Upsell: Focus on "one-of-a-kind masterpiece" combining their sign with Fire Horse
+
+**Visual Equation Approach:**
+- [Their Card] + [Fire Horse Card] = Masterpiece
+- Shows actual digital art card thumbnails (not emojis)
+- Demonstrates product quality visually
+- Links to examples gallery for Fire Horse combinations
+
+### Files Modified/Created
+
+| File | Changes |
+|------|---------|
+| `src/app/free/page.tsx` | Complete redesign with hero, share CTA, green FREE card, visual equation |
+| `src/components/reveal/ZodiacSummary.tsx` | Added bonus zodiac card section |
+| `public/assets/zodiac-badges/*.jpeg` | 60 individual + 12 collection images |
+| `public/assets/examples/*.png` | 12 simple-named copies |
+| `scripts/rename_zodiac_images.py` | Image renaming utility |
+
+### FREE Page Flow Summary
+
+```
+1. Hero: "HERE IS YOUR FREE ORACLE - You are a [Element] [Animal]"
+2. Share CTA: "Don't Miss Out!" + $8.88 button + Share buttons
+3. Zodiac Identity Card
+4. Green FREE ORACLE Card:
+   - "Privacy by Design — Your [Element] [Animal]"
+   - Clear zodiac digital art card (watermarked)
+   - Full forecast + Oracle wisdom + Core strengths
+   - "Want more detailed reading?" upsell
+5. Immediate CTA: "Would you like Authenticated Limited Edition?"
+6. Certificate of Authenticity preview
+7. Courage Challenge: "Will YOU Claim Your Authentic Oracle?"
+8. Visual Equation: [Your Card] + [Fire Horse] = Masterpiece + "See Examples" button
+9. Four Paths grid (Wealth, Power, Love, Shield)
+10. Final CTA: "I BET ON MYSELF — GET MY ORACLE" button
+11. Privacy Reinforcement
+12. Footer
+```
+
+### Lessons Learned / Claude Tips
+
+#### 1. Always Commit and Push Before Testing
+- Changes aren't visible until deployed to Vercel
+- Use `git status` to verify uncommitted changes
+- Common issue: User sees old version, changes were never pushed
+
+#### 2. Image Path Debugging
+- If images show alt text instead of image, check file path exists
+- Use `ls` to verify files in `/public/assets/` directory
+- Dynamic paths need matching file names (e.g., `${animal.toLowerCase()}.png`)
+
+#### 3. Visual Impact Matters
+- Thumbnail-only sections make page feel "smaller"
+- Balance thumbnails with larger hero images
+- Use actual product images instead of emojis when possible
+
+#### 4. Multiple CTAs Increase Conversion
+- Don't let users scroll past without seeing a conversion opportunity
+- Place CTAs after each major content section
+- Vary the CTA messaging (urgency, FOMO, value proposition)
+
+#### 5. Watermarking Strategy
+- Light watermark at bottom: `"Free Oracle • redhorseoracle.com"`
+- Don't obscure the image - subtle protection only
+- Clear image shows product quality, builds desire
+
+#### 6. Element + Animal = 60 Combinations
+- Chinese Zodiac: 12 animals × 5 elements = 60 unique signs
+- Each element changes the personality traits significantly
+- Fire Horse is just one of 60 (but special because 2026 is Fire Horse year)
+
+### Asset Inventory
+
+**Zodiac Badges:** `/public/assets/zodiac-badges/`
+- 60 individual cards: `{element}-{animal}.jpeg`
+- 12 collections: `{animal}-collection.jpeg`
+- Total: 72 images
+
+**Example Oracles:** `/public/assets/examples/`
+- 12 full-named: `{name}-{animal}-{mode}.png`
+- 12 simple-named: `{animal}.png`
+- Total: 24 images
+
+**Hero Images:** `/public/assets/`
+- `Year-of-the-Horse-2026-v2.jpeg` (main hero)
+- `Year-of-Horse-Hero-Image2.jpeg` (OG image)
+- `Year-of-Horse-Hero-Image3.jpeg` (background watermark)
+
+---
+
 *火马年 2026 - Year of the Fire Horse*
