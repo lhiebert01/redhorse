@@ -18,6 +18,23 @@ const nextConfig = {
       bodySizeLimit: '10mb',
     },
   },
+  // Redirect Vercel URL to custom domain
+  async redirects() {
+    // Only redirect if on Vercel deployment URL (not custom domain)
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'redhorse-omega.vercel.app',
+          },
+        ],
+        destination: 'https://redhorseoracle.com/:path*',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
