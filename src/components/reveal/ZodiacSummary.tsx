@@ -9,9 +9,14 @@ import {
   ZODIAC_ELEMENTS,
   ZODIAC_CHINESE,
   ELEMENT_CHINESE,
-  ZODIAC_PROFILES,
-  FIRE_HORSE_RELATIONS,
 } from '@/constants/zodiac-data';
+import {
+  getForecast,
+  getFireHorseRelationDescription,
+  ZodiacElement as ForecastElement,
+  ZodiacAnimalType,
+  MODE_EXPLAINERS,
+} from '@/constants/zodiac-forecasts';
 
 interface ZodiacSummaryProps {
   zodiacSign: string;
@@ -46,16 +51,22 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement }: ZodiacSumma
     return null;
   }
 
-  const profile = ZODIAC_PROFILES[animal];
-  const relation = FIRE_HORSE_RELATIONS[animal];
+  // Get element-specific forecast data
+  const forecast = element
+    ? getForecast(element as ForecastElement, animal as ZodiacAnimalType)
+    : null;
+
   const animalChinese = ZODIAC_CHINESE[animal] || '';
   const elementChinese = element ? (ELEMENT_CHINESE[element] || '') : '';
 
-  // Safety check
-  if (!profile || !relation) {
-    console.warn('ZodiacSummary: No profile or relation for:', animal);
+  // Safety check - fallback if forecast not found
+  if (!forecast) {
+    console.warn('ZodiacSummary: No forecast for:', element, animal);
     return null;
   }
+
+  // Get relation description from tagline
+  const relationDescription = getFireHorseRelationDescription(forecast.tagline);
 
   // Download handler for zodiac forecast
   const handleDownloadForecast = async () => {
@@ -103,31 +114,21 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement }: ZodiacSumma
     }
   };
 
-  // Get compatibility color
+  // Get compatibility color based on tagline
   const getCompatibilityColor = () => {
-    switch (relation.compatibility) {
-      case 'ally':
-        return 'text-green-400';
-      case 'special':
-        return 'text-fire-gold';
-      case 'clash':
-        return 'text-red-400';
-      default:
-        return 'text-gray-400';
-    }
+    const tagline = forecast.tagline.toLowerCase();
+    if (tagline.includes('ally')) return 'text-green-400';
+    if (tagline.includes('catalyst')) return 'text-fire-gold';
+    if (tagline.includes('harm') || tagline.includes('friction')) return 'text-red-400';
+    return 'text-gray-400';
   };
 
   const getCompatibilityBg = () => {
-    switch (relation.compatibility) {
-      case 'ally':
-        return 'bg-green-900/20 border-green-800/50';
-      case 'special':
-        return 'bg-yellow-900/20 border-yellow-800/50';
-      case 'clash':
-        return 'bg-red-900/20 border-red-800/50';
-      default:
-        return 'bg-gray-900/20 border-gray-800/50';
-    }
+    const tagline = forecast.tagline.toLowerCase();
+    if (tagline.includes('ally')) return 'bg-green-900/20 border-green-800/50';
+    if (tagline.includes('catalyst')) return 'bg-yellow-900/20 border-yellow-800/50';
+    if (tagline.includes('harm') || tagline.includes('friction')) return 'bg-red-900/20 border-red-800/50';
+    return 'bg-gray-900/20 border-gray-800/50';
   };
 
   return (
@@ -163,16 +164,23 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement }: ZodiacSumma
               {elementChinese}{animalChinese}
             </p>
             <p className={`text-sm ${getCompatibilityColor()}`}>
-              {relation.relation}
+              {forecast.tagline}
             </p>
           </div>
         </div>
 
-        {/* Strengths */}
+        {/* Relation Meaning */}
+        {relationDescription && (
+          <div className="text-center">
+            <p className="text-gray-400 text-xs italic">{relationDescription}</p>
+          </div>
+        )}
+
+        {/* Strengths - Now element-specific */}
         <div>
           <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Core Strengths</p>
           <div className="flex flex-wrap gap-2">
-            {profile.strengths.map((strength) => (
+            {forecast.coreStrengths.map((strength) => (
               <span
                 key={strength}
                 className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-xs px-3 py-1 rounded-full"
@@ -183,21 +191,21 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement }: ZodiacSumma
           </div>
         </div>
 
-        {/* Characteristics */}
+        {/* Characteristics - Now element-specific */}
         <div>
           <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Characteristics</p>
           <p className="text-gray-300 text-sm leading-relaxed">
-            {profile.characteristics}
+            {forecast.characteristics}
           </p>
         </div>
 
-        {/* 2026 Forecast */}
+        {/* 2026 Forecast - Full forecast for PAID users */}
         <div className={`${getCompatibilityBg()} border rounded-xl p-4`}>
           <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">
             2026 Fire Horse Forecast
           </p>
           <p className="text-gray-200 text-sm leading-relaxed">
-            {profile.forecast2026}
+            {forecast.forecast}
           </p>
         </div>
 
@@ -205,10 +213,63 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement }: ZodiacSumma
         <div className="border-t border-fire-gold/20 pt-4">
           <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Oracle Wisdom</p>
           <p className="text-fire-gold text-sm italic">
-            &quot;{relation.advice}&quot;
+            &quot;{forecast.oracleWisdom}&quot;
           </p>
         </div>
       </div>
+
+        {/* PAID EXCLUSIVE: All 4 Oracle Modes */}
+        <div className="bg-gradient-to-b from-red-950/80 to-black/80 border border-fire-gold/40 rounded-2xl p-5 space-y-4">
+          <div className="text-center mb-4">
+            <p className="text-xs text-fire-gold uppercase tracking-widest mb-1">★ Paid Exclusive ★</p>
+            <h3 className="text-lg font-bold text-fire-gold">Your Four Oracle Modes</h3>
+          </div>
+
+          {/* Wealth Mode */}
+          <div className="bg-green-900/30 border border-green-700/50 rounded-xl p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xl">🎲</span>
+              <span className="text-green-400 font-bold text-sm uppercase tracking-wider">Wealth Mode</span>
+            </div>
+            <p className="text-2xl font-mono text-green-300 tracking-wider mb-2">{forecast.modes.wealth.numbers}</p>
+            <p className="text-gray-400 text-xs">{forecast.modes.wealth.note}</p>
+            <p className="text-gray-500 text-xs mt-2 italic">{forecast.modes.wealth.explanation}</p>
+            <p className="text-gray-600 text-xs mt-2 border-t border-gray-700/50 pt-2">{MODE_EXPLAINERS.wealth.whatItMeans}</p>
+          </div>
+
+          {/* Power Mode */}
+          <div className="bg-red-900/30 border border-red-700/50 rounded-xl p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xl">⚔️</span>
+              <span className="text-red-400 font-bold text-sm uppercase tracking-wider">Power Mode</span>
+            </div>
+            <p className="text-xl font-bold text-red-300 tracking-wider mb-2">{forecast.modes.power.motto}</p>
+            <p className="text-gray-500 text-xs italic">{forecast.modes.power.explanation}</p>
+            <p className="text-gray-600 text-xs mt-2 border-t border-gray-700/50 pt-2">{MODE_EXPLAINERS.power.whatItMeans}</p>
+          </div>
+
+          {/* Love Mode */}
+          <div className="bg-pink-900/30 border border-pink-700/50 rounded-xl p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xl">❤️</span>
+              <span className="text-pink-400 font-bold text-sm uppercase tracking-wider">Love Mode</span>
+            </div>
+            <p className="text-xl font-bold text-pink-300 tracking-wider mb-2">{forecast.modes.love.decree}</p>
+            <p className="text-gray-500 text-xs italic">{forecast.modes.love.explanation}</p>
+            <p className="text-gray-600 text-xs mt-2 border-t border-gray-700/50 pt-2">{MODE_EXPLAINERS.love.whatItMeans}</p>
+          </div>
+
+          {/* Shield Mode */}
+          <div className="bg-blue-900/30 border border-blue-700/50 rounded-xl p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xl">🛡️</span>
+              <span className="text-blue-400 font-bold text-sm uppercase tracking-wider">Shield Mode</span>
+            </div>
+            <p className="text-xl font-bold text-blue-300 tracking-wider mb-2">{forecast.modes.shield.mantra}</p>
+            <p className="text-gray-500 text-xs italic">{forecast.modes.shield.explanation}</p>
+            <p className="text-gray-600 text-xs mt-2 border-t border-gray-700/50 pt-2">{MODE_EXPLAINERS.shield.whatItMeans}</p>
+          </div>
+        </div>
 
         {/* Branding Footer in Capturable Area */}
         <div className="text-center text-xs text-gray-600 pt-2">

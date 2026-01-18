@@ -7,11 +7,15 @@ import {
   ZodiacElement,
   ZODIAC_CHINESE,
   ELEMENT_CHINESE,
-  ZODIAC_PROFILES,
-  FIRE_HORSE_RELATIONS,
 } from '@/constants/zodiac-data';
 import { PRODUCT_MODES } from '@/constants/modes';
 import { EDITION_CONFIG, getDaysRemaining } from '@/constants/editions';
+import {
+  getForecast,
+  getFireHorseRelationDescription,
+  ZodiacElement as ForecastElement,
+  ZodiacAnimalType,
+} from '@/constants/zodiac-forecasts';
 
 export default function FreeReadingPage() {
   const [birthDate, setBirthDate] = useState('');
@@ -50,22 +54,23 @@ export default function FreeReadingPage() {
     }
   };
 
-  const getCompatibilityColor = (compatibility: string) => {
-    switch (compatibility) {
-      case 'ally': return 'text-green-400';
-      case 'special': return 'text-fire-gold';
-      case 'clash': return 'text-red-400';
-      default: return 'text-gray-300';
-    }
+  // Get the accurate forecast for this specific element + animal combination
+  const forecast = result
+    ? getForecast(result.element as ForecastElement, result.animal as ZodiacAnimalType)
+    : null;
+
+  const getTaglineColor = (tagline: string) => {
+    if (tagline.includes('Ally')) return 'text-green-400';
+    if (tagline.includes('Catalyst')) return 'text-fire-gold';
+    if (tagline.includes('Harm')) return 'text-red-400';
+    return 'text-gray-300';
   };
 
-  const getCompatibilityBg = (compatibility: string) => {
-    switch (compatibility) {
-      case 'ally': return 'bg-green-900/30 border-green-700/50';
-      case 'special': return 'bg-yellow-900/30 border-yellow-700/50';
-      case 'clash': return 'bg-red-900/30 border-red-700/50';
-      default: return 'bg-gray-900/30 border-gray-700/50';
-    }
+  const getTaglineBg = (tagline: string) => {
+    if (tagline.includes('Ally')) return 'bg-green-900/30 border-green-700/50';
+    if (tagline.includes('Catalyst')) return 'bg-yellow-900/30 border-yellow-700/50';
+    if (tagline.includes('Harm')) return 'bg-red-900/30 border-red-700/50';
+    return 'bg-gray-900/30 border-gray-700/50';
   };
 
   return (
@@ -179,51 +184,75 @@ export default function FreeReadingPage() {
               </div>
             </div>
 
-            {/* Core Strengths */}
-            <div className="bg-black/50 border border-gray-800 rounded-xl p-6">
-              <p className="text-gray-400 text-sm uppercase tracking-widest mb-3">
-                Your Core Strengths
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {ZODIAC_PROFILES[result.animal].strengths.map((strength) => (
-                  <span
-                    key={strength}
-                    className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-sm px-4 py-2 rounded-full"
-                  >
-                    {strength}
-                  </span>
-                ))}
+            {/* Core Strengths - Element-Specific */}
+            {forecast && (
+              <div className="bg-black/50 border border-gray-800 rounded-xl p-6">
+                <p className="text-gray-400 text-sm uppercase tracking-widest mb-3">
+                  Your {result.element} {result.animal} Core Strengths
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {forecast.coreStrengths.map((strength) => (
+                    <span
+                      key={strength}
+                      className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-sm px-4 py-2 rounded-full"
+                    >
+                      {strength}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Characteristics */}
-            <div className="bg-black/50 border border-gray-800 rounded-xl p-6">
-              <p className="text-gray-400 text-sm uppercase tracking-widest mb-3">
-                {result.animal} Characteristics
-              </p>
-              <p className="text-gray-200 leading-relaxed">
-                {ZODIAC_PROFILES[result.animal].characteristics}
-              </p>
-            </div>
-
-            {/* 2026 Fire Horse Forecast */}
-            <div className={`${getCompatibilityBg(FIRE_HORSE_RELATIONS[result.animal].compatibility)} border rounded-xl p-6`}>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-2xl">🔥</span>
-                <p className="text-gray-400 text-sm uppercase tracking-widest">
-                  Your 2026 Fire Horse Forecast
+            {/* Characteristics - Element-Specific */}
+            {forecast && (
+              <div className="bg-black/50 border border-gray-800 rounded-xl p-6">
+                <p className="text-gray-400 text-sm uppercase tracking-widest mb-3">
+                  {result.element} {result.animal} Characteristics
+                </p>
+                <p className="text-gray-200 leading-relaxed">
+                  {forecast.characteristics}
                 </p>
               </div>
-              <p className={`text-lg font-semibold mb-2 ${getCompatibilityColor(FIRE_HORSE_RELATIONS[result.animal].compatibility)}`}>
-                {FIRE_HORSE_RELATIONS[result.animal].relation}
-              </p>
-              <p className="text-gray-200 leading-relaxed mb-4">
-                {ZODIAC_PROFILES[result.animal].forecast2026}
-              </p>
-              <p className="text-fire-gold italic">
-                &ldquo;{FIRE_HORSE_RELATIONS[result.animal].advice}&rdquo;
-              </p>
-            </div>
+            )}
+
+            {/* 2026 Fire Horse Forecast - Element-Specific (FREE: Limited Preview) */}
+            {forecast && (
+              <div className={`${getTaglineBg(forecast.tagline)} border rounded-xl p-6`}>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-2xl">🔥</span>
+                  <p className="text-gray-400 text-sm uppercase tracking-widest">
+                    Your {result.element} {result.animal} × Fire Horse 2026 Forecast
+                  </p>
+                </div>
+                <p className={`text-lg font-semibold mb-2 ${getTaglineColor(forecast.tagline)}`}>
+                  {forecast.tagline}
+                </p>
+                <p className="text-gray-300 text-sm mb-3">
+                  {getFireHorseRelationDescription(forecast.tagline)}
+                </p>
+
+                {/* FREE: Show only first 2 sentences of forecast */}
+                <p className="text-gray-200 leading-relaxed mb-4">
+                  {forecast.forecast.split('.').slice(0, 2).join('.') + '.'}
+                  <span className="text-fire-gold font-semibold"> [Preview]</span>
+                </p>
+
+                {/* Oracle Wisdom */}
+                <p className="text-fire-gold italic">
+                  &ldquo;{forecast.oracleWisdom}&rdquo;
+                </p>
+
+                {/* Teaser for full forecast */}
+                <div className="mt-4 bg-black/50 border border-fire-gold/30 rounded-lg p-3">
+                  <p className="text-fire-gold text-sm font-semibold mb-1">
+                    🔒 Full {result.element} {result.animal} Forecast + 4 Oracle Modes
+                  </p>
+                  <p className="text-gray-400 text-xs">
+                    Unlock your complete forecast, lucky numbers, power motto, love decree, and protection mantra with your Authenticated Oracle.
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* Limited Edition Certificate */}
             <div className="bg-gradient-to-br from-black via-gray-950 to-black border-2 border-fire-gold rounded-2xl p-6 relative overflow-hidden">
