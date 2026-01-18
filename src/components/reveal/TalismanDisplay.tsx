@@ -1,8 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import html2canvas from 'html2canvas';
 import { Prophecy } from '@/types/prophecy';
 import ShareButtons from './ShareButtons';
+import { EDITION_CONFIG } from '@/constants/editions';
+import { ZodiacAnimal } from '@/constants/zodiac-data';
 
 interface TalismanDisplayProps {
   prophecy: Prophecy;
@@ -10,49 +13,88 @@ interface TalismanDisplayProps {
 
 export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [isDownloading, setIsDownloading] = useState(false);
-  const [hasDownloaded, setHasDownloaded] = useState(false);
+  const [isCapturing, setIsCapturing] = useState(false);
+  const talismanRef = useRef<HTMLDivElement>(null);
 
-  // Download the BRANDED image (with certificate) - this is the owner's authenticated copy
   const handleDownload = async () => {
-    // Use branded image (with cert) for owner download, fallback to raw image
-    const downloadUrl = prophecy.branded_image_url || prophecy.image_url;
-    if (!downloadUrl) return;
+    if (!talismanRef.current) return;
 
-    setIsDownloading(true);
+    setIsCapturing(true);
 
     try {
-      // Build filename with certificate ID
+      // Wait a moment for any rendering to complete
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Use html2canvas to capture the full talisman card
+      const canvas = await html2canvas(talismanRef.current, {
+        backgroundColor: '#0a0000',
+        scale: 2, // Higher quality
+        useCORS: true, // Allow cross-origin images
+        allowTaint: false,
+        logging: false,
+        imageTimeout: 15000,
+        onclone: (clonedDoc) => {
+          // Ensure images are fully loaded in the clone
+          const images = clonedDoc.getElementsByTagName('img');
+          for (let i = 0; i < images.length; i++) {
+            images[i].style.opacity = '1';
+          }
+        }
+      });
+
+      // Build consistent filename with zodiac info
       const elementName = prophecy.zodiac_element ? `${prophecy.zodiac_element.toLowerCase()}-` : '';
       const animalName = prophecy.zodiac_sign ? prophecy.zodiac_sign.toLowerCase() : 'unknown';
-      const certId = prophecy.id.slice(0, 8).toUpperCase();
-      const filename = `fire-horse-2026-${elementName}${animalName}-CERT-${certId}.png`;
+      const filename = `fire-horse-2026-${elementName}${animalName}-talisman.png`;
 
-      // Fetch and download the branded image
-      const response = await fetch(downloadUrl);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-
-      // Mark as downloaded
-      setHasDownloaded(true);
+      // Convert to blob and download
+      canvas.toBlob((blob) => {
+        if (!blob) {
+          console.error('Failed to create blob');
+          return;
+        }
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      }, 'image/png', 1.0);
     } catch (error) {
-      console.error('Download failed:', error);
+      console.error('Screenshot failed:', error);
+      // Fallback to just downloading the image
+      if (prophecy.image_url) {
+        try {
+          const elementName = prophecy.zodiac_element ? `${prophecy.zodiac_element.toLowerCase()}-` : '';
+          const animalName = prophecy.zodiac_sign ? prophecy.zodiac_sign.toLowerCase() : 'unknown';
+          const fallbackFilename = `fire-horse-2026-${elementName}${animalName}-talisman.png`;
+
+          const response = await fetch(prophecy.image_url);
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fallbackFilename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        } catch (fallbackError) {
+          console.error('Fallback download failed:', fallbackError);
+        }
+      }
     } finally {
-      setIsDownloading(false);
+      setIsCapturing(false);
     }
   };
 
   return (
     <div className="flex flex-col items-center max-w-md w-full">
-      {/* Talisman Card Display */}
+      {/* Capturable Talisman Card */}
       <div
+        ref={talismanRef}
         className="flex flex-col items-center w-full p-6 rounded-2xl relative"
         style={{ backgroundColor: '#0a0000' }}
       >
@@ -164,54 +206,20 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
         </div>
       </div>
 
-      {/* Important Notice for Owner */}
-      <div className="w-full mt-4 bg-gradient-to-r from-yellow-900/30 to-red-900/30 border border-fire-gold/50 rounded-xl p-4">
-        <div className="flex items-start gap-3">
-          <span className="text-2xl">🔐</span>
-          <div>
-            <p className="text-fire-gold font-bold text-sm">Your Authenticated Certificate</p>
-            <p className="text-gray-300 text-xs mt-1">
-              Download your official talisman with Certificate #{prophecy.id.slice(0, 8).toUpperCase()} now.
-              This authenticated version is exclusively yours and proves ownership of Edition #{prophecy.edition_number}.
-            </p>
-          </div>
-        </div>
-      </div>
-
       {/* Action Buttons - Outside capturable area */}
-      <div className="flex flex-col gap-3 pt-4 w-full">
-        {/* Download Button - Primary CTA for authenticated image */}
+      <div className="flex flex-col sm:flex-row gap-3 pt-6 w-full">
         <button
           onClick={handleDownload}
-          disabled={isDownloading}
-          className={`w-full font-bold py-4 px-6 rounded-xl
-                     hover:scale-[1.02] active:scale-98 transition-all
-                     flex items-center justify-center gap-2 disabled:opacity-50
-                     ${hasDownloaded
-                       ? 'bg-green-600 text-white'
-                       : 'bg-fire-gold text-black'}`}
+          disabled={isCapturing}
+          className="flex-1 bg-fire-gold text-black font-bold py-3 px-6 rounded-xl
+                     hover:scale-105 active:scale-95 transition-transform
+                     flex items-center justify-center gap-2 disabled:opacity-50"
         >
-          <span>{isDownloading ? '⏳' : hasDownloaded ? '✓' : '📥'}</span>
-          {isDownloading
-            ? 'Downloading...'
-            : hasDownloaded
-              ? 'Downloaded! (Click to save again)'
-              : 'Download Authenticated Talisman'}
+          <span>{isCapturing ? '...' : '📥'}</span>
+          {isCapturing ? 'Capturing...' : 'Save Talisman'}
         </button>
 
-        {!hasDownloaded && (
-          <p className="text-center text-yellow-500 text-xs">
-            ⚠️ Save your certificate now - this is your proof of ownership
-          </p>
-        )}
-
-        {/* Share Buttons */}
-        <div className="border-t border-fire-gold/20 pt-4 mt-2">
-          <p className="text-gray-400 text-xs text-center mb-3">
-            Share your oracle (watermarked preview - certificate not included)
-          </p>
-          <ShareButtons prophecy={prophecy} />
-        </div>
+        <ShareButtons prophecy={prophecy} />
       </div>
     </div>
   );
