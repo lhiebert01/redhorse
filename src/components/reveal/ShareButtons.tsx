@@ -23,9 +23,13 @@ The Year of the Fire Horse only comes every 60 years!
 
 👉 View my oracle: ${oracleViewUrl}
 
+Will 2026 be YOUR year to bet on yourself? To improve your luck and become Healthy, Wealthy, and Wise? Or will you keep the status quo and do nothing?
+
+This is your once-in-60-years opportunity. 🐴🔥
+
 Get YOUR personalized prophecy → RedHorseOracle.com
 
-#FireHorse2026 #YearOfTheHorse #ChineseZodiac #LimitedEdition`;
+#FireHorse2026 #YearOfTheHorse #ChineseZodiac #LimitedEdition #BetOnYourself`;
 
   // Share URL points to this specific oracle
   const shareUrl = oracleViewUrl;
