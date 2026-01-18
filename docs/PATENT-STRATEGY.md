@@ -269,6 +269,57 @@ Embed in generated images
 
 ---
 
+### Innovation #6: Privacy-Preserving Digital Art Certification and Ownership Registry
+
+**Technical Description:**
+A system and method for cryptographically certifying and registering ownership of AI-generated digital artwork without storing personally identifiable information, comprising:
+- Generating a cryptographic hash of the digital artwork at time of creation
+- Creating a digital certificate containing edition number, timestamp, artwork hash, and metadata
+- Signing the certificate using public-key cryptography (Ed25519/RSA)
+- Storing the signed certificate in a centralized registry database
+- Enabling public verification of artwork authenticity without revealing owner identity
+- Optionally minting to blockchain while discarding wallet address after transaction
+
+**Novel Elements:**
+- PKI-signed certificates for AI-generated artwork
+- Centralized ownership registry with zero PII
+- Dual verification path (centralized PKI + optional decentralized blockchain)
+- Wallet address discarded after NFT minting (privacy preservation)
+- Certificate embedded in image pixels, not just metadata
+
+**Claims:**
+1. A method for cryptographically certifying AI-generated digital artwork while maintaining zero PII...
+2. A system for verifying digital artwork authenticity using embedded certificate identifiers...
+3. A method for minting NFTs while discarding wallet addresses after transaction completion...
+
+---
+
+### Innovation #7: Privacy-Preserving Authenticated Art Marketplace and Ownership Transfer System
+
+**Technical Description:**
+A system and method for operating a marketplace for buying, selling, and transferring ownership of authenticated digital artwork while maintaining zero PII in the primary database, comprising:
+- Maintaining a master registry of authenticated digital artwork with edition numbers and certificates
+- Enabling ownership transfer between parties without storing buyer/seller identity
+- Recording transfer transactions with timestamps and certificate updates
+- Generating new certificates upon ownership transfer with updated ownership proof
+- Providing escrow functionality for secure transactions
+- Enabling price discovery and listing without identity disclosure
+
+**Novel Elements:**
+- Ownership transfer without storing party identities
+- Certificate chain showing provenance without PII
+- Escrow system using temporary transaction identifiers
+- Secondary market for limited edition AI-generated artwork
+- Transfer history recorded without wallet addresses or user accounts
+- Privacy-preserving price discovery and bidding
+
+**Claims:**
+1. A method for transferring ownership of authenticated digital artwork without storing buyer or seller PII...
+2. A marketplace system enabling secondary sales of AI-generated artwork with privacy preservation...
+3. A certificate chain system showing artwork provenance without revealing owner identities...
+
+---
+
 ## Part 4: Trade Secret vs Patent Decision Matrix
 
 | Innovation | Patent | Trade Secret | Recommendation |
@@ -280,6 +331,8 @@ Embed in generated images
 | AI Prompt Templates | No | Yes | **TRADE SECRET** |
 | Zodiac Interpretation Text | No | Yes | **COPYRIGHT** |
 | Art Style Randomization | No | Yes | **TRADE SECRET** |
+| PKI Certification System | Yes | No | **PATENT** - Key differentiator |
+| Privacy-Preserving Marketplace | Yes | No | **PATENT** - Future platform value |
 
 ---
 
@@ -375,13 +428,25 @@ This creates:
 
 ## Conclusion
 
-The Red Horse Oracle / PIGENAI system contains multiple patentable innovations that should be protected immediately via provisional patent applications. The combination of privacy-preserving architecture, dual-image authentication, and watermark-protected distribution represents a novel approach that differentiates from existing AI content platforms.
+The Red Horse Oracle / PIGENAI system contains **7 patentable innovations** that should be protected immediately via provisional patent applications:
 
-**Recommended Investment:** $3,000-5,000 immediately (provisionals) + $20,000-30,000 over 3 years (utility prosecution)
+1. **Privacy-Preserving AI Content Generation** - Zero PII retention pipeline
+2. **Dual-Image Authentication System** - Owner vs shareable versions
+3. **Limited Edition Digital Art Numbering** - Edition certification without blockchain
+4. **AI-Generated Watermark Overlay** - Anti-theft distribution
+5. **Zodiac-Based Personalization Without Tracking** - Categorical classification only
+6. **PKI Digital Art Certification Registry** - Cryptographic proof of ownership
+7. **Privacy-Preserving Art Marketplace** - Secondary sales without PII
+
+The combination of privacy-preserving architecture, dual-image authentication, PKI certification, and future marketplace capabilities represents a **novel platform** that differentiates from ALL existing AI content platforms and NFT marketplaces.
+
+**Recommended Investment:** $5,000-8,000 immediately (3-4 provisionals) + $30,000-50,000 over 3 years (utility prosecution)
 
 **Expected Protection:** 20 years from filing date for utility patent
 
 **"First to File" Warning:** Under US patent law (post-AIA), the first inventor to FILE wins, not first to invent. File provisionals ASAP to establish priority date.
+
+**Marketplace Vision:** The Supabase registry becomes the authoritative database for ALL authenticated Chinese Zodiac artwork, enabling a future platform for buying, selling, and transferring ownership - all while maintaining zero PII.
 
 ---
 
