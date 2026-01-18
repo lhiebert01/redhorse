@@ -269,7 +269,10 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
       {/* ========== SHARE SECTION ========== */}
       <div className="w-full bg-gradient-to-r from-purple-950 via-black to-purple-950 border-2 border-purple-500/70 rounded-2xl p-5">
         <p className="text-purple-300 text-sm font-semibold text-center mb-1">📣 Share Your Oracle</p>
-        <p className="text-gray-400 text-xs text-center mb-4">Share the image link with friends</p>
+        <p className="text-gray-400 text-xs text-center mb-2">Share a watermarked preview with friends</p>
+        <p className="text-yellow-500 text-[10px] text-center mb-4">
+          🔒 Your authenticated certificate version stays private
+        </p>
         <ShareButtons prophecy={prophecy} />
       </div>
 

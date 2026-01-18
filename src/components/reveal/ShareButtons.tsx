@@ -10,14 +10,15 @@ interface ShareButtonsProps {
 export default function ShareButtons({ prophecy }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
 
-  // Share the RAW image URL (link to Supabase image)
-  const imageUrl = prophecy.image_url || '';
+  // Share the WATERMARKED shareable image (no certificate number)
+  // Falls back to raw image if shareable not available
+  const shareableImageUrl = prophecy.shareable_image_url || prophecy.image_url || '';
 
   const shareText = `My Fire Horse Oracle for 2026: "${prophecy.main_text}" - Get yours at RedHorseOracle.com`;
 
   const handleCopyLink = async () => {
     try {
-      await navigator.clipboard.writeText(imageUrl);
+      await navigator.clipboard.writeText(shareableImageUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
@@ -26,17 +27,17 @@ export default function ShareButtons({ prophecy }: ShareButtonsProps) {
   };
 
   const handleFacebookShare = () => {
-    const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(imageUrl)}&quote=${encodeURIComponent(shareText)}`;
+    const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareableImageUrl)}&quote=${encodeURIComponent(shareText)}`;
     window.open(fbUrl, '_blank', 'width=600,height=400');
   };
 
   const handleLinkedInShare = () => {
-    const liUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(imageUrl)}`;
+    const liUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareableImageUrl)}`;
     window.open(liUrl, '_blank', 'width=600,height=400');
   };
 
   const handleTwitterShare = () => {
-    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(imageUrl)}`;
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareableImageUrl)}`;
     window.open(twitterUrl, '_blank', 'width=600,height=400');
   };
 
@@ -47,7 +48,7 @@ export default function ShareButtons({ prophecy }: ShareButtonsProps) {
         await navigator.share({
           title: 'My Fire Horse Oracle 2026',
           text: shareText,
-          url: imageUrl,
+          url: shareableImageUrl,
         });
       } catch (error) {
         // User cancelled or error - fallback to copy
@@ -60,7 +61,7 @@ export default function ShareButtons({ prophecy }: ShareButtonsProps) {
     }
   };
 
-  if (!imageUrl) {
+  if (!shareableImageUrl) {
     return null;
   }
 
