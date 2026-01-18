@@ -339,7 +339,9 @@ function AdminTestContent() {
       }
 
       // Redirect to reveal page with the session ID and admin flag
-      router.push(`/reveal?session_id=${data.sessionId}&from=admin`);
+      // Use the production domain for shareable URLs
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://redhorseoracle.com';
+      window.location.href = `${baseUrl}/reveal?session_id=${data.sessionId}&from=admin`;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
       setIsGenerating(false);

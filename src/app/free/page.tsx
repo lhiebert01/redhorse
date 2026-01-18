@@ -214,7 +214,7 @@ export default function FreeReadingPage() {
               {/* Share Buttons */}
               <div className="flex flex-wrap justify-center gap-3">
                 <a
-                  href={`https://twitter.com/intent/tweet?text=I%20just%20discovered%20I%27m%20a%20${result.element}%20${result.animal}%20in%20the%20Year%20of%20the%20Fire%20Horse%202026!%20%F0%9F%94%A5%F0%9F%90%B4%20Find%20YOUR%20zodiac%20destiny%3A&url=https://redhorse-omega.vercel.app/free`}
+                  href={`https://twitter.com/intent/tweet?text=I%20just%20discovered%20I%27m%20a%20${result.element}%20${result.animal}%20in%20the%20Year%20of%20the%20Fire%20Horse%202026!%20%F0%9F%94%A5%F0%9F%90%B4%20Find%20YOUR%20zodiac%20destiny%3A&url=https://redhorseoracle.com/free`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 bg-black hover:bg-gray-900 border border-gray-600 text-white font-semibold px-4 py-2.5 rounded-xl transition-all hover:scale-105"
@@ -223,7 +223,7 @@ export default function FreeReadingPage() {
                   <span className="text-sm">Share on X</span>
                 </a>
                 <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=https://redhorse-omega.vercel.app/free&quote=I%27m%20a%20${result.element}%20${result.animal}%20in%20the%20Year%20of%20the%20Fire%20Horse%202026!`}
+                  href={`https://www.facebook.com/sharer/sharer.php?u=https://redhorseoracle.com/free&quote=I%27m%20a%20${result.element}%20${result.animal}%20in%20the%20Year%20of%20the%20Fire%20Horse%202026!`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4 py-2.5 rounded-xl transition-all hover:scale-105"
@@ -237,10 +237,10 @@ export default function FreeReadingPage() {
                       navigator.share({
                         title: `I'm a ${result.element} ${result.animal} - Fire Horse 2026`,
                         text: `I just discovered my Chinese zodiac destiny for 2026! I'm a ${result.element} ${result.animal}. Find YOUR zodiac sign:`,
-                        url: 'https://redhorse-omega.vercel.app/free'
+                        url: 'https://redhorseoracle.com/free'
                       });
                     } else {
-                      navigator.clipboard.writeText('https://redhorse-omega.vercel.app/free');
+                      navigator.clipboard.writeText('https://redhorseoracle.com/free');
                       alert('Link copied to clipboard!');
                     }
                   }}
