@@ -121,83 +121,157 @@ Fire Horse returns once every 60 years. Get yours!
     }
   };
 
-  // Twitter share (text only - Twitter handles image preview from URL)
+  // Twitter share
   const handleTwitterShare = () => {
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(twitterText)}&url=${encodeURIComponent(shareUrl)}`;
     window.open(twitterUrl, '_blank', 'width=600,height=400');
   };
 
+  // Facebook share
+  const handleFacebookShare = () => {
+    const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`;
+    window.open(fbUrl, '_blank', 'width=600,height=400');
+  };
+
+  // LinkedIn share
+  const handleLinkedInShare = () => {
+    const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+    window.open(linkedInUrl, '_blank', 'width=600,height=400');
+  };
+
+  // Email share
+  const handleEmailShare = () => {
+    const subject = encodeURIComponent('My Fire Horse Oracle 2026');
+    const body = encodeURIComponent(`${shareText}\n\nView my talisman image: ${shareableImageUrl || shareUrl}`);
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  };
+
+  // Copy image URL directly
+  const handleCopyImageUrl = async () => {
+    if (!shareableImageUrl) {
+      alert('No shareable image URL available');
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(shareableImageUrl);
+      setImageCopied(true);
+      setTimeout(() => setImageCopied(false), 2000);
+    } catch {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = shareableImageUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setImageCopied(true);
+      setTimeout(() => setImageCopied(false), 2000);
+    }
+  };
+
   return (
     <>
-      <div className="flex flex-col gap-2 w-full">
-        {/* PRIMARY: Create Social Media Post Button */}
-        <button
-          onClick={() => setShowShareModal(true)}
-          className="w-full bg-gradient-to-r from-purple-600 via-pink-500 to-red-500
-                     text-white font-bold py-4 px-6 rounded-xl
-                     hover:from-purple-500 hover:via-pink-400 hover:to-red-400
-                     hover:scale-[1.02] active:scale-95 transition-all
-                     flex items-center justify-center gap-2 shadow-lg"
-        >
-          <span>🚀</span>
-          Create Social Media Post
-        </button>
-
-        {/* Quick Share Row: Simple Share + Twitter */}
-        <div className="flex gap-2 w-full">
-          {/* Share App Link (text/link only) */}
+      <div className="flex flex-col gap-3 w-full">
+        {/* Share to Social Media - Row 1 */}
+        <div className="grid grid-cols-4 gap-2">
+          {/* Facebook */}
           <button
-            onClick={handleShareApp}
-            className="flex-1 bg-red-900 text-white font-bold py-3 px-6 rounded-xl
-                       hover:bg-red-800 active:scale-95 transition-all
-                       flex items-center justify-center gap-2"
+            onClick={handleFacebookShare}
+            className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-2 rounded-xl
+                       active:scale-95 transition-all flex flex-col items-center justify-center gap-1"
+            title="Share on Facebook"
           >
-            <span>{copied ? '✓' : '🔗'}</span>
-            {copied ? 'Copied!' : 'Quick Share'}
+            <span className="text-lg">f</span>
+            <span className="text-[10px]">Facebook</span>
           </button>
 
           {/* Twitter/X */}
           <button
             onClick={handleTwitterShare}
-            className="bg-black border border-gray-700 text-white font-bold py-3 px-4 rounded-xl
-                       hover:bg-gray-900 active:scale-95 transition-all"
+            className="bg-black border border-gray-700 text-white font-bold py-3 px-2 rounded-xl
+                       hover:bg-gray-900 active:scale-95 transition-all flex flex-col items-center justify-center gap-1"
             title="Share on X"
           >
-            𝕏
+            <span className="text-lg">𝕏</span>
+            <span className="text-[10px]">Twitter</span>
+          </button>
+
+          {/* LinkedIn */}
+          <button
+            onClick={handleLinkedInShare}
+            className="bg-blue-700 hover:bg-blue-600 text-white font-bold py-3 px-2 rounded-xl
+                       active:scale-95 transition-all flex flex-col items-center justify-center gap-1"
+            title="Share on LinkedIn"
+          >
+            <span className="text-lg">in</span>
+            <span className="text-[10px]">LinkedIn</span>
+          </button>
+
+          {/* Email */}
+          <button
+            onClick={handleEmailShare}
+            className="bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 px-2 rounded-xl
+                       active:scale-95 transition-all flex flex-col items-center justify-center gap-1"
+            title="Share via Email"
+          >
+            <span className="text-lg">✉</span>
+            <span className="text-[10px]">Email</span>
           </button>
         </div>
 
-        {/* Share Image (watermarked) */}
-        {shareableImageUrl && (
-          <div className="space-y-2">
+        {/* Copy Buttons Row */}
+        <div className="flex gap-2">
+          {/* Copy Text */}
+          <button
+            onClick={handleCopy}
+            className="flex-1 bg-red-900 text-white font-bold py-3 px-4 rounded-xl
+                       hover:bg-red-800 active:scale-95 transition-all
+                       flex items-center justify-center gap-2"
+          >
+            <span>{copied ? '✓' : '📋'}</span>
+            {copied ? 'Copied!' : 'Copy Text'}
+          </button>
+
+          {/* Copy Image URL */}
+          {shareableImageUrl && (
             <button
-              onClick={handleShareImage}
-              className="w-full bg-gradient-to-r from-yellow-700 via-yellow-600 to-yellow-700
-                         text-black font-bold py-3 px-6 rounded-xl
-                         hover:from-yellow-600 hover:via-yellow-500 hover:to-yellow-600
-                         active:scale-95 transition-all
+              onClick={handleCopyImageUrl}
+              className="flex-1 bg-yellow-700 text-black font-bold py-3 px-4 rounded-xl
+                         hover:bg-yellow-600 active:scale-95 transition-all
                          flex items-center justify-center gap-2"
             >
               <span>{imageCopied ? '✓' : '🖼️'}</span>
-              {imageCopied ? 'Image URL Copied!' : 'Share Talisman Image'}
+              {imageCopied ? 'Copied!' : 'Copy Image URL'}
             </button>
-            {/* Direct link to view/download shareable image */}
-            <a
-              href={shareableImageUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full text-center text-xs text-gray-400 hover:text-fire-gold underline"
-            >
-              View shareable image in new tab
-            </a>
+          )}
+        </div>
+
+        {/* Direct Image Link */}
+        {shareableImageUrl && (
+          <a
+            href={shareableImageUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full bg-fire-gold/20 border border-fire-gold/50 text-fire-gold font-bold py-3 px-4 rounded-xl
+                       hover:bg-fire-gold/30 transition-all text-center"
+          >
+            🔗 Open Shareable Image (Right-click to Save)
+          </a>
+        )}
+
+        {/* Image URL Display for Copy/Paste */}
+        {shareableImageUrl && (
+          <div className="bg-black/50 border border-gray-700 rounded-lg p-2">
+            <p className="text-gray-400 text-[10px] mb-1">Image URL (copy and paste to share):</p>
+            <p className="text-fire-gold text-xs break-all font-mono select-all">{shareableImageUrl}</p>
           </div>
         )}
 
-        {/* Note about watermark */}
+        {/* Status */}
         <p className="text-gray-500 text-[10px] text-center">
           {hasShareableImage
-            ? 'Shared images include watermark • Your certificate stays private'
-            : '⚠️ Watermarked image not available - sharing raw image'}
+            ? '✓ Shareable image ready (watermarked, certificate hidden)'
+            : '⚠️ Using raw image - watermarked version not available'}
         </p>
       </div>
 
