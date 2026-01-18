@@ -11,16 +11,24 @@ export default function ShareButtons({ prophecy }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
   const [imageCopied, setImageCopied] = useState(false);
 
+  // Direct link to view THIS specific oracle (watermarked version will show immediately)
+  const oracleViewUrl = `https://redhorseoracle.com/reveal?session_id=${prophecy.stripe_session_id}`;
+
   // Marketing-focused share text with strong CTA
   const shareText = `🐎🔥 My Fire Horse Oracle for 2026: "${prophecy.main_text}"
 
-The Year of the Fire Horse only comes every 60 years! Limited Edition oracles available now.
+🔥 See my ${prophecy.zodiac_element} ${prophecy.zodiac_sign} prophecy! Limited Edition #${prophecy.edition_number} of 888.
 
-🔥 Get YOUR personalized prophecy before they sell out → RedHorseOracle.com
+The Year of the Fire Horse only comes every 60 years!
+
+👉 View my oracle: ${oracleViewUrl}
+
+Get YOUR personalized prophecy → RedHorseOracle.com
 
 #FireHorse2026 #YearOfTheHorse #ChineseZodiac #LimitedEdition`;
 
-  const shareUrl = 'https://redhorseoracle.com';
+  // Share URL points to this specific oracle
+  const shareUrl = oracleViewUrl;
 
   // Use SHAREABLE image (watermarked, no cert) for sharing
   // Falls back to branded, then raw if shareable not available
