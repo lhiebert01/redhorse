@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Prophecy } from '@/types/prophecy';
+import ShareModal from './ShareModal';
 
 interface ShareButtonsProps {
   prophecy: Prophecy;
@@ -10,6 +11,7 @@ interface ShareButtonsProps {
 export default function ShareButtons({ prophecy }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
   const [imageCopied, setImageCopied] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   // Share URL is just the homepage - NOT the reveal page
   // We don't want to expose the authenticated reveal page to others
@@ -106,50 +108,72 @@ Fire Horse returns once every 60 years. Get yours!
   };
 
   return (
-    <div className="flex flex-col gap-2 w-full">
-      {/* Row 1: Share App Link + Twitter */}
-      <div className="flex gap-2 w-full">
-        {/* Share App Link (text/link only) */}
+    <>
+      <div className="flex flex-col gap-2 w-full">
+        {/* PRIMARY: Create Social Media Post Button */}
         <button
-          onClick={handleShareApp}
-          className="flex-1 bg-red-900 text-white font-bold py-3 px-6 rounded-xl
-                     hover:bg-red-800 active:scale-95 transition-all
-                     flex items-center justify-center gap-2"
+          onClick={() => setShowShareModal(true)}
+          className="w-full bg-gradient-to-r from-purple-600 via-pink-500 to-red-500
+                     text-white font-bold py-4 px-6 rounded-xl
+                     hover:from-purple-500 hover:via-pink-400 hover:to-red-400
+                     hover:scale-[1.02] active:scale-95 transition-all
+                     flex items-center justify-center gap-2 shadow-lg"
         >
-          <span>{copied ? '✓' : '🔗'}</span>
-          {copied ? 'Copied!' : 'Share App'}
+          <span>🚀</span>
+          Create Social Media Post
         </button>
 
-        {/* Twitter/X */}
-        <button
-          onClick={handleTwitterShare}
-          className="bg-black border border-gray-700 text-white font-bold py-3 px-4 rounded-xl
-                     hover:bg-gray-900 active:scale-95 transition-all"
-          title="Share on X"
-        >
-          𝕏
-        </button>
+        {/* Quick Share Row: Simple Share + Twitter */}
+        <div className="flex gap-2 w-full">
+          {/* Share App Link (text/link only) */}
+          <button
+            onClick={handleShareApp}
+            className="flex-1 bg-red-900 text-white font-bold py-3 px-6 rounded-xl
+                       hover:bg-red-800 active:scale-95 transition-all
+                       flex items-center justify-center gap-2"
+          >
+            <span>{copied ? '✓' : '🔗'}</span>
+            {copied ? 'Copied!' : 'Quick Share'}
+          </button>
+
+          {/* Twitter/X */}
+          <button
+            onClick={handleTwitterShare}
+            className="bg-black border border-gray-700 text-white font-bold py-3 px-4 rounded-xl
+                       hover:bg-gray-900 active:scale-95 transition-all"
+            title="Share on X"
+          >
+            𝕏
+          </button>
+        </div>
+
+        {/* Share Image (watermarked) */}
+        {shareableImageUrl && (
+          <button
+            onClick={handleShareImage}
+            className="w-full bg-gradient-to-r from-yellow-700 via-yellow-600 to-yellow-700
+                       text-black font-bold py-3 px-6 rounded-xl
+                       hover:from-yellow-600 hover:via-yellow-500 hover:to-yellow-600
+                       active:scale-95 transition-all
+                       flex items-center justify-center gap-2"
+          >
+            <span>{imageCopied ? '✓' : '🖼️'}</span>
+            {imageCopied ? 'Image URL Copied!' : 'Share Talisman Image'}
+          </button>
+        )}
+
+        {/* Note about watermark */}
+        <p className="text-gray-500 text-[10px] text-center">
+          Shared images include watermark • Your certificate stays private
+        </p>
       </div>
 
-      {/* Row 2: Share Image (watermarked) */}
-      {shareableImageUrl && (
-        <button
-          onClick={handleShareImage}
-          className="w-full bg-gradient-to-r from-yellow-700 via-yellow-600 to-yellow-700
-                     text-black font-bold py-3 px-6 rounded-xl
-                     hover:from-yellow-600 hover:via-yellow-500 hover:to-yellow-600
-                     active:scale-95 transition-all
-                     flex items-center justify-center gap-2"
-        >
-          <span>{imageCopied ? '✓' : '🖼️'}</span>
-          {imageCopied ? 'Image URL Copied!' : 'Share Talisman Image'}
-        </button>
-      )}
-
-      {/* Note about watermark */}
-      <p className="text-gray-500 text-[10px] text-center">
-        Shared images include watermark • Your certificate stays private
-      </p>
-    </div>
+      {/* Share Modal */}
+      <ShareModal
+        prophecy={prophecy}
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+      />
+    </>
   );
 }
