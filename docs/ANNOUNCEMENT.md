@@ -1,128 +1,160 @@
-# Introducing Red Horse Oracle
+# RED HORSE ORACLE: STICK IT TO THE MAN
 
-## The World's First AI-Powered Fire Horse Oracle
+## The World's First Privacy-By-Design AI Oracle Platform
 
-**FOR IMMEDIATE RELEASE**
-
----
-
-### A Once-in-60-Year Celestial Event Meets Cutting-Edge AI
-
-**January 2026** — As the Chinese New Year approaches, the world prepares for one of the rarest events in the ancient zodiac calendar: the **Year of the Fire Horse (火马年)**. This powerful combination of the Horse — symbol of success, freedom, and unbridled spirit — with the element of Fire occurs only once every 60 years.
-
-Today, we announce **Red Horse Oracle** — the world's first AI-powered mystical experience that channels the Fire Horse's legendary energy to deliver personalized prophecies, lucky numbers, and protective mantras through stunning, museum-quality digital talismans.
+**FOR IMMEDIATE RELEASE — January 2026**
 
 ---
 
-## What is Red Horse Oracle?
+## EXTRA! EXTRA! READ ALL ABOUT IT!
 
-Red Horse Oracle is a groundbreaking fusion of **ancient Chinese wisdom** and **modern artificial intelligence**. Using Google's most advanced Gemini AI models, the Oracle generates:
-
-- **Personalized Prophecies** based on your exact birth date
-- **Stunning Talisman Artwork** in authentic Chinese zodiac styles
-- **Mystical Readings** explaining your connection to the Fire Horse
-- **Permanent Digital Keepsakes** you can save, share, and print
-
-Each talisman is a **one-of-a-kind masterpiece** — no two are ever alike.
+**The Fire Horse Returns After 60 Years — And This Time, Big Tech Isn't Invited**
 
 ---
 
-## The Four Oracle Paths
+### Tired of Being Tracked? Fed Up With Ads? We Built Something Different.
 
-Seekers may choose from four sacred paths:
+Every app wants your data. Facebook tracks you. Google profiles you. Instagram sells you. Every click, every scroll, every like — harvested, analyzed, monetized.
 
-### 🎲 Wealth Mode — "Channel Your Fortune"
-Receive **6 Personal Lucky Numbers** channeled specifically for your zodiac sign. These mystical digits carry the Fire Horse's blessing for financial prosperity throughout 2026.
+**We said: ENOUGH.**
 
-### ⚔️ Power Mode — "Claim Your Victory"
-Obtain a **3-Word Strategic Battle Motto** — a commanding phrase designed to fuel your ambitions, career success, and competitive edge in the Year of the Fire Horse.
+Today we launch **Red Horse Oracle** — the world's **FIRST, ONLY, and BEST** AI-powered Fire Horse prophecy platform built with **Privacy by Design**.
 
-### ❤️ Love Mode — "Ignite Your Heart"
-Receive a **4-Word Love Decree** revealing your romantic destiny. The Fire Horse's passionate energy speaks directly to matters of the heart.
+🛡️ **NO tracking**
+🛡️ **NO ads**
+🛡️ **NO data harvesting**
+🛡️ **NO personally identifiable information stored**
 
-### 🛡️ Shield Mode — "Guard Your Spirit"
-Acquire a **3-Word Protective Mantra** — a sacred phrase to ward off negativity, envy, and misfortune. The Fire Horse becomes your spiritual guardian.
-
----
-
-## The Technology Behind the Magic
-
-Red Horse Oracle represents a new frontier in AI-powered experiences:
-
-### Google Gemini 2.0 Flash
-The latest in Google's AI technology powers both the prophecy generation and the stunning talisman artwork. Each image is generated in real-time, incorporating:
-
-- Traditional Chinese artistic styles (ink wash, Song Dynasty, Dunhuang, Tang Dynasty)
-- Authentic zodiac animal representations
-- The majestic Fire Horse in all its glory
-- Personalized prophecy text embedded in the artwork
-
-### Instant Generation
-From payment to prophecy in under 60 seconds. The Oracle works swiftly to channel the Fire Horse's message.
-
-### Permanent & Shareable
-Every talisman is stored permanently in the cloud. Share your prophecy on social media, download the high-resolution image, or print it as a keepsake.
+Just pure, authenticated, AI-generated mystical artwork and prophecies. The way the internet should be.
 
 ---
 
-## The Examples Gallery
+## What Makes Red Horse Oracle Different?
 
-For the first time, seekers can preview the Oracle's work through our **Examples Gallery** — featuring all 12 Chinese zodiac animals with real generated talismans:
+### STICK IT TO THE MAN
 
-| Zodiac | Name | Mode | Prophecy |
-|--------|------|------|----------|
-| 🐀 Rat | Michael Johnson | Wealth | 04-15-28-38-68-84 |
-| 🐂 Ox | Jennifer Smith | Power | BREAK THE RANK |
-| 🐅 Tiger | David Williams | Love | FIERCE LOVE CLAIMS YOU |
-| 🐇 Rabbit | Sarah Davis | Shield | FLAME SHIELDS PEACE |
-| 🐉 Dragon | James Miller | Wealth | 08-17-28-58-66-88 |
-| 🐍 Snake | Emily Brown | Power | STRIKE FROM SILENCE |
-| 🐴 Horse | Robert Jones | Love | WILD HEARTS BECOME ONE |
-| 🐐 Goat | Lisa Anderson | Shield | PEACE IS ARMOR |
-| 🐵 Monkey | William Taylor | Wealth | 09-18-28-68-80-88 |
-| 🐓 Rooster | Maria Garcia | Power | DROWN ALL RIVALS |
-| 🐕 Dog | Christopher Lee | Love | FAITHFUL HEART FINDS HOME |
-| 🐖 Pig | Jessica Martinez | Shield | ROOTS ANCHOR PEACE |
+While other platforms mine your personal data to sell to advertisers, Red Horse Oracle operates on a revolutionary principle: **we don't want your data**.
 
-*View the full gallery at: https://redhorse-omega.vercel.app/examples*
+| Other Apps | Red Horse Oracle |
+|------------|------------------|
+| Track everything you do | Track nothing |
+| Sell your data to advertisers | No advertising, ever |
+| Require account creation | No account needed |
+| Store your personal info | Birth date used once, then discarded |
+| Profit from your privacy | Profit from quality, not exploitation |
+
+**Your prophecy. Your talisman. Your privacy. Period.**
 
 ---
 
-## Why 2026 Matters
+## Privacy by Design — Not an Afterthought
 
-The Fire Horse last appeared in **1966** and won't return until **2086**. For most people alive today, this is their **only opportunity** to receive a Fire Horse blessing.
+Red Horse Oracle was **engineered from the ground up** with privacy as a core principle:
 
-In Chinese astrology, the Fire Horse represents:
+- **Zero PII Storage** — We never store your name, email is only for delivery
+- **Birth Date Discarded** — Used only to calculate your Chinese zodiac, then deleted
+- **No Cookies** — No tracking pixels, no fingerprinting, no surveillance
+- **No Third-Party Analytics** — Facebook Pixel? Google Analytics? Not here.
+- **Secure & Encrypted** — Your transaction, your prophecy, protected
 
-- **Unstoppable Energy** — The fire fuels the horse's natural power
-- **Transformation** — Old obstacles burn away
-- **Passion** — Love and ambition reach peak intensity
-- **Fortune** — The blazing path to prosperity opens
-
-The Red Horse Oracle captures this rare celestial energy and delivers it directly to you.
-
----
-
-## Pricing & Availability
-
-**One prophecy: $8.88**
-
-The price honors the auspicious number **8** (八) — which sounds like "發" (fā), meaning "to prosper" in Chinese. Three 8s = triple fortune.
-
-**Available now at: https://redhorse-omega.vercel.app/**
+This isn't a marketing claim. It's architecture. It's code. It's principle.
 
 ---
 
-## What People Are Saying
+## The Technology: Google Gemini 3 Pro
 
-> *"The Oracle gave me six numbers that felt deeply connected to my Rat nature. I played them on a whim and won $2,400! The Fire Horse knows something we don't."*
-> — Michael Johnson, Year of the Rat
+Red Horse Oracle harnesses the most advanced AI on the planet:
 
-> *"My motto 'BREAK THE RANK' became my mantra at work. I landed a promotion within two months. The Ox and Fire Horse alliance is unstoppable."*
-> — Jennifer Smith, Year of the Ox
+### Gemini 3 Pro — The Best Gets Better
 
-> *"The decree 'FIERCE LOVE CLAIMS YOU' appeared right before I met my now-fiancée. As a Tiger, I needed that push to open my heart. Thank you, Fire Horse!"*
-> — David Williams, Year of the Tiger
+- **Text Generation:** Personalized prophecies crafted by the latest Gemini 3 Pro
+- **Image Generation:** Museum-quality digital artwork via Gemini 3 Pro Image
+- **Real-Time Creation:** Your talisman generated in under 60 seconds
+- **Truly Unique:** No two talismans are ever identical
+
+Each prophecy combines ancient Chinese zodiac wisdom with cutting-edge AI to create something that has never existed before — and will never exist again.
+
+---
+
+## Will 2026 Be YOUR Year?
+
+The Fire Horse last appeared in **1966**. It won't return until **2086**.
+
+For most people alive today, this is their **ONLY OPPORTUNITY** to receive a Fire Horse blessing.
+
+**Ask yourself:**
+
+> Will 2026 be YOUR year to bet on yourself?
+>
+> To become **Healthy, Wealthy, and Wise**?
+>
+> Or will you keep the status quo and do nothing?
+
+The Fire Horse doesn't wait. Neither should you.
+
+---
+
+## Limited Edition — Only 888 Per Zodiac
+
+Each prophecy is part of a **Limited Edition series**:
+
+- **888 editions** per zodiac sign per oracle mode
+- **Authenticated** with unique certificate number
+- **Numbered** (e.g., "Edition #47 of 888")
+- **Watermarked for sharing** — Owner gets unwatermarked authenticated copy
+- **Permanent** — Stored securely, yours forever
+
+**Are YOU one of the 888 people on the planet who will own one?**
+
+When they're gone, they're gone. The Fire Horse doesn't do reprints.
+
+---
+
+## Four Oracle Paths
+
+### 🎲 WEALTH MODE — "Channel Your Fortune"
+**6 Personal Lucky Numbers** blessed by the Fire Horse for financial prosperity.
+
+### ⚔️ POWER MODE — "Claim Your Victory"
+**3-Word Strategic Battle Motto** to fuel your ambitions and competitive edge.
+
+### ❤️ LOVE MODE — "Ignite Your Heart"
+**4-Word Love Decree** revealing your romantic destiny for 2026.
+
+### 🛡️ SHIELD MODE — "Guard Your Spirit"
+**3-Word Protective Mantra** to ward off negativity and misfortune.
+
+---
+
+## The Price: $8.88
+
+Three 8s. Triple fortune. The most auspicious number in Chinese culture.
+
+**8** (八) sounds like **發** (fā) — meaning "to prosper."
+
+That's less than two lattes for a:
+- One-of-a-kind AI masterpiece
+- Personalized prophecy for 2026
+- Limited edition authenticated talisman
+- Privacy-respecting experience
+
+**No subscription. No upsells. No data harvesting.**
+
+Just $8.88 for something truly unique.
+
+---
+
+## Free Zodiac Reading Available
+
+Not ready to commit? Try our **FREE zodiac reading**:
+
+- Discover your Chinese zodiac animal and element
+- Learn your relationship to the 2026 Fire Horse
+- Preview what your personalized Oracle might reveal
+
+**No payment required. No email harvesting. No strings attached.**
+
+Because even free should respect your privacy.
 
 ---
 
@@ -130,20 +162,53 @@ The price honors the auspicious number **8** (八) — which sounds like "發" (
 
 | Component | Technology |
 |-----------|------------|
-| AI Engine | Google Gemini 2.0 Flash |
-| Image Generation | Gemini Imagen (Real-time) |
-| Framework | Next.js 14 |
+| AI Engine | Google Gemini 3 Pro |
+| Image Generation | Gemini 3 Pro Image (Real-time) |
+| Framework | Next.js 14 (App Router) |
 | Database | Supabase (PostgreSQL) |
-| Payments | Stripe |
+| Payments | Stripe (PCI Compliant) |
 | Hosting | Vercel Edge Network |
+| Privacy | Zero PII, No Tracking, No Ads |
+
+**Open Source Architecture** — Built with transparency in mind.
 
 ---
 
-## About Red Horse Oracle
+## What People Are Saying
 
-Red Horse Oracle was created to bridge the ancient wisdom of the Chinese zodiac with the possibilities of modern AI. Our mission is to deliver meaningful, beautiful, and shareable mystical experiences that honor traditional culture while embracing technological innovation.
+> *"Finally, an app that doesn't treat me like a product. The Oracle gave me my lucky numbers AND my dignity."*
+> — Michael, Year of the Rat
 
-The Oracle is strictly for entertainment purposes. We make no claims about the predictive accuracy of prophecies. AI-generated artwork is original and unique to each user.
+> *"My motto 'BREAK THE RANK' changed my mindset. Got promoted within two months. And no one sold my data to do it."*
+> — Jennifer, Year of the Ox
+
+> *"In a world of surveillance capitalism, Red Horse Oracle is a breath of fresh air. Beautiful art, zero tracking."*
+> — Tech Privacy Advocate
+
+---
+
+## The Fire Horse Manifesto
+
+We believe:
+
+1. **Privacy is a right**, not a premium feature
+2. **AI can create beauty** without exploiting users
+3. **Ancient wisdom and modern technology** can coexist
+4. **Limited editions mean limited** — not artificial scarcity tactics
+5. **The internet can be better** than what Big Tech has made it
+
+Red Horse Oracle isn't just an app. It's a statement.
+
+**Stick it to the Man. Get your Oracle.**
+
+---
+
+## Links
+
+- **Live Application:** https://redhorseoracle.com
+- **Examples Gallery:** https://redhorseoracle.com/examples
+- **Free Reading:** https://redhorseoracle.com/free
+- **GitHub Repository:** https://github.com/lhiebert01/redhorse
 
 ---
 
@@ -152,15 +217,7 @@ The Oracle is strictly for entertainment purposes. We make no claims about the p
 For press inquiries, partnerships, or interview requests:
 
 **Email:** press@redhorseoracle.com
-**Website:** https://redhorse-omega.vercel.app/
-
----
-
-## Links
-
-- **Live Application:** https://redhorse-omega.vercel.app/
-- **Examples Gallery:** https://redhorse-omega.vercel.app/examples
-- **GitHub Repository:** https://github.com/lhiebert01/redhorse
+**Website:** https://redhorseoracle.com
 
 ---
 
@@ -168,11 +225,17 @@ For press inquiries, partnerships, or interview requests:
 
 ## 火马年 2026
 
-**The Fire Horse Returns**
+### The Fire Horse Returns
 
-*Your Oracle Awaits*
+**No Tracking. No Ads. No BS.**
+
+*Just Your Oracle.*
 
 🔥🐴🔥
+
+**Are you one of the 888?**
+
+[GET YOURS NOW →](https://redhorseoracle.com)
 
 </div>
 
@@ -181,3 +244,23 @@ For press inquiries, partnerships, or interview requests:
 ### Disclaimers
 
 Red Horse Oracle is strictly for entertainment purposes only. All prophecies, lucky numbers, and advice are AI-generated and should not be considered financial, legal, gambling, or relationship advice. AI-generated artwork is original and unique. The Fire Horse Oracle makes no guarantees about the accuracy or outcomes of any prophecy. Must be 18+ to purchase. © 2026 Red Horse Oracle. All rights reserved.
+
+---
+
+### For Hacker News / Tech Communities
+
+**Show HN: Red Horse Oracle — Privacy-first AI art generator with zero tracking**
+
+We built an AI-powered zodiac prophecy platform that:
+- Uses Gemini 3 Pro for text + image generation
+- Stores ZERO personally identifiable information
+- Has NO analytics, NO tracking, NO ads
+- Generates unique limited edition (888) digital talismans
+- Costs $8.88 with no subscription model
+
+Tech stack: Next.js 14, Supabase, Stripe, Vercel, Google Gemini 3 Pro
+
+Built as a demonstration that consumer AI apps don't need to exploit user privacy. AMA!
+
+GitHub: https://github.com/lhiebert01/redhorse
+Live: https://redhorseoracle.com
