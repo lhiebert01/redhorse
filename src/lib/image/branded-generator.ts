@@ -145,7 +145,7 @@ function createHeaderSvg(width: number, height: number, editionNumber: number, t
       <text x="${width / 2}" y="${height * 0.62}"
             font-family="Arial, sans-serif" font-size="${fontSize}px" font-weight="bold"
             fill="#000000" text-anchor="middle">
-        ✦ LIMITED EDITION #${editionNumber} of ${totalEditions} ✦
+        * LIMITED EDITION #${editionNumber} of ${totalEditions} *
       </text>
     </svg>
   `;
@@ -167,12 +167,12 @@ function createFooterSvg(
   const subtitleSize = Math.round(height * 0.14);
   const smallSize = Math.round(height * 0.11);
 
-  const modeEmoji = {
-    wealth: '🎲',
-    power: '⚔️',
-    love: '❤️',
-    shield: '🛡️',
-  }[focusMode.toLowerCase()] || '🔥';
+  const modeLabel = {
+    wealth: 'WEALTH',
+    power: 'POWER',
+    love: 'LOVE',
+    shield: 'SHIELD',
+  }[focusMode.toLowerCase()] || 'ORACLE';
 
   return `
     <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
@@ -200,21 +200,21 @@ function createFooterSvg(
       <text x="${width / 2}" y="${height * 0.48}"
             font-family="Arial, sans-serif" font-size="${subtitleSize}px"
             fill="#9ca3af" text-anchor="middle">
-        ${zodiacElement} ${zodiacSign} • ${modeEmoji} ${focusMode.charAt(0).toUpperCase() + focusMode.slice(1)} Oracle
+        ${zodiacElement} ${zodiacSign} - ${modeLabel} Oracle
       </text>
 
       <!-- Certificate line -->
       <text x="${width / 2}" y="${height * 0.70}"
             font-family="Arial, sans-serif" font-size="${smallSize}px"
             fill="#6b7280" text-anchor="middle">
-        🔥 AUTHENTIC • VERIFIED • Certificate #${certificateId}
+        AUTHENTIC - VERIFIED - Certificate #${certificateId}
       </text>
 
       <!-- Bottom branding -->
       <text x="${width / 2}" y="${height * 0.90}"
             font-family="Arial, sans-serif" font-size="${smallSize}px" font-weight="bold"
             fill="#ca8a04" text-anchor="middle">
-        redhorseoracle.com • Year of the Fire Horse 2026
+        redhorseoracle.com - Year of the Fire Horse 2026
       </text>
     </svg>
   `;
@@ -222,12 +222,12 @@ function createFooterSvg(
 
 /**
  * Create SVG for the maker's mark (circular seal)
- * Note: Using horse emoji instead of Chinese character because
- * Vercel servers don't have Chinese fonts installed
+ * Note: Only using ASCII characters because Vercel servers
+ * don't have Chinese/emoji fonts for SVG rendering
  */
 function createMakerMarkSvg(size: number): string {
   const fontSize = Math.round(size * 0.09);
-  const horseSize = Math.round(size * 0.22);
+  const mainSize = Math.round(size * 0.15);
 
   return `
     <svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
@@ -239,7 +239,7 @@ function createMakerMarkSvg(size: number): string {
 
       <!-- Outer circle -->
       <circle cx="${size / 2}" cy="${size / 2}" r="${size * 0.45}"
-              fill="rgba(0,0,0,0.8)" stroke="#ca8a04" stroke-width="2"
+              fill="rgba(0,0,0,0.85)" stroke="#ca8a04" stroke-width="2"
               filter="url(#markShadow)"/>
 
       <!-- Inner styling -->
@@ -247,21 +247,21 @@ function createMakerMarkSvg(size: number): string {
               fill="none" stroke="#ca8a04" stroke-width="1" opacity="0.5"/>
 
       <!-- RED HORSE text -->
-      <text x="${size / 2}" y="${size * 0.28}"
+      <text x="${size / 2}" y="${size * 0.32}"
             font-family="Arial, sans-serif" font-size="${fontSize}px" font-weight="bold"
             fill="#ca8a04" text-anchor="middle">
         RED HORSE
       </text>
 
-      <!-- Fire Horse symbol (using fire + horse emoji for universal rendering) -->
-      <text x="${size / 2}" y="${size * 0.58}"
-            font-family="Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif" font-size="${horseSize}px"
+      <!-- ORACLE text -->
+      <text x="${size / 2}" y="${size * 0.55}"
+            font-family="Arial, sans-serif" font-size="${mainSize}px" font-weight="bold"
             fill="#dc2626" text-anchor="middle">
         ORACLE
       </text>
 
       <!-- 2026 -->
-      <text x="${size / 2}" y="${size * 0.78}"
+      <text x="${size / 2}" y="${size * 0.75}"
             font-family="Arial, sans-serif" font-size="${fontSize}px" font-weight="bold"
             fill="#ca8a04" text-anchor="middle">
         2026
@@ -418,7 +418,7 @@ function createWatermarkSvg(width: number, height: number): string {
           <text x="0" y="-${fontSize * 1.5}"
                 font-family="Arial, sans-serif" font-size="${fontSize * 1.5}px" font-weight="bold"
                 fill="rgba(255,215,0,0.25)" text-anchor="middle">
-            🐴 PREVIEW ONLY 🐴
+            * PREVIEW ONLY *
           </text>
           <text x="0" y="0"
                 font-family="Arial, sans-serif" font-size="${fontSize * 1.2}px" font-weight="bold"
@@ -451,12 +451,12 @@ function createShareableFooterSvg(
   const subtitleSize = Math.round(height * 0.16);
   const smallSize = Math.round(height * 0.14);
 
-  const modeEmoji = {
-    wealth: '🎲',
-    power: '⚔️',
-    love: '❤️',
-    shield: '🛡️',
-  }[focusMode.toLowerCase()] || '🔥';
+  const modeLabel = {
+    wealth: 'WEALTH',
+    power: 'POWER',
+    love: 'LOVE',
+    shield: 'SHIELD',
+  }[focusMode.toLowerCase()] || 'ORACLE';
 
   return `
     <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
@@ -484,14 +484,14 @@ function createShareableFooterSvg(
       <text x="${width / 2}" y="${height * 0.60}"
             font-family="Arial, sans-serif" font-size="${subtitleSize}px"
             fill="#9ca3af" text-anchor="middle">
-        ${zodiacElement} ${zodiacSign} • ${modeEmoji} ${focusMode.charAt(0).toUpperCase() + focusMode.slice(1)} Oracle
+        ${zodiacElement} ${zodiacSign} - ${modeLabel} Oracle
       </text>
 
       <!-- CTA instead of certificate -->
       <text x="${width / 2}" y="${height * 0.85}"
             font-family="Arial, sans-serif" font-size="${smallSize}px" font-weight="bold"
             fill="#ca8a04" text-anchor="middle">
-        🔥 Get yours at redhorseoracle.com • Year of the Fire Horse 2026
+        Get yours at redhorseoracle.com - Year of the Fire Horse 2026
       </text>
     </svg>
   `;
