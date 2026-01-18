@@ -595,24 +595,63 @@ export default function FreeReadingPage() {
               </p>
             </div>
 
-            {/* See What Others Have Received + Final CTA */}
+            {/* Get Your Oracle - Visual Equation + CTA */}
             <div className="bg-gradient-to-br from-yellow-900/20 to-red-900/20 border border-fire-gold/50 rounded-2xl p-6">
-              <p className="text-fire-gold text-base uppercase tracking-widest mb-3 text-center font-semibold">
-                See What Others Have Received
+              <p className="text-fire-gold text-base uppercase tracking-widest mb-4 text-center font-semibold">
+                Get Your {result.element} {result.animal} × Fire Horse Oracle
               </p>
-              <p className="text-gray-300 text-sm mb-4 text-center">
-                Your <span className="text-fire-gold font-semibold">Authenticated Limited Edition Oracle</span> includes unique AI-generated digital art combining YOUR {result.element} {result.animal} with the Fire Horse — a masterpiece created just for you.
-              </p>
-              <div className="text-center mb-6">
-                <a
-                  href="/examples"
-                  className="inline-block bg-gradient-to-r from-fire-gold/20 to-yellow-900/30 border-2 border-fire-gold text-fire-gold font-bold text-base py-3 px-8 rounded-xl hover:bg-fire-gold/30 hover:scale-105 transition-all"
-                >
-                  🎨 View Example Gallery
-                </a>
-                <p className="text-gray-500 text-xs mt-2">
-                  12 sample oracles showing all zodiac animals with the Fire Horse
-                </p>
+
+              {/* Visual equation: Your Card + Fire Horse Card = Masterpiece */}
+              <div className="flex flex-col md:flex-row gap-3 items-center justify-center mb-6">
+                {/* User's Zodiac Card thumbnail */}
+                <div className="text-center">
+                  <div className="relative w-24 rounded-lg overflow-hidden border-2 border-fire-gold/50 shadow-lg">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`/assets/zodiac-badges/${result.element.toLowerCase()}-${result.animal.toLowerCase()}.jpeg`}
+                      alt={`${result.element} ${result.animal}`}
+                      className="w-full h-auto"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-black/70 py-1">
+                      <p className="text-white/70 text-[6px] text-center">redhorseoracle.com</p>
+                    </div>
+                  </div>
+                  <p className="text-fire-gold text-[10px] mt-1 font-semibold">Your {result.animal}</p>
+                </div>
+
+                {/* Plus sign */}
+                <div className="text-fire-gold text-2xl font-bold">+</div>
+
+                {/* Fire Horse Card thumbnail */}
+                <div className="text-center">
+                  <div className="relative w-24 rounded-lg overflow-hidden border-2 border-red-500/50 shadow-lg">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/assets/zodiac-badges/fire-horse.jpeg"
+                      alt="Fire Horse 2026"
+                      className="w-full h-auto"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-black/70 py-1">
+                      <p className="text-white/70 text-[6px] text-center">redhorseoracle.com</p>
+                    </div>
+                  </div>
+                  <p className="text-red-400 text-[10px] mt-1 font-semibold">Fire Horse 2026</p>
+                </div>
+
+                {/* Equals sign */}
+                <div className="text-fire-gold text-2xl font-bold">=</div>
+
+                {/* Result */}
+                <div className="text-center">
+                  <p className="text-white text-base font-bold">Your Unique</p>
+                  <p className="text-fire-gold text-lg font-bold">Masterpiece</p>
+                  <a
+                    href="/examples"
+                    className="text-green-400 hover:text-green-300 text-[10px] underline"
+                  >
+                    See Examples →
+                  </a>
+                </div>
               </div>
 
               {/* The Four Paths */}
