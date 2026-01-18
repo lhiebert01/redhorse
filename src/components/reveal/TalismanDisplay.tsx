@@ -61,7 +61,7 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
           <div className="w-14 h-14 border-2 border-fire-gold/60 rounded-full flex items-center justify-center bg-black/80 rotate-12">
             <div className="text-center">
               <p className="text-fire-gold text-[6px] font-bold leading-tight">RED HORSE</p>
-              <p className="text-red-500 text-sm leading-none">馬</p>
+              <p className="text-red-500 text-sm leading-none chinese-text">馬</p>
               <p className="text-fire-gold text-[5px]">2026</p>
             </div>
           </div>

@@ -160,7 +160,7 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement }: ZodiacSumma
             <h3 className="text-xl font-bold text-fire-gold">
               {element ? `${element} ${animal}` : animal}
             </h3>
-            <p className="text-2xl text-red-300">
+            <p className="text-2xl text-red-300 chinese-text">
               {elementChinese}{animalChinese}
             </p>
             <p className={`text-sm ${getCompatibilityColor()}`}>

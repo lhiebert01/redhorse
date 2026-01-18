@@ -38,6 +38,12 @@ Fire Horse returns once every 60 years. Get yours!
   // Use SHAREABLE image (watermarked, no cert) for sharing
   // Falls back to raw image if shareable not available
   const shareableImageUrl = prophecy.shareable_image_url || prophecy.image_url;
+  const hasShareableImage = !!prophecy.shareable_image_url;
+
+  // Debug log for troubleshooting
+  console.log('[ShareButtons] shareable_image_url:', prophecy.shareable_image_url);
+  console.log('[ShareButtons] image_url:', prophecy.image_url);
+  console.log('[ShareButtons] using:', shareableImageUrl);
 
   // Share App Link (text only, no image)
   const handleShareApp = async () => {
@@ -69,12 +75,24 @@ Fire Horse returns once every 60 years. Get yours!
 
   // Share Image (watermarked image + short text)
   const handleShareImage = async () => {
-    if (!shareableImageUrl) return;
+    if (!shareableImageUrl) {
+      console.error('[ShareButtons] No shareable image URL available');
+      alert('No shareable image available. Please try again or contact support.');
+      return;
+    }
+
+    console.log('[ShareButtons] Attempting to share image:', shareableImageUrl);
 
     // Try native share with image if supported
     if (navigator.share && navigator.canShare) {
       try {
-        const response = await fetch(shareableImageUrl);
+        console.log('[ShareButtons] Fetching image for native share...');
+        const response = await fetch(shareableImageUrl, { mode: 'cors' });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
+        }
+
         const blob = await response.blob();
         const file = new File([blob], 'fire-horse-oracle-2026.png', { type: 'image/png' });
 
@@ -86,8 +104,8 @@ Fire Horse returns once every 60 years. Get yours!
           });
           return;
         }
-      } catch {
-        console.log('Native image share not available, copying URL');
+      } catch (err) {
+        console.error('[ShareButtons] Native image share failed:', err);
       }
     }
 
@@ -97,7 +115,9 @@ Fire Horse returns once every 60 years. Get yours!
       setImageCopied(true);
       setTimeout(() => setImageCopied(false), 2000);
     } catch (error) {
-      console.error('Copy image URL failed:', error);
+      console.error('[ShareButtons] Copy image URL failed:', error);
+      // Final fallback: open image in new tab
+      window.open(shareableImageUrl, '_blank');
     }
   };
 
@@ -149,22 +169,35 @@ Fire Horse returns once every 60 years. Get yours!
 
         {/* Share Image (watermarked) */}
         {shareableImageUrl && (
-          <button
-            onClick={handleShareImage}
-            className="w-full bg-gradient-to-r from-yellow-700 via-yellow-600 to-yellow-700
-                       text-black font-bold py-3 px-6 rounded-xl
-                       hover:from-yellow-600 hover:via-yellow-500 hover:to-yellow-600
-                       active:scale-95 transition-all
-                       flex items-center justify-center gap-2"
-          >
-            <span>{imageCopied ? '✓' : '🖼️'}</span>
-            {imageCopied ? 'Image URL Copied!' : 'Share Talisman Image'}
-          </button>
+          <div className="space-y-2">
+            <button
+              onClick={handleShareImage}
+              className="w-full bg-gradient-to-r from-yellow-700 via-yellow-600 to-yellow-700
+                         text-black font-bold py-3 px-6 rounded-xl
+                         hover:from-yellow-600 hover:via-yellow-500 hover:to-yellow-600
+                         active:scale-95 transition-all
+                         flex items-center justify-center gap-2"
+            >
+              <span>{imageCopied ? '✓' : '🖼️'}</span>
+              {imageCopied ? 'Image URL Copied!' : 'Share Talisman Image'}
+            </button>
+            {/* Direct link to view/download shareable image */}
+            <a
+              href={shareableImageUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full text-center text-xs text-gray-400 hover:text-fire-gold underline"
+            >
+              View shareable image in new tab
+            </a>
+          </div>
         )}
 
         {/* Note about watermark */}
         <p className="text-gray-500 text-[10px] text-center">
-          Shared images include watermark • Your certificate stays private
+          {hasShareableImage
+            ? 'Shared images include watermark • Your certificate stays private'
+            : '⚠️ Watermarked image not available - sharing raw image'}
         </p>
       </div>
 

@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Google Fonts with Chinese support */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=Noto+Serif+SC:wght@400;700&display=swap');
+
 :root {
   --fire-red: #8b0000;
   --fire-gold: #ffd700;
@@ -11,7 +14,12 @@
 body {
   background-color: var(--fire-black);
   color: #dc2626;
-  font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+  font-family: Georgia, Cambria, 'Times New Roman', Times, 'Noto Serif SC', 'PingFang SC', 'Microsoft YaHei', serif;
+}
+
+/* Chinese text styling - ensure proper font rendering */
+.chinese-text {
+  font-family: 'Noto Serif SC', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', 'SimHei', serif;
 }
 
 /* Custom scrollbar */
