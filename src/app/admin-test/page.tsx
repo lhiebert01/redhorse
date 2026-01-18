@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
+import GeneratingState from '@/components/reveal/GeneratingState';
+import { getChineseZodiac } from '@/lib/zodiac/calculator';
 
 const FOCUS_MODES = [
   { id: 'wealth', name: 'Wealth Mode', description: '6 Lucky Numbers (XX-XX-XX-XX-XX-XX)' },
@@ -271,6 +273,7 @@ function AdminTestContent() {
   const [focusMode, setFocusMode] = useState('wealth');
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState('');
+  const [generatingZodiac, setGeneratingZodiac] = useState<{sign: string, element: string} | null>(null);
 
   // Check sessionStorage on mount OR auto-authenticate if skip_pin
   useEffect(() => {
@@ -319,6 +322,15 @@ function AdminTestContent() {
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    // Calculate zodiac to show in generating state
+    try {
+      const zodiac = getChineseZodiac(birthDate);
+      setGeneratingZodiac({ sign: zodiac.animal, element: zodiac.element });
+    } catch {
+      setGeneratingZodiac(null);
+    }
+
     setIsGenerating(true);
 
     try {
@@ -345,8 +357,20 @@ function AdminTestContent() {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
       setIsGenerating(false);
+      setGeneratingZodiac(null);
     }
   };
+
+  // Show bouncing pony animation while generating
+  if (isGenerating) {
+    return (
+      <GeneratingState
+        zodiacSign={generatingZodiac?.sign}
+        zodiacElement={generatingZodiac?.element}
+        focusMode={focusMode}
+      />
+    );
+  }
 
   // PIN Entry Screen
   if (!isAuthenticated) {
