@@ -11,56 +11,53 @@ export default function ShareButtons({ prophecy }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
   const [imageCopied, setImageCopied] = useState(false);
 
-  // Direct link to view THIS specific oracle (watermarked version will show immediately)
-  const oracleViewUrl = `https://redhorseoracle.com/reveal?session_id=${prophecy.stripe_session_id}`;
+  // Share URL is just the homepage - NOT the reveal page
+  // We don't want to expose the authenticated reveal page to others
+  const shareUrl = 'https://redhorseoracle.com';
 
-  // Marketing-focused share text with strong CTA
-  const shareText = `🐎🔥 My Fire Horse Oracle for 2026: "${prophecy.main_text}"
+  // Simple share text - just promotes the app, no reveal URL
+  const shareText = `🐴🔥 I just got my Fire Horse Oracle for 2026!
 
-🔥 See my ${prophecy.zodiac_element} ${prophecy.zodiac_sign} prophecy! Limited Edition #${prophecy.edition_number} of 888.
+My prophecy: "${prophecy.main_text}"
 
-👉 View my oracle: ${oracleViewUrl}
+The Fire Horse returns only once every 60 years. Will 2026 be YOUR year?
 
-Will 2026 be YOUR year to bet on yourself? To become Healthy, Wealthy, and Wise? Or keep the status quo and do nothing?
+Get yours → ${shareUrl}
 
-🛡️ STICK IT TO THE MAN! No Facebook tracking. No ads. No data harvesting. Just a TRUE AUTHENTICATED Fire Horse Oracle built with Privacy by Design.
+#FireHorse2026 #YearOfTheHorse #LimitedEdition`;
 
-The world's FIRST, ONLY, and BEST Red Horse Oracle platform. Free zodiac readings + Paid Limited Edition AI masterpiece artwork.
+  // Shorter text for Twitter (280 char limit)
+  const twitterText = `🐴🔥 My Fire Horse Oracle: "${prophecy.main_text}"
 
-Are YOU one of the 888 people on the planet who will own one? This opportunity only comes once every 60 years. 🐴🔥
+Fire Horse returns once every 60 years. Get yours!
 
-Get YOUR prophecy → RedHorseOracle.com
-
-#FireHorse2026 #YearOfTheHorse #PrivacyByDesign #NoTracking #BetOnYourself #LimitedEdition`;
-
-  // Share URL points to this specific oracle
-  const shareUrl = oracleViewUrl;
+#FireHorse2026`;
 
   // Use SHAREABLE image (watermarked, no cert) for sharing
-  // Falls back to branded, then raw if shareable not available
-  const shareableImageUrl = prophecy.shareable_image_url || prophecy.branded_image_url || prophecy.image_url;
+  // Falls back to raw image if shareable not available
+  const shareableImageUrl = prophecy.shareable_image_url || prophecy.image_url;
 
-  const handleNativeShare = async () => {
+  // Share App Link (text only, no image)
+  const handleShareApp = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'My Fire Horse Prophecy',
+          title: 'Fire Horse Oracle 2026',
           text: shareText,
           url: shareUrl,
         });
-      } catch (error) {
-        // User cancelled or error
-        console.log('Share cancelled');
+      } catch {
+        // User cancelled or error - fallback to copy
+        handleCopy();
       }
     } else {
-      // Fallback to copy
       handleCopy();
     }
   };
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+      await navigator.clipboard.writeText(`${shareText}`);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
@@ -68,6 +65,7 @@ Get YOUR prophecy → RedHorseOracle.com
     }
   };
 
+  // Share Image (watermarked image + short text)
   const handleShareImage = async () => {
     if (!shareableImageUrl) return;
 
@@ -76,17 +74,17 @@ Get YOUR prophecy → RedHorseOracle.com
       try {
         const response = await fetch(shareableImageUrl);
         const blob = await response.blob();
-        const file = new File([blob], 'fire-horse-talisman.png', { type: 'image/png' });
+        const file = new File([blob], 'fire-horse-oracle-2026.png', { type: 'image/png' });
 
         if (navigator.canShare({ files: [file] })) {
           await navigator.share({
-            title: 'My Fire Horse Talisman',
-            text: shareText,
+            title: 'My Fire Horse Oracle',
+            text: `🐴🔥 My Fire Horse Oracle: "${prophecy.main_text}" - Get yours at redhorseoracle.com`,
             files: [file],
           });
           return;
         }
-      } catch (error) {
+      } catch {
         console.log('Native image share not available, copying URL');
       }
     }
@@ -101,23 +99,25 @@ Get YOUR prophecy → RedHorseOracle.com
     }
   };
 
+  // Twitter share (text only - Twitter handles image preview from URL)
   const handleTwitterShare = () => {
-    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(twitterText)}&url=${encodeURIComponent(shareUrl)}`;
     window.open(twitterUrl, '_blank', 'width=600,height=400');
   };
 
   return (
     <div className="flex flex-col gap-2 w-full">
+      {/* Row 1: Share App Link + Twitter */}
       <div className="flex gap-2 w-full">
-        {/* Native Share (Mobile) or Copy (Desktop) */}
+        {/* Share App Link (text/link only) */}
         <button
-          onClick={handleNativeShare}
+          onClick={handleShareApp}
           className="flex-1 bg-red-900 text-white font-bold py-3 px-6 rounded-xl
                      hover:bg-red-800 active:scale-95 transition-all
                      flex items-center justify-center gap-2"
         >
           <span>{copied ? '✓' : '🔗'}</span>
-          {copied ? 'Copied!' : 'Share Page'}
+          {copied ? 'Copied!' : 'Share App'}
         </button>
 
         {/* Twitter/X */}
@@ -131,7 +131,7 @@ Get YOUR prophecy → RedHorseOracle.com
         </button>
       </div>
 
-      {/* Share Talisman Image - Only show if branded image is available */}
+      {/* Row 2: Share Image (watermarked) */}
       {shareableImageUrl && (
         <button
           onClick={handleShareImage}
@@ -145,6 +145,11 @@ Get YOUR prophecy → RedHorseOracle.com
           {imageCopied ? 'Image URL Copied!' : 'Share Talisman Image'}
         </button>
       )}
+
+      {/* Note about watermark */}
+      <p className="text-gray-500 text-[10px] text-center">
+        Shared images include watermark • Your certificate stays private
+      </p>
     </div>
   );
 }

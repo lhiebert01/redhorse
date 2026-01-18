@@ -71,20 +71,11 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
         <h1 className="text-3xl md:text-4xl font-bold mb-2 text-center text-fire-gold text-glow-gold">
           YOUR 2026 DECREE
         </h1>
-        <p className="text-red-400 text-sm mb-2">The Oracle has spoken</p>
+        <p className="text-red-400 text-sm mb-4">The Oracle has spoken</p>
 
-        {/* Edition Badge */}
-        {prophecy.edition_number && prophecy.total_editions && (
-          <div className="bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 rounded-full px-6 pt-1 pb-2.5 mb-4 flex items-center justify-center">
-            <p className="text-black text-xs font-bold tracking-wide leading-none">
-              ✦ LIMITED EDITION #{prophecy.edition_number} of {prophecy.total_editions} ✦
-            </p>
-          </div>
-        )}
-
-        {/* Talisman Image - Using regular img for html2canvas compatibility */}
+        {/* Talisman Image - Show BRANDED image (with Limited Edition + Certificate baked in) */}
         <div className="relative border-4 border-fire-gold rounded-2xl overflow-hidden shadow-2xl glow-gold bg-black">
-          {prophecy.image_url ? (
+          {(prophecy.branded_image_url || prophecy.image_url) ? (
             <>
               {!imageLoaded && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black z-10">
@@ -93,7 +84,7 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
               )}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={prophecy.image_url}
+                src={prophecy.branded_image_url ?? prophecy.image_url ?? undefined}
                 alt="Your Fire Horse Talisman"
                 crossOrigin="anonymous"
                 className={`w-full max-w-[400px] h-auto transition-opacity duration-500 ${
@@ -207,9 +198,6 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
 
         {/* Share Buttons */}
         <div className="border-t border-fire-gold/20 pt-4 mt-2">
-          <p className="text-gray-400 text-xs text-center mb-3">
-            Share your oracle (watermarked preview - certificate not included)
-          </p>
           <ShareButtons prophecy={prophecy} />
         </div>
       </div>
