@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback, Suspense, useRef } from 'react';
+import { useEffect, useState, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getSupabaseClient } from '@/lib/supabase/client';
 import { Prophecy } from '@/types/prophecy';
@@ -8,7 +8,7 @@ import TalismanDisplay from '@/components/reveal/TalismanDisplay';
 import ZodiacSummary from '@/components/reveal/ZodiacSummary';
 import GeneratingState from '@/components/reveal/GeneratingState';
 
-// Minimum time to show loading animation (15 seconds) - ONLY for active generation
+// Minimum time to show loading animation (15 seconds)
 const MIN_LOADING_TIME_MS = 15000;
 
 function RevealContent() {
@@ -19,11 +19,8 @@ function RevealContent() {
   const [prophecy, setProphecy] = useState<Prophecy | null>(null);
   const [status, setStatus] = useState<'loading' | 'generating' | 'ready' | 'error'>('loading');
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [loadingStartTime] = useState<number>(Date.now());
   const [minTimeElapsed, setMinTimeElapsed] = useState<boolean>(false);
-
-  // Track if prophecy was already completed when page loaded (shared link vs fresh generation)
-  const wasAlreadyCompleted = useRef<boolean>(false);
-  const isFirstFetch = useRef<boolean>(true);
 
   const fetchProphecy = useCallback(async () => {
     if (!sessionId) return;
@@ -39,19 +36,12 @@ function RevealContent() {
       if (error || !data) {
         // Not found yet - webhook may still be processing
         setStatus('generating');
-        isFirstFetch.current = false;
         return;
       }
 
       setProphecy(data as Prophecy);
 
       if (data.status === 'completed') {
-        // If this is the first fetch and it's already completed,
-        // this is a shared link - skip the loading animation
-        if (isFirstFetch.current) {
-          wasAlreadyCompleted.current = true;
-          setMinTimeElapsed(true); // Skip the minimum loading time
-        }
         setStatus('ready');
       } else if (data.status === 'failed') {
         setStatus('error');
@@ -59,12 +49,9 @@ function RevealContent() {
       } else {
         setStatus('generating');
       }
-
-      isFirstFetch.current = false;
     } catch (err) {
       console.error('Error fetching prophecy:', err);
       setStatus('generating');
-      isFirstFetch.current = false;
     }
   }, [sessionId]);
 
@@ -113,11 +100,8 @@ function RevealContent() {
     };
   }, [sessionId, fetchProphecy]);
 
-  // Ensure minimum loading time for the animation - ONLY for fresh generations
+  // Ensure minimum loading time for the animation
   useEffect(() => {
-    // Don't start the timer if already completed (shared link)
-    if (wasAlreadyCompleted.current) return;
-
     const timer = setTimeout(() => {
       setMinTimeElapsed(true);
     }, MIN_LOADING_TIME_MS);
@@ -125,11 +109,9 @@ function RevealContent() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Calculate if we should show loading:
-  // - For shared links (wasAlreadyCompleted): Show immediately when ready
-  // - For fresh generation: Wait for min time + completion
+  // Calculate if we should show loading (either not ready OR min time hasn't elapsed)
   const shouldShowLoading = (status === 'loading' || status === 'generating') ||
-    (status === 'ready' && !minTimeElapsed && !wasAlreadyCompleted.current);
+    (status === 'ready' && !minTimeElapsed);
 
   if (status === 'error') {
     return (

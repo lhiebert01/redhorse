@@ -61,7 +61,7 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
           <div className="w-14 h-14 border-2 border-fire-gold/60 rounded-full flex items-center justify-center bg-black/80 rotate-12">
             <div className="text-center">
               <p className="text-fire-gold text-[6px] font-bold leading-tight">RED HORSE</p>
-              <p className="text-red-500 text-sm leading-none chinese-text">馬</p>
+              <p className="text-red-500 text-sm leading-none">馬</p>
               <p className="text-fire-gold text-[5px]">2026</p>
             </div>
           </div>
@@ -71,11 +71,20 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
         <h1 className="text-3xl md:text-4xl font-bold mb-2 text-center text-fire-gold text-glow-gold">
           YOUR 2026 DECREE
         </h1>
-        <p className="text-red-400 text-sm mb-4">The Oracle has spoken</p>
+        <p className="text-red-400 text-sm mb-2">The Oracle has spoken</p>
 
-        {/* Talisman Image - Show BRANDED image (with Limited Edition + Certificate baked in) */}
+        {/* Edition Badge */}
+        {prophecy.edition_number && prophecy.total_editions && (
+          <div className="bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 rounded-full px-6 pt-1 pb-2.5 mb-4 flex items-center justify-center">
+            <p className="text-black text-xs font-bold tracking-wide leading-none">
+              ✦ LIMITED EDITION #{prophecy.edition_number} of {prophecy.total_editions} ✦
+            </p>
+          </div>
+        )}
+
+        {/* Talisman Image - Using regular img for html2canvas compatibility */}
         <div className="relative border-4 border-fire-gold rounded-2xl overflow-hidden shadow-2xl glow-gold bg-black">
-          {(prophecy.branded_image_url || prophecy.image_url) ? (
+          {prophecy.image_url ? (
             <>
               {!imageLoaded && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black z-10">
@@ -84,7 +93,7 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
               )}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={prophecy.branded_image_url ?? prophecy.image_url ?? undefined}
+                src={prophecy.image_url}
                 alt="Your Fire Horse Talisman"
                 crossOrigin="anonymous"
                 className={`w-full max-w-[400px] h-auto transition-opacity duration-500 ${
@@ -136,14 +145,6 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
 
           {/* Authenticity Certificate Footer */}
           <div className="border-t border-fire-gold/30 pt-4 mt-4 w-full">
-            {/* Edition Number - Prominent Display */}
-            {prophecy.edition_number && (
-              <div className="text-center mb-3 bg-fire-gold/10 border border-fire-gold/30 rounded-lg py-2 px-4">
-                <p className="text-fire-gold text-lg font-bold">
-                  LIMITED EDITION #{prophecy.edition_number}
-                </p>
-              </div>
-            )}
             <div className="flex items-center justify-between text-xs">
               <div className="flex items-center gap-2">
                 <span className="text-fire-gold">🔥</span>
@@ -154,9 +155,11 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
                 <p className="text-fire-gold font-bold">redhorseoracle.com</p>
               </div>
             </div>
-            <p className="text-center text-white text-xs font-bold mt-3">
-              Certificate #{prophecy.id.slice(0, 8).toUpperCase()} • Year of the Fire Horse 2026
-            </p>
+            {prophecy.edition_number && (
+              <p className="text-center text-white text-xs font-bold mt-3">
+                Certificate #{prophecy.id.slice(0, 8).toUpperCase()} • Year of the Fire Horse 2026
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -204,6 +207,9 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
 
         {/* Share Buttons */}
         <div className="border-t border-fire-gold/20 pt-4 mt-2">
+          <p className="text-gray-400 text-xs text-center mb-3">
+            Share your oracle (watermarked preview - certificate not included)
+          </p>
           <ShareButtons prophecy={prophecy} />
         </div>
       </div>

@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Prophecy } from '@/types/prophecy';
-import ShareModal from './ShareModal';
 
 interface ShareButtonsProps {
   prophecy: Prophecy;
@@ -11,61 +10,43 @@ interface ShareButtonsProps {
 export default function ShareButtons({ prophecy }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
   const [imageCopied, setImageCopied] = useState(false);
-  const [showShareModal, setShowShareModal] = useState(false);
 
-  // Share URL is just the homepage - NOT the reveal page
-  // We don't want to expose the authenticated reveal page to others
+  // Marketing-focused share text with strong CTA
+  const shareText = `🐎🔥 My Fire Horse Oracle for 2026: "${prophecy.main_text}"
+
+The Year of the Fire Horse only comes every 60 years! Limited Edition oracles available now.
+
+🔥 Get YOUR personalized prophecy before they sell out → RedHorseOracle.com
+
+#FireHorse2026 #YearOfTheHorse #ChineseZodiac #LimitedEdition`;
+
   const shareUrl = 'https://redhorseoracle.com';
 
-  // Simple share text - just promotes the app, no reveal URL
-  const shareText = `🐴🔥 I just got my Fire Horse Oracle for 2026!
-
-My prophecy: "${prophecy.main_text}"
-
-The Fire Horse returns only once every 60 years. Will 2026 be YOUR year?
-
-Get yours → ${shareUrl}
-
-#FireHorse2026 #YearOfTheHorse #LimitedEdition`;
-
-  // Shorter text for Twitter (280 char limit)
-  const twitterText = `🐴🔥 My Fire Horse Oracle: "${prophecy.main_text}"
-
-Fire Horse returns once every 60 years. Get yours!
-
-#FireHorse2026`;
-
   // Use SHAREABLE image (watermarked, no cert) for sharing
-  // Falls back to raw image if shareable not available
-  const shareableImageUrl = prophecy.shareable_image_url || prophecy.image_url;
-  const hasShareableImage = !!prophecy.shareable_image_url;
+  // Falls back to branded, then raw if shareable not available
+  const shareableImageUrl = prophecy.shareable_image_url || prophecy.branded_image_url || prophecy.image_url;
 
-  // Debug log for troubleshooting
-  console.log('[ShareButtons] shareable_image_url:', prophecy.shareable_image_url);
-  console.log('[ShareButtons] image_url:', prophecy.image_url);
-  console.log('[ShareButtons] using:', shareableImageUrl);
-
-  // Share App Link (text only, no image)
-  const handleShareApp = async () => {
+  const handleNativeShare = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Fire Horse Oracle 2026',
+          title: 'My Fire Horse Prophecy',
           text: shareText,
           url: shareUrl,
         });
-      } catch {
-        // User cancelled or error - fallback to copy
-        handleCopy();
+      } catch (error) {
+        // User cancelled or error
+        console.log('Share cancelled');
       }
     } else {
+      // Fallback to copy
       handleCopy();
     }
   };
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(`${shareText}`);
+      await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
@@ -73,39 +54,26 @@ Fire Horse returns once every 60 years. Get yours!
     }
   };
 
-  // Share Image (watermarked image + short text)
   const handleShareImage = async () => {
-    if (!shareableImageUrl) {
-      console.error('[ShareButtons] No shareable image URL available');
-      alert('No shareable image available. Please try again or contact support.');
-      return;
-    }
-
-    console.log('[ShareButtons] Attempting to share image:', shareableImageUrl);
+    if (!shareableImageUrl) return;
 
     // Try native share with image if supported
     if (navigator.share && navigator.canShare) {
       try {
-        console.log('[ShareButtons] Fetching image for native share...');
-        const response = await fetch(shareableImageUrl, { mode: 'cors' });
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
-        }
-
+        const response = await fetch(shareableImageUrl);
         const blob = await response.blob();
-        const file = new File([blob], 'fire-horse-oracle-2026.png', { type: 'image/png' });
+        const file = new File([blob], 'fire-horse-talisman.png', { type: 'image/png' });
 
         if (navigator.canShare({ files: [file] })) {
           await navigator.share({
-            title: 'My Fire Horse Oracle',
-            text: `🐴🔥 My Fire Horse Oracle: "${prophecy.main_text}" - Get yours at redhorseoracle.com`,
+            title: 'My Fire Horse Talisman',
+            text: shareText,
             files: [file],
           });
           return;
         }
-      } catch (err) {
-        console.error('[ShareButtons] Native image share failed:', err);
+      } catch (error) {
+        console.log('Native image share not available, copying URL');
       }
     }
 
@@ -115,98 +83,54 @@ Fire Horse returns once every 60 years. Get yours!
       setImageCopied(true);
       setTimeout(() => setImageCopied(false), 2000);
     } catch (error) {
-      console.error('[ShareButtons] Copy image URL failed:', error);
-      // Final fallback: open image in new tab
-      window.open(shareableImageUrl, '_blank');
+      console.error('Copy image URL failed:', error);
     }
   };
 
-  // Twitter share (text only - Twitter handles image preview from URL)
   const handleTwitterShare = () => {
-    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(twitterText)}&url=${encodeURIComponent(shareUrl)}`;
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
     window.open(twitterUrl, '_blank', 'width=600,height=400');
   };
 
   return (
-    <>
-      <div className="flex flex-col gap-2 w-full">
-        {/* PRIMARY: Create Social Media Post Button */}
+    <div className="flex flex-col gap-2 w-full">
+      <div className="flex gap-2 w-full">
+        {/* Native Share (Mobile) or Copy (Desktop) */}
         <button
-          onClick={() => setShowShareModal(true)}
-          className="w-full bg-gradient-to-r from-purple-600 via-pink-500 to-red-500
-                     text-white font-bold py-4 px-6 rounded-xl
-                     hover:from-purple-500 hover:via-pink-400 hover:to-red-400
-                     hover:scale-[1.02] active:scale-95 transition-all
-                     flex items-center justify-center gap-2 shadow-lg"
+          onClick={handleNativeShare}
+          className="flex-1 bg-red-900 text-white font-bold py-3 px-6 rounded-xl
+                     hover:bg-red-800 active:scale-95 transition-all
+                     flex items-center justify-center gap-2"
         >
-          <span>🚀</span>
-          Create Social Media Post
+          <span>{copied ? '✓' : '🔗'}</span>
+          {copied ? 'Copied!' : 'Share Page'}
         </button>
 
-        {/* Quick Share Row: Simple Share + Twitter */}
-        <div className="flex gap-2 w-full">
-          {/* Share App Link (text/link only) */}
-          <button
-            onClick={handleShareApp}
-            className="flex-1 bg-red-900 text-white font-bold py-3 px-6 rounded-xl
-                       hover:bg-red-800 active:scale-95 transition-all
-                       flex items-center justify-center gap-2"
-          >
-            <span>{copied ? '✓' : '🔗'}</span>
-            {copied ? 'Copied!' : 'Quick Share'}
-          </button>
-
-          {/* Twitter/X */}
-          <button
-            onClick={handleTwitterShare}
-            className="bg-black border border-gray-700 text-white font-bold py-3 px-4 rounded-xl
-                       hover:bg-gray-900 active:scale-95 transition-all"
-            title="Share on X"
-          >
-            𝕏
-          </button>
-        </div>
-
-        {/* Share Image (watermarked) */}
-        {shareableImageUrl && (
-          <div className="space-y-2">
-            <button
-              onClick={handleShareImage}
-              className="w-full bg-gradient-to-r from-yellow-700 via-yellow-600 to-yellow-700
-                         text-black font-bold py-3 px-6 rounded-xl
-                         hover:from-yellow-600 hover:via-yellow-500 hover:to-yellow-600
-                         active:scale-95 transition-all
-                         flex items-center justify-center gap-2"
-            >
-              <span>{imageCopied ? '✓' : '🖼️'}</span>
-              {imageCopied ? 'Image URL Copied!' : 'Share Talisman Image'}
-            </button>
-            {/* Direct link to view/download shareable image */}
-            <a
-              href={shareableImageUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full text-center text-xs text-gray-400 hover:text-fire-gold underline"
-            >
-              View shareable image in new tab
-            </a>
-          </div>
-        )}
-
-        {/* Note about watermark */}
-        <p className="text-gray-500 text-[10px] text-center">
-          {hasShareableImage
-            ? 'Shared images include watermark • Your certificate stays private'
-            : '⚠️ Watermarked image not available - sharing raw image'}
-        </p>
+        {/* Twitter/X */}
+        <button
+          onClick={handleTwitterShare}
+          className="bg-black border border-gray-700 text-white font-bold py-3 px-4 rounded-xl
+                     hover:bg-gray-900 active:scale-95 transition-all"
+          title="Share on X"
+        >
+          𝕏
+        </button>
       </div>
 
-      {/* Share Modal */}
-      <ShareModal
-        prophecy={prophecy}
-        isOpen={showShareModal}
-        onClose={() => setShowShareModal(false)}
-      />
-    </>
+      {/* Share Talisman Image - Only show if branded image is available */}
+      {shareableImageUrl && (
+        <button
+          onClick={handleShareImage}
+          className="w-full bg-gradient-to-r from-yellow-700 via-yellow-600 to-yellow-700
+                     text-black font-bold py-3 px-6 rounded-xl
+                     hover:from-yellow-600 hover:via-yellow-500 hover:to-yellow-600
+                     active:scale-95 transition-all
+                     flex items-center justify-center gap-2"
+        >
+          <span>{imageCopied ? '✓' : '🖼️'}</span>
+          {imageCopied ? 'Image URL Copied!' : 'Share Talisman Image'}
+        </button>
+      )}
+    </div>
   );
 }
