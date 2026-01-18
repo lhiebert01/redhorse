@@ -595,83 +595,24 @@ export default function FreeReadingPage() {
               </p>
             </div>
 
-            {/* Your Oracle Awaits - Fire Horse Hero + Zodiac Card */}
+            {/* See What Others Have Received + Final CTA */}
             <div className="bg-gradient-to-br from-yellow-900/20 to-red-900/20 border border-fire-gold/50 rounded-2xl p-6">
-              <p className="text-fire-gold text-base uppercase tracking-widest mb-4 text-center font-semibold">
-                Your {result.element} {result.animal} × Fire Horse Oracle Awaits
+              <p className="text-fire-gold text-base uppercase tracking-widest mb-3 text-center font-semibold">
+                See What Others Have Received
               </p>
-
-              {/* Large Fire Horse Hero Image */}
-              <div className="relative w-full max-w-md mx-auto mb-6">
-                <div className="relative rounded-xl overflow-hidden border-2 border-fire-gold/50 shadow-xl">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/assets/Year-of-the-Horse-2026-v2.jpeg"
-                    alt="Year of the Fire Horse 2026"
-                    className="w-full h-auto"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                  <div className="absolute bottom-4 left-0 right-0 text-center">
-                    <p className="text-fire-gold text-lg font-bold">Year of the Fire Horse 2026</p>
-                    <p className="text-white/80 text-sm">A once-in-60-year event</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Side by side: Zodiac Card + CTA */}
-              <div className="flex flex-col md:flex-row gap-4 items-center justify-center mb-6">
-                {/* Zodiac Badge Card thumbnail with watermark */}
-                <div className="relative w-40 flex-shrink-0">
-                  <div className="relative rounded-lg overflow-hidden border-2 border-fire-gold/50 shadow-lg">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={`/assets/zodiac-badges/${result.element.toLowerCase()}-${result.animal.toLowerCase()}.jpeg`}
-                      alt={`${result.element} ${result.animal} Digital Art Card`}
-                      className="w-full h-auto"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent py-2 px-1">
-                      <p className="text-white/60 text-[8px] text-center">
-                        redhorseoracle.com
-                      </p>
-                    </div>
-                  </div>
-                  <p className="text-center text-fire-gold text-xs mt-1 font-semibold">
-                    Your {result.element} {result.animal}
-                  </p>
-                </div>
-
-                {/* Plus sign */}
-                <div className="text-fire-gold text-3xl font-bold">+</div>
-
-                {/* Fire Horse icon */}
-                <div className="text-center">
-                  <div className="text-6xl">🔥🐴</div>
-                  <p className="text-fire-gold text-xs font-semibold mt-1">Fire Horse 2026</p>
-                </div>
-
-                {/* Equals sign */}
-                <div className="text-fire-gold text-3xl font-bold">=</div>
-
-                {/* Result */}
-                <div className="text-center">
-                  <p className="text-white text-lg font-bold">Your Unique</p>
-                  <p className="text-fire-gold text-xl font-bold">Masterpiece</p>
-                </div>
-              </div>
-
-              <div className="bg-fire-gold/10 border border-fire-gold/40 rounded-xl p-4 mb-6">
-                <p className="text-fire-gold text-sm font-bold text-center mb-2">
-                  ✨ Get Your ONE-OF-A-KIND Oracle
-                </p>
-                <p className="text-gray-300 text-xs text-center leading-relaxed">
-                  Your <span className="text-fire-gold font-semibold">Authenticated Limited Edition Oracle</span> includes unique AI-generated digital art combining YOUR {result.element} {result.animal} WITH the Fire Horse in authentic Chinese artistic style — a masterpiece created just for you.
-                </p>
+              <p className="text-gray-300 text-sm mb-4 text-center">
+                Your <span className="text-fire-gold font-semibold">Authenticated Limited Edition Oracle</span> includes unique AI-generated digital art combining YOUR {result.element} {result.animal} with the Fire Horse — a masterpiece created just for you.
+              </p>
+              <div className="text-center mb-6">
                 <a
                   href="/examples"
-                  className="block text-center text-green-400 hover:text-green-300 text-xs mt-2 underline"
+                  className="inline-block bg-gradient-to-r from-fire-gold/20 to-yellow-900/30 border-2 border-fire-gold text-fire-gold font-bold text-base py-3 px-8 rounded-xl hover:bg-fire-gold/30 hover:scale-105 transition-all"
                 >
-                  View Sample Gallery →
+                  🎨 View Example Gallery
                 </a>
+                <p className="text-gray-500 text-xs mt-2">
+                  12 sample oracles showing all zodiac animals with the Fire Horse
+                </p>
               </div>
 
               {/* The Four Paths */}
