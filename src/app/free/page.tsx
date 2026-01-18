@@ -78,7 +78,7 @@ export default function FreeReadingPage() {
       {/* Hero Section */}
       <div className="bg-gradient-to-b from-red-950 to-black py-12 px-4">
         <div className="max-w-2xl mx-auto text-center">
-          <p className="text-red-400 text-sm uppercase tracking-widest mb-2">
+          <p className="text-red-400 text-2xl md:text-3xl uppercase tracking-widest mb-3 font-bold">
             Free 2026 Reading
           </p>
           <h1 className="text-3xl md:text-4xl font-bold text-fire-gold mb-4">
