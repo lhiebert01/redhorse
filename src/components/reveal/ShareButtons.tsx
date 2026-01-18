@@ -19,17 +19,19 @@ export default function ShareButtons({ prophecy }: ShareButtonsProps) {
 
 🔥 See my ${prophecy.zodiac_element} ${prophecy.zodiac_sign} prophecy! Limited Edition #${prophecy.edition_number} of 888.
 
-The Year of the Fire Horse only comes every 60 years!
-
 👉 View my oracle: ${oracleViewUrl}
 
-Will 2026 be YOUR year to bet on yourself? To improve your luck and become Healthy, Wealthy, and Wise? Or will you keep the status quo and do nothing?
+Will 2026 be YOUR year to bet on yourself? To become Healthy, Wealthy, and Wise? Or keep the status quo and do nothing?
 
-This is your once-in-60-years opportunity. 🐴🔥
+🛡️ STICK IT TO THE MAN! No Facebook tracking. No ads. No data harvesting. Just a TRUE AUTHENTICATED Fire Horse Oracle built with Privacy by Design.
 
-Get YOUR personalized prophecy → RedHorseOracle.com
+The world's FIRST, ONLY, and BEST Red Horse Oracle platform. Free zodiac readings + Paid Limited Edition AI masterpiece artwork.
 
-#FireHorse2026 #YearOfTheHorse #ChineseZodiac #LimitedEdition #BetOnYourself`;
+Are YOU one of the 888 people on the planet who will own one? This opportunity only comes once every 60 years. 🐴🔥
+
+Get YOUR prophecy → RedHorseOracle.com
+
+#FireHorse2026 #YearOfTheHorse #PrivacyByDesign #NoTracking #BetOnYourself #LimitedEdition`;
 
   // Share URL points to this specific oracle
   const shareUrl = oracleViewUrl;
