@@ -602,52 +602,52 @@ export default function FreeReadingPage() {
               </p>
 
               {/* Visual equation: Your Card + Fire Horse Card = Masterpiece */}
-              <div className="flex flex-col md:flex-row gap-3 items-center justify-center mb-6">
-                {/* User's Zodiac Card thumbnail */}
+              <div className="flex flex-col md:flex-row gap-4 items-center justify-center mb-6">
+                {/* User's Zodiac Card thumbnail - LARGER */}
                 <div className="text-center">
-                  <div className="relative w-24 rounded-lg overflow-hidden border-2 border-fire-gold/50 shadow-lg">
+                  <div className="relative w-36 rounded-xl overflow-hidden border-2 border-fire-gold/50 shadow-xl">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={`/assets/zodiac-badges/${result.element.toLowerCase()}-${result.animal.toLowerCase()}.jpeg`}
                       alt={`${result.element} ${result.animal}`}
                       className="w-full h-auto"
                     />
-                    <div className="absolute bottom-0 left-0 right-0 bg-black/70 py-1">
-                      <p className="text-white/70 text-[6px] text-center">redhorseoracle.com</p>
+                    <div className="absolute bottom-0 left-0 right-0 bg-black/70 py-1.5">
+                      <p className="text-white/70 text-[8px] text-center">redhorseoracle.com</p>
                     </div>
                   </div>
-                  <p className="text-fire-gold text-[10px] mt-1 font-semibold">Your {result.animal}</p>
+                  <p className="text-fire-gold text-xs mt-2 font-semibold">Your {result.animal}</p>
                 </div>
 
-                {/* Plus sign */}
-                <div className="text-fire-gold text-2xl font-bold">+</div>
+                {/* Plus sign - LARGER */}
+                <div className="text-fire-gold text-4xl font-bold">+</div>
 
-                {/* Fire Horse Card thumbnail */}
+                {/* Fire Horse Card thumbnail - LARGER */}
                 <div className="text-center">
-                  <div className="relative w-24 rounded-lg overflow-hidden border-2 border-red-500/50 shadow-lg">
+                  <div className="relative w-36 rounded-xl overflow-hidden border-2 border-red-500/50 shadow-xl">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src="/assets/zodiac-badges/fire-horse.jpeg"
                       alt="Fire Horse 2026"
                       className="w-full h-auto"
                     />
-                    <div className="absolute bottom-0 left-0 right-0 bg-black/70 py-1">
-                      <p className="text-white/70 text-[6px] text-center">redhorseoracle.com</p>
+                    <div className="absolute bottom-0 left-0 right-0 bg-black/70 py-1.5">
+                      <p className="text-white/70 text-[8px] text-center">redhorseoracle.com</p>
                     </div>
                   </div>
-                  <p className="text-red-400 text-[10px] mt-1 font-semibold">Fire Horse 2026</p>
+                  <p className="text-red-400 text-xs mt-2 font-semibold">Fire Horse 2026</p>
                 </div>
 
-                {/* Equals sign */}
-                <div className="text-fire-gold text-2xl font-bold">=</div>
+                {/* Equals sign - LARGER */}
+                <div className="text-fire-gold text-4xl font-bold">=</div>
 
-                {/* Result */}
+                {/* Result - LARGER */}
                 <div className="text-center">
-                  <p className="text-white text-base font-bold">Your Unique</p>
-                  <p className="text-fire-gold text-xl font-bold mb-2">Masterpiece</p>
+                  <p className="text-white text-lg font-bold">Your Unique</p>
+                  <p className="text-fire-gold text-2xl font-bold mb-3">Masterpiece</p>
                   <a
                     href="/examples"
-                    className="inline-block bg-green-600 hover:bg-green-500 text-white font-bold text-sm py-2 px-4 rounded-lg transition-all hover:scale-105"
+                    className="inline-block bg-green-600 hover:bg-green-500 text-white font-bold text-base py-2.5 px-6 rounded-xl transition-all hover:scale-105"
                   >
                     🎨 See Examples
                   </a>
