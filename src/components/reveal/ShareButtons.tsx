@@ -26,21 +26,38 @@ export default function ShareButtons({ prophecy }: ShareButtonsProps) {
   };
 
   const handleFacebookShare = () => {
-    // Facebook share - shares the image URL
     const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(imageUrl)}&quote=${encodeURIComponent(shareText)}`;
     window.open(fbUrl, '_blank', 'width=600,height=400');
   };
 
   const handleLinkedInShare = () => {
-    // LinkedIn share - shares the image URL
     const liUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(imageUrl)}`;
     window.open(liUrl, '_blank', 'width=600,height=400');
   };
 
   const handleTwitterShare = () => {
-    // Twitter/X share - shares text with image URL
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(imageUrl)}`;
     window.open(twitterUrl, '_blank', 'width=600,height=400');
+  };
+
+  // Native share (works on mobile for SMS/iMessage, WhatsApp, etc.)
+  const handleNativeShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'My Fire Horse Oracle 2026',
+          text: shareText,
+          url: imageUrl,
+        });
+      } catch (error) {
+        // User cancelled or error - fallback to copy
+        console.log('Native share cancelled, copying link');
+        handleCopyLink();
+      }
+    } else {
+      // Fallback for desktop without native share
+      handleCopyLink();
+    }
   };
 
   if (!imageUrl) {
@@ -49,46 +66,57 @@ export default function ShareButtons({ prophecy }: ShareButtonsProps) {
 
   return (
     <div className="flex flex-col gap-3 w-full">
-      <p className="text-gray-400 text-xs text-center">Share your Oracle</p>
-
+      {/* Social Share Row */}
       <div className="flex gap-2 w-full">
         {/* Facebook */}
         <button
           onClick={handleFacebookShare}
-          className="flex-1 bg-[#1877F2] text-white font-bold py-3 px-4 rounded-xl
+          className="flex-1 bg-[#1877F2] text-white font-bold py-3 px-3 rounded-xl
                      hover:bg-[#166FE5] active:scale-95 transition-all
-                     flex items-center justify-center gap-2"
+                     flex items-center justify-center gap-1"
           title="Share on Facebook"
         >
-          <span>f</span>
-          <span className="hidden sm:inline">Facebook</span>
+          <span className="text-lg">f</span>
+          <span className="hidden sm:inline text-sm">Facebook</span>
         </button>
 
         {/* LinkedIn */}
         <button
           onClick={handleLinkedInShare}
-          className="flex-1 bg-[#0A66C2] text-white font-bold py-3 px-4 rounded-xl
+          className="flex-1 bg-[#0A66C2] text-white font-bold py-3 px-3 rounded-xl
                      hover:bg-[#095196] active:scale-95 transition-all
-                     flex items-center justify-center gap-2"
+                     flex items-center justify-center gap-1"
           title="Share on LinkedIn"
         >
-          <span>in</span>
-          <span className="hidden sm:inline">LinkedIn</span>
+          <span className="text-lg">in</span>
+          <span className="hidden sm:inline text-sm">LinkedIn</span>
         </button>
 
         {/* Twitter/X */}
         <button
           onClick={handleTwitterShare}
-          className="flex-1 bg-black border border-gray-700 text-white font-bold py-3 px-4 rounded-xl
+          className="flex-1 bg-black border border-gray-600 text-white font-bold py-3 px-3 rounded-xl
                      hover:bg-gray-900 active:scale-95 transition-all
                      flex items-center justify-center"
           title="Share on X"
         >
-          𝕏
+          <span className="text-lg">𝕏</span>
+        </button>
+
+        {/* SMS/iMessage/Native Share */}
+        <button
+          onClick={handleNativeShare}
+          className="flex-1 bg-green-600 text-white font-bold py-3 px-3 rounded-xl
+                     hover:bg-green-500 active:scale-95 transition-all
+                     flex items-center justify-center gap-1"
+          title="Share via SMS/Messages"
+        >
+          <span className="text-lg">📤</span>
+          <span className="hidden sm:inline text-sm">Share</span>
         </button>
       </div>
 
-      {/* Copy Image Link */}
+      {/* Copy Link Button */}
       <button
         onClick={handleCopyLink}
         className="w-full bg-gradient-to-r from-yellow-700 via-yellow-600 to-yellow-700

@@ -4,8 +4,12 @@ import { useState, useRef } from 'react';
 import html2canvas from 'html2canvas';
 import { Prophecy } from '@/types/prophecy';
 import ShareButtons from './ShareButtons';
-import { EDITION_CONFIG } from '@/constants/editions';
-import { ZodiacAnimal } from '@/constants/zodiac-data';
+import {
+  ZODIAC_CHINESE,
+  ELEMENT_CHINESE,
+  ZodiacAnimal,
+  ZodiacElement,
+} from '@/constants/zodiac-data';
 
 interface TalismanDisplayProps {
   prophecy: Prophecy;
@@ -14,27 +18,31 @@ interface TalismanDisplayProps {
 export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isCapturing, setIsCapturing] = useState(false);
+  const [isDownloadingRaw, setIsDownloadingRaw] = useState(false);
+  const [isDownloadingCard, setIsDownloadingCard] = useState(false);
   const talismanRef = useRef<HTMLDivElement>(null);
 
-  const handleDownload = async () => {
-    if (!talismanRef.current) return;
+  const animal = prophecy.zodiac_sign as ZodiacAnimal;
+  const element = prophecy.zodiac_element as ZodiacElement;
+  const animalChinese = animal ? ZODIAC_CHINESE[animal] : '';
+  const elementChinese = element ? ELEMENT_CHINESE[element] : '';
 
+  // Download the screen capture (exactly what user sees)
+  const handleSaveTalisman = async () => {
+    if (!talismanRef.current) return;
     setIsCapturing(true);
 
     try {
-      // Wait a moment for any rendering to complete
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      // Use html2canvas to capture the full talisman card
       const canvas = await html2canvas(talismanRef.current, {
         backgroundColor: '#0a0000',
-        scale: 2, // Higher quality
-        useCORS: true, // Allow cross-origin images
+        scale: 2,
+        useCORS: true,
         allowTaint: false,
         logging: false,
         imageTimeout: 15000,
         onclone: (clonedDoc) => {
-          // Ensure images are fully loaded in the clone
           const images = clonedDoc.getElementsByTagName('img');
           for (let i = 0; i < images.length; i++) {
             images[i].style.opacity = '1';
@@ -42,17 +50,12 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
         }
       });
 
-      // Build consistent filename with zodiac info
-      const elementName = prophecy.zodiac_element ? `${prophecy.zodiac_element.toLowerCase()}-` : '';
-      const animalName = prophecy.zodiac_sign ? prophecy.zodiac_sign.toLowerCase() : 'unknown';
+      const elementName = element ? `${element.toLowerCase()}-` : '';
+      const animalName = animal ? animal.toLowerCase() : 'unknown';
       const filename = `fire-horse-2026-${elementName}${animalName}-talisman.png`;
 
-      // Convert to blob and download
       canvas.toBlob((blob) => {
-        if (!blob) {
-          console.error('Failed to create blob');
-          return;
-        }
+        if (!blob) return;
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -64,35 +67,63 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
       }, 'image/png', 1.0);
     } catch (error) {
       console.error('Screenshot failed:', error);
-      // Fallback to just downloading the image
-      if (prophecy.image_url) {
-        try {
-          const elementName = prophecy.zodiac_element ? `${prophecy.zodiac_element.toLowerCase()}-` : '';
-          const animalName = prophecy.zodiac_sign ? prophecy.zodiac_sign.toLowerCase() : 'unknown';
-          const fallbackFilename = `fire-horse-2026-${elementName}${animalName}-talisman.png`;
-
-          const response = await fetch(prophecy.image_url);
-          const blob = await response.blob();
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = fallbackFilename;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          window.URL.revokeObjectURL(url);
-        } catch (fallbackError) {
-          console.error('Fallback download failed:', fallbackError);
-        }
-      }
     } finally {
       setIsCapturing(false);
     }
   };
 
+  // Download the raw AI-generated image
+  const handleDownloadRawImage = async () => {
+    if (!prophecy.image_url) return;
+    setIsDownloadingRaw(true);
+
+    try {
+      const response = await fetch(prophecy.image_url);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const elementName = element ? `${element.toLowerCase()}-` : '';
+      const animalName = animal ? animal.toLowerCase() : 'unknown';
+      a.download = `fire-horse-2026-${elementName}${animalName}-raw-image.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Raw image download failed:', error);
+    } finally {
+      setIsDownloadingRaw(false);
+    }
+  };
+
+  // Download the Digital Art Card
+  const handleDownloadCard = async () => {
+    if (!animal || !element) return;
+    setIsDownloadingCard(true);
+
+    try {
+      const cardUrl = `/assets/zodiac-badges/${element.toLowerCase()}-${animal.toLowerCase()}.jpeg`;
+      const response = await fetch(cardUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `fire-horse-2026-${element.toLowerCase()}-${animal.toLowerCase()}-card.jpeg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Card download failed:', error);
+    } finally {
+      setIsDownloadingCard(false);
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center max-w-md w-full">
-      {/* Capturable Talisman Card */}
+    <div className="flex flex-col items-center max-w-lg w-full space-y-6">
+      {/* ========== TALISMAN SECTION ========== */}
       <div
         ref={talismanRef}
         className="flex flex-col items-center w-full p-6 rounded-2xl relative"
@@ -124,7 +155,7 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
           </div>
         )}
 
-        {/* Talisman Image - Using regular img for html2canvas compatibility */}
+        {/* Talisman Image */}
         <div className="relative border-4 border-fire-gold rounded-2xl overflow-hidden shadow-2xl glow-gold bg-black">
           {prophecy.image_url ? (
             <>
@@ -144,7 +175,7 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
                 onLoad={() => setImageLoaded(true)}
                 onError={() => {
                   console.error('Image failed to load');
-                  setImageLoaded(true); // Show anyway
+                  setImageLoaded(true);
                 }}
               />
             </>
@@ -206,20 +237,122 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
         </div>
       </div>
 
-      {/* Action Buttons - Outside capturable area */}
-      <div className="flex flex-col sm:flex-row gap-3 pt-6 w-full">
+      {/* ========== DOWNLOAD BUTTONS ========== */}
+      <div className="w-full space-y-3">
+        <p className="text-fire-gold text-sm font-semibold text-center">Download Your Oracle</p>
+
+        {/* Save Talisman (Screen Capture) */}
         <button
-          onClick={handleDownload}
+          onClick={handleSaveTalisman}
           disabled={isCapturing}
-          className="flex-1 bg-fire-gold text-black font-bold py-3 px-6 rounded-xl
-                     hover:scale-105 active:scale-95 transition-transform
-                     flex items-center justify-center gap-2 disabled:opacity-50"
+          className="w-full bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 text-black font-bold py-4 px-6 rounded-xl
+                     hover:scale-[1.02] active:scale-98 transition-all
+                     flex items-center justify-center gap-2 disabled:opacity-50 border-2 border-yellow-400"
         >
           <span>{isCapturing ? '...' : '📥'}</span>
-          {isCapturing ? 'Capturing...' : 'Save Talisman'}
+          {isCapturing ? 'Capturing...' : 'Save Complete Talisman'}
         </button>
 
+        {/* Download Raw Image */}
+        <button
+          onClick={handleDownloadRawImage}
+          disabled={isDownloadingRaw || !prophecy.image_url}
+          className="w-full bg-red-900 hover:bg-red-800 text-white font-bold py-3 px-6 rounded-xl
+                     active:scale-95 transition-all
+                     flex items-center justify-center gap-2 disabled:opacity-50"
+        >
+          <span>{isDownloadingRaw ? '...' : '🖼️'}</span>
+          {isDownloadingRaw ? 'Downloading...' : 'Download Raw AI Image'}
+        </button>
+      </div>
+
+      {/* ========== SHARE SECTION ========== */}
+      <div className="w-full bg-gradient-to-r from-purple-950 via-black to-purple-950 border-2 border-purple-500/70 rounded-2xl p-5">
+        <p className="text-purple-300 text-sm font-semibold text-center mb-1">📣 Share Your Oracle</p>
+        <p className="text-gray-400 text-xs text-center mb-4">Share the image link with friends</p>
         <ShareButtons prophecy={prophecy} />
+      </div>
+
+      {/* ========== DIGITAL ART CARD SECTION ========== */}
+      {animal && element && (
+        <div className="w-full">
+          {/* Glowing border effect */}
+          <div className="relative">
+            <div className="absolute -inset-1 bg-gradient-to-r from-green-500 via-fire-gold to-green-500 rounded-3xl opacity-70"></div>
+
+            <div className="relative bg-gradient-to-b from-green-950 via-black to-green-950 border-4 border-green-400 rounded-2xl p-6">
+              {/* FREE Badge */}
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <div className="bg-gradient-to-r from-green-500 via-green-400 to-green-500 text-black font-black text-sm px-6 py-2 rounded-full border-2 border-green-200 shadow-lg">
+                  ★ BONUS DIGITAL ART CARD ★
+                </div>
+              </div>
+
+              <div className="pt-6 space-y-4">
+                {/* Header */}
+                <div className="text-center">
+                  <p className="text-green-400 text-xs uppercase tracking-[0.2em] mb-1">
+                    Your Collectible Zodiac Card
+                  </p>
+                  <h2 className="text-xl font-bold text-white">
+                    {element} {animal}
+                  </h2>
+                  <p className="text-3xl mt-1">
+                    {elementChinese}{animalChinese}
+                  </p>
+                </div>
+
+                {/* Digital Art Card - Full Resolution */}
+                <div className="relative mx-auto max-w-sm">
+                  <div className="rounded-xl overflow-hidden border-2 border-green-500/50 shadow-lg shadow-green-500/20">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`/assets/zodiac-badges/${element.toLowerCase()}-${animal.toLowerCase()}.jpeg`}
+                      alt={`${element} ${animal} Digital Art Card`}
+                      className="w-full h-auto"
+                    />
+                  </div>
+                </div>
+
+                {/* Download Card Button */}
+                <button
+                  onClick={handleDownloadCard}
+                  disabled={isDownloadingCard}
+                  className="w-full bg-gradient-to-r from-green-600 via-green-500 to-green-600 text-black font-bold py-3 px-6 rounded-xl
+                             hover:scale-[1.02] active:scale-95 transition-all
+                             flex items-center justify-center gap-2 disabled:opacity-50 border-2 border-green-400"
+                >
+                  <span>{isDownloadingCard ? '...' : '📥'}</span>
+                  {isDownloadingCard ? 'Downloading...' : 'Download Digital Art Card'}
+                </button>
+
+                {/* Card Info */}
+                <div className="text-center text-xs text-gray-400">
+                  <p>High-resolution collectible card featuring your {element} {animal}</p>
+                  <p className="text-green-400 mt-1">Included FREE with your Oracle</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========== PRIVACY SECTION ========== */}
+      <div className="w-full bg-green-900/30 border-2 border-green-500/50 rounded-2xl p-5">
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <span className="text-2xl">🛡️</span>
+          <h3 className="text-green-400 text-lg font-bold">Privacy by Design</h3>
+        </div>
+        <p className="text-white text-center text-sm leading-relaxed">
+          Your Oracle was generated by <span className="text-fire-gold font-bold">Gemini 3 Pro AI</span>.
+          <br />
+          <span className="text-green-400 font-semibold">No personal information collected, stored, or displayed.</span>
+        </p>
+        <div className="flex flex-wrap justify-center gap-2 mt-3">
+          <span className="bg-green-900/50 border border-green-700 text-green-300 text-[10px] px-2 py-1 rounded">✓ ZERO DATA STORED</span>
+          <span className="bg-green-900/50 border border-green-700 text-green-300 text-[10px] px-2 py-1 rounded">✓ NO TRACKING</span>
+          <span className="bg-green-900/50 border border-green-700 text-green-300 text-[10px] px-2 py-1 rounded">✓ SAFE TO SHARE</span>
+        </div>
       </div>
     </div>
   );
