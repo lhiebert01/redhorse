@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { verifyWebhookSignature, extractCustomFields } from '@/lib/stripe/webhooks';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { generateProphecy } from '@/lib/gemini/generate';
-import { generateBrandedImage } from '@/lib/image/branded-generator';
+import { generateBrandedImage, generateShareableImage } from '@/lib/image/branded-generator';
 import { getChineseZodiac, getFireHorseReading } from '@/lib/zodiac/calculator';
 import { validateFocusMode } from '@/lib/utils/validation';
 import { withRetry } from '@/lib/utils/retry';
@@ -149,6 +149,7 @@ export async function POST(request: Request) {
     const rawImageBuffer = Buffer.from(result.imageData, 'base64');
     const rawImagePath = `${prophecy.id}.png`;
     const brandedImagePath = `${prophecy.id}-branded.png`;
+    const shareableImagePath = `${prophecy.id}-shareable.png`;
     const certificateId = prophecy.id.slice(0, 8).toUpperCase();
 
     // Metadata to attach to storage objects for querying
@@ -176,8 +177,8 @@ export async function POST(request: Request) {
       console.error('Raw image upload error:', rawUploadError);
     }
 
-    // Generate branded image with edition/certificate baked in
-    console.log('Generating branded image with edition info...');
+    // Generate branded image with edition/certificate baked in (OWNER DOWNLOAD)
+    console.log('Generating branded image with certificate for owner download...');
     let brandedImageUrl: string | null = null;
     try {
       const brandedImageBuffer = await generateBrandedImage({
@@ -199,7 +200,7 @@ export async function POST(request: Request) {
           upsert: true,
           metadata: {
             ...imageMetadata,
-            image_type: 'branded',
+            image_type: 'branded_owner',
           },
         });
 
@@ -210,11 +211,52 @@ export async function POST(request: Request) {
           .from('talismans')
           .getPublicUrl(brandedImagePath);
         brandedImageUrl = brandedUrlData.publicUrl;
-        console.log('Branded image uploaded successfully');
+        console.log('Branded image (owner) uploaded successfully');
       }
     } catch (brandedError) {
       console.error('Failed to generate branded image:', brandedError);
       // Continue without branded image - raw image still works
+    }
+
+    // Generate shareable image with WATERMARK but NO certificate (SOCIAL SHARING)
+    console.log('Generating watermarked shareable image for social sharing...');
+    let shareableImageUrl: string | null = null;
+    try {
+      const shareableImageBuffer = await generateShareableImage({
+        rawImageBuffer,
+        editionNumber,
+        totalEditions,
+        zodiacSign: zodiac.animal,
+        zodiacElement: zodiac.element,
+        focusMode,
+        mainText: result.mainText,
+        // NO certificateId - shareable version doesn't include cert
+      });
+
+      // Upload shareable image with metadata
+      const { error: shareableUploadError } = await supabase.storage
+        .from('talismans')
+        .upload(shareableImagePath, shareableImageBuffer, {
+          contentType: 'image/png',
+          upsert: true,
+          metadata: {
+            ...imageMetadata,
+            image_type: 'shareable_watermarked',
+          },
+        });
+
+      if (shareableUploadError) {
+        console.error('Shareable image upload error:', shareableUploadError);
+      } else {
+        const { data: shareableUrlData } = supabase.storage
+          .from('talismans')
+          .getPublicUrl(shareableImagePath);
+        shareableImageUrl = shareableUrlData.publicUrl;
+        console.log('Shareable image (watermarked) uploaded successfully');
+      }
+    } catch (shareableError) {
+      console.error('Failed to generate shareable image:', shareableError);
+      // Continue without shareable image - branded image can be fallback
     }
 
     // Get public URL for raw image
@@ -222,7 +264,7 @@ export async function POST(request: Request) {
       .from('talismans')
       .getPublicUrl(rawImagePath);
 
-    // Update record with generated content and both image URLs
+    // Update record with generated content and all image URLs
     const { error: updateError } = await supabase
       .from('prophecies')
       .update({
@@ -231,8 +273,10 @@ export async function POST(request: Request) {
         full_reading: result.fullReading,
         image_url: publicUrlData.publicUrl,
         image_storage_path: rawImagePath,
-        branded_image_url: brandedImageUrl,
+        branded_image_url: brandedImageUrl,                          // Owner version WITH cert (download)
         branded_image_storage_path: brandedImageUrl ? brandedImagePath : null,
+        shareable_image_url: shareableImageUrl,                      // Watermarked version NO cert (share)
+        shareable_image_storage_path: shareableImageUrl ? shareableImagePath : null,
         status: 'completed',
         completed_at: new Date().toISOString(),
       })

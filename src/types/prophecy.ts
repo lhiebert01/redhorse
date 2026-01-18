@@ -16,8 +16,10 @@ export interface Prophecy {
   full_reading: string | null;
   image_url: string | null;              // Raw AI-generated image
   image_storage_path: string | null;
-  branded_image_url: string | null;      // Branded image with edition/certificate baked in
+  branded_image_url: string | null;      // Owner version: has CERT number (for DOWNLOAD only)
   branded_image_storage_path: string | null;
+  shareable_image_url: string | null;    // Share version: WATERMARKED, NO cert (for SHARING)
+  shareable_image_storage_path: string | null;
   edition_number: number | null;         // Limited edition number (e.g., 127)
   total_editions: number | null;         // Total editions for this sign (e.g., 888)
   status: 'pending' | 'processing' | 'completed' | 'failed';

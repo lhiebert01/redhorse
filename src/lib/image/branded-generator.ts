@@ -11,6 +11,17 @@ export interface BrandedImageOptions {
   mainText: string;
 }
 
+export interface ShareableImageOptions {
+  rawImageBuffer: Buffer;
+  editionNumber: number;
+  totalEditions: number;
+  zodiacSign: string;
+  zodiacElement: string;
+  focusMode: string;
+  mainText: string;
+  // NO certificateId - shareable version doesn't include cert
+}
+
 /**
  * Generate a branded talisman image with edition info, certificate, and maker's mark
  * baked directly into the image for sharing.
@@ -252,6 +263,233 @@ function createMakerMarkSvg(size: number): string {
             font-family="Arial, sans-serif" font-size="${fontSize}px" font-weight="bold"
             fill="#ca8a04" text-anchor="middle">
         2026
+      </text>
+    </svg>
+  `;
+}
+
+// ============================================================================
+// SHAREABLE IMAGE GENERATOR (Watermarked, NO Certificate)
+// ============================================================================
+
+/**
+ * Generate a shareable talisman image with watermark but NO certificate number.
+ * This version is for social sharing and prevents unauthorized copying.
+ */
+export async function generateShareableImage(options: ShareableImageOptions): Promise<Buffer> {
+  const {
+    rawImageBuffer,
+    editionNumber,
+    totalEditions,
+    zodiacSign,
+    zodiacElement,
+    focusMode,
+    mainText,
+  } = options;
+
+  // Get dimensions of the raw image
+  const rawImage = sharp(rawImageBuffer);
+  const metadata = await rawImage.metadata();
+  const width = metadata.width || 576;
+  const height = metadata.height || 1024;
+
+  // Calculate sizes for overlays
+  const headerHeight = Math.round(height * 0.08); // 8% for edition badge
+  const footerHeight = Math.round(height * 0.08); // 8% for footer (smaller than branded - no cert)
+  const newHeight = height + headerHeight + footerHeight;
+
+  // Create header SVG with edition badge (same as branded)
+  const headerSvg = createHeaderSvg(width, headerHeight, editionNumber, totalEditions);
+
+  // Create footer SVG WITHOUT certificate (different from branded)
+  const footerSvg = createShareableFooterSvg(
+    width,
+    footerHeight,
+    zodiacSign,
+    zodiacElement,
+    focusMode,
+    mainText
+  );
+
+  // Create maker's mark SVG
+  const makerMarkSize = Math.round(width * 0.18);
+  const makerMarkSvg = createMakerMarkSvg(makerMarkSize);
+
+  // Create diagonal watermark SVG that covers the image
+  const watermarkSvg = createWatermarkSvg(width, height);
+
+  // Create the final composite image with watermark
+  const shareableImage = await sharp({
+    create: {
+      width: width,
+      height: newHeight,
+      channels: 4,
+      background: { r: 10, g: 0, b: 0, alpha: 1 },
+    },
+  })
+    .composite([
+      // Header at top
+      {
+        input: Buffer.from(headerSvg),
+        top: 0,
+        left: 0,
+      },
+      // Raw image in middle
+      {
+        input: rawImageBuffer,
+        top: headerHeight,
+        left: 0,
+      },
+      // WATERMARK overlay on the image (prevents copying)
+      {
+        input: await sharp(Buffer.from(watermarkSvg)).png().toBuffer(),
+        top: headerHeight,
+        left: 0,
+      },
+      // Maker's mark on the raw image (top-right corner)
+      {
+        input: await sharp(Buffer.from(makerMarkSvg)).png().toBuffer(),
+        top: headerHeight + Math.round(height * 0.02),
+        left: width - makerMarkSize - Math.round(width * 0.03),
+      },
+      // Footer at bottom (no certificate)
+      {
+        input: Buffer.from(footerSvg),
+        top: headerHeight + height,
+        left: 0,
+      },
+    ])
+    .png()
+    .toBuffer();
+
+  return shareableImage;
+}
+
+/**
+ * Create diagonal watermark SVG that prevents unauthorized copying
+ */
+function createWatermarkSvg(width: number, height: number): string {
+  // Calculate diagonal for full coverage
+  const diagonal = Math.sqrt(width * width + height * height);
+  const fontSize = Math.round(width * 0.045); // Readable but not overwhelming
+  const lineHeight = fontSize * 2.5;
+  const numLines = Math.ceil(diagonal / lineHeight) + 2;
+
+  // Watermark text lines
+  const line1 = 'AUTHENTICATED LIMITED EDITION';
+  const line2 = 'RedHorseOracle.com';
+  const line3 = 'Get Your Oracle Today';
+
+  let textElements = '';
+  for (let i = 0; i < numLines; i++) {
+    const y = i * lineHeight;
+    const textLine = i % 3 === 0 ? line1 : i % 3 === 1 ? line2 : line3;
+    textElements += `
+      <text x="${diagonal / 2}" y="${y}"
+            font-family="Arial, sans-serif" font-size="${fontSize}px" font-weight="bold"
+            fill="rgba(255,215,0,0.18)" text-anchor="middle"
+            transform="rotate(-35, ${diagonal / 2}, ${y})">
+        ${textLine}
+      </text>
+    `;
+  }
+
+  return `
+    <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="imageClip">
+          <rect width="${width}" height="${height}"/>
+        </clipPath>
+      </defs>
+
+      <g clip-path="url(#imageClip)">
+        <!-- Semi-transparent overlay -->
+        <rect width="${width}" height="${height}" fill="rgba(0,0,0,0.05)"/>
+
+        <!-- Diagonal watermark text pattern -->
+        <g transform="translate(${-width * 0.3}, ${height * 0.3})">
+          ${textElements}
+        </g>
+
+        <!-- Central prominent watermark -->
+        <g transform="translate(${width / 2}, ${height / 2}) rotate(-35)">
+          <text x="0" y="-${fontSize * 1.5}"
+                font-family="Arial, sans-serif" font-size="${fontSize * 1.5}px" font-weight="bold"
+                fill="rgba(255,215,0,0.25)" text-anchor="middle">
+            🐴 PREVIEW ONLY 🐴
+          </text>
+          <text x="0" y="0"
+                font-family="Arial, sans-serif" font-size="${fontSize * 1.2}px" font-weight="bold"
+                fill="rgba(255,215,0,0.22)" text-anchor="middle">
+            Get Your Authenticated Oracle
+          </text>
+          <text x="0" y="${fontSize * 1.5}"
+                font-family="Arial, sans-serif" font-size="${fontSize}px" font-weight="bold"
+                fill="rgba(255,215,0,0.20)" text-anchor="middle">
+            RedHorseOracle.com
+          </text>
+        </g>
+      </g>
+    </svg>
+  `;
+}
+
+/**
+ * Create footer SVG for shareable image (NO certificate number)
+ */
+function createShareableFooterSvg(
+  width: number,
+  height: number,
+  zodiacSign: string,
+  zodiacElement: string,
+  focusMode: string,
+  mainText: string
+): string {
+  const titleSize = Math.round(height * 0.22);
+  const subtitleSize = Math.round(height * 0.16);
+  const smallSize = Math.round(height * 0.14);
+
+  const modeEmoji = {
+    wealth: '🎲',
+    power: '⚔️',
+    love: '❤️',
+    shield: '🛡️',
+  }[focusMode.toLowerCase()] || '🔥';
+
+  return `
+    <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="shareFooterGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#1a0505"/>
+          <stop offset="100%" style="stop-color:#0a0000"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Background -->
+      <rect width="${width}" height="${height}" fill="url(#shareFooterGradient)"/>
+
+      <!-- Top border line -->
+      <line x1="10%" y1="2" x2="90%" y2="2" stroke="#ca8a04" stroke-width="2" opacity="0.5"/>
+
+      <!-- Main prophecy text -->
+      <text x="${width / 2}" y="${height * 0.35}"
+            font-family="Arial, sans-serif" font-size="${titleSize}px" font-weight="bold"
+            fill="#ffd700" text-anchor="middle">
+        ${mainText}
+      </text>
+
+      <!-- Zodiac info -->
+      <text x="${width / 2}" y="${height * 0.60}"
+            font-family="Arial, sans-serif" font-size="${subtitleSize}px"
+            fill="#9ca3af" text-anchor="middle">
+        ${zodiacElement} ${zodiacSign} • ${modeEmoji} ${focusMode.charAt(0).toUpperCase() + focusMode.slice(1)} Oracle
+      </text>
+
+      <!-- CTA instead of certificate -->
+      <text x="${width / 2}" y="${height * 0.85}"
+            font-family="Arial, sans-serif" font-size="${smallSize}px" font-weight="bold"
+            fill="#ca8a04" text-anchor="middle">
+        🔥 Get yours at redhorseoracle.com • Year of the Fire Horse 2026
       </text>
     </svg>
   `;
