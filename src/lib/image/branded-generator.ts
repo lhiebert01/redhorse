@@ -222,10 +222,12 @@ function createFooterSvg(
 
 /**
  * Create SVG for the maker's mark (circular seal)
+ * Note: Using horse emoji instead of Chinese character because
+ * Vercel servers don't have Chinese fonts installed
  */
 function createMakerMarkSvg(size: number): string {
   const fontSize = Math.round(size * 0.09);
-  const chineseSize = Math.round(size * 0.28);
+  const horseSize = Math.round(size * 0.22);
 
   return `
     <svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
@@ -251,11 +253,11 @@ function createMakerMarkSvg(size: number): string {
         RED HORSE
       </text>
 
-      <!-- Chinese character 馬 -->
-      <text x="${size / 2}" y="${size * 0.60}"
-            font-family="Arial, sans-serif" font-size="${chineseSize}px"
+      <!-- Fire Horse symbol (using fire + horse emoji for universal rendering) -->
+      <text x="${size / 2}" y="${size * 0.58}"
+            font-family="Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif" font-size="${horseSize}px"
             fill="#dc2626" text-anchor="middle">
-        馬
+        ORACLE
       </text>
 
       <!-- 2026 -->

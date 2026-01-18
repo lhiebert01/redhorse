@@ -136,6 +136,14 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
 
           {/* Authenticity Certificate Footer */}
           <div className="border-t border-fire-gold/30 pt-4 mt-4 w-full">
+            {/* Edition Number - Prominent Display */}
+            {prophecy.edition_number && (
+              <div className="text-center mb-3 bg-fire-gold/10 border border-fire-gold/30 rounded-lg py-2 px-4">
+                <p className="text-fire-gold text-lg font-bold">
+                  LIMITED EDITION #{prophecy.edition_number}
+                </p>
+              </div>
+            )}
             <div className="flex items-center justify-between text-xs">
               <div className="flex items-center gap-2">
                 <span className="text-fire-gold">🔥</span>
@@ -146,11 +154,9 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
                 <p className="text-fire-gold font-bold">redhorseoracle.com</p>
               </div>
             </div>
-            {prophecy.edition_number && (
-              <p className="text-center text-white text-xs font-bold mt-3">
-                Certificate #{prophecy.id.slice(0, 8).toUpperCase()} • Year of the Fire Horse 2026
-              </p>
-            )}
+            <p className="text-center text-white text-xs font-bold mt-3">
+              Certificate #{prophecy.id.slice(0, 8).toUpperCase()} • Year of the Fire Horse 2026
+            </p>
           </div>
         </div>
       </div>
