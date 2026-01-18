@@ -1,10 +1,13 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { generateProphecy } from '@/lib/gemini/generate';
+import { generateBrandedImage, generateShareableImage } from '@/lib/image/branded-generator';
 import { getChineseZodiac, getFireHorseReading } from '@/lib/zodiac/calculator';
 import { validateFocusMode } from '@/lib/utils/validation';
 import { withRetry } from '@/lib/utils/retry';
 import { FocusMode } from '@/constants/modes';
+import { EDITION_CONFIG } from '@/constants/editions';
+import { ZodiacAnimal } from '@/constants/zodiac-data';
 import { randomUUID } from 'crypto';
 
 export const runtime = 'nodejs';
@@ -43,7 +46,21 @@ export async function POST(request: Request) {
     // Generate a unique test session ID
     const testSessionId = `admin_test_${randomUUID()}`;
 
-    // Create pending record
+    // Get edition number for this zodiac sign + mode combination
+    const { count: existingCount } = await supabase
+      .from('prophecies')
+      .select('*', { count: 'exact', head: true })
+      .eq('zodiac_sign', zodiac.animal)
+      .eq('focus_mode', focusMode)
+      .eq('status', 'completed');
+
+    const editionNumber = (existingCount || 0) + 1;
+    const editionConfig = EDITION_CONFIG[zodiac.animal as ZodiacAnimal];
+    const totalEditions = editionConfig?.totalSlots || 888;
+
+    console.log(`[ADMIN TEST] Assigning edition #${editionNumber} of ${totalEditions} for ${zodiac.animal} ${focusMode}`);
+
+    // Create pending record with edition info
     const { data: prophecy, error: insertError } = await supabase
       .from('prophecies')
       .insert({
@@ -55,6 +72,8 @@ export async function POST(request: Request) {
         zodiac_sign: zodiac.animal,
         zodiac_element: zodiac.element,
         fire_horse_relation: fireHorseReading.relation,
+        edition_number: editionNumber,
+        total_editions: totalEditions,
         status: 'processing',
       })
       .select()
@@ -86,29 +105,102 @@ export async function POST(request: Request) {
       }
     );
 
-    console.log('[ADMIN TEST] AI generation complete, uploading image...');
+    console.log('[ADMIN TEST] AI generation complete, uploading images...');
 
-    // Convert base64 to blob and upload to Supabase Storage
-    const imageBuffer = Buffer.from(result.imageData, 'base64');
-    const imagePath = `${prophecy.id}.png`;
+    // Convert base64 to buffer
+    const rawImageBuffer = Buffer.from(result.imageData, 'base64');
+    const rawImagePath = `${prophecy.id}.png`;
+    const brandedImagePath = `${prophecy.id}-branded.png`;
+    const shareableImagePath = `${prophecy.id}-shareable.png`;
+    const certificateId = prophecy.id.slice(0, 8).toUpperCase();
 
-    const { error: uploadError } = await supabase.storage
+    // Upload raw image
+    const { error: rawUploadError } = await supabase.storage
       .from('talismans')
-      .upload(imagePath, imageBuffer, {
+      .upload(rawImagePath, rawImageBuffer, {
         contentType: 'image/png',
         upsert: true,
       });
 
-    if (uploadError) {
-      console.error('[ADMIN TEST] Image upload error:', uploadError);
+    if (rawUploadError) {
+      console.error('[ADMIN TEST] Raw image upload error:', rawUploadError);
     }
 
-    // Get public URL
+    // Generate branded image with edition/certificate baked in (OWNER DOWNLOAD)
+    console.log('[ADMIN TEST] Generating branded image with certificate for owner download...');
+    let brandedImageUrl: string | null = null;
+    try {
+      const brandedImageBuffer = await generateBrandedImage({
+        rawImageBuffer,
+        editionNumber,
+        totalEditions,
+        certificateId,
+        zodiacSign: zodiac.animal,
+        zodiacElement: zodiac.element,
+        focusMode,
+        mainText: result.mainText,
+      });
+
+      const { error: brandedUploadError } = await supabase.storage
+        .from('talismans')
+        .upload(brandedImagePath, brandedImageBuffer, {
+          contentType: 'image/png',
+          upsert: true,
+        });
+
+      if (brandedUploadError) {
+        console.error('[ADMIN TEST] Branded image upload error:', brandedUploadError);
+      } else {
+        const { data: brandedUrlData } = supabase.storage
+          .from('talismans')
+          .getPublicUrl(brandedImagePath);
+        brandedImageUrl = brandedUrlData.publicUrl;
+        console.log('[ADMIN TEST] Branded image (owner) uploaded successfully');
+      }
+    } catch (brandedError) {
+      console.error('[ADMIN TEST] Failed to generate branded image:', brandedError);
+    }
+
+    // Generate shareable image with WATERMARK but NO certificate (SOCIAL SHARING)
+    console.log('[ADMIN TEST] Generating watermarked shareable image for social sharing...');
+    let shareableImageUrl: string | null = null;
+    try {
+      const shareableImageBuffer = await generateShareableImage({
+        rawImageBuffer,
+        editionNumber,
+        totalEditions,
+        zodiacSign: zodiac.animal,
+        zodiacElement: zodiac.element,
+        focusMode,
+        mainText: result.mainText,
+      });
+
+      const { error: shareableUploadError } = await supabase.storage
+        .from('talismans')
+        .upload(shareableImagePath, shareableImageBuffer, {
+          contentType: 'image/png',
+          upsert: true,
+        });
+
+      if (shareableUploadError) {
+        console.error('[ADMIN TEST] Shareable image upload error:', shareableUploadError);
+      } else {
+        const { data: shareableUrlData } = supabase.storage
+          .from('talismans')
+          .getPublicUrl(shareableImagePath);
+        shareableImageUrl = shareableUrlData.publicUrl;
+        console.log('[ADMIN TEST] Shareable image (watermarked) uploaded successfully');
+      }
+    } catch (shareableError) {
+      console.error('[ADMIN TEST] Failed to generate shareable image:', shareableError);
+    }
+
+    // Get public URL for raw image
     const { data: publicUrlData } = supabase.storage
       .from('talismans')
-      .getPublicUrl(imagePath);
+      .getPublicUrl(rawImagePath);
 
-    // Update record with generated content
+    // Update record with generated content and all image URLs
     const { error: updateError } = await supabase
       .from('prophecies')
       .update({
@@ -116,7 +208,11 @@ export async function POST(request: Request) {
         sub_text: result.subText,
         full_reading: result.fullReading,
         image_url: publicUrlData.publicUrl,
-        image_storage_path: imagePath,
+        image_storage_path: rawImagePath,
+        branded_image_url: brandedImageUrl,
+        branded_image_storage_path: brandedImageUrl ? brandedImagePath : null,
+        shareable_image_url: shareableImageUrl,
+        shareable_image_storage_path: shareableImageUrl ? shareableImagePath : null,
         status: 'completed',
         completed_at: new Date().toISOString(),
       })
