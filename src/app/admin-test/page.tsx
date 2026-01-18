@@ -11,17 +11,261 @@ const FOCUS_MODES = [
   { id: 'shield', name: 'Shield Mode', description: '3-Word Protective Mantra (e.g., FIRE SHIELDS ME)' },
 ];
 
+// Zodiac data
+const ANIMALS = ['rat', 'ox', 'tiger', 'rabbit', 'dragon', 'snake', 'horse', 'goat', 'monkey', 'rooster', 'dog', 'pig'] as const;
+const ELEMENTS = ['wood', 'fire', 'earth', 'metal', 'water'] as const;
+
+const ANIMAL_EMOJI: Record<string, string> = {
+  rat: '🐀', ox: '🐂', tiger: '🐅', rabbit: '🐇', dragon: '🐲', snake: '🐍',
+  horse: '🐴', goat: '🐐', monkey: '🐒', rooster: '🐓', dog: '🐕', pig: '🐷'
+};
+
+const ELEMENT_EMOJI: Record<string, string> = {
+  wood: '🌳', fire: '🔥', earth: '🌍', metal: '⚙️', water: '💧'
+};
+
+const ELEMENT_COLORS: Record<string, string> = {
+  wood: 'border-green-500 bg-green-500/10',
+  fire: 'border-red-500 bg-red-500/10',
+  earth: 'border-amber-600 bg-amber-600/10',
+  metal: 'border-gray-400 bg-gray-400/10',
+  water: 'border-blue-500 bg-blue-500/10'
+};
+
 // Shared authentication key with SuperAdmin
 const AUTH_STORAGE_KEY = 'superadmin_authenticated';
+
+// Gallery Component
+function CardGallery() {
+  const [filterAnimal, setFilterAnimal] = useState<string>('all');
+  const [filterElement, setFilterElement] = useState<string>('all');
+  const [showCollections, setShowCollections] = useState(true);
+  const [selectedCard, setSelectedCard] = useState<string | null>(null);
+
+  // Build list of cards based on filters
+  const getCards = () => {
+    const cards: { name: string; element: string; animal: string; isCollection: boolean }[] = [];
+
+    // Individual cards (element-animal)
+    for (const element of ELEMENTS) {
+      for (const animal of ANIMALS) {
+        if (filterAnimal !== 'all' && animal !== filterAnimal) continue;
+        if (filterElement !== 'all' && element !== filterElement) continue;
+        cards.push({
+          name: `${element}-${animal}`,
+          element,
+          animal,
+          isCollection: false
+        });
+      }
+    }
+
+    // Collection panels (animal-collection)
+    if (showCollections) {
+      for (const animal of ANIMALS) {
+        if (filterAnimal !== 'all' && animal !== filterAnimal) continue;
+        if (filterElement !== 'all') continue; // Collections don't have elements
+        cards.push({
+          name: `${animal}-collection`,
+          element: 'collection',
+          animal,
+          isCollection: true
+        });
+      }
+    }
+
+    return cards;
+  };
+
+  const cards = getCards();
+
+  return (
+    <div className="space-y-6">
+      {/* Filters */}
+      <div className="bg-black/50 border border-fire-gold/30 rounded-xl p-4 space-y-4">
+        <div className="flex flex-wrap gap-4 items-center">
+          {/* Animal Filter */}
+          <div className="flex-1 min-w-[200px]">
+            <label className="block text-xs text-gray-400 mb-1">Filter by Animal</label>
+            <select
+              value={filterAnimal}
+              onChange={(e) => setFilterAnimal(e.target.value)}
+              className="w-full bg-black border border-red-900/50 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-fire-gold"
+            >
+              <option value="all">All Animals (12)</option>
+              {ANIMALS.map((animal) => (
+                <option key={animal} value={animal}>
+                  {ANIMAL_EMOJI[animal]} {animal.charAt(0).toUpperCase() + animal.slice(1)}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Element Filter */}
+          <div className="flex-1 min-w-[200px]">
+            <label className="block text-xs text-gray-400 mb-1">Filter by Element</label>
+            <select
+              value={filterElement}
+              onChange={(e) => setFilterElement(e.target.value)}
+              className="w-full bg-black border border-red-900/50 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-fire-gold"
+            >
+              <option value="all">All Elements (5)</option>
+              {ELEMENTS.map((element) => (
+                <option key={element} value={element}>
+                  {ELEMENT_EMOJI[element]} {element.charAt(0).toUpperCase() + element.slice(1)}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Collection Toggle */}
+          <div className="flex items-center gap-2">
+            <label className="text-xs text-gray-400">Show Collections</label>
+            <button
+              onClick={() => setShowCollections(!showCollections)}
+              className={`w-12 h-6 rounded-full transition-colors ${
+                showCollections ? 'bg-fire-gold' : 'bg-gray-600'
+              }`}
+            >
+              <div
+                className={`w-5 h-5 bg-white rounded-full transition-transform ${
+                  showCollections ? 'translate-x-6' : 'translate-x-0.5'
+                }`}
+              />
+            </button>
+          </div>
+        </div>
+
+        {/* Stats */}
+        <div className="flex gap-4 text-xs text-gray-400">
+          <span>Showing: <span className="text-fire-gold font-bold">{cards.length}</span> cards</span>
+          <span>•</span>
+          <span>Individual: <span className="text-white">{cards.filter(c => !c.isCollection).length}</span></span>
+          <span>•</span>
+          <span>Collections: <span className="text-white">{cards.filter(c => c.isCollection).length}</span></span>
+        </div>
+      </div>
+
+      {/* Card Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+        {cards.map((card) => (
+          <div
+            key={card.name}
+            onClick={() => setSelectedCard(card.name)}
+            className={`cursor-pointer rounded-xl overflow-hidden border-2 transition-all hover:scale-105 hover:shadow-xl hover:shadow-fire-gold/20 ${
+              card.isCollection
+                ? 'border-purple-500 bg-purple-500/10'
+                : ELEMENT_COLORS[card.element]
+            }`}
+          >
+            <div className="aspect-[3/4] relative">
+              <img
+                src={`/assets/zodiac-badges/${card.name}.jpeg`}
+                alt={card.name}
+                className="w-full h-full object-cover"
+              />
+              {/* Overlay with name */}
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-2">
+                <p className="text-white text-xs font-bold truncate">
+                  {card.isCollection ? (
+                    <>📚 {card.animal.charAt(0).toUpperCase() + card.animal.slice(1)} Collection</>
+                  ) : (
+                    <>
+                      {ELEMENT_EMOJI[card.element]} {card.element.charAt(0).toUpperCase() + card.element.slice(1)}{' '}
+                      {ANIMAL_EMOJI[card.animal]} {card.animal.charAt(0).toUpperCase() + card.animal.slice(1)}
+                    </>
+                  )}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {cards.length === 0 && (
+        <div className="text-center py-12 text-gray-400">
+          <p className="text-4xl mb-4">🔍</p>
+          <p>No cards match your filters</p>
+        </div>
+      )}
+
+      {/* Lightbox Modal */}
+      {selectedCard && (
+        <div
+          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4"
+          onClick={() => setSelectedCard(null)}
+        >
+          <div className="relative max-w-4xl max-h-[90vh] w-full">
+            {/* Close button */}
+            <button
+              onClick={() => setSelectedCard(null)}
+              className="absolute -top-12 right-0 text-white hover:text-fire-gold text-lg font-bold"
+            >
+              ✕ Close
+            </button>
+
+            {/* Image */}
+            <img
+              src={`/assets/zodiac-badges/${selectedCard}.jpeg`}
+              alt={selectedCard}
+              className="w-full h-auto max-h-[80vh] object-contain rounded-xl"
+              onClick={(e) => e.stopPropagation()}
+            />
+
+            {/* Card name */}
+            <div className="mt-4 text-center">
+              <p className="text-fire-gold text-xl font-bold">
+                {selectedCard.includes('collection') ? (
+                  <>📚 {selectedCard.replace('-collection', '').charAt(0).toUpperCase() + selectedCard.replace('-collection', '').slice(1)} Collection</>
+                ) : (
+                  selectedCard.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+                )}
+              </p>
+              <p className="text-gray-400 text-sm mt-1">
+                /assets/zodiac-badges/{selectedCard}.jpeg
+              </p>
+            </div>
+
+            {/* Navigation */}
+            <div className="flex justify-center gap-4 mt-4">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const idx = cards.findIndex(c => c.name === selectedCard);
+                  if (idx > 0) setSelectedCard(cards[idx - 1].name);
+                }}
+                className="bg-fire-gold/20 hover:bg-fire-gold/40 text-fire-gold px-4 py-2 rounded-lg"
+              >
+                ← Previous
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const idx = cards.findIndex(c => c.name === selectedCard);
+                  if (idx < cards.length - 1) setSelectedCard(cards[idx + 1].name);
+                }}
+                className="bg-fire-gold/20 hover:bg-fire-gold/40 text-fire-gold px-4 py-2 rounded-lg"
+              >
+                Next →
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 function AdminTestContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const skipPin = searchParams.get('skip_pin') === 'true';
+  const initialTab = searchParams.get('tab') === 'gallery' ? 'gallery' : 'test';
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
+  const [activeTab, setActiveTab] = useState<'test' | 'gallery'>(initialTab);
 
   const [birthDate, setBirthDate] = useState('');
   const [focusMode, setFocusMode] = useState('wealth');
@@ -149,97 +393,147 @@ function AdminTestContent() {
     );
   }
 
-  // Admin Test Console
+  // Admin Console with Tabs
   return (
-    <div className="min-h-screen bg-fire-gradient flex flex-col items-center p-4 py-12">
-      <div className="bg-black/80 border border-fire-gold/30 rounded-2xl p-8 max-w-md w-full">
-        <div className="flex items-center justify-center gap-2 mb-2">
-          <span className="text-2xl">🔧</span>
-          <h1 className="text-2xl font-bold text-fire-gold">Admin Test Console</h1>
+    <div className="min-h-screen bg-fire-gradient p-4 py-8">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-6">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <span className="text-2xl">🔧</span>
+            <h1 className="text-2xl font-bold text-fire-gold">Admin Console</h1>
+          </div>
+          <p className="text-gray-400 text-sm">
+            Test prophecy generation and browse digital art cards
+          </p>
         </div>
-        <p className="text-gray-400 text-center text-sm mb-8">
-          Generate prophecies without payment for testing
-        </p>
 
-        <form onSubmit={handleGenerate} className="space-y-6">
-          {/* Birth Date */}
-          <div>
-            <label className="block text-sm text-gray-400 mb-2">
-              Date of Birth
-            </label>
-            <input
-              type="text"
-              value={birthDate}
-              onChange={handleDateChange}
-              placeholder="MM/DD/YYYY"
-              className="w-full bg-black border border-red-900/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-fire-gold"
-              maxLength={10}
-              required
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              Just type numbers - slashes auto-added
-            </p>
-          </div>
-
-          {/* Focus Mode */}
-          <div>
-            <label className="block text-sm text-gray-400 mb-2">
-              Oracle Mode
-            </label>
-            <select
-              value={focusMode}
-              onChange={(e) => setFocusMode(e.target.value)}
-              className="w-full bg-black border border-red-900/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-fire-gold appearance-none cursor-pointer"
-            >
-              {FOCUS_MODES.map((mode) => (
-                <option key={mode.id} value={mode.id}>
-                  {mode.name} - {mode.description}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Error Display */}
-          {error && (
-            <div className="bg-red-900/30 border border-red-500 rounded-xl p-4">
-              <p className="text-red-400 text-sm">{error}</p>
-            </div>
-          )}
-
-          {/* Generate Button */}
+        {/* Tab Navigation */}
+        <div className="flex justify-center gap-2 mb-6">
           <button
-            type="submit"
-            disabled={isGenerating}
-            className="w-full bg-fire-gold text-black font-bold py-4 px-6 rounded-xl hover:scale-105 active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            onClick={() => setActiveTab('test')}
+            className={`px-6 py-3 rounded-xl font-bold transition-all ${
+              activeTab === 'test'
+                ? 'bg-fire-gold text-black'
+                : 'bg-black/50 text-gray-400 hover:text-white border border-fire-gold/30'
+            }`}
           >
-            {isGenerating ? (
-              <>
-                <span className="animate-spin">🔥</span>
-                Generating Prophecy...
-              </>
-            ) : (
-              <>
-                <span>✨</span>
-                Generate Test Prophecy
-              </>
-            )}
+            ✨ Test Console
           </button>
-        </form>
+          <button
+            onClick={() => setActiveTab('gallery')}
+            className={`px-6 py-3 rounded-xl font-bold transition-all ${
+              activeTab === 'gallery'
+                ? 'bg-fire-gold text-black'
+                : 'bg-black/50 text-gray-400 hover:text-white border border-fire-gold/30'
+            }`}
+          >
+            🎴 Card Gallery
+          </button>
+        </div>
 
-        {isGenerating && (
-          <div className="mt-6 text-center">
-            <p className="text-gray-400 text-sm animate-pulse">
-              This may take 30-60 seconds while AI generates your talisman...
-            </p>
+        {/* Tab Content */}
+        {activeTab === 'test' ? (
+          /* Test Console Tab */
+          <div className="flex justify-center">
+            <div className="bg-black/80 border border-fire-gold/30 rounded-2xl p-8 max-w-md w-full">
+              <p className="text-gray-400 text-center text-sm mb-8">
+                Generate prophecies without payment for testing
+              </p>
+
+              <form onSubmit={handleGenerate} className="space-y-6">
+                {/* Birth Date */}
+                <div>
+                  <label className="block text-sm text-gray-400 mb-2">
+                    Date of Birth
+                  </label>
+                  <input
+                    type="text"
+                    value={birthDate}
+                    onChange={handleDateChange}
+                    placeholder="MM/DD/YYYY"
+                    className="w-full bg-black border border-red-900/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-fire-gold"
+                    maxLength={10}
+                    required
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Just type numbers - slashes auto-added
+                  </p>
+                </div>
+
+                {/* Focus Mode */}
+                <div>
+                  <label className="block text-sm text-gray-400 mb-2">
+                    Oracle Mode
+                  </label>
+                  <select
+                    value={focusMode}
+                    onChange={(e) => setFocusMode(e.target.value)}
+                    className="w-full bg-black border border-red-900/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-fire-gold appearance-none cursor-pointer"
+                  >
+                    {FOCUS_MODES.map((mode) => (
+                      <option key={mode.id} value={mode.id}>
+                        {mode.name} - {mode.description}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Error Display */}
+                {error && (
+                  <div className="bg-red-900/30 border border-red-500 rounded-xl p-4">
+                    <p className="text-red-400 text-sm">{error}</p>
+                  </div>
+                )}
+
+                {/* Generate Button */}
+                <button
+                  type="submit"
+                  disabled={isGenerating}
+                  className="w-full bg-fire-gold text-black font-bold py-4 px-6 rounded-xl hover:scale-105 active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {isGenerating ? (
+                    <>
+                      <span className="animate-spin">🔥</span>
+                      Generating Prophecy...
+                    </>
+                  ) : (
+                    <>
+                      <span>✨</span>
+                      Generate Test Prophecy
+                    </>
+                  )}
+                </button>
+              </form>
+
+              {isGenerating && (
+                <div className="mt-6 text-center">
+                  <p className="text-gray-400 text-sm animate-pulse">
+                    This may take 30-60 seconds while AI generates your talisman...
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
+        ) : (
+          /* Gallery Tab */
+          <CardGallery />
         )}
 
+        {/* Footer Links */}
         <div className="flex gap-4 mt-8 justify-center">
           <a
             href="/superadmin"
             className="text-fire-gold text-sm hover:text-yellow-400 font-medium"
           >
-            📊 Image Browser
+            📊 SuperAdmin Dashboard
+          </a>
+          <span className="text-gray-600">|</span>
+          <a
+            href="/examples"
+            className="text-gray-400 text-sm hover:text-gray-300"
+          >
+            🎨 Examples Page
           </a>
           <span className="text-gray-600">|</span>
           <a
