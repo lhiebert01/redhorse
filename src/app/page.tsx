@@ -1,6 +1,7 @@
 'use client';
 
 import { PRODUCT_MODES } from '@/constants/modes';
+import FutureReservations from '@/components/FutureReservations';
 
 export default function Home() {
   const paymentLink = process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK || '#';
@@ -227,6 +228,11 @@ export default function Home() {
             &quot;The Oracle revealed my path. I won $500 the next day.&quot;
           </p>
           <p className="text-gray-400 text-sm mt-2">— Fire Horse Believer (Fictional)</p>
+        </div>
+
+        {/* Future Years Reservation Section */}
+        <div className="w-full bg-black/60 backdrop-blur-sm border border-fire-gold/30 rounded-2xl p-6 mb-6">
+          <FutureReservations />
         </div>
 
         {/* Footer / Disclaimer */}
