@@ -54,7 +54,7 @@ export default function Home() {
         <h1 className="text-5xl md:text-6xl font-bold text-fire-gold tracking-tighter text-glow-gold text-center mt-4 mb-3">
           RED HORSE
           <br />
-          ORACLE
+          ORACLE<sup className="text-lg align-super">™</sup>
         </h1>
 
         {/* Tagline */}
@@ -236,7 +236,10 @@ export default function Home() {
             <br />
             Not financial, legal, or gambling advice.
           </p>
-          <p className="mt-2">© 2026 Red Horse Oracle. 18+.</p>
+          <p className="mt-2">© 2026 PIGENAI LLC. All Rights Reserved.</p>
+          <p className="text-fire-gold text-xs mt-1">
+            Red Horse Oracle™ • Patent Pending • 18+
+          </p>
           <div className="mt-3 space-x-4">
             <a href="/terms" className="hover:text-fire-gold underline">
               Terms

@@ -480,6 +480,19 @@ export default function FreeReadingPage() {
             ← Back to Home
           </a>
         </div>
+
+        {/* Footer */}
+        <footer className="text-center text-sm text-white font-bold mt-8 pb-8">
+          <p>
+            Strictly for entertainment purposes only. AI-generated artwork.
+            <br />
+            Not financial, legal, or gambling advice.
+          </p>
+          <p className="mt-2">© 2026 PIGENAI LLC. All Rights Reserved.</p>
+          <p className="text-fire-gold text-xs mt-1">
+            Red Horse Oracle™ • Patent Pending • 18+
+          </p>
+        </footer>
       </div>
     </main>
   );

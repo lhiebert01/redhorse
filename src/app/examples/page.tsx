@@ -241,7 +241,10 @@ export default function ExamplesPage() {
             <br />
             Not financial, legal, or gambling advice.
           </p>
-          <p className="mt-2">© 2026 Red Horse Oracle. 18+.</p>
+          <p className="mt-2">© 2026 PIGENAI LLC. All Rights Reserved.</p>
+          <p className="text-fire-gold text-xs mt-1">
+            Red Horse Oracle™ • Patent Pending • 18+
+          </p>
         </footer>
       </div>
 
