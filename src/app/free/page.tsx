@@ -644,12 +644,12 @@ export default function FreeReadingPage() {
                 {/* Result */}
                 <div className="text-center">
                   <p className="text-white text-base font-bold">Your Unique</p>
-                  <p className="text-fire-gold text-lg font-bold">Masterpiece</p>
+                  <p className="text-fire-gold text-xl font-bold mb-2">Masterpiece</p>
                   <a
                     href="/examples"
-                    className="text-green-400 hover:text-green-300 text-[10px] underline"
+                    className="inline-block bg-green-600 hover:bg-green-500 text-white font-bold text-sm py-2 px-4 rounded-lg transition-all hover:scale-105"
                   >
-                    See Examples →
+                    🎨 See Examples
                   </a>
                 </div>
               </div>
