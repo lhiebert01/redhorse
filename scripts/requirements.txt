@@ -1,0 +1,6 @@
+# Requirements for Fire Horse 2026 Zodiac Badge Generator
+# Install with: pip install -r requirements.txt
+
+google-generativeai>=0.8.0
+python-dotenv>=1.0.0
+Pillow>=10.0.0

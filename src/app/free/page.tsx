@@ -313,29 +313,27 @@ export default function FreeReadingPage() {
                       </h2>
                     </div>
 
-                    {/* Large Zodiac Badge Preview - Watermarked */}
-                    <div className="relative mx-auto max-w-xs">
+                    {/* Zodiac Digital Art Card - Clear with light watermark */}
+                    <div className="relative mx-auto max-w-sm">
+                      <p className="text-center text-green-400 text-sm font-semibold mb-2">
+                        🔒 Privacy by Design — Your {result.element} {result.animal}
+                      </p>
                       <div className="relative rounded-xl overflow-hidden border-2 border-green-500/50 shadow-lg shadow-green-500/20">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={`/assets/zodiac-badges/${result.element.toLowerCase()}-${result.animal.toLowerCase()}.jpeg`}
                           alt={`${result.element} ${result.animal} Zodiac Card`}
-                          className="w-full h-auto opacity-80 blur-[1px]"
+                          className="w-full h-auto"
                         />
-                        {/* Watermark Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/50 flex flex-col items-center justify-center">
-                          <p className="text-white/80 text-lg font-bold tracking-wider">PREVIEW</p>
-                          <p className="text-green-400/90 text-xs mt-1">Full resolution with purchase</p>
-                        </div>
-                        {/* FREE watermark diagonal */}
-                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                          <p className="text-white/20 text-5xl font-black rotate-[-25deg] tracking-widest">
-                            FREE PREVIEW
+                        {/* Light watermark at bottom */}
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent py-3 px-2">
+                          <p className="text-white/60 text-[10px] text-center tracking-wide">
+                            Free Oracle from redhorseoracle.com
                           </p>
                         </div>
                       </div>
-                      <p className="text-center text-green-400 text-xs mt-2">
-                        Your {result.element} {result.animal} Digital Art Card
+                      <p className="text-center text-gray-400 text-xs mt-2">
+                        Your {result.element} {result.animal} Collectible Digital Art Card
                       </p>
                     </div>
 
@@ -359,17 +357,22 @@ export default function FreeReadingPage() {
                       </p>
                     </div>
 
-                    {/* The FREE Forecast Content */}
+                    {/* The FREE Forecast Content - Full forecast */}
                     <div className="bg-black/60 border-2 border-green-600/50 rounded-xl p-5">
                       <p className="text-green-400 text-xs uppercase tracking-widest text-center mb-3">
-                        Your 2026 Forecast Preview
+                        Your 2026 {result.element} {result.animal} Forecast
                       </p>
-                      <p className="text-white text-lg leading-relaxed mb-3">
-                        {forecast.forecast.split('.').slice(0, 2).join('.') + '.'}
+                      <p className="text-white text-base leading-relaxed mb-4">
+                        {forecast.forecast}
                       </p>
-                      <p className="text-green-500 text-xs text-center font-semibold">
-                        [Preview - 2 of {forecast.forecast.split('.').length - 1} sentences shown]
-                      </p>
+                      <div className="bg-fire-gold/10 border border-fire-gold/30 rounded-lg p-3 mt-3">
+                        <p className="text-fire-gold text-xs text-center font-semibold">
+                          ✨ Want a more detailed, personalized reading?
+                        </p>
+                        <p className="text-gray-400 text-xs text-center mt-1">
+                          Get your <span className="text-fire-gold">Authenticated Limited Edition Oracle</span> with one-of-a-kind AI-generated digital art featuring YOUR {result.element} {result.animal} with the Fire Horse.
+                        </p>
+                      </div>
                     </div>
 
                     {/* Oracle Wisdom Quote */}
