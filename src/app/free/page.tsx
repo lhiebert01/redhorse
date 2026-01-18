@@ -595,31 +595,48 @@ export default function FreeReadingPage() {
               </p>
             </div>
 
-            {/* Sample Talisman Preview */}
+            {/* Your Zodiac Digital Art Card + CTA */}
             <div className="bg-gradient-to-br from-yellow-900/20 to-red-900/20 border border-fire-gold/50 rounded-2xl p-6">
-              <p className="text-fire-gold text-base uppercase tracking-widest mb-6 text-center font-semibold">
-                Your {result.element} {result.animal} × Fire Horse Oracle Awaits
+              <p className="text-fire-gold text-base uppercase tracking-widest mb-4 text-center font-semibold">
+                Your {result.element} {result.animal} Digital Art Card
               </p>
 
-              <div className="relative w-full max-w-sm mx-auto mb-6">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={`/assets/examples/${result.animal.toLowerCase()}.png`}
-                  alt={`${result.element} ${result.animal} Oracle Example`}
-                  className="w-full h-auto rounded-xl border border-fire-gold/30"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent rounded-xl flex items-end justify-center pb-6">
-                  <p className="text-white text-sm font-semibold">
-                    Sample {result.element} {result.animal} × Fire Horse Oracle
-                  </p>
+              {/* Zodiac Badge Card with watermark */}
+              <div className="relative w-full max-w-xs mx-auto mb-6">
+                <div className="relative rounded-xl overflow-hidden border-2 border-fire-gold/50 shadow-lg">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`/assets/zodiac-badges/${result.element.toLowerCase()}-${result.animal.toLowerCase()}.jpeg`}
+                    alt={`${result.element} ${result.animal} Digital Art Card`}
+                    className="w-full h-auto"
+                  />
+                  {/* Light watermark at bottom */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent py-3 px-2">
+                    <p className="text-white/70 text-[9px] text-center tracking-wide">
+                      Free Oracle • redhorseoracle.com
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              <p className="text-gray-300 text-center text-base mb-8 leading-relaxed">
-                Your unique AI-generated {result.element} {result.animal} talisman
-                <br />
-                for the Year of the Fire Horse
+              <p className="text-gray-300 text-center text-sm mb-4">
+                This is YOUR {result.element} {result.animal} collectible card.
               </p>
+
+              <div className="bg-fire-gold/10 border border-fire-gold/40 rounded-xl p-4 mb-6">
+                <p className="text-fire-gold text-sm font-bold text-center mb-2">
+                  ✨ Want a ONE-OF-A-KIND Masterpiece?
+                </p>
+                <p className="text-gray-300 text-xs text-center leading-relaxed">
+                  Your <span className="text-fire-gold font-semibold">Authenticated Limited Edition Oracle</span> includes unique AI-generated digital art showing YOUR {result.element} {result.animal} WITH the Fire Horse in authentic Chinese artistic style.
+                </p>
+                <a
+                  href="/examples"
+                  className="block text-center text-green-400 hover:text-green-300 text-xs mt-2 underline"
+                >
+                  View Sample Gallery →
+                </a>
+              </div>
 
               {/* The Four Paths */}
               <div className="grid grid-cols-2 gap-3 mb-6">
