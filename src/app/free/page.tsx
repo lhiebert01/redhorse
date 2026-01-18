@@ -159,6 +159,103 @@ export default function FreeReadingPage() {
         ) : (
           /* Results Section */
           <div className="space-y-8">
+            {/* BIG HERO TITLE - Make it OBVIOUS this is their FREE Oracle */}
+            <div className="bg-gradient-to-r from-fire-gold via-yellow-500 to-fire-gold rounded-2xl p-1">
+              <div className="bg-black rounded-xl p-6 text-center">
+                <p className="text-fire-gold text-xs uppercase tracking-[0.25em] mb-2">
+                  Your Personalized Reading is Ready
+                </p>
+                <h1 className="text-2xl md:text-3xl font-bold text-white leading-tight mb-2">
+                  HERE IS YOUR <span className="text-fire-gold">FREE</span> ORACLE
+                  <br />
+                  <span className="text-lg md:text-xl text-gray-300">for the Year of the Fire Horse 2026</span>
+                </h1>
+                <div className="mt-4 inline-block bg-fire-gold/20 border-2 border-fire-gold rounded-xl px-6 py-3">
+                  <p className="text-fire-gold text-lg font-bold">
+                    You are a {result.element} {result.animal}
+                  </p>
+                  <p className="text-3xl mt-1">
+                    {ELEMENT_CHINESE[result.element]}{ZODIAC_CHINESE[result.animal]}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* ========== SHARE CTA - Right at the top ========== */}
+            <div className="bg-gradient-to-r from-purple-950 via-black to-purple-950 border-2 border-purple-500/70 rounded-2xl p-5 text-center">
+              {/* Urgency CTA */}
+              <div className="mb-4">
+                <p className="text-white text-lg font-bold mb-1">
+                  🔥 Don&apos;t Miss Out on the <span className="text-fire-gold">Limited Edition Oracle</span> for 2026!
+                </p>
+                <a
+                  href={paymentLink}
+                  className="inline-block bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 text-black font-bold text-base py-3 px-6 rounded-xl hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg shadow-yellow-500/30 border-2 border-yellow-400"
+                >
+                  GET YOURS NOW — $8.88
+                </a>
+              </div>
+
+              {/* Divider */}
+              <div className="flex items-center gap-3 my-4">
+                <div className="flex-1 h-px bg-purple-700/50"></div>
+                <span className="text-purple-400 text-xs uppercase tracking-widest">or</span>
+                <div className="flex-1 h-px bg-purple-700/50"></div>
+              </div>
+
+              {/* Share Section */}
+              <p className="text-purple-300 text-base font-semibold mb-1">
+                📣 Share This — Please!
+              </p>
+              <p className="text-red-400 text-sm font-bold mb-4">
+                Supplies won&apos;t last. Only 888 per zodiac sign.
+              </p>
+
+              {/* Share Buttons */}
+              <div className="flex flex-wrap justify-center gap-3">
+                <a
+                  href={`https://twitter.com/intent/tweet?text=I%20just%20discovered%20I%27m%20a%20${result.element}%20${result.animal}%20in%20the%20Year%20of%20the%20Fire%20Horse%202026!%20%F0%9F%94%A5%F0%9F%90%B4%20Find%20YOUR%20zodiac%20destiny%3A&url=https://redhorse-omega.vercel.app/free`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-black hover:bg-gray-900 border border-gray-600 text-white font-semibold px-4 py-2.5 rounded-xl transition-all hover:scale-105"
+                >
+                  <span className="text-lg">𝕏</span>
+                  <span className="text-sm">Share on X</span>
+                </a>
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=https://redhorse-omega.vercel.app/free&quote=I%27m%20a%20${result.element}%20${result.animal}%20in%20the%20Year%20of%20the%20Fire%20Horse%202026!`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4 py-2.5 rounded-xl transition-all hover:scale-105"
+                >
+                  <span className="text-lg">f</span>
+                  <span className="text-sm">Share on Facebook</span>
+                </a>
+                <button
+                  onClick={() => {
+                    if (navigator.share) {
+                      navigator.share({
+                        title: `I'm a ${result.element} ${result.animal} - Fire Horse 2026`,
+                        text: `I just discovered my Chinese zodiac destiny for 2026! I'm a ${result.element} ${result.animal}. Find YOUR zodiac sign:`,
+                        url: 'https://redhorse-omega.vercel.app/free'
+                      });
+                    } else {
+                      navigator.clipboard.writeText('https://redhorse-omega.vercel.app/free');
+                      alert('Link copied to clipboard!');
+                    }
+                  }}
+                  className="flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white font-semibold px-4 py-2.5 rounded-xl transition-all hover:scale-105"
+                >
+                  <span className="text-lg">📤</span>
+                  <span className="text-sm">Share Link</span>
+                </button>
+              </div>
+
+              <p className="text-gray-500 text-xs mt-3">
+                Help a friend discover their 2026 destiny before it&apos;s too late
+              </p>
+            </div>
+
             {/* Zodiac Identity Card */}
             <div className="bg-gradient-to-br from-red-950/50 to-black border border-fire-gold/30 rounded-2xl p-6 text-center">
               <p className="text-gray-400 text-sm uppercase tracking-widest mb-2">
@@ -184,75 +281,180 @@ export default function FreeReadingPage() {
               </div>
             </div>
 
-            {/* Core Strengths - Element-Specific */}
+            {/* ========== YOUR FREE ORACLE CARD - THE MAIN EVENT ========== */}
             {forecast && (
-              <div className="bg-black/50 border border-gray-800 rounded-xl p-6">
-                <p className="text-gray-400 text-sm uppercase tracking-widest mb-3">
-                  Your {result.element} {result.animal} Core Strengths
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {forecast.coreStrengths.map((strength) => (
-                    <span
-                      key={strength}
-                      className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-sm px-4 py-2 rounded-full"
-                    >
-                      {strength}
-                    </span>
-                  ))}
+              <div className="relative">
+                {/* Animated glowing border effect */}
+                <div className="absolute -inset-2 bg-gradient-to-r from-green-400 via-green-500 to-green-400 rounded-3xl blur-md opacity-80 animate-pulse"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-green-500 via-fire-gold to-green-500 rounded-3xl opacity-90"></div>
+
+                <div className="relative bg-gradient-to-b from-green-950 via-black to-green-950 border-4 border-green-400 rounded-2xl p-6 shadow-2xl shadow-green-500/30">
+                  {/* FREE Badge - Larger and more prominent */}
+                  <div className="absolute -top-5 left-1/2 transform -translate-x-1/2">
+                    <div className="bg-gradient-to-r from-green-500 via-green-400 to-green-500 text-black font-black text-base px-8 py-2.5 rounded-full border-3 border-green-200 shadow-xl shadow-green-500/50">
+                      ★ YOUR FREE ORACLE ★
+                    </div>
+                  </div>
+
+                  {/* Corner decorations */}
+                  <div className="absolute top-2 left-2 text-green-500 text-2xl opacity-50">✦</div>
+                  <div className="absolute top-2 right-2 text-green-500 text-2xl opacity-50">✦</div>
+                  <div className="absolute bottom-2 left-2 text-green-500 text-2xl opacity-50">✦</div>
+                  <div className="absolute bottom-2 right-2 text-green-500 text-2xl opacity-50">✦</div>
+
+                  <div className="pt-6 space-y-5">
+                    {/* Section Header */}
+                    <div className="text-center">
+                      <p className="text-green-400 text-xs uppercase tracking-[0.25em] mb-1">
+                        2026 Fire Horse Forecast
+                      </p>
+                      <h2 className="text-xl md:text-2xl font-bold text-white">
+                        Your {result.element} {result.animal} × Fire Horse Prophecy
+                      </h2>
+                    </div>
+
+                    {/* Large Zodiac Badge Preview - Watermarked */}
+                    <div className="relative mx-auto max-w-xs">
+                      <div className="relative rounded-xl overflow-hidden border-2 border-green-500/50 shadow-lg shadow-green-500/20">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={`/assets/zodiac-badges/${result.element.toLowerCase()}-${result.animal.toLowerCase()}.jpeg`}
+                          alt={`${result.element} ${result.animal} Zodiac Card`}
+                          className="w-full h-auto opacity-80 blur-[1px]"
+                        />
+                        {/* Watermark Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/50 flex flex-col items-center justify-center">
+                          <p className="text-white/80 text-lg font-bold tracking-wider">PREVIEW</p>
+                          <p className="text-green-400/90 text-xs mt-1">Full resolution with purchase</p>
+                        </div>
+                        {/* FREE watermark diagonal */}
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                          <p className="text-white/20 text-5xl font-black rotate-[-25deg] tracking-widest">
+                            FREE PREVIEW
+                          </p>
+                        </div>
+                      </div>
+                      <p className="text-center text-green-400 text-xs mt-2">
+                        Your {result.element} {result.animal} Digital Art Card
+                      </p>
+                    </div>
+
+                    {/* Tagline with colored background */}
+                    <div className={`${getTaglineBg(forecast.tagline)} border-2 rounded-xl p-4`}>
+                      <p className={`text-xl font-bold text-center mb-2 ${getTaglineColor(forecast.tagline)}`}>
+                        {forecast.tagline}
+                      </p>
+                      <p className="text-gray-300 text-sm text-center">
+                        {getFireHorseRelationDescription(forecast.tagline)}
+                      </p>
+                    </div>
+
+                    {/* Characteristics */}
+                    <div className="bg-black/40 border border-green-700/40 rounded-xl p-4">
+                      <p className="text-green-400 text-xs uppercase tracking-widest text-center mb-2">
+                        {result.element} {result.animal} Characteristics
+                      </p>
+                      <p className="text-gray-200 text-sm leading-relaxed text-center">
+                        {forecast.characteristics}
+                      </p>
+                    </div>
+
+                    {/* The FREE Forecast Content */}
+                    <div className="bg-black/60 border-2 border-green-600/50 rounded-xl p-5">
+                      <p className="text-green-400 text-xs uppercase tracking-widest text-center mb-3">
+                        Your 2026 Forecast Preview
+                      </p>
+                      <p className="text-white text-lg leading-relaxed mb-3">
+                        {forecast.forecast.split('.').slice(0, 2).join('.') + '.'}
+                      </p>
+                      <p className="text-green-500 text-xs text-center font-semibold">
+                        [Preview - 2 of {forecast.forecast.split('.').length - 1} sentences shown]
+                      </p>
+                    </div>
+
+                    {/* Oracle Wisdom Quote */}
+                    <div className="bg-fire-gold/10 border border-fire-gold/40 rounded-xl p-4">
+                      <p className="text-fire-gold text-lg italic text-center">
+                        &ldquo;{forecast.oracleWisdom}&rdquo;
+                      </p>
+                      <p className="text-gray-500 text-xs text-center mt-2">— Oracle Wisdom for {result.element} {result.animal}</p>
+                    </div>
+
+                    {/* Core Strengths in the FREE card */}
+                    <div>
+                      <p className="text-green-400 text-xs uppercase tracking-widest text-center mb-3">
+                        Your {result.element} {result.animal} Core Strengths
+                      </p>
+                      <div className="flex flex-wrap justify-center gap-2">
+                        {forecast.coreStrengths.map((strength) => (
+                          <span
+                            key={strength}
+                            className="bg-green-900/50 border border-green-500/50 text-green-300 text-sm px-4 py-1.5 rounded-full font-medium"
+                          >
+                            {strength}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* This is what you got FREE label */}
+                  <div className="border-t-2 border-green-600/50 mt-5 pt-4 text-center">
+                    <p className="text-green-300 text-base font-bold">
+                      ✓ This is your FREE {result.element} {result.animal} Oracle for 2026
+                    </p>
+                    <p className="text-gray-400 text-xs mt-1">
+                      Scroll down to unlock the complete authenticated oracle
+                    </p>
+                  </div>
                 </div>
               </div>
             )}
 
-            {/* Characteristics - Element-Specific */}
-            {forecast && (
-              <div className="bg-black/50 border border-gray-800 rounded-xl p-6">
-                <p className="text-gray-400 text-sm uppercase tracking-widest mb-3">
-                  {result.element} {result.animal} Characteristics
-                </p>
-                <p className="text-gray-200 leading-relaxed">
-                  {forecast.characteristics}
-                </p>
-              </div>
-            )}
-
-            {/* 2026 Fire Horse Forecast - Element-Specific (FREE: Limited Preview) */}
-            {forecast && (
-              <div className={`${getTaglineBg(forecast.tagline)} border rounded-xl p-6`}>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl">🔥</span>
-                  <p className="text-gray-400 text-sm uppercase tracking-widest">
-                    Your {result.element} {result.animal} × Fire Horse 2026 Forecast
-                  </p>
+            {/* ========== IMMEDIATE CTA - Want the Full Oracle? ========== */}
+            <div className="bg-gradient-to-r from-red-950 via-black to-red-950 border-2 border-fire-gold rounded-2xl p-6 text-center">
+              <p className="text-fire-gold text-xs uppercase tracking-[0.2em] mb-2">
+                Ready for More?
+              </p>
+              <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">
+                Would You Like an<br />
+                <span className="text-fire-gold">Authenticated Limited Edition</span><br />
+                Complete Oracle?
+              </h3>
+              <p className="text-gray-300 text-sm mb-4">
+                Your FREE preview shows just the beginning. The complete {result.element} {result.animal} × Fire Horse Oracle includes:
+              </p>
+              <div className="grid grid-cols-2 gap-2 mb-4 max-w-sm mx-auto">
+                <div className="bg-black/50 border border-fire-gold/30 rounded-lg p-2">
+                  <span className="text-lg">🎲</span>
+                  <p className="text-fire-gold text-xs font-semibold">6 Lucky Numbers</p>
                 </div>
-                <p className={`text-lg font-semibold mb-2 ${getTaglineColor(forecast.tagline)}`}>
-                  {forecast.tagline}
-                </p>
-                <p className="text-gray-300 text-sm mb-3">
-                  {getFireHorseRelationDescription(forecast.tagline)}
-                </p>
-
-                {/* FREE: Show only first 2 sentences of forecast */}
-                <p className="text-gray-200 leading-relaxed mb-4">
-                  {forecast.forecast.split('.').slice(0, 2).join('.') + '.'}
-                  <span className="text-fire-gold font-semibold"> [Preview]</span>
-                </p>
-
-                {/* Oracle Wisdom */}
-                <p className="text-fire-gold italic">
-                  &ldquo;{forecast.oracleWisdom}&rdquo;
-                </p>
-
-                {/* Teaser for full forecast */}
-                <div className="mt-4 bg-black/50 border border-fire-gold/30 rounded-lg p-3">
-                  <p className="text-fire-gold text-sm font-semibold mb-1">
-                    🔒 Full {result.element} {result.animal} Forecast + 4 Oracle Modes
-                  </p>
-                  <p className="text-gray-400 text-xs">
-                    Unlock your complete forecast, lucky numbers, power motto, love decree, and protection mantra with your Authenticated Oracle.
-                  </p>
+                <div className="bg-black/50 border border-fire-gold/30 rounded-lg p-2">
+                  <span className="text-lg">⚔️</span>
+                  <p className="text-fire-gold text-xs font-semibold">Power Motto</p>
+                </div>
+                <div className="bg-black/50 border border-fire-gold/30 rounded-lg p-2">
+                  <span className="text-lg">❤️</span>
+                  <p className="text-fire-gold text-xs font-semibold">Love Decree</p>
+                </div>
+                <div className="bg-black/50 border border-fire-gold/30 rounded-lg p-2">
+                  <span className="text-lg">🛡️</span>
+                  <p className="text-fire-gold text-xs font-semibold">Shield Mantra</p>
                 </div>
               </div>
-            )}
+              <p className="text-white text-sm font-semibold mb-4">
+                + AI-Generated Talisman Art + Full Prophecy + Zodiac Card Download
+              </p>
+              <a
+                href={paymentLink}
+                className="inline-block bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 text-black font-bold text-lg py-4 px-8 rounded-xl hover:scale-105 active:scale-95 transition-all duration-200 shadow-xl shadow-yellow-500/30 border-2 border-yellow-400"
+              >
+                🔥 YES! GET MY COMPLETE ORACLE — $8.88
+              </a>
+              <p className="text-gray-500 text-xs mt-3">
+                One-time payment • Instant delivery • Privacy by design
+              </p>
+            </div>
 
             {/* Limited Edition Certificate */}
             <div className="bg-gradient-to-br from-black via-gray-950 to-black border-2 border-fire-gold rounded-2xl p-6 relative overflow-hidden">
@@ -329,75 +531,91 @@ export default function FreeReadingPage() {
             </div>
 
             {/* Courage Challenge CTA */}
-            <div className="bg-gradient-to-br from-red-950 via-red-900 to-black border-2 border-red-500 rounded-2xl p-6 text-center">
+            <div className="bg-gradient-to-b from-red-950/80 via-red-900/60 to-black border-2 border-red-500/70 rounded-2xl p-6 text-center space-y-5">
               {/* Urgency Warning - Time-based */}
-              <div className="bg-red-900/80 border border-red-500 rounded-lg px-4 py-2 mb-4 inline-block">
+              <div className="bg-red-900/80 border border-red-500 rounded-lg px-4 py-2 inline-block">
                 <p className="text-red-200 text-xs font-bold uppercase tracking-wider">
                   ⏰ {result.element.toUpperCase()} {result.animal.toUpperCase()} EDITION CLOSES {EDITION_CONFIG[result.animal].closingDateDisplay.toUpperCase()} ⏰
                 </p>
               </div>
 
-              <p className="text-red-400 text-sm uppercase tracking-widest mb-2">
-                The Fire Horse Demands Courage
-              </p>
-              <h3 className="text-white text-2xl md:text-3xl font-bold mb-4">
-                Will YOU Claim Your Authentic<br />{result.element} {result.animal} × Fire Horse Oracle?
-              </h3>
-              <p className="text-gray-300 text-lg mb-4">
+              <div>
+                <p className="text-red-400 text-sm uppercase tracking-widest mb-3">
+                  The Fire Horse Demands Courage
+                </p>
+                <h3 className="text-white text-2xl md:text-3xl font-bold leading-relaxed">
+                  Will YOU Claim Your Authentic
+                  <br />
+                  <span className="text-fire-gold">{result.element} {result.animal}</span> × Fire Horse Oracle?
+                </h3>
+              </div>
+
+              <p className="text-gray-300 text-lg leading-relaxed">
                 Only <span className="text-fire-gold font-bold">888</span> of each oracle type will EVER be minted for {result.element} {result.animal}.
-                <br />
-                <span className="text-red-400">Each one numbered. Each one unique. Each one YOURS.</span>
+              </p>
+              <p className="text-red-400 font-semibold">
+                Each one numbered. Each one unique. Each one YOURS.
               </p>
 
               {/* Countdown Context */}
-              <div className="bg-black/70 border border-fire-gold/50 rounded-xl p-4 mb-4">
-                <p className="text-fire-gold text-sm font-bold mb-1">🔥 {result.element} {result.animal} Edition Closes: {EDITION_CONFIG[result.animal].closingDateDisplay}</p>
-                <p className="text-gray-400 text-xs">
+              <div className="bg-black/70 border border-fire-gold/50 rounded-xl p-4 space-y-2">
+                <p className="text-fire-gold text-sm font-bold">
+                  🔥 {result.element} {result.animal} Edition Closes: {EDITION_CONFIG[result.animal].closingDateDisplay}
+                </p>
+                <p className="text-gray-400 text-sm">
                   After this date, <span className="text-red-400 font-bold">NO MORE {result.animal} Oracles</span> will be minted for Fire Horse 2026.
                 </p>
-                <p className="text-gray-500 text-xs mt-1">
+                <p className="text-gray-500 text-xs">
                   Next Fire Horse year: <span className="text-red-400">2086</span> — Will you even be alive?
                 </p>
               </div>
 
-              <p className="text-white text-base font-semibold italic mb-4">
+              <p className="text-white text-base font-semibold italic">
                 &ldquo;Fortune favors the bold. The Fire Horse respects COURAGE.&rdquo;
               </p>
 
-              <div className="bg-black/50 border border-gray-700 rounded-xl p-4 mb-4">
-                <p className="text-gray-400 text-xs uppercase tracking-widest mb-2">The Question Is:</p>
-                <p className="text-white text-xl font-bold">
+              <div className="bg-black/50 border border-gray-700 rounded-xl p-4 space-y-2">
+                <p className="text-gray-400 text-xs uppercase tracking-widest">The Question Is:</p>
+                <p className="text-white text-xl font-bold leading-relaxed">
                   Are you someone who <span className="text-red-400">ACTS</span>?
-                  <br />
+                </p>
+                <p className="text-white text-xl font-bold">
                   Or someone who <span className="text-gray-500">lets opportunity pass?</span>
                 </p>
               </div>
 
-              <p className="text-white text-sm font-semibold">
-                Only {EDITION_CONFIG[result.animal].totalSlots} of each mode (Wealth, Power, Love, Shield) will EVER be minted for {result.element} {result.animal}. Will you claim yours?
+              <p className="text-white text-sm font-semibold leading-relaxed">
+                Only {EDITION_CONFIG[result.animal].totalSlots} of each mode (Wealth, Power, Love, Shield) will EVER be minted for {result.element} {result.animal}.
+              </p>
+              <p className="text-fire-gold text-sm font-bold">
+                Will you claim yours?
               </p>
             </div>
 
             {/* Sample Talisman Preview */}
             <div className="bg-gradient-to-br from-yellow-900/20 to-red-900/20 border border-fire-gold/50 rounded-2xl p-6">
-              <p className="text-fire-gold text-sm uppercase tracking-widest mb-3 text-center">
+              <p className="text-fire-gold text-base uppercase tracking-widest mb-6 text-center font-semibold">
                 Your {result.element} {result.animal} × Fire Horse Oracle Awaits
               </p>
-              <div className="relative w-full max-w-sm mx-auto mb-4">
+
+              <div className="relative w-full max-w-sm mx-auto mb-6">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`/assets/examples/${result.animal.toLowerCase()}.png`}
                   alt={`${result.element} ${result.animal} Oracle Example`}
                   className="w-full h-auto rounded-xl border border-fire-gold/30"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent rounded-xl flex items-end justify-center pb-4">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent rounded-xl flex items-end justify-center pb-6">
                   <p className="text-white text-sm font-semibold">
                     Sample {result.element} {result.animal} × Fire Horse Oracle
                   </p>
                 </div>
               </div>
-              <p className="text-gray-300 text-center text-sm mb-6">
-                Your unique AI-generated {result.element} {result.animal} talisman for the Year of the Fire Horse
+
+              <p className="text-gray-300 text-center text-base mb-8 leading-relaxed">
+                Your unique AI-generated {result.element} {result.animal} talisman
+                <br />
+                for the Year of the Fire Horse
               </p>
 
               {/* The Four Paths */}
