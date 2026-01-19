@@ -232,8 +232,18 @@ export default function Home() {
           {/* ========== SECTION 2: PAID ORACLE ========== */}
           <div className="bg-gradient-to-br from-red-950/50 to-black border-2 border-fire-gold/50 rounded-2xl p-5">
             <div className="text-center mb-4">
-              <span className="text-3xl">🔥</span>
+              <p className="text-3xl">🔥🔥</p>
               <h3 className="text-fire-gold text-xl font-bold mt-2">THE LIMITED EDITION — COMPLETE ORACLE</h3>
+            </div>
+
+            {/* Oracle Preview Image */}
+            <div className="flex justify-center mb-4">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/assets/Year-of-the-Horse-2026-v2.jpeg"
+                alt="Your Limited Edition Oracle"
+                className="w-40 h-auto rounded-xl border-2 border-fire-gold/50 shadow-lg shadow-red-900/50 opacity-90"
+              />
             </div>
 
             {/* Paid CTA Button */}
