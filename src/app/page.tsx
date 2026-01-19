@@ -233,10 +233,7 @@ export default function Home() {
           <div className="bg-gradient-to-br from-red-950/50 to-black border-2 border-fire-gold/50 rounded-2xl p-5">
             <div className="text-center mb-4">
               <span className="text-3xl">🔥</span>
-              <h3 className="text-fire-gold text-xl font-bold mt-2">BET ON YOURSELF!</h3>
-              <p className="text-white text-sm mt-1">
-                <span className="text-yellow-400">Get</span> the <span className="text-fire-gold font-semibold">REAL ORACLE</span> for 2026
-              </p>
+              <h3 className="text-fire-gold text-xl font-bold mt-2">THE LIMITED EDITION — COMPLETE ORACLE</h3>
             </div>
 
             {/* Paid CTA Button */}
