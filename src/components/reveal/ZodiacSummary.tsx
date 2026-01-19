@@ -12,6 +12,7 @@ import {
   ZODIAC_PROFILES,
   FIRE_HORSE_RELATIONS,
 } from '@/constants/zodiac-data';
+import { getZodiacFunFacts, getElementColors } from '@/constants/zodiac-fun-facts';
 
 interface ZodiacSummaryProps {
   zodiacSign: string;
@@ -62,6 +63,10 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement, focusMode, fu
   const relation = FIRE_HORSE_RELATIONS[animal];
   const animalChinese = ZODIAC_CHINESE[animal] || '';
   const elementChinese = element ? (ELEMENT_CHINESE[element] || '') : '';
+
+  // Get fun facts for celebrity quotes, mantras, etc.
+  const funFacts = element ? getZodiacFunFacts(element, animal) : null;
+  const elementColors = element ? getElementColors(element) : null;
 
   // Safety check
   if (!profile || !relation) {
@@ -144,6 +149,59 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement, focusMode, fu
 
   return (
     <div className="w-full max-w-md mt-8 space-y-6">
+      {/* ========== CELEBRITY QUOTE BANNER - TOP OF FORECAST ========== */}
+      {funFacts && elementColors && element && (
+        <div className={`relative overflow-hidden rounded-2xl border-2 ${elementColors.border}`}>
+          {/* Animated gradient background */}
+          <div className={`absolute inset-0 bg-gradient-to-r ${elementColors.gradient} opacity-30`}></div>
+          <div className="absolute inset-0 bg-black/70"></div>
+
+          <div className="relative p-6 text-center">
+            {/* Decorative corners */}
+            <div className="absolute top-3 left-3 text-3xl opacity-30">✦</div>
+            <div className="absolute top-3 right-3 text-3xl opacity-30">✦</div>
+            <div className="absolute bottom-3 left-3 text-3xl opacity-30">✦</div>
+            <div className="absolute bottom-3 right-3 text-3xl opacity-30">✦</div>
+
+            {/* Quote marks with element color */}
+            <div className={`text-6xl mb-2 ${elementColors.text} opacity-60 font-serif`}>&ldquo;</div>
+
+            {/* The Quote - Artistic Typography */}
+            <blockquote className="relative">
+              <p className={`text-2xl md:text-3xl font-black leading-relaxed mb-2 bg-gradient-to-r ${elementColors.gradient} bg-clip-text text-transparent`}>
+                {funFacts.quote}
+              </p>
+            </blockquote>
+
+            {/* Closing quote */}
+            <div className={`text-4xl ${elementColors.text} opacity-40 font-serif -mt-2`}>&rdquo;</div>
+
+            {/* Attribution Line with Description */}
+            <div className="mt-4 space-y-2">
+              <div className="flex items-center justify-center gap-3">
+                <div className={`h-px w-16 bg-gradient-to-r ${elementColors.gradient}`}></div>
+                <div className="text-center">
+                  <p className={`${elementColors.text} font-bold text-xl`}>
+                    — {funFacts.quoteAuthor}
+                  </p>
+                  <p className="text-gray-400 text-sm italic">
+                    {funFacts.quoteAuthorDescription}
+                  </p>
+                </div>
+                <div className={`h-px w-16 bg-gradient-to-r ${elementColors.gradient}`}></div>
+              </div>
+            </div>
+
+            {/* Celebrity Badge */}
+            <div className={`inline-block mt-4 bg-gradient-to-r ${elementColors.gradient} rounded-full px-5 py-2 shadow-lg`}>
+              <p className="text-black text-sm font-bold">
+                {funFacts.emoji} Famous {element} {animal} {funFacts.emoji}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Capturable Forecast Section */}
       <div ref={forecastRef} className="p-4 rounded-2xl space-y-6" style={{ backgroundColor: '#0a0000' }}>
         {/* Section Header */}
@@ -247,6 +305,113 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement, focusMode, fu
         <span>{isCapturing ? '...' : '📜'}</span>
         {isCapturing ? 'Capturing...' : 'Save Zodiac Forecast'}
       </button>
+
+      {/* ========== CELEBRITY FUN FACTS SECTION (Premium Content) ========== */}
+      {funFacts && elementColors && element && (
+        <div className="space-y-4 mt-6">
+          {/* Section Header */}
+          <div className="text-center">
+            <div className={`inline-block ${elementColors.bg} border-2 ${elementColors.border} rounded-full px-5 py-2`}>
+              <p className={`${elementColors.text} text-sm font-bold uppercase tracking-wider`}>
+                {funFacts.emoji} {element} {animal} INSIGHTS {funFacts.emoji}
+              </p>
+            </div>
+          </div>
+
+          {/* Mantra Card */}
+          <div className={`relative overflow-hidden rounded-xl border-2 ${elementColors.border}`}>
+            <div className={`absolute inset-0 bg-gradient-to-br ${elementColors.gradient} opacity-10`}></div>
+            <div className="relative p-4">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <span className="text-lg">🧘</span>
+                <p className={`${elementColors.text} text-xs uppercase tracking-widest font-bold`}>
+                  Your {element} {animal} Mantra
+                </p>
+              </div>
+              <p className="text-xl md:text-2xl font-black text-white text-center leading-relaxed">
+                &ldquo;{funFacts.mantra}&rdquo;
+              </p>
+            </div>
+          </div>
+
+          {/* Famous People Card - Grid of Celebrities with Descriptions */}
+          <div className="bg-gradient-to-br from-yellow-950/40 to-black border-2 border-yellow-500/50 rounded-xl p-4">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <span className="text-lg">⭐</span>
+              <p className="text-yellow-400 text-xs uppercase tracking-widest font-bold">
+                Famous {element} {animal}s
+              </p>
+              <span className="text-lg">⭐</span>
+            </div>
+            <div className="space-y-3">
+              {funFacts.famousPeople.map((person, index) => (
+                <div
+                  key={person.name}
+                  className={`
+                    flex items-center gap-3 p-3 rounded-xl
+                    ${index === 0 ? 'bg-gradient-to-r from-yellow-600/20 to-yellow-500/10 border border-yellow-500/50' : ''}
+                    ${index === 1 ? 'bg-gradient-to-r from-purple-600/20 to-purple-500/10 border border-purple-500/50' : ''}
+                    ${index === 2 ? 'bg-gradient-to-r from-pink-600/20 to-pink-500/10 border border-pink-500/50' : ''}
+                  `}
+                >
+                  <div className={`
+                    w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm
+                    ${index === 0 ? 'bg-yellow-500 text-black' : ''}
+                    ${index === 1 ? 'bg-purple-500 text-white' : ''}
+                    ${index === 2 ? 'bg-pink-500 text-white' : ''}
+                  `}>
+                    {index + 1}
+                  </div>
+                  <div className="flex-1">
+                    <p className={`font-bold text-base ${index === 0 ? 'text-yellow-400' : index === 1 ? 'text-purple-400' : 'text-pink-400'}`}>
+                      {person.name}
+                    </p>
+                    <p className="text-gray-400 text-xs">
+                      {person.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="text-gray-400 text-xs text-center mt-3">
+              You share your {element} {animal} sign with these legends!
+            </p>
+          </div>
+
+          {/* Fun Fact Card */}
+          <div className="bg-gradient-to-br from-cyan-950/40 to-black border-2 border-cyan-500/50 rounded-xl p-4">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <span className="text-lg">💡</span>
+              <p className="text-cyan-400 text-xs uppercase tracking-widest font-bold">
+                Did You Know?
+              </p>
+            </div>
+            <p className="text-white text-sm leading-relaxed text-center">
+              {funFacts.funFact}
+            </p>
+          </div>
+
+          {/* Years Card */}
+          <div className="bg-gradient-to-br from-orange-950/40 to-black border-2 border-orange-500/50 rounded-xl p-4">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <span className="text-base">📅</span>
+              <p className="text-orange-400 text-xs uppercase tracking-widest font-bold">
+                {element} {animal} Years
+              </p>
+            </div>
+            <div className="flex justify-center gap-3">
+              {funFacts.years.map((year) => (
+                <div
+                  key={year}
+                  className="bg-orange-900/50 border border-orange-500/50 rounded-lg px-3 py-1.5"
+                >
+                  <p className="text-orange-300 text-lg font-bold">{year}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Privacy Notice */}
       <div className="bg-green-900/30 border border-green-600/60 rounded-xl p-5 space-y-4">

@@ -16,6 +16,7 @@ import {
   ZodiacElement as ForecastElement,
   ZodiacAnimalType,
 } from '@/constants/zodiac-forecasts';
+import { getZodiacFunFacts, getElementColors } from '@/constants/zodiac-fun-facts';
 
 export default function FreeReadingPage() {
   const [birthDate, setBirthDate] = useState('');
@@ -24,8 +25,13 @@ export default function FreeReadingPage() {
     element: ZodiacElement;
   } | null>(null);
   const [showPriceExplainer, setShowPriceExplainer] = useState(false);
+  const [shareStatus, setShareStatus] = useState<'idle' | 'copied' | 'shared'>('idle');
 
   const paymentLink = process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK || '#';
+
+  // Get fun facts for the result
+  const funFacts = result ? getZodiacFunFacts(result.element, result.animal) : null;
+  const elementColors = result ? getElementColors(result.element) : null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,6 +77,67 @@ export default function FreeReadingPage() {
     if (tagline.includes('Catalyst')) return 'bg-yellow-900/30 border-yellow-700/50';
     if (tagline.includes('Harm')) return 'bg-red-900/30 border-red-700/50';
     return 'bg-gray-900/30 border-gray-700/50';
+  };
+
+  // Generate viral share content
+  const generateShareContent = () => {
+    if (!result || !funFacts) return { text: '', shortText: '' };
+
+    const shareText = `🔥 I'm a ${result.element} ${result.animal}! ${funFacts.emoji}
+
+✨ "${funFacts.mantra}"
+
+🌟 Famous ${result.element} ${result.animal}s: ${funFacts.famousPeople.join(', ')}
+
+💬 "${funFacts.quote}" — ${funFacts.quoteAuthor}
+
+🐴 Discover YOUR Chinese Zodiac destiny for the Year of the Fire Horse 2026:
+🔗 redhorseoracle.com/free
+
+#FireHorse2026 #ChineseZodiac #${result.animal} #${result.element}${result.animal}`;
+
+    const shortText = `🔥 I'm a ${result.element} ${result.animal}! "${funFacts.mantra}" ${funFacts.emoji}
+
+Find YOUR zodiac destiny → redhorseoracle.com/free #FireHorse2026`;
+
+    return { text: shareText, shortText };
+  };
+
+  const handleViralShare = async () => {
+    const { text, shortText } = generateShareContent();
+
+    // Try native share first (mobile)
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `I'm a ${result?.element} ${result?.animal} - Fire Horse 2026`,
+          text: shortText,
+          url: 'https://redhorseoracle.com/free'
+        });
+        setShareStatus('shared');
+        setTimeout(() => setShareStatus('idle'), 3000);
+        return;
+      } catch {
+        // User cancelled or error - fall through to clipboard
+      }
+    }
+
+    // Fallback to clipboard
+    try {
+      await navigator.clipboard.writeText(text);
+      setShareStatus('copied');
+      setTimeout(() => setShareStatus('idle'), 3000);
+    } catch {
+      // Final fallback - open a text area for manual copy
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setShareStatus('copied');
+      setTimeout(() => setShareStatus('idle'), 3000);
+    }
   };
 
   return (
@@ -159,6 +226,59 @@ export default function FreeReadingPage() {
         ) : (
           /* Results Section */
           <div className="space-y-8">
+            {/* ========== CELEBRITY QUOTE BANNER - TOP OF PAGE ========== */}
+            {funFacts && elementColors && (
+              <div className={`relative overflow-hidden rounded-2xl border-2 ${elementColors.border}`}>
+                {/* Animated gradient background */}
+                <div className={`absolute inset-0 bg-gradient-to-r ${elementColors.gradient} opacity-30`}></div>
+                <div className="absolute inset-0 bg-black/70"></div>
+
+                <div className="relative p-6 text-center">
+                  {/* Decorative corners */}
+                  <div className="absolute top-3 left-3 text-3xl opacity-30">✦</div>
+                  <div className="absolute top-3 right-3 text-3xl opacity-30">✦</div>
+                  <div className="absolute bottom-3 left-3 text-3xl opacity-30">✦</div>
+                  <div className="absolute bottom-3 right-3 text-3xl opacity-30">✦</div>
+
+                  {/* Quote marks with element color */}
+                  <div className={`text-6xl mb-2 ${elementColors.text} opacity-60 font-serif`}>&ldquo;</div>
+
+                  {/* The Quote - Artistic Typography */}
+                  <blockquote className="relative">
+                    <p className={`text-2xl md:text-3xl font-black leading-relaxed mb-2 bg-gradient-to-r ${elementColors.gradient} bg-clip-text text-transparent`}>
+                      {funFacts.quote}
+                    </p>
+                  </blockquote>
+
+                  {/* Closing quote */}
+                  <div className={`text-4xl ${elementColors.text} opacity-40 font-serif -mt-2`}>&rdquo;</div>
+
+                  {/* Attribution Line with Description */}
+                  <div className="mt-4 space-y-2">
+                    <div className="flex items-center justify-center gap-3">
+                      <div className={`h-px w-16 bg-gradient-to-r ${elementColors.gradient}`}></div>
+                      <div className="text-center">
+                        <p className={`${elementColors.text} font-bold text-xl`}>
+                          — {funFacts.quoteAuthor}
+                        </p>
+                        <p className="text-gray-400 text-sm italic">
+                          {funFacts.quoteAuthorDescription}
+                        </p>
+                      </div>
+                      <div className={`h-px w-16 bg-gradient-to-r ${elementColors.gradient}`}></div>
+                    </div>
+                  </div>
+
+                  {/* Celebrity Badge */}
+                  <div className={`inline-block mt-4 bg-gradient-to-r ${elementColors.gradient} rounded-full px-5 py-2 shadow-lg`}>
+                    <p className="text-black text-sm font-bold">
+                      {funFacts.emoji} Famous {result.element} {result.animal} {funFacts.emoji}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* BIG HERO TITLE - Make it OBVIOUS this is their FREE Oracle */}
             <div className="bg-gradient-to-r from-fire-gold via-yellow-500 to-fire-gold rounded-2xl p-1">
               <div className="bg-black rounded-xl p-6 text-center">
@@ -205,25 +325,67 @@ export default function FreeReadingPage() {
 
               {/* Share Section */}
               <p className="text-purple-300 text-base font-semibold mb-1">
-                📣 Share This — Please!
+                📣 Share Your Zodiac — Go Viral!
               </p>
               <p className="text-red-400 text-sm font-bold mb-4">
                 Supplies won&apos;t last. Only 888 per zodiac sign.
               </p>
 
+              {/* VIRAL SHARE BUTTON - Primary CTA */}
+              <button
+                onClick={handleViralShare}
+                className={`w-full max-w-md mx-auto mb-4 flex items-center justify-center gap-3 ${
+                  shareStatus === 'copied' || shareStatus === 'shared'
+                    ? 'bg-green-600 border-green-400'
+                    : 'bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 border-purple-400 hover:scale-105'
+                } border-2 text-white font-bold text-lg py-4 px-6 rounded-xl transition-all duration-200 shadow-lg`}
+              >
+                {shareStatus === 'copied' ? (
+                  <>
+                    <span className="text-2xl">✅</span>
+                    <span>Copied! Now Paste & Share</span>
+                  </>
+                ) : shareStatus === 'shared' ? (
+                  <>
+                    <span className="text-2xl">🎉</span>
+                    <span>Shared Successfully!</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="text-2xl">🚀</span>
+                    <span>CREATE VIRAL POST</span>
+                    <span className="text-sm opacity-80">(Copy All)</span>
+                  </>
+                )}
+              </button>
+
+              {shareStatus !== 'idle' && (
+                <p className="text-green-400 text-sm mb-4 animate-pulse">
+                  ✨ Your personalized zodiac post is ready! Paste it anywhere.
+                </p>
+              )}
+
               {/* Share Buttons */}
               <div className="flex flex-wrap justify-center gap-3">
                 <a
-                  href={`https://twitter.com/intent/tweet?text=I%20just%20discovered%20I%27m%20a%20${result.element}%20${result.animal}%20in%20the%20Year%20of%20the%20Fire%20Horse%202026!%20%F0%9F%94%A5%F0%9F%90%B4%20Find%20YOUR%20zodiac%20destiny%3A&url=https://redhorseoracle.com/free`}
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                    funFacts
+                      ? `🔥 I'm a ${result.element} ${result.animal}! ${funFacts.emoji}\n\n✨ "${funFacts.mantra}"\n\nFind YOUR zodiac destiny → redhorseoracle.com/free #FireHorse2026`
+                      : `I just discovered I'm a ${result.element} ${result.animal}! 🔥🐴 Find YOUR zodiac destiny → redhorseoracle.com/free`
+                  )}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 bg-black hover:bg-gray-900 border border-gray-600 text-white font-semibold px-4 py-2.5 rounded-xl transition-all hover:scale-105"
                 >
                   <span className="text-lg">𝕏</span>
-                  <span className="text-sm">Share on X</span>
+                  <span className="text-sm">Post on X</span>
                 </a>
                 <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=https://redhorseoracle.com/free&quote=I%27m%20a%20${result.element}%20${result.animal}%20in%20the%20Year%20of%20the%20Fire%20Horse%202026!`}
+                  href={`https://www.facebook.com/sharer/sharer.php?u=https://redhorseoracle.com/free&quote=${encodeURIComponent(
+                    funFacts
+                      ? `🔥 I'm a ${result.element} ${result.animal}! "${funFacts.mantra}" Find YOUR zodiac destiny!`
+                      : `I'm a ${result.element} ${result.animal} in the Year of the Fire Horse 2026!`
+                  )}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4 py-2.5 rounded-xl transition-all hover:scale-105"
@@ -232,22 +394,11 @@ export default function FreeReadingPage() {
                   <span className="text-sm">Share on Facebook</span>
                 </a>
                 <button
-                  onClick={() => {
-                    if (navigator.share) {
-                      navigator.share({
-                        title: `I'm a ${result.element} ${result.animal} - Fire Horse 2026`,
-                        text: `I just discovered my Chinese zodiac destiny for 2026! I'm a ${result.element} ${result.animal}. Find YOUR zodiac sign:`,
-                        url: 'https://redhorseoracle.com/free'
-                      });
-                    } else {
-                      navigator.clipboard.writeText('https://redhorseoracle.com/free');
-                      alert('Link copied to clipboard!');
-                    }
-                  }}
+                  onClick={handleViralShare}
                   className="flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white font-semibold px-4 py-2.5 rounded-xl transition-all hover:scale-105"
                 >
-                  <span className="text-lg">📤</span>
-                  <span className="text-sm">Share Link</span>
+                  <span className="text-lg">📋</span>
+                  <span className="text-sm">Copy Full Post</span>
                 </button>
               </div>
 
@@ -280,6 +431,113 @@ export default function FreeReadingPage() {
                 </div>
               </div>
             </div>
+
+            {/* ========== COLORFUL FUN FACTS SECTION ========== */}
+            {funFacts && elementColors && (
+              <div className="space-y-4">
+                {/* Section Header */}
+                <div className="text-center">
+                  <div className={`inline-block ${elementColors.bg} border-2 ${elementColors.border} rounded-full px-6 py-2 mb-2`}>
+                    <p className={`${elementColors.text} text-lg font-bold uppercase tracking-wider`}>
+                      {funFacts.emoji} {result.element} {result.animal} FUN FACTS {funFacts.emoji}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Mantra Card - Big and Bold */}
+                <div className={`relative overflow-hidden rounded-2xl border-2 ${elementColors.border}`}>
+                  <div className={`absolute inset-0 bg-gradient-to-br ${elementColors.gradient} opacity-10`}></div>
+                  <div className="relative p-6">
+                    <div className="flex items-center justify-center gap-2 mb-3">
+                      <span className="text-2xl">🧘</span>
+                      <p className={`${elementColors.text} text-sm uppercase tracking-widest font-bold`}>
+                        Your {result.element} {result.animal} Mantra
+                      </p>
+                    </div>
+                    <p className="text-2xl md:text-3xl font-black text-white text-center leading-relaxed">
+                      &ldquo;{funFacts.mantra}&rdquo;
+                    </p>
+                  </div>
+                </div>
+
+                {/* Famous People Card - Grid of Celebrities with Descriptions */}
+                <div className="bg-gradient-to-br from-yellow-950/40 to-black border-2 border-yellow-500/50 rounded-2xl p-6">
+                  <div className="flex items-center justify-center gap-2 mb-4">
+                    <span className="text-2xl">⭐</span>
+                    <p className="text-yellow-400 text-sm uppercase tracking-widest font-bold">
+                      Famous {result.element} {result.animal}s
+                    </p>
+                    <span className="text-2xl">⭐</span>
+                  </div>
+                  <div className="space-y-3">
+                    {funFacts.famousPeople.map((person, index) => (
+                      <div
+                        key={person.name}
+                        className={`
+                          flex items-center gap-3 p-3 rounded-xl
+                          ${index === 0 ? 'bg-gradient-to-r from-yellow-600/20 to-yellow-500/10 border border-yellow-500/50' : ''}
+                          ${index === 1 ? 'bg-gradient-to-r from-purple-600/20 to-purple-500/10 border border-purple-500/50' : ''}
+                          ${index === 2 ? 'bg-gradient-to-r from-pink-600/20 to-pink-500/10 border border-pink-500/50' : ''}
+                        `}
+                      >
+                        <div className={`
+                          w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg
+                          ${index === 0 ? 'bg-yellow-500 text-black' : ''}
+                          ${index === 1 ? 'bg-purple-500 text-white' : ''}
+                          ${index === 2 ? 'bg-pink-500 text-white' : ''}
+                        `}>
+                          {index + 1}
+                        </div>
+                        <div className="flex-1">
+                          <p className={`font-bold text-lg ${index === 0 ? 'text-yellow-400' : index === 1 ? 'text-purple-400' : 'text-pink-400'}`}>
+                            {person.name}
+                          </p>
+                          <p className="text-gray-400 text-sm">
+                            {person.description}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-gray-400 text-xs text-center mt-4">
+                    You share your {result.element} {result.animal} sign with these legends!
+                  </p>
+                </div>
+
+                {/* Fun Fact Card - Interesting Info */}
+                <div className="bg-gradient-to-br from-cyan-950/40 to-black border-2 border-cyan-500/50 rounded-2xl p-6">
+                  <div className="flex items-center justify-center gap-2 mb-3">
+                    <span className="text-2xl">💡</span>
+                    <p className="text-cyan-400 text-sm uppercase tracking-widest font-bold">
+                      Did You Know?
+                    </p>
+                  </div>
+                  <p className="text-white text-base md:text-lg leading-relaxed text-center">
+                    {funFacts.funFact}
+                  </p>
+                </div>
+
+                {/* Years Born Card */}
+                <div className="bg-gradient-to-br from-orange-950/40 to-black border-2 border-orange-500/50 rounded-2xl p-5">
+                  <div className="flex items-center justify-center gap-2 mb-3">
+                    <span className="text-xl">📅</span>
+                    <p className="text-orange-400 text-sm uppercase tracking-widest font-bold">
+                      {result.element} {result.animal} Years
+                    </p>
+                  </div>
+                  <div className="flex justify-center gap-4">
+                    {funFacts.years.map((year) => (
+                      <div
+                        key={year}
+                        className="bg-orange-900/50 border border-orange-500/50 rounded-lg px-4 py-2"
+                      >
+                        <p className="text-orange-300 text-xl font-bold">{year}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* ========== YOUR FREE ORACLE CARD - THE MAIN EVENT ========== */}
             {forecast && (

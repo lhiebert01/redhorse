@@ -23,27 +23,60 @@ export default function ShareButtons({ prophecy }: ShareButtonsProps) {
 
   const mainText = prophecy.main_text || 'My Fire Horse Prophecy';
 
-  // Base share content
-  const shareText = `My ${zodiacInfo} prophecy: "${mainText}" - Year of the Fire Horse (once every 60 years!)`;
+  // Get mode emoji
+  const getModeEmoji = (mode: string | null | undefined): string => {
+    switch (mode?.toLowerCase()) {
+      case 'wealth': return '🎲💰';
+      case 'power': return '⚔️👑';
+      case 'love': return '❤️💕';
+      case 'shield': return '🛡️✨';
+      default: return '🔥🐴';
+    }
+  };
 
-  // Full message for copy - includes image URL if available
+  const modeEmoji = getModeEmoji(prophecy.focus_mode);
+
+  // Base share content - more viral
+  const shareText = `🔥 I'm a ${zodiacInfo}! ${modeEmoji}
+
+My Fire Horse Oracle prophecy: "${mainText}"
+
+🐴 Year of the Fire Horse = once every 60 YEARS! (Last: 1966, Next: 2086)`;
+
+  // Full message for copy - VIRAL CONTENT with emojis and hashtags
   const fullMessage = shareableImageUrl
-    ? `Check out my Fire Horse Oracle talisman for 2026!
+    ? `🔥 I just got my Authenticated Limited Edition Fire Horse Oracle! 🐴
 
-My ${zodiacInfo} prophecy: "${mainText}"
+✨ I'm a ${zodiacInfo} ${modeEmoji}
 
-VIEW MY TALISMAN: ${shareableImageUrl}
+💬 My prophecy: "${mainText}"
 
-Year of the Fire Horse = once every 60 YEARS!
+🎨 VIEW MY TALISMAN: ${shareableImageUrl}
 
-Get your own LIMITED EDITION talisman: ${siteUrl}`
-    : `Check out my Fire Horse Oracle for 2026!
+🔮 The Fire Horse returns only once every 60 years!
+   • Last: 1966
+   • NOW: 2026
+   • Next: 2086 (will you even be alive?)
 
-My ${zodiacInfo} prophecy: "${mainText}"
+🎯 Get YOUR Fire Horse Oracle:
+${siteUrl}
 
-Year of the Fire Horse = once every 60 YEARS!
+#FireHorse2026 #ChineseZodiac #${prophecy.zodiac_sign || 'Zodiac'} #AI #LimitedEdition`
+    : `🔥 I just got my Authenticated Limited Edition Fire Horse Oracle! 🐴
 
-Get your own LIMITED EDITION talisman: ${siteUrl}`;
+✨ I'm a ${zodiacInfo} ${modeEmoji}
+
+💬 My prophecy: "${mainText}"
+
+🔮 The Fire Horse returns only once every 60 years!
+   • Last: 1966
+   • NOW: 2026
+   • Next: 2086 (will you even be alive?)
+
+🎯 Get YOUR Fire Horse Oracle:
+${siteUrl}
+
+#FireHorse2026 #ChineseZodiac #${prophecy.zodiac_sign || 'Zodiac'} #AI #LimitedEdition`;
 
   // =====================================================
   // COPY TO CLIPBOARD - Most reliable method
@@ -81,8 +114,24 @@ Get your own LIMITED EDITION talisman: ${siteUrl}`;
   // Twitter/X - WORKS: Supports pre-filled text with URLs
   const openTwitter = () => {
     const tweetText = shareableImageUrl
-      ? `${shareText}\n\nSee my talisman: ${shareableImageUrl}\n\nGet yours: ${siteUrl}`
-      : `${shareText}\n\nGet yours: ${siteUrl}`;
+      ? `🔥 I'm a ${zodiacInfo}! ${modeEmoji}
+
+My Fire Horse Oracle: "${mainText}"
+
+🎨 ${shareableImageUrl}
+
+🐴 Fire Horse = once every 60 yrs!
+Get yours: ${siteUrl}
+
+#FireHorse2026 #ChineseZodiac`
+      : `🔥 I'm a ${zodiacInfo}! ${modeEmoji}
+
+My Fire Horse Oracle: "${mainText}"
+
+🐴 Fire Horse = once every 60 yrs!
+Get yours: ${siteUrl}
+
+#FireHorse2026 #ChineseZodiac`;
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
     window.open(url, 'twitter-share', 'width=550,height=450');
   };
@@ -102,16 +151,52 @@ Get your own LIMITED EDITION talisman: ${siteUrl}`;
   // WhatsApp - WORKS: Supports pre-filled text
   const openWhatsApp = () => {
     const waText = shareableImageUrl
-      ? `${shareText}\n\nView my talisman: ${shareableImageUrl}\n\nGet yours: ${siteUrl}`
-      : `${shareText}\n\nGet yours: ${siteUrl}`;
+      ? `🔥 Check out my Fire Horse Oracle! 🐴
+
+I'm a ${zodiacInfo}! ${modeEmoji}
+
+My prophecy: "${mainText}"
+
+🎨 See my talisman: ${shareableImageUrl}
+
+🔮 Fire Horse = once every 60 years! (Last: 1966, Next: 2086)
+
+Get YOUR oracle: ${siteUrl}`
+      : `🔥 Check out my Fire Horse Oracle! 🐴
+
+I'm a ${zodiacInfo}! ${modeEmoji}
+
+My prophecy: "${mainText}"
+
+🔮 Fire Horse = once every 60 years!
+
+Get YOUR oracle: ${siteUrl}`;
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(waText)}`, '_blank');
   };
 
   // Telegram - WORKS: Supports pre-filled text
   const openTelegram = () => {
     const tgText = shareableImageUrl
-      ? `${shareText}\n\nView my talisman: ${shareableImageUrl}\n\nGet yours: ${siteUrl}`
-      : `${shareText}\n\nGet yours: ${siteUrl}`;
+      ? `🔥 Check out my Fire Horse Oracle! 🐴
+
+I'm a ${zodiacInfo}! ${modeEmoji}
+
+My prophecy: "${mainText}"
+
+🎨 See my talisman: ${shareableImageUrl}
+
+🔮 Fire Horse = once every 60 years!
+
+Get YOUR oracle: ${siteUrl}`
+      : `🔥 Check out my Fire Horse Oracle! 🐴
+
+I'm a ${zodiacInfo}! ${modeEmoji}
+
+My prophecy: "${mainText}"
+
+🔮 Fire Horse = once every 60 years!
+
+Get YOUR oracle: ${siteUrl}`;
     window.open(`https://t.me/share/url?url=${encodeURIComponent(siteUrl)}&text=${encodeURIComponent(tgText)}`, '_blank');
   };
 
