@@ -114,8 +114,8 @@
 ## Monthly Projections (Medium Scenario)
 
 ### Year of the Fire Horse Timeline
-- **Start:** January 29, 2026 (Chinese New Year)
-- **End:** February 16, 2027
+- **Start:** February 17, 2026 (Chinese New Year)
+- **End:** February 5, 2027
 - **Duration:** ~13 months
 
 | Month | Visitors | Conv% | Sales | Revenue | Cumulative |

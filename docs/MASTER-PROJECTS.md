@@ -59,8 +59,8 @@ See `/docs/NEXT-STEPS.md` for detailed launch plan:
 5. Paid Advertising
 
 ### Key Dates
-- **Chinese New Year 2026:** January 29, 2026
-- **Target Launch:** Before January 29
+- **Chinese New Year 2026:** February 17, 2026
+- **Target Launch:** Before February 17
 
 ---
 

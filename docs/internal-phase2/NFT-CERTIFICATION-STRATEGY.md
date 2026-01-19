@@ -526,7 +526,7 @@ CREATE TABLE nft_mint_queue (
 - [ ] Create NFT upgrade checkout
 - [ ] Test end-to-end minting flow
 
-### Before CNY (Jan 29)
+### Before CNY (Feb 17)
 - [ ] Production smart contract deployment
 - [ ] OpenSea collection verification
 - [ ] Commercial license legal review

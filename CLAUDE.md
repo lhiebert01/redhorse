@@ -687,7 +687,7 @@ npm run dev
 ## 2026 Growth Projections & Launch Objectives
 
 ### Market Opportunity
-- **Chinese New Year 2026:** January 29 (Year of the Fire Horse begins)
+- **Chinese New Year 2026:** February 17 (Year of the Fire Horse begins)
 - **Fire Horse Rarity:** Only occurs every 60 years (last: 1966, next: 2086)
 - **Price Point:** $8.88 (auspicious number, impulse buy)
 - **Target Markets:** Chinese diaspora, astrology enthusiasts, gamblers, spiritual seekers
@@ -2054,7 +2054,7 @@ The app is now ready for marketing launch:
 4. ✅ Share buttons working
 5. 🟢 Ready for social media campaign
 6. 🟢 Ready for influencer outreach
-7. 🟢 Ready for CNY (Jan 29, 2026)
+7. 🟢 Ready for CNY (Feb 17, 2026)
 
 ---
 
@@ -2241,7 +2241,7 @@ You share your Earth Dragon sign with these legends!
 - ✅ Visual polish complete
 - ✅ Share buttons working across platforms
 - ✅ Privacy messaging prominent
-- 🟢 10 days until CNY (Jan 29, 2026)
+- 🟢 29 days until CNY (Feb 17, 2026)
 
 ### Quick Commands
 

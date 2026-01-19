@@ -464,7 +464,7 @@ Once filed, use these phrases in marketing:
 - [ ] File copyright registrations
 - [ ] Document trade secrets
 
-### Before CNY (Jan 29)
+### Before CNY (Feb 17)
 - [ ] All high-priority filings complete
 - [ ] "Patent Pending" visible on website
 - [ ] Trademark ™ symbols in use

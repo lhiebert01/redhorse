@@ -257,7 +257,7 @@ This release adds **Analytics Tracking**, **Share Talisman Image** functionality
 
 #### Edition System Updates
 - **Unified closing date:** All signs close February 17, 2027
-- Full Fire Horse year availability (Jan 29, 2026 - Feb 16, 2027)
+- Full Fire Horse year availability (Feb 17, 2026 - Feb 5, 2027)
 - 888 editions per zodiac per mode (42,624 total)
 
 #### UI Improvements

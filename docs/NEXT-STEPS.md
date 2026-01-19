@@ -199,16 +199,38 @@ Feedback welcome on the privacy approach and limited edition concept.
 | Fri 24 | TikTok video: "Which Fire Horse zodiac are you?" |
 | Sat 25 | Influencer outreach begins (20 micro-influencers) |
 
-#### Week 2: Jan 26 - Feb 1 (CNY Push)
+#### Week 2: Feb 2-8 (Pre-CNY Build)
 | Day | Action |
 |-----|--------|
-| Sun 26 | Amplify best-performing content |
-| Mon 27 | Reddit r/ChineseZodiac, r/astrology |
-| Tue 28 | Product Hunt launch (if traction supports) |
-| **Wed 29** | **🎆 CNY DAY 1 - Maximum posting** |
-| Thu 30 | CNY Day 2 - Respond to all engagement |
-| Fri 31 | CNY Day 3 - User testimonials |
-| Sat 1 | CNY Day 4 - Share viral content |
+| Sun 2 | Amplify best-performing content |
+| Mon 3 | Reddit r/ChineseZodiac, r/astrology |
+| Tue 4 | Product Hunt launch (if traction supports) |
+| Wed 5 | Instagram stories countdown to CNY |
+| Thu 6 | TikTok "CNY countdown" video |
+| Fri 7 | Influencer content goes live |
+| Sat 8 | Final pre-CNY push |
+
+#### Week 3: Feb 9-15 (CNY Week Build)
+| Day | Action |
+|-----|--------|
+| Sun 9 | CNY countdown - 8 days |
+| Mon 10 | Paid ad campaign ramp up |
+| Tue 11 | Email newsletter to list |
+| Wed 12 | CNY countdown - 5 days |
+| Thu 13 | Partner content coordination |
+| Fri 14 | Valentine's + CNY crossover content |
+| Sat 15 | Final push before CNY |
+
+#### Week 4: Feb 16-22 (🎆 CNY PEAK WEEK)
+| Day | Action |
+|-----|--------|
+| Mon 16 | CNY Eve - Maximum anticipation posts |
+| **Tue 17** | **🎆 CNY DAY 1 - LUNAR NEW YEAR - Maximum posting** |
+| Wed 18 | CNY Day 2 - Respond to all engagement |
+| Thu 19 | CNY Day 3 - User testimonials |
+| Fri 20 | CNY Day 4 - Share viral content |
+| Sat 21 | CNY Day 5 - Weekend push |
+| Sun 22 | CNY Day 6 - Sustained engagement |
 
 ---
 
@@ -391,7 +413,7 @@ Based on analysis of successful viral AI apps and current market trends:
 | Identity Hook | "Your zodiac sign + Fire Horse decree" |
 | Shareability | Museum-quality AI art people WANT to post |
 | FOMO | 60-year cycle + 888 limited editions |
-| Cultural Timing | CNY 2026 peak (Jan 29 - Feb 15) |
+| Cultural Timing | CNY 2026 peak (Feb 17 - Mar 3) |
 | Price Point | $8.88 impulse buy (auspicious number) |
 | Personalization | Unique talisman for each birth date |
 
@@ -465,21 +487,28 @@ Friends see post → cycle repeats
 - [ ] Identify 20 astrology micro-influencers to contact
 - [ ] Draft influencer outreach template
 
-### Week 2 (Jan 25-31) - PRE-CNY PUSH
+### Week 2 (Feb 2-8) - PRE-CNY BUILD
 - [ ] Send outreach to 20 influencers with free oracle offers
 - [ ] Post first TikTok video (goal: 10K views)
 - [ ] Post Instagram carousel of all 12 zodiac talismans
 - [ ] Schedule 3 tweets/day during CNY buildup
 - [ ] Launch Facebook ad campaign ($100 test budget)
 
-### Week 3 (Feb 1-7) - CNY PEAK
+### Week 3 (Feb 9-15) - CNY COUNTDOWN
+- [ ] Ramp up paid ads
+- [ ] CNY countdown content daily
+- [ ] Valentine's + CNY crossover (Feb 14)
+- [ ] Final influencer coordination
+- [ ] Email blast to newsletter
+
+### Week 4 (Feb 17-22) - CNY PEAK
 - [ ] Monitor viral metrics hourly during CNY
 - [ ] Amplify any organic viral content
 - [ ] Respond to all comments/mentions within 1 hour
 - [ ] Document user testimonials for social proof
 - [ ] A/B test ad creatives based on performance
 
-### Week 4+ (Feb 8+) - OPTIMIZE
+### Week 5+ (Feb 23+) - OPTIMIZE
 - [ ] Analyze which content performed best
 - [ ] Double down on winning channels
 - [ ] Implement referral program if justified by metrics

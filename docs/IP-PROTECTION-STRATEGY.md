@@ -99,7 +99,7 @@
 
 | Year | Animal | Element | Full Name | CNY Start Date |
 |------|--------|---------|-----------|----------------|
-| 2026 | Horse 馬 | Fire 火 | Fire Horse | Jan 29, 2026 |
+| 2026 | Horse 馬 | Fire 火 | Fire Horse | Feb 17, 2026 |
 | 2027 | Goat 羊 | Fire 火 | Fire Goat | Feb 17, 2027 |
 | 2028 | Monkey 猴 | Earth 土 | Earth Monkey | Feb 6, 2028 |
 | 2029 | Rooster 雞 | Earth 土 | Earth Rooster | Jan 26, 2029 |

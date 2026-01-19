@@ -51,8 +51,9 @@ Red Horse Oracle is an AI-powered SaaS application that generates personalized C
 
 | Event | Date |
 |-------|------|
-| **Chinese New Year 2026** | January 29, 2026 |
-| **Target Launch** | Before January 29, 2026 |
+| **Chinese New Year 2026** | February 17, 2026 |
+| **Target Launch** | Before February 17, 2026 |
+| **Fire Horse Year Ends** | March 3, 2026 (Lantern Festival) |
 | **Fire Horse Last Occurred** | 1966 (60 years ago) |
 | **Fire Horse Next Occurrence** | 2086 (60 years from now) |
 
@@ -158,21 +159,21 @@ Red Horse Oracle is designed with a **privacy-by-design** architecture that stor
 
 ## Go-To-Market Strategy
 
-### Phase 1: Pre-Launch (Now - Jan 28)
+### Phase 1: Pre-Launch (Now - Feb 16)
 
-1. **Stripe Production Setup** - Switch from test to live mode
-2. **Domain Purchase** - redhorseoracle.com or similar
+1. **Stripe Production Setup** - ✅ Complete
+2. **Domain Purchase** - ✅ redhorseoracle.com configured
 3. **SEO & Analytics** - Google Analytics, Search Console
 4. **Content Marketing** - LinkedIn article, Medium, press release
 
-### Phase 2: Launch Week (Jan 29 - Feb 5)
+### Phase 2: CNY Launch Week (Feb 17 - Feb 22)
 
 1. **Product Hunt Launch** - Target top 10
 2. **Social Media Push** - X/Twitter, Instagram, TikTok
 3. **Influencer Outreach** - Astrology/tarot creators
 4. **Paid Ads** - Facebook/Instagram, Google Ads
 
-### Phase 3: CNY Peak (Feb - Mar)
+### Phase 3: CNY Peak (Feb 17 - Mar 3)
 
 1. **Maximum Ad Spend** - Capitalize on CNY search volume
 2. **User Testimonials** - Share wins/stories
