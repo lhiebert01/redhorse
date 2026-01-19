@@ -142,22 +142,16 @@ export default function Home() {
 
         {/* Value Prop Badge */}
         <div className="bg-black/60 backdrop-blur-sm border-2 border-fire-gold/50 rounded-xl px-5 py-5 mb-6">
-          <p className="text-center text-white text-lg md:text-xl font-bold mb-1">
-            🔥 World&apos;s First
+          <p className="text-center text-white text-lg md:text-xl font-bold mb-2">
+            🔥 World&apos;s First 🔥
           </p>
-          <p className="text-center text-fire-gold text-xl md:text-2xl font-bold mb-1">
-            Authenticated Limited Edition
-          </p>
-          <p className="text-center text-white text-lg md:text-xl font-bold mb-3">
+          <p className="text-center text-fire-gold text-base md:text-lg font-bold leading-snug">
+            Google Gemini 3 Pro Powered<br />
+            Authenticated Limited Edition<br />
             AI Zodiac Oracle
           </p>
-          <div className="flex flex-wrap justify-center gap-2 mb-3">
-            <span className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-xs px-3 py-1.5 rounded">✦ NUMBERED EDITIONS</span>
-            <span className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-xs px-3 py-1.5 rounded">🖼️ VERIFIABLE ART</span>
-            <span className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-xs px-3 py-1.5 rounded">📜 PROVENANCE</span>
-          </div>
-          <p className="text-center text-green-400 text-sm font-semibold">
-            🛡️ Zero Personal Data Stored • Privacy by Design • Maker&apos;s Mark Authenticated
+          <p className="text-center text-green-400 text-sm font-bold mt-3">
+            🛡️ Privacy by Design
           </p>
         </div>
 
