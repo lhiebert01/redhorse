@@ -74,10 +74,10 @@ export default function Home() {
         }}
       />
 
-      {/* Fire Horse Quote Ticker - Center strip, big text, background layer */}
-      <div className="fixed top-1/2 -translate-y-1/2 left-0 right-0 z-0 pointer-events-none overflow-hidden">
-        <div className="animate-marquee whitespace-nowrap py-4">
-          <span className="text-4xl md:text-5xl font-bold text-fire-gold/25">
+      {/* Fire Horse Quote Ticker - Bottom strip, 3x bigger */}
+      <div className="fixed bottom-2 left-0 right-0 z-0 pointer-events-none overflow-hidden">
+        <div className="animate-marquee whitespace-nowrap py-2">
+          <span className="text-2xl md:text-3xl font-semibold text-fire-gold/30">
             {FIRE_HORSE_TICKER_TEXT}{FIRE_HORSE_TICKER_TEXT}
           </span>
         </div>
