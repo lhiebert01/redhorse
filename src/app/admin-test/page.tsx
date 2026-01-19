@@ -37,57 +37,111 @@ const ELEMENT_COLORS: Record<string, string> = {
 // Shared authentication key with SuperAdmin
 const AUTH_STORAGE_KEY = 'superadmin_authenticated';
 
-// Collections Overview - All 12 in one view
+// Collections Overview - All 12 in one view with full controls
 function CollectionsOverview() {
   const [selectedCard, setSelectedCard] = useState<string | null>(null);
-  const [gridLayout, setGridLayout] = useState<'4x3' | '3x4' | '6x2'>('4x3');
-
-  const gridClasses = {
-    '4x3': 'grid-cols-4', // 4 columns, 3 rows
-    '3x4': 'grid-cols-3', // 3 columns, 4 rows
-    '6x2': 'grid-cols-6', // 6 columns, 2 rows
-  };
+  const [columns, setColumns] = useState<1 | 2 | 3 | 4>(2);
+  const [gap, setGap] = useState<0 | 4 | 8 | 16>(8);
+  const [scale, setScale] = useState<100 | 80 | 60 | 50>(80);
 
   return (
     <div className="space-y-4">
-      {/* Layout Toggle */}
-      <div className="flex justify-center gap-2 mb-4">
-        <span className="text-gray-400 text-sm self-center mr-2">Layout:</span>
-        {(['4x3', '3x4', '6x2'] as const).map((layout) => (
-          <button
-            key={layout}
-            onClick={() => setGridLayout(layout)}
-            className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
-              gridLayout === layout
-                ? 'bg-fire-gold text-black'
-                : 'bg-black/50 text-gray-400 hover:text-white border border-fire-gold/30'
-            }`}
-          >
-            {layout}
-          </button>
-        ))}
+      {/* CONTROLS PANEL */}
+      <div className="bg-black/80 border-2 border-fire-gold rounded-xl p-4">
+        <h3 className="text-fire-gold text-center font-bold mb-4">COLLECTION GRID CONTROLS</h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Columns */}
+          <div className="bg-gray-900 rounded-lg p-3">
+            <p className="text-fire-gold text-xs mb-2 font-bold text-center">COLUMNS</p>
+            <div className="flex justify-center gap-2">
+              {([1, 2, 3, 4] as const).map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setColumns(c)}
+                  className={`w-10 h-10 rounded-lg text-lg font-bold transition-all ${
+                    columns === c
+                      ? 'bg-fire-gold text-black'
+                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Gap */}
+          <div className="bg-gray-900 rounded-lg p-3">
+            <p className="text-purple-400 text-xs mb-2 font-bold text-center">GAP (pixels)</p>
+            <div className="flex justify-center gap-2">
+              {([0, 4, 8, 16] as const).map((g) => (
+                <button
+                  key={g}
+                  onClick={() => setGap(g)}
+                  className={`w-10 h-10 rounded-lg text-sm font-bold transition-all ${
+                    gap === g
+                      ? 'bg-purple-500 text-white'
+                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  }`}
+                >
+                  {g}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Scale */}
+          <div className="bg-gray-900 rounded-lg p-3">
+            <p className="text-green-400 text-xs mb-2 font-bold text-center">SCALE %</p>
+            <div className="flex justify-center gap-2">
+              {([100, 80, 60, 50] as const).map((s) => (
+                <button
+                  key={s}
+                  onClick={() => setScale(s)}
+                  className={`px-3 h-10 rounded-lg text-sm font-bold transition-all ${
+                    scale === s
+                      ? 'bg-green-500 text-white'
+                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  }`}
+                >
+                  {s}%
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <p className="text-center text-gray-500 text-xs mt-3">
+          Current: {columns} column{columns > 1 ? 's' : ''}, {gap}px gap, {scale}% scale
+        </p>
       </div>
 
-      {/* All 12 Collections Grid */}
-      <div className={`grid ${gridClasses[gridLayout]} gap-3`}>
+      {/* All 12 Collections Grid - Natural image dimensions */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(${columns}, 1fr)`,
+          gap: `${gap}px`,
+          transform: `scale(${scale / 100})`,
+          transformOrigin: 'top center',
+        }}
+      >
         {ANIMALS.map((animal) => (
           <div
             key={animal}
             onClick={() => setSelectedCard(`${animal}-collection`)}
-            className="cursor-pointer rounded-xl overflow-hidden border-2 border-purple-500 bg-purple-500/10 transition-all hover:scale-105 hover:shadow-xl hover:shadow-purple-500/30"
+            className="cursor-pointer rounded-lg overflow-hidden border-2 border-purple-500 bg-purple-500/10 transition-all hover:border-fire-gold hover:shadow-xl hover:shadow-fire-gold/30"
           >
-            <div className="aspect-[3/4] relative">
-              <img
-                src={`/assets/zodiac-badges/${animal}-collection.jpeg`}
-                alt={`${animal} collection`}
-                className="w-full h-full object-cover"
-              />
-              {/* Overlay with name */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-2">
-                <p className="text-white text-sm font-bold text-center">
-                  {ANIMAL_EMOJI[animal]} {animal.charAt(0).toUpperCase() + animal.slice(1)}
-                </p>
-              </div>
+            <img
+              src={`/assets/zodiac-badges/${animal}-collection.jpeg`}
+              alt={`${animal} collection - all 5 elements`}
+              className="w-full h-auto block"
+            />
+            <div className="bg-black/80 p-2 text-center">
+              <p className="text-white text-sm font-bold">
+                {ANIMAL_EMOJI[animal]} {animal.charAt(0).toUpperCase() + animal.slice(1)}
+              </p>
             </div>
           </div>
         ))}
@@ -99,7 +153,7 @@ function CollectionsOverview() {
           className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4"
           onClick={() => setSelectedCard(null)}
         >
-          <div className="relative max-w-4xl max-h-[90vh] w-full">
+          <div className="relative max-w-6xl max-h-[90vh] w-full">
             <button
               onClick={() => setSelectedCard(null)}
               className="absolute -top-12 right-0 text-white hover:text-fire-gold text-lg font-bold"
@@ -114,7 +168,7 @@ function CollectionsOverview() {
             />
             <div className="mt-4 text-center">
               <p className="text-fire-gold text-xl font-bold">
-                📚 {selectedCard.replace('-collection', '').charAt(0).toUpperCase() + selectedCard.replace('-collection', '').slice(1)} Collection
+                📚 {selectedCard.replace('-collection', '').charAt(0).toUpperCase() + selectedCard.replace('-collection', '').slice(1)} Collection - All 5 Elements
               </p>
             </div>
             {/* Navigation */}
