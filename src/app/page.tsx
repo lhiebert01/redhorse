@@ -44,7 +44,7 @@ export default function Home() {
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
           backgroundImage: `url(${BACKGROUND_IMAGES[currentIndex]})`,
-          backgroundSize: 'cover',
+          backgroundSize: 'contain',
           backgroundPosition: 'top center',
           backgroundRepeat: 'no-repeat',
           opacity: showNext ? 0 : 0.30,
@@ -56,7 +56,7 @@ export default function Home() {
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
           backgroundImage: `url(${BACKGROUND_IMAGES[nextIndex]})`,
-          backgroundSize: 'cover',
+          backgroundSize: 'contain',
           backgroundPosition: 'top center',
           backgroundRepeat: 'no-repeat',
           opacity: showNext ? 0.30 : 0,
