@@ -150,9 +150,11 @@ export default function Home() {
             Authenticated Limited Edition<br />
             AI Zodiac Oracle
           </p>
-          <p className="text-center text-green-400 text-sm font-bold mt-3">
-            🛡️ Privacy by Design
-          </p>
+          <div className="flex flex-wrap justify-center gap-2 mt-3">
+            <span className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-xs px-3 py-1.5 rounded">✦ NUMBERED EDITIONS</span>
+            <span className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-xs px-3 py-1.5 rounded">🖼️ VERIFIED</span>
+            <span className="bg-green-900/50 border border-green-500/50 text-green-400 text-xs px-3 py-1.5 rounded">🛡️ PRIVACY BY DESIGN</span>
+          </div>
         </div>
 
         {/* Hero Image */}
