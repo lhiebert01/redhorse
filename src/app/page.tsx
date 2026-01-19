@@ -5,43 +5,51 @@ import { PRODUCT_MODES } from '@/constants/modes';
 
 // Background images to rotate through - alternating main with grids
 const BACKGROUND_IMAGES = [
-  '/assets/Fire-Horse-2026-Chart-v2.jpeg',  // Main
-  '/assets/marketing-grid-1.jpg',            // Grid 1
-  '/assets/Fire-Horse-2026-Chart-v2.jpeg',  // Main
-  '/assets/marketing-grid-3.jpg',            // Grid 3
+  { src: '/assets/Fire-Horse-2026-Chart-v2.jpeg', isMain: true },   // Main
+  { src: '/assets/marketing-grid-1.jpg', isMain: false },            // Grid 1
+  { src: '/assets/Fire-Horse-2026-Chart-v2.jpeg', isMain: true },   // Main
+  { src: '/assets/marketing-grid-3.jpg', isMain: false },            // Grid 3
 ];
 
 // Timing constants (in milliseconds)
-const FADE_DURATION = 3000;      // 3 seconds for smooth fade
-const DISPLAY_DURATION = 12000;  // 12 seconds showing each image
-const TOTAL_CYCLE = FADE_DURATION + DISPLAY_DURATION; // 15 seconds total per image
+const FADE_DURATION = 4000;           // 4 seconds for extra smooth fade
+const MAIN_DISPLAY_DURATION = 18000;  // 18 seconds for main chart
+const GRID_DISPLAY_DURATION = 12000;  // 12 seconds for grid images
 
 export default function Home() {
   const paymentLink = process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK || '#';
   const [activeIndex, setActiveIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const cycleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Rotate background images with consistent timing
   useEffect(() => {
-    const startRotation = () => {
-      intervalRef.current = setInterval(() => {
+    const scheduleNextTransition = (index: number) => {
+      const currentImage = BACKGROUND_IMAGES[index];
+      const displayDuration = currentImage.isMain ? MAIN_DISPLAY_DURATION : GRID_DISPLAY_DURATION;
+      const totalCycle = FADE_DURATION + displayDuration;
+
+      cycleTimeoutRef.current = setTimeout(() => {
         // Start fade out
         setIsFading(true);
 
         // After fade completes, switch to next image and fade in
         timeoutRef.current = setTimeout(() => {
-          setActiveIndex((prev) => (prev + 1) % BACKGROUND_IMAGES.length);
+          const nextIndex = (index + 1) % BACKGROUND_IMAGES.length;
+          setActiveIndex(nextIndex);
           setIsFading(false);
+          // Schedule next transition
+          scheduleNextTransition(nextIndex);
         }, FADE_DURATION);
-      }, TOTAL_CYCLE);
+      }, totalCycle);
     };
 
-    startRotation();
+    // Start the rotation cycle
+    scheduleNextTransition(0);
 
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (cycleTimeoutRef.current) clearTimeout(cycleTimeoutRef.current);
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, []); // Empty dependency - only runs once on mount
@@ -52,7 +60,7 @@ export default function Home() {
       <div
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
-          backgroundImage: `url(${BACKGROUND_IMAGES[activeIndex]})`,
+          backgroundImage: `url(${BACKGROUND_IMAGES[activeIndex].src})`,
           backgroundSize: 'contain',
           backgroundPosition: 'top center',
           backgroundRepeat: 'no-repeat',
