@@ -232,10 +232,11 @@ export default function Home() {
           {/* ========== SECTION 2: PAID ORACLE ========== */}
           <div className="bg-gradient-to-br from-red-950/50 to-black border-2 border-fire-gold/50 rounded-2xl p-5">
             <div className="text-center mb-4">
-              <h3 className="text-fire-gold text-lg font-bold">
-                🔥 Unlock Fortune, Power, Love & Protection
-              </h3>
-              <p className="text-gray-400 text-sm mt-1">Your Authenticated Limited Edition Oracle</p>
+              <span className="text-3xl">🔥</span>
+              <h3 className="text-fire-gold text-xl font-bold mt-2">BET ON YOURSELF!</h3>
+              <p className="text-white text-sm mt-1">
+                <span className="text-yellow-400">Get</span> the <span className="text-fire-gold font-semibold">REAL ORACLE</span> for 2026
+              </p>
             </div>
 
             {/* Paid CTA Button */}
