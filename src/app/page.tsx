@@ -1,21 +1,48 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { PRODUCT_MODES } from '@/constants/modes';
+
+// Background images to rotate through
+const BACKGROUND_IMAGES = [
+  '/assets/Fire-Horse-2026-Chart-v2.jpeg',
+  '/assets/marketing-grid-4.jpg',
+  '/assets/marketing-grid-1.jpg',
+  '/assets/marketing-grid-3.jpg',
+];
+
+// Rotation interval in milliseconds (8 seconds)
+const ROTATION_INTERVAL = 8000;
 
 export default function Home() {
   const paymentLink = process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK || '#';
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Rotate background images
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentImageIndex((prev) => (prev + 1) % BACKGROUND_IMAGES.length);
+        setIsTransitioning(false);
+      }, 500); // Half of transition duration
+    }, ROTATION_INTERVAL);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <main className="min-h-screen bg-fire-gradient relative overflow-hidden">
-      {/* Background Watermark - Cinematic 12 Zodiac Chart - Crystal Clear */}
+      {/* Rotating Background Watermark */}
       <div
-        className="fixed inset-0 z-0 pointer-events-none"
+        className="fixed inset-0 z-0 pointer-events-none transition-opacity duration-1000"
         style={{
-          backgroundImage: 'url(/assets/Fire-Horse-2026-Chart-v2.jpeg)',
+          backgroundImage: `url(${BACKGROUND_IMAGES[currentImageIndex]})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat',
-          opacity: 0.30,
+          opacity: isTransitioning ? 0.15 : 0.30,
         }}
       />
 
