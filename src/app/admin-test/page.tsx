@@ -725,12 +725,19 @@ function AdminTestContent() {
         )}
 
         {/* Footer Links */}
-        <div className="flex gap-4 mt-8 justify-center">
+        <div className="flex flex-wrap gap-4 mt-8 justify-center">
           <a
             href="/superadmin"
             className="text-fire-gold text-sm hover:text-yellow-400 font-medium"
           >
             📊 SuperAdmin Dashboard
+          </a>
+          <span className="text-gray-600">|</span>
+          <a
+            href="/collections-grid"
+            className="text-purple-400 text-sm hover:text-purple-300 font-medium"
+          >
+            📸 Collections Screenshot
           </a>
           <span className="text-gray-600">|</span>
           <a
