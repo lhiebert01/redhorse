@@ -3,36 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { PRODUCT_MODES } from '@/constants/modes';
 
-// Fire Horse Celebrity Quotes (all born 1966)
-const FIRE_HORSE_QUOTES = [
-  {
-    quote: "I'm going to follow my path. I'm going to run my race. And it's not going to be like anyone else's.",
-    author: "Halle Berry",
-    description: "Academy Award-winning actress known for 'Monster's Ball' and Storm in X-Men"
-  },
-  {
-    quote: "I don't like looking back. I'm always constantly looking forward. I'm not the one to sit and cry over spilt milk. I'm too busy looking for the next cow.",
-    author: "Gordon Ramsay",
-    description: "Celebrity Chef known for his intensity on 'Hell's Kitchen' and 'MasterChef'"
-  },
-  {
-    quote: "I don't have to prove anything to anyone. I only have to follow my heart and concentrate on what I want to say to the world.",
-    author: "Janet Jackson",
-    description: "Grammy-winning pop icon and youngest sibling of the Jackson family"
-  },
-  {
-    quote: "I was always a very willful child. I was the one who said, 'I'll do it my way.'",
-    author: "Robin Wright",
-    description: "Golden Globe-winning actress known for 'House of Cards' and 'The Princess Bride'"
-  }
-];
-
-// Quote modal timing constants (in milliseconds) - subtle, infrequent
-const QUOTE_FADE_IN_DURATION = 300;     // 0.3 second fade in
-const QUOTE_DISPLAY_DURATION = 2000;    // 2 seconds display
-const QUOTE_FADE_OUT_DURATION = 300;    // 0.3 second fade out
-const QUOTE_PAUSE_DURATION = 90000;     // 90 seconds between quotes (very infrequent)
-const QUOTE_INITIAL_DELAY = 30000;      // 30 seconds before first quote
+// Fire Horse Celebrity Quotes for ticker (all born 1966)
+const FIRE_HORSE_TICKER_TEXT = '🔥 "I\'m going to follow my path. I\'m going to run my race." — Halle Berry  •  🐴 "I\'m too busy looking for the next cow." — Gordon Ramsay  •  🔥 "I only have to follow my heart." — Janet Jackson  •  🐴 "I was always willful. I\'ll do it my way." — Robin Wright  •  ✨ All Fire Horses born 1966 — Next Fire Horse year: 2086  •  ';
 
 // Background images to rotate through - alternating main with grids
 const BACKGROUND_IMAGES = [
@@ -55,11 +27,6 @@ export default function Home() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const cycleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Quote modal state
-  const [showQuoteModal, setShowQuoteModal] = useState(false);
-  const [quoteIndex, setQuoteIndex] = useState(0);
-  const [quoteOpacity, setQuoteOpacity] = useState(0);
-  const quoteTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Rotate background images with consistent timing
   useEffect(() => {
@@ -92,43 +59,6 @@ export default function Home() {
     };
   }, []); // Empty dependency - only runs once on mount
 
-  // Rotate Fire Horse quotes with fade in/out
-  useEffect(() => {
-    const showNextQuote = (index: number) => {
-      // Show modal and start fade in
-      setQuoteIndex(index);
-      setShowQuoteModal(true);
-
-      // Fade in
-      setTimeout(() => setQuoteOpacity(1), 50);
-
-      // After display duration, fade out
-      quoteTimeoutRef.current = setTimeout(() => {
-        setQuoteOpacity(0);
-
-        // After fade out, hide modal and schedule next quote
-        setTimeout(() => {
-          setShowQuoteModal(false);
-
-          // Schedule next quote after pause
-          quoteTimeoutRef.current = setTimeout(() => {
-            const nextIndex = (index + 1) % FIRE_HORSE_QUOTES.length;
-            showNextQuote(nextIndex);
-          }, QUOTE_PAUSE_DURATION);
-        }, QUOTE_FADE_OUT_DURATION);
-      }, QUOTE_FADE_IN_DURATION + QUOTE_DISPLAY_DURATION);
-    };
-
-    // Start with initial delay
-    quoteTimeoutRef.current = setTimeout(() => {
-      showNextQuote(0);
-    }, QUOTE_INITIAL_DELAY);
-
-    return () => {
-      if (quoteTimeoutRef.current) clearTimeout(quoteTimeoutRef.current);
-    };
-  }, []);
-
   return (
     <main className="min-h-screen bg-fire-gradient relative overflow-hidden">
       {/* Single Background Layer with fade transition */}
@@ -144,20 +74,25 @@ export default function Home() {
         }}
       />
 
-      {/* Fire Horse Quote - Minimal toast at bottom */}
-      {showQuoteModal && (
-        <div
-          className="fixed bottom-2 inset-x-0 z-40 pointer-events-none flex justify-center px-2"
-          style={{
-            opacity: quoteOpacity,
-            transition: `opacity ${QUOTE_FADE_IN_DURATION}ms ease-in-out`,
-          }}
-        >
-          <div className="bg-black/80 border border-fire-gold/20 rounded px-2 py-1 text-[11px] text-fire-gold/80">
-            🔥 &ldquo;{FIRE_HORSE_QUOTES[quoteIndex].quote.substring(0, 50)}...&rdquo; — {FIRE_HORSE_QUOTES[quoteIndex].author}
-          </div>
+      {/* Fire Horse Quote Ticker - Background scrolling text (z-0 so it's behind all content) */}
+      <div className="fixed bottom-4 left-0 right-0 z-0 pointer-events-none overflow-hidden">
+        <div className="animate-marquee whitespace-nowrap py-1">
+          <span className="text-[10px] text-fire-gold/30">
+            {FIRE_HORSE_TICKER_TEXT}{FIRE_HORSE_TICKER_TEXT}
+          </span>
         </div>
-      )}
+      </div>
+
+      {/* Marquee animation */}
+      <style jsx>{`
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+          animation: marquee 45s linear infinite;
+        }
+      `}</style>
 
       {/* Admin Test Button - Gear Icon */}
       <a
@@ -186,7 +121,8 @@ export default function Home() {
         </svg>
       </a>
 
-      <div className="max-w-lg mx-auto px-4 py-8 flex flex-col items-center min-h-screen relative z-10">
+      {/* Added pb-12 to ensure footer isn't covered by fixed ticker */}
+      <div className="max-w-lg mx-auto px-4 py-8 pb-12 flex flex-col items-center min-h-screen relative z-10">
         {/* Hero Title */}
         <h1 className="text-5xl md:text-6xl font-bold text-fire-gold tracking-tighter text-glow-gold text-center mt-4 mb-3">
           RED HORSE
