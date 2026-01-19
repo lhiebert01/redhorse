@@ -26,6 +26,7 @@ export default function FreeReadingPage() {
   } | null>(null);
   const [showPriceExplainer, setShowPriceExplainer] = useState(false);
   const [shareStatus, setShareStatus] = useState<'idle' | 'copied' | 'shared'>('idle');
+  const [showShareModal, setShowShareModal] = useState(false);
 
   const paymentLink = process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK || '#';
 
@@ -79,87 +80,41 @@ export default function FreeReadingPage() {
     return 'bg-gray-900/30 border-gray-700/50';
   };
 
-  // Generate viral share content - First person "I learned..." format
+  // Generate viral share content for social media
   const generateShareContent = () => {
-    if (!result || !funFacts || !forecast) return { text: '', shortText: '' };
+    if (!result || !funFacts || !forecast) return '';
 
-    // Get celebrity names only (first 3)
-    const celebNames = funFacts.famousPeople.slice(0, 3).map(p => p.name).join(', ');
+    // Get one celebrity with description
+    const celeb = funFacts.famousPeople[0];
 
-    // Format strengths with emojis
-    const strengthsFormatted = forecast.coreStrengths
-      .map(s => `✓ ${s}`)
-      .join('\n');
-
+    // Create a concise, viral share text
     const shareText = `🔥 I just discovered I'm a ${result.element} ${result.animal}! ${funFacts.emoji}
 
-━━━━━━━━━━━━━━━━━━━━━━
-📜 MY FREE FIRE HORSE ORACLE
-━━━━━━━━━━━━━━━━━━━━━━
+✨ My 2026 Mantra: "${funFacts.mantra}"
 
-🐴 ${result.element} ${result.animal} Characteristics:
-${forecast.characteristics.split('.').slice(0, 2).join('.')}.
+💡 Fun Fact: ${funFacts.funFact.split('.')[0]}.
 
-💪 My Core Strengths:
-${strengthsFormatted}
+⭐ Famous ${result.element} ${result.animal}: ${celeb.name} (${celeb.description})
 
-🌟 Famous ${result.element} ${result.animal}s I share my sign with:
-${celebNames}
+🐴 2026 is the Year of the Fire Horse — only happens once every 60 years!
 
-✨ My Mantra for 2026:
-"${funFacts.mantra}"
+👉 Get YOUR FREE Oracle: redhorseoracle.com/free
 
-🔮 Oracle Wisdom:
-"${forecast.oracleWisdom}"
+#FireHorse2026 #ChineseZodiac #${result.animal}`;
 
-━━━━━━━━━━━━━━━━━━━━━━
-🐎 The Year of the Fire Horse 2026
-   Only happens once every 60 years!
-   Last: 1966 → NOW: 2026 → Next: 2086
-━━━━━━━━━━━━━━━━━━━━━━
-
-👉 Get YOUR FREE Fire Horse Oracle:
-🔗 redhorseoracle.com/free
-
-#FireHorse2026 #ChineseZodiac #${result.animal} #YearOfTheHorse`;
-
-    const shortText = `🔥 I'm a ${result.element} ${result.animal}! ${funFacts.emoji}
-
-My strengths: ${forecast.coreStrengths.join(' • ')}
-
-Get YOUR free Fire Horse Oracle → redhorseoracle.com/free
-
-#FireHorse2026 #ChineseZodiac`;
-
-    return { text: shareText, shortText };
+    return shareText;
   };
 
-  const handleViralShare = async () => {
-    const { text, shortText } = generateShareContent();
+  // Copy share text to clipboard
+  const handleCopyShareText = async () => {
+    const text = generateShareContent();
 
-    // Try native share first (mobile)
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: `I'm a ${result?.element} ${result?.animal} - Fire Horse 2026`,
-          text: shortText,
-          url: 'https://redhorseoracle.com/free'
-        });
-        setShareStatus('shared');
-        setTimeout(() => setShareStatus('idle'), 3000);
-        return;
-      } catch {
-        // User cancelled or error - fall through to clipboard
-      }
-    }
-
-    // Fallback to clipboard
     try {
       await navigator.clipboard.writeText(text);
       setShareStatus('copied');
-      setTimeout(() => setShareStatus('idle'), 3000);
+      setTimeout(() => setShareStatus('idle'), 5000);
     } catch {
-      // Final fallback - open a text area for manual copy
+      // Fallback for older browsers
       const textArea = document.createElement('textarea');
       textArea.value = text;
       document.body.appendChild(textArea);
@@ -167,7 +122,7 @@ Get YOUR free Fire Horse Oracle → redhorseoracle.com/free
       document.execCommand('copy');
       document.body.removeChild(textArea);
       setShareStatus('copied');
-      setTimeout(() => setShareStatus('idle'), 3000);
+      setTimeout(() => setShareStatus('idle'), 5000);
     }
   };
 
@@ -354,75 +309,139 @@ Get YOUR free Fire Horse Oracle → redhorseoracle.com/free
                 <div className="flex-1 h-px bg-purple-700/50"></div>
               </div>
 
-              {/* Share Section - 3 Simple Buttons */}
+              {/* Share Section - Single Button to Open Modal */}
               <div className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border-2 border-purple-500/50 rounded-2xl p-5 mb-4">
                 <p className="text-purple-300 text-lg font-bold mb-2 text-center">
                   📣 Share Your Zodiac Discovery!
                 </p>
                 <p className="text-gray-300 text-sm mb-4 text-center">
-                  Click to copy your post, then paste into your favorite social app
+                  Get a ready-to-post message for your social media
                 </p>
 
-                {/* Copy Status Message */}
-                {shareStatus === 'copied' && (
-                  <div className="bg-green-900/50 border border-green-500 rounded-xl p-3 mb-4 animate-pulse">
-                    <p className="text-green-300 text-sm font-bold text-center">
-                      ✅ Copied! Now paste (Ctrl+V) into your social app
-                    </p>
-                  </div>
-                )}
-
-                {/* 3 Share Buttons */}
-                <div className="flex flex-col gap-3">
-                  {/* X/Twitter */}
-                  <a
-                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
-                      funFacts && forecast
-                        ? `🔥 I just discovered I'm a ${result.element} ${result.animal}! ${funFacts.emoji}\n\n💪 My strengths: ${forecast.coreStrengths.join(' • ')}\n\n✨ "${funFacts.mantra}"\n\nGet YOUR free Fire Horse Oracle:\n🔗 redhorseoracle.com/free\n\n#FireHorse2026 #ChineseZodiac`
-                        : `I just discovered I'm a ${result.element} ${result.animal}! 🔥🐴\n\nGet YOUR zodiac → redhorseoracle.com/free`
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-3 bg-black hover:bg-gray-900 border-2 border-gray-600 text-white font-bold py-3 px-6 rounded-xl transition-all hover:scale-[1.02]"
-                  >
-                    <span className="text-xl font-bold">𝕏</span>
-                    <span>Share on X (Twitter)</span>
-                  </a>
-
-                  {/* LinkedIn - Copy first, then open */}
-                  <button
-                    onClick={async () => {
-                      await handleViralShare();
-                      window.open('https://www.linkedin.com/feed/', '_blank');
-                    }}
-                    className="flex items-center justify-center gap-3 bg-[#0A66C2] hover:bg-[#004182] border-2 border-[#0A66C2] text-white font-bold py-3 px-6 rounded-xl transition-all hover:scale-[1.02]"
-                  >
-                    <span className="text-xl font-bold">in</span>
-                    <span>Copy & Share on LinkedIn</span>
-                  </button>
-
-                  {/* Facebook - Copy first, then open */}
-                  <button
-                    onClick={async () => {
-                      await handleViralShare();
-                      window.open('https://www.facebook.com/', '_blank');
-                    }}
-                    className="flex items-center justify-center gap-3 bg-[#1877F2] hover:bg-[#166FE5] border-2 border-[#1877F2] text-white font-bold py-3 px-6 rounded-xl transition-all hover:scale-[1.02]"
-                  >
-                    <span className="text-xl font-bold">f</span>
-                    <span>Copy & Share on Facebook</span>
-                  </button>
-                </div>
-
-                <p className="text-gray-500 text-xs mt-4 text-center">
-                  📌 LinkedIn & Facebook: We copy your post first, then open the app. Just paste!
-                </p>
+                {/* Big Share Button */}
+                <button
+                  onClick={() => setShowShareModal(true)}
+                  className="w-full bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 text-white font-bold text-lg py-4 px-6 rounded-xl hover:scale-105 active:scale-95 transition-all duration-200 shadow-xl shadow-purple-500/30 border-2 border-purple-400"
+                >
+                  📋 CREATE MY SHARE POST
+                </button>
               </div>
 
               <p className="text-gray-500 text-xs mt-3">
                 Help a friend discover their 2026 destiny before it&apos;s too late
               </p>
             </div>
+
+            {/* ========== SHARE MODAL ========== */}
+            {showShareModal && funFacts && forecast && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+                <div className="bg-gradient-to-br from-purple-950 via-black to-purple-950 border-2 border-purple-500 rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl shadow-purple-500/30">
+                  {/* Modal Header */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl">📣</span>
+                      <h3 className="text-purple-300 text-xl font-bold">Share Your Discovery!</h3>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setShowShareModal(false);
+                        setShareStatus('idle');
+                      }}
+                      className="text-gray-400 hover:text-white text-2xl font-bold"
+                    >
+                      ×
+                    </button>
+                  </div>
+
+                  {/* Instructions */}
+                  <p className="text-gray-300 text-sm mb-4 text-center">
+                    Copy this ready-to-post message, then paste it into X, LinkedIn, Facebook, or any social app!
+                  </p>
+
+                  {/* The Share Text - Visible Preview */}
+                  <div className="bg-black/60 border-2 border-purple-700/50 rounded-xl p-4 mb-4 font-mono text-sm">
+                    <p className="text-white whitespace-pre-wrap leading-relaxed">
+                      🔥 I just discovered I&apos;m a {result.element} {result.animal}! {funFacts.emoji}
+                      {'\n\n'}
+                      ✨ My 2026 Mantra: &ldquo;{funFacts.mantra}&rdquo;
+                      {'\n\n'}
+                      💡 Fun Fact: {funFacts.funFact.split('.')[0]}.
+                      {'\n\n'}
+                      ⭐ Famous {result.element} {result.animal}: {funFacts.famousPeople[0].name} ({funFacts.famousPeople[0].description})
+                      {'\n\n'}
+                      🐴 2026 is the Year of the Fire Horse — only happens once every 60 years!
+                      {'\n\n'}
+                      👉 Get YOUR FREE Oracle: redhorseoracle.com/free
+                      {'\n\n'}
+                      #FireHorse2026 #ChineseZodiac #{result.animal}
+                    </p>
+                  </div>
+
+                  {/* Copy Status */}
+                  {shareStatus === 'copied' && (
+                    <div className="bg-green-900/50 border border-green-500 rounded-xl p-3 mb-4 animate-pulse">
+                      <p className="text-green-300 text-base font-bold text-center">
+                        ✅ COPIED! Now paste (Ctrl+V / Cmd+V) into your social app
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Big Copy Button */}
+                  <button
+                    onClick={handleCopyShareText}
+                    className={`w-full font-bold text-xl py-4 px-6 rounded-xl transition-all duration-200 shadow-xl border-2 ${
+                      shareStatus === 'copied'
+                        ? 'bg-green-600 border-green-400 text-white'
+                        : 'bg-gradient-to-r from-fire-gold via-yellow-500 to-fire-gold border-yellow-400 text-black hover:scale-105 active:scale-95'
+                    }`}
+                  >
+                    {shareStatus === 'copied' ? '✅ COPIED TO CLIPBOARD!' : '📋 COPY POST TO CLIPBOARD'}
+                  </button>
+
+                  {/* Quick Links */}
+                  <div className="mt-4 pt-4 border-t border-purple-700/50">
+                    <p className="text-gray-400 text-xs text-center mb-3">After copying, paste into:</p>
+                    <div className="flex justify-center gap-3">
+                      <a
+                        href="https://twitter.com/compose/tweet"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-black hover:bg-gray-900 border border-gray-600 text-white font-bold text-sm py-2 px-4 rounded-lg transition-colors"
+                      >
+                        𝕏 Twitter
+                      </a>
+                      <a
+                        href="https://www.linkedin.com/feed/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-[#0A66C2] hover:bg-[#004182] text-white font-bold text-sm py-2 px-4 rounded-lg transition-colors"
+                      >
+                        in LinkedIn
+                      </a>
+                      <a
+                        href="https://www.facebook.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-[#1877F2] hover:bg-[#166FE5] text-white font-bold text-sm py-2 px-4 rounded-lg transition-colors"
+                      >
+                        f Facebook
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Close */}
+                  <button
+                    onClick={() => {
+                      setShowShareModal(false);
+                      setShareStatus('idle');
+                    }}
+                    className="mt-4 w-full text-gray-400 hover:text-white text-sm underline"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* Zodiac Identity Card - Using digital card style consistently */}
             <div className="bg-gradient-to-br from-red-950/50 to-black border border-fire-gold/30 rounded-2xl p-6 text-center">
