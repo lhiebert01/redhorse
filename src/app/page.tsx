@@ -252,10 +252,15 @@ export default function Home() {
               className="block w-full bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600
                          text-black font-bold text-xl py-4 rounded-xl text-center
                          hover:scale-105 active:scale-95 transition-all duration-200
-                         shadow-xl shadow-yellow-500/30 glow-gold border-2 border-yellow-400 mb-3"
+                         shadow-xl shadow-yellow-500/30 glow-gold border-2 border-yellow-400"
             >
               GET MY ORACLE — $8.88
             </a>
+
+            {/* Privacy badges - same as FREE but without "No Payment" */}
+            <p className="text-white font-bold text-sm text-center mt-3 mb-3">
+              ✓ No Personal Info &nbsp; ✓ No Login &nbsp; ✓ No Email
+            </p>
 
             {/* 4 Paths - compact inline */}
             <div className="flex justify-center gap-3 text-sm">
