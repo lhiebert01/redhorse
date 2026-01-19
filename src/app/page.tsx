@@ -3,6 +3,37 @@
 import { useState, useEffect, useRef } from 'react';
 import { PRODUCT_MODES } from '@/constants/modes';
 
+// Fire Horse Celebrity Quotes (all born 1966)
+const FIRE_HORSE_QUOTES = [
+  {
+    quote: "I'm going to follow my path. I'm going to run my race. And it's not going to be like anyone else's.",
+    author: "Halle Berry",
+    description: "Academy Award-winning actress known for 'Monster's Ball' and Storm in X-Men"
+  },
+  {
+    quote: "I don't like looking back. I'm always constantly looking forward. I'm not the one to sit and cry over spilt milk. I'm too busy looking for the next cow.",
+    author: "Gordon Ramsay",
+    description: "Celebrity Chef known for his intensity on 'Hell's Kitchen' and 'MasterChef'"
+  },
+  {
+    quote: "I don't have to prove anything to anyone. I only have to follow my heart and concentrate on what I want to say to the world.",
+    author: "Janet Jackson",
+    description: "Grammy-winning pop icon and youngest sibling of the Jackson family"
+  },
+  {
+    quote: "I was always a very willful child. I was the one who said, 'I'll do it my way.'",
+    author: "Robin Wright",
+    description: "Golden Globe-winning actress known for 'House of Cards' and 'The Princess Bride'"
+  }
+];
+
+// Quote modal timing constants (in milliseconds)
+const QUOTE_FADE_IN_DURATION = 1000;    // 1 second fade in
+const QUOTE_DISPLAY_DURATION = 6000;    // 6 seconds display
+const QUOTE_FADE_OUT_DURATION = 1000;   // 1 second fade out
+const QUOTE_PAUSE_DURATION = 15000;     // 15 seconds between quotes
+const QUOTE_INITIAL_DELAY = 5000;       // 5 seconds before first quote
+
 // Background images to rotate through - alternating main with grids
 const BACKGROUND_IMAGES = [
   { src: '/assets/Fire-Horse-2026-Chart-v2.jpeg', isMain: true },   // Main
@@ -23,6 +54,12 @@ export default function Home() {
   const [showWhyPrice, setShowWhyPrice] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const cycleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Quote modal state
+  const [showQuoteModal, setShowQuoteModal] = useState(false);
+  const [quoteIndex, setQuoteIndex] = useState(0);
+  const [quoteOpacity, setQuoteOpacity] = useState(0);
+  const quoteTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Rotate background images with consistent timing
   useEffect(() => {
@@ -55,6 +92,43 @@ export default function Home() {
     };
   }, []); // Empty dependency - only runs once on mount
 
+  // Rotate Fire Horse quotes with fade in/out
+  useEffect(() => {
+    const showNextQuote = (index: number) => {
+      // Show modal and start fade in
+      setQuoteIndex(index);
+      setShowQuoteModal(true);
+
+      // Fade in
+      setTimeout(() => setQuoteOpacity(1), 50);
+
+      // After display duration, fade out
+      quoteTimeoutRef.current = setTimeout(() => {
+        setQuoteOpacity(0);
+
+        // After fade out, hide modal and schedule next quote
+        setTimeout(() => {
+          setShowQuoteModal(false);
+
+          // Schedule next quote after pause
+          quoteTimeoutRef.current = setTimeout(() => {
+            const nextIndex = (index + 1) % FIRE_HORSE_QUOTES.length;
+            showNextQuote(nextIndex);
+          }, QUOTE_PAUSE_DURATION);
+        }, QUOTE_FADE_OUT_DURATION);
+      }, QUOTE_FADE_IN_DURATION + QUOTE_DISPLAY_DURATION);
+    };
+
+    // Start with initial delay
+    quoteTimeoutRef.current = setTimeout(() => {
+      showNextQuote(0);
+    }, QUOTE_INITIAL_DELAY);
+
+    return () => {
+      if (quoteTimeoutRef.current) clearTimeout(quoteTimeoutRef.current);
+    };
+  }, []);
+
   return (
     <main className="min-h-screen bg-fire-gradient relative overflow-hidden">
       {/* Single Background Layer with fade transition */}
@@ -69,6 +143,111 @@ export default function Home() {
           transition: `opacity ${FADE_DURATION}ms ease-in-out`,
         }}
       />
+
+      {/* Fire Horse Celebrity Quote Modal */}
+      {showQuoteModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
+          style={{
+            opacity: quoteOpacity,
+            transition: `opacity ${QUOTE_FADE_IN_DURATION}ms ease-in-out`,
+          }}
+        >
+          {/* Outer glow container */}
+          <div className="relative">
+            {/* Animated gradient border glow */}
+            <div
+              className="absolute -inset-1 rounded-2xl opacity-75 blur-sm"
+              style={{
+                background: 'linear-gradient(135deg, #ef4444, #f97316, #eab308, #ef4444)',
+                backgroundSize: '300% 300%',
+                animation: 'gradient-shift 4s ease infinite',
+              }}
+            />
+
+            {/* Main card */}
+            <div className="relative bg-gradient-to-br from-black via-red-950/95 to-black backdrop-blur-md rounded-2xl p-6 md:p-8 max-w-lg mx-auto border border-fire-gold/30">
+              {/* Fire Horse Badge */}
+              <div className="flex items-center justify-center gap-3 mb-5">
+                <span className="text-3xl animate-pulse">🔥</span>
+                <div className="text-center">
+                  <p className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 font-black text-xs tracking-[0.3em] uppercase">
+                    Fire Horse
+                  </p>
+                  <p className="text-gray-400 text-[10px] tracking-wider">
+                    BORN 1966
+                  </p>
+                </div>
+                <span className="text-3xl animate-pulse">🐴</span>
+              </div>
+
+              {/* Decorative quote mark */}
+              <div className="text-center mb-2">
+                <span className="text-6xl text-fire-gold/30 font-serif leading-none">&ldquo;</span>
+              </div>
+
+              {/* Quote - with gradient text */}
+              <blockquote className="text-center mb-3 px-2">
+                <p
+                  className="text-lg md:text-xl leading-relaxed font-medium"
+                  style={{
+                    background: 'linear-gradient(180deg, #ffffff 0%, #fcd34d 50%, #f97316 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                  }}
+                >
+                  {FIRE_HORSE_QUOTES[quoteIndex].quote}
+                </p>
+              </blockquote>
+
+              {/* Closing quote mark */}
+              <div className="text-center mb-4">
+                <span className="text-6xl text-fire-gold/30 font-serif leading-none">&rdquo;</span>
+              </div>
+
+              {/* Decorative divider */}
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <div className="h-px w-12 bg-gradient-to-r from-transparent via-fire-gold/50 to-transparent" />
+                <span className="text-fire-gold text-sm">✦</span>
+                <div className="h-px w-12 bg-gradient-to-r from-transparent via-fire-gold/50 to-transparent" />
+              </div>
+
+              {/* Author */}
+              <div className="text-center">
+                <p className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-fire-gold to-orange-400 font-bold text-xl tracking-wide">
+                  {FIRE_HORSE_QUOTES[quoteIndex].author}
+                </p>
+                <p className="text-gray-400 text-xs mt-1.5 max-w-xs mx-auto leading-relaxed">
+                  {FIRE_HORSE_QUOTES[quoteIndex].description}
+                </p>
+              </div>
+
+              {/* Progress dots */}
+              <div className="flex justify-center gap-2 mt-5">
+                {FIRE_HORSE_QUOTES.map((_, i) => (
+                  <div
+                    key={i}
+                    className={`w-2 h-2 rounded-full transition-all duration-500 ${
+                      i === quoteIndex
+                        ? 'bg-gradient-to-r from-yellow-400 to-orange-500 scale-125 shadow-lg shadow-orange-500/50'
+                        : 'bg-gray-700'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CSS for gradient animation */}
+      <style jsx>{`
+        @keyframes gradient-shift {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+      `}</style>
 
       {/* Admin Test Button - Gear Icon */}
       <a
