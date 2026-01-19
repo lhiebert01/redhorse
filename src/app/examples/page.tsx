@@ -23,6 +23,7 @@ export default function ExamplesPage() {
   const [selectedPerson, setSelectedPerson] = useState<number | null>(null);
   const [showFullImage, setShowFullImage] = useState(false);
   const [showPrivacyInfo, setShowPrivacyInfo] = useState(false);
+  const [showWhyPrice, setShowWhyPrice] = useState(false);
 
   const selectedExample = selectedPerson !== null
     ? EXAMPLE_PEOPLE.find(p => p.id === selectedPerson)
@@ -96,6 +97,39 @@ export default function ExamplesPage() {
               >
                 Get Your Prophecy - $8.88
               </a>
+
+              {/* Why $8.88 Button */}
+              <button
+                onClick={() => setShowWhyPrice(!showWhyPrice)}
+                className="mt-3 text-fire-gold/80 hover:text-fire-gold text-sm font-medium
+                           underline underline-offset-2 decoration-dotted
+                           transition-colors duration-200 flex items-center justify-center md:justify-start gap-1"
+              >
+                Why $8.88? Tap to discover...
+                <span className={`transition-transform duration-300 ${showWhyPrice ? 'rotate-180' : ''}`}>
+                  ▼
+                </span>
+              </button>
+
+              {/* Expandable Explanation */}
+              <div
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  showWhyPrice ? 'max-h-64 opacity-100 mt-3' : 'max-h-0 opacity-0'
+                }`}
+              >
+                <div className="bg-red-950/60 border border-fire-gold/30 rounded-xl p-4 text-left max-w-sm">
+                  <p className="text-fire-gold font-bold text-sm mb-2">🎰 The Luckiest Number in Chinese Culture</p>
+                  <p className="text-white text-sm leading-relaxed">
+                    <strong>8</strong> sounds like <strong>&quot;發&quot; (fā)</strong> — meaning <em>prosperity</em> and <em>wealth</em>.
+                  </p>
+                  <p className="text-gray-300 text-sm mt-2 leading-relaxed">
+                    Three 8s = <strong>triple fortune</strong>. That&apos;s why phone numbers, license plates, and addresses with 888 sell for premium prices across Asia.
+                  </p>
+                  <p className="text-fire-gold text-xs mt-3 italic">
+                    Your Oracle price IS your first lucky number. 🔥
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
