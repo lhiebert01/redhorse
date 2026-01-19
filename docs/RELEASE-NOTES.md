@@ -1,5 +1,105 @@
 # Red Horse Oracle - Release Notes
 
+## Version 1.4.0 - Celebrity Quotes & Viral Share Content (January 19, 2026)
+
+**Status:** PRODUCTION LIVE
+**Release Date:** January 19, 2026
+
+---
+
+### Highlights
+
+This release adds **Artistic Celebrity Quote Banners**, **Celebrity Descriptions**, **Enhanced Viral Share Content**, and positions quotes at the TOP of the forecast for immediate celebrity value recognition.
+
+---
+
+### New Features
+
+#### Artistic Celebrity Quote Banner (TOP of Forecast)
+- **Position:** Celebrity quote now displays at the TOP of the Oracle Forecast (both FREE and PAID pages)
+- **Gradient text effect** matching element colors (Wood=green, Fire=red, Earth=yellow, Metal=silver, Water=blue)
+- **Decorative corner elements** (✦) for artistic framing
+- **Quote author with description** explaining who the celebrity is
+- **Celebrity badge** with element-specific gradient background
+
+#### Celebrity Descriptions (60 Zodiac Combinations)
+- **New data structure:** `CelebrityInfo` with `name` and `description` fields
+- **All 60 zodiac combinations** now have celebrity bios (who they are, what they do)
+- **Example:** `{ name: 'LeBron James', description: 'NBA legend, 4x champion' }`
+- **Quote author descriptions** added for attribution context
+
+#### Enhanced Viral Share Content (PAID Page)
+- **Mode-specific emojis:** 🎲💰 Wealth, ⚔️👑 Power, ❤️💕 Love, 🛡️✨ Shield
+- **Urgency messaging:** "Next: 2086 - will you even be alive?"
+- **Hashtags added:** #FireHorse2026 #ChineseZodiac #LimitedEdition #AI
+- **Updated platforms:** Twitter, WhatsApp, Telegram share text enhanced
+- **Copy Message button:** Full viral content with emojis and hashtags
+
+#### Famous People Section (PAID Page)
+- **Updated to object structure:** `person.name` and `person.description`
+- **Numbered list with colorful badges** (gold #1, purple #2, pink #3)
+- **Shows who each celebrity is** for users unfamiliar with names
+
+---
+
+### Modified Files
+
+| File | Changes |
+|------|---------|
+| `src/constants/zodiac-fun-facts.ts` | NEW - 60 zodiac celebrity data entries |
+| `src/components/reveal/ZodiacSummary.tsx` | Artistic quote at top, updated Famous People |
+| `src/components/reveal/ShareButtons.tsx` | Viral share content with emojis/hashtags |
+| `src/app/free/page.tsx` | Celebrity quote banner, updated Famous People |
+
+---
+
+### Data Structure Changes
+
+#### CelebrityInfo Interface
+```typescript
+export interface CelebrityInfo {
+  name: string;
+  description: string;  // Who they are, what they do
+}
+
+export interface ZodiacFunFact {
+  years: number[];
+  famousPeople: CelebrityInfo[];  // Changed from string[]
+  mantra: string;
+  quote: string;
+  quoteAuthor: string;
+  quoteAuthorDescription: string;  // NEW - Celebrity bio
+  funFact: string;
+  emoji: string;
+}
+```
+
+---
+
+### Share Content Example
+
+```
+🔥 I just got my Authenticated Limited Edition Fire Horse Oracle! 🐴
+
+✨ I'm a Earth Dragon ⚔️👑
+
+💬 My prophecy: "STRIKE FROM SILENCE"
+
+🎨 VIEW MY TALISMAN: [URL]
+
+🔮 The Fire Horse returns only once every 60 years!
+   • Last: 1966
+   • NOW: 2026
+   • Next: 2086 (will you even be alive?)
+
+🎯 Get YOUR Fire Horse Oracle:
+redhorseoracle.com
+
+#FireHorse2026 #ChineseZodiac #Dragon #AI #LimitedEdition
+```
+
+---
+
 ## Version 1.3.0 - Visual Polish & Marketing Assets (January 18, 2026)
 
 **Status:** PRODUCTION LIVE

@@ -1,8 +1,8 @@
 # Red Horse Oracle - Next Steps & Launch Plan
 
-**Last Updated:** January 18, 2026
+**Last Updated:** January 19, 2026
 **Current Phase:** ✅ PRODUCTION READY → 🚀 MARKETING LAUNCH
-**Version:** 1.3.0
+**Version:** 1.4.0
 
 ---
 
@@ -38,6 +38,11 @@
 | **Background Polish** | Crystal clear images, proper positioning | Jan 18 |
 | **OG Image Verified** | LinkedIn + Facebook debugger confirmed | Jan 18 |
 | **Social Media Copy** | "Zombie User" activation copy ready | Jan 18 |
+| **Celebrity Quote Banner** | Artistic quote at TOP of forecast (FREE + PAID) | Jan 19 |
+| **Celebrity Descriptions** | 60 zodiac entries with who they are bios | Jan 19 |
+| **Viral Share Content** | Emojis, hashtags, urgency messaging | Jan 19 |
+| **Famous People Update** | Shows name + description (not just name) | Jan 19 |
+| **zodiac-fun-facts.ts** | New data file with 60 celebrity entries | Jan 19 |
 
 ---
 

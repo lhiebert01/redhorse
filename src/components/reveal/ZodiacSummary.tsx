@@ -168,7 +168,7 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement, focusMode, fu
 
             {/* The Quote - Artistic Typography */}
             <blockquote className="relative">
-              <p className={`text-2xl md:text-3xl font-black leading-relaxed mb-2 bg-gradient-to-r ${elementColors.gradient} bg-clip-text text-transparent`}>
+              <p className={`text-2xl md:text-3xl font-black leading-relaxed mb-2 text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]`}>
                 {funFacts.quote}
               </p>
             </blockquote>
