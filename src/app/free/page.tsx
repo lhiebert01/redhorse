@@ -265,7 +265,7 @@ export default function FreeReadingPage() {
                 <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-fire-gold shadow-lg shadow-fire-gold/30">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={`/assets/zodiac-badges/${result.element.toLowerCase()}-${result.animal.toLowerCase()}.jpeg`}
+                    src={`/assets/zodiac-badges-free/${result.element.toLowerCase()}-${result.animal.toLowerCase()}.jpeg`}
                     alt={`${result.element} ${result.animal}`}
                     className="w-full h-full object-cover scale-125"
                   />
@@ -321,7 +321,7 @@ export default function FreeReadingPage() {
                       <div className="relative rounded-xl overflow-hidden border-2 border-green-500/50 shadow-lg shadow-green-500/20">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
-                          src={`/assets/zodiac-badges/${result.element.toLowerCase()}-${result.animal.toLowerCase()}.jpeg`}
+                          src={`/assets/zodiac-badges-free/${result.element.toLowerCase()}-${result.animal.toLowerCase()}.jpeg`}
                           alt={`${result.element} ${result.animal} Zodiac Card`}
                           className="w-full h-auto"
                         />
@@ -608,7 +608,7 @@ export default function FreeReadingPage() {
                   <div className="relative w-36 rounded-xl overflow-hidden border-2 border-fire-gold/50 shadow-xl">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={`/assets/zodiac-badges/${result.element.toLowerCase()}-${result.animal.toLowerCase()}.jpeg`}
+                      src={`/assets/zodiac-badges-free/${result.element.toLowerCase()}-${result.animal.toLowerCase()}.jpeg`}
                       alt={`${result.element} ${result.animal}`}
                       className="w-full h-auto"
                     />
@@ -627,7 +627,7 @@ export default function FreeReadingPage() {
                   <div className="relative w-36 rounded-xl overflow-hidden border-2 border-red-500/50 shadow-xl">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src="/assets/zodiac-badges/fire-horse.jpeg"
+                      src="/assets/zodiac-badges-free/fire-horse.jpeg"
                       alt="Fire Horse 2026"
                       className="w-full h-auto"
                     />
