@@ -231,31 +231,14 @@ export default function Home() {
 
           {/* ========== SECTION 2: PAID ORACLE ========== */}
           <div className="bg-gradient-to-br from-red-950/50 to-black border-2 border-fire-gold/50 rounded-2xl p-5">
-            <div className="text-center mb-3">
+            <div className="text-center mb-4">
               <span className="text-4xl">🔥</span>
-              <h3 className="text-fire-gold text-lg font-bold mt-2 leading-snug">
-                UNLOCK YOUR COMPLETE FORTUNE, LUCK,<br />
-                PROSPERITY, WEALTH, POWER, LOVE & PROTECTION
+              <h3 className="text-fire-gold text-lg font-bold mt-2">
+                WANT MORE? GET YOUR COMPLETE ORACLE
               </h3>
-              <p className="text-gray-300 text-sm mt-2">
-                Bet on yourself in 2026 with your <span className="text-fire-gold font-semibold">Authenticated Limited Edition Oracle</span>
-              </p>
             </div>
 
-            {/* Four Paths Preview */}
-            <div className="grid grid-cols-2 gap-2 mb-4">
-              {Object.values(PRODUCT_MODES).map((mode) => (
-                <div
-                  key={mode.id}
-                  className="bg-black/50 border border-fire-gold/30 rounded-lg p-2 text-center"
-                >
-                  <span className="text-xl">{mode.emoji}</span>
-                  <p className="text-fire-gold text-xs font-semibold">{mode.name}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Paid CTA Button */}
+            {/* Paid CTA Button - FIRST */}
             <a
               href={paymentLink}
               className="block w-full bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600
@@ -266,44 +249,36 @@ export default function Home() {
               🔥 GET MY ORACLE — $8.88
             </a>
 
-            {/* Why $8.88 Button - GREEN, under the purchase button */}
-            <button
-              onClick={() => setShowWhyPrice(!showWhyPrice)}
-              className="mt-3 mx-auto block bg-green-700 hover:bg-green-600 text-white font-bold text-sm
-                         px-4 py-2 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
-            >
-              💰 Why $8.88? Tap to Discover
-              <span className={`transition-transform duration-300 ${showWhyPrice ? 'rotate-180' : ''}`}>
-                ▼
-              </span>
-            </button>
-
-            {/* Expandable Why $8.88 Explanation */}
-            <div
-              className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                showWhyPrice ? 'max-h-64 opacity-100 mt-3' : 'max-h-0 opacity-0'
-              }`}
-            >
-              <div className="bg-green-950/60 border border-green-500/30 rounded-xl p-4 text-left">
-                <p className="text-green-400 font-bold text-sm mb-2">🎰 The Luckiest Number in Chinese Culture</p>
-                <p className="text-white text-sm leading-relaxed">
-                  <strong>8</strong> sounds like <strong>&quot;發&quot; (fā)</strong> — meaning <em>prosperity</em> and <em>wealth</em>.
-                </p>
-                <p className="text-gray-300 text-sm mt-2 leading-relaxed">
-                  Three 8s = <strong>triple fortune</strong>. That&apos;s why phone numbers, license plates, and addresses with 888 sell for premium prices across Asia.
-                </p>
-                <p className="text-green-400 text-xs mt-3 italic">
-                  Your Oracle price IS your first lucky number. 🔥
-                </p>
+            {/* What You Get - AFTER the button */}
+            <div className="mt-4 pt-4 border-t border-fire-gold/20">
+              <p className="text-gray-400 text-xs text-center mb-3">Choose your path at checkout:</p>
+              <div className="grid grid-cols-4 gap-1">
+                {Object.values(PRODUCT_MODES).map((mode) => (
+                  <div key={mode.id} className="text-center">
+                    <span className="text-lg">{mode.emoji}</span>
+                    <p className="text-fire-gold text-[10px] font-semibold">{mode.name}</p>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Trust Badges */}
-            <div className="flex justify-center gap-4 text-xs text-gray-400 mt-3">
-              <span>🔒 Secure</span>
-              <span>⚡ Instant</span>
-              <span>🎨 AI Art</span>
-              <span>🛡️ Private</span>
+            {/* Why $8.88 Button */}
+            <button
+              onClick={() => setShowWhyPrice(!showWhyPrice)}
+              className="mt-4 mx-auto block bg-green-700 hover:bg-green-600 text-white font-bold text-sm
+                         px-4 py-2 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+            >
+              💰 Why $8.88?
+              <span className={`transition-transform duration-300 ${showWhyPrice ? 'rotate-180' : ''}`}>▼</span>
+            </button>
+
+            {/* Expandable Why $8.88 Explanation */}
+            <div className={`overflow-hidden transition-all duration-500 ease-in-out ${showWhyPrice ? 'max-h-64 opacity-100 mt-3' : 'max-h-0 opacity-0'}`}>
+              <div className="bg-green-950/60 border border-green-500/30 rounded-xl p-3 text-left">
+                <p className="text-white text-sm leading-relaxed">
+                  <strong>8</strong> = <strong>&quot;發&quot; (fā)</strong> = <em>prosperity</em>. Three 8s = <strong>triple fortune</strong>.
+                </p>
+              </div>
             </div>
           </div>
 
