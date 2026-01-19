@@ -45,7 +45,7 @@ export default function Home() {
         style={{
           backgroundImage: `url(${BACKGROUND_IMAGES[currentIndex]})`,
           backgroundSize: 'cover',
-          backgroundPosition: 'center center',
+          backgroundPosition: 'top center',
           backgroundRepeat: 'no-repeat',
           opacity: showNext ? 0 : 0.30,
           transition: 'opacity 2.5s ease-in-out',
@@ -57,7 +57,7 @@ export default function Home() {
         style={{
           backgroundImage: `url(${BACKGROUND_IMAGES[nextIndex]})`,
           backgroundSize: 'cover',
-          backgroundPosition: 'center center',
+          backgroundPosition: 'top center',
           backgroundRepeat: 'no-repeat',
           opacity: showNext ? 0.30 : 0,
           transition: 'opacity 2.5s ease-in-out',
