@@ -27,12 +27,12 @@ const FIRE_HORSE_QUOTES = [
   }
 ];
 
-// Quote modal timing constants (in milliseconds)
-const QUOTE_FADE_IN_DURATION = 1000;    // 1 second fade in
-const QUOTE_DISPLAY_DURATION = 6000;    // 6 seconds display
-const QUOTE_FADE_OUT_DURATION = 1000;   // 1 second fade out
-const QUOTE_PAUSE_DURATION = 15000;     // 15 seconds between quotes
-const QUOTE_INITIAL_DELAY = 5000;       // 5 seconds before first quote
+// Quote modal timing constants (in milliseconds) - subtle, infrequent
+const QUOTE_FADE_IN_DURATION = 300;     // 0.3 second fade in
+const QUOTE_DISPLAY_DURATION = 2000;    // 2 seconds display
+const QUOTE_FADE_OUT_DURATION = 300;    // 0.3 second fade out
+const QUOTE_PAUSE_DURATION = 90000;     // 90 seconds between quotes (very infrequent)
+const QUOTE_INITIAL_DELAY = 30000;      // 30 seconds before first quote
 
 // Background images to rotate through - alternating main with grids
 const BACKGROUND_IMAGES = [
@@ -144,110 +144,20 @@ export default function Home() {
         }}
       />
 
-      {/* Fire Horse Celebrity Quote Modal */}
+      {/* Fire Horse Quote - Minimal toast at bottom */}
       {showQuoteModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
+          className="fixed bottom-2 inset-x-0 z-40 pointer-events-none flex justify-center px-2"
           style={{
             opacity: quoteOpacity,
             transition: `opacity ${QUOTE_FADE_IN_DURATION}ms ease-in-out`,
           }}
         >
-          {/* Outer glow container */}
-          <div className="relative">
-            {/* Animated gradient border glow */}
-            <div
-              className="absolute -inset-1 rounded-2xl opacity-75 blur-sm"
-              style={{
-                background: 'linear-gradient(135deg, #ef4444, #f97316, #eab308, #ef4444)',
-                backgroundSize: '300% 300%',
-                animation: 'gradient-shift 4s ease infinite',
-              }}
-            />
-
-            {/* Main card */}
-            <div className="relative bg-gradient-to-br from-black via-red-950/95 to-black backdrop-blur-md rounded-2xl p-6 md:p-8 max-w-lg mx-auto border border-fire-gold/30">
-              {/* Fire Horse Badge */}
-              <div className="flex items-center justify-center gap-3 mb-5">
-                <span className="text-3xl animate-pulse">🔥</span>
-                <div className="text-center">
-                  <p className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 font-black text-xs tracking-[0.3em] uppercase">
-                    Fire Horse
-                  </p>
-                  <p className="text-gray-400 text-[10px] tracking-wider">
-                    BORN 1966
-                  </p>
-                </div>
-                <span className="text-3xl animate-pulse">🐴</span>
-              </div>
-
-              {/* Decorative quote mark */}
-              <div className="text-center mb-2">
-                <span className="text-6xl text-fire-gold/30 font-serif leading-none">&ldquo;</span>
-              </div>
-
-              {/* Quote - with gradient text */}
-              <blockquote className="text-center mb-3 px-2">
-                <p
-                  className="text-lg md:text-xl leading-relaxed font-medium"
-                  style={{
-                    background: 'linear-gradient(180deg, #ffffff 0%, #fcd34d 50%, #f97316 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                  }}
-                >
-                  {FIRE_HORSE_QUOTES[quoteIndex].quote}
-                </p>
-              </blockquote>
-
-              {/* Closing quote mark */}
-              <div className="text-center mb-4">
-                <span className="text-6xl text-fire-gold/30 font-serif leading-none">&rdquo;</span>
-              </div>
-
-              {/* Decorative divider */}
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <div className="h-px w-12 bg-gradient-to-r from-transparent via-fire-gold/50 to-transparent" />
-                <span className="text-fire-gold text-sm">✦</span>
-                <div className="h-px w-12 bg-gradient-to-r from-transparent via-fire-gold/50 to-transparent" />
-              </div>
-
-              {/* Author */}
-              <div className="text-center">
-                <p className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-fire-gold to-orange-400 font-bold text-xl tracking-wide">
-                  {FIRE_HORSE_QUOTES[quoteIndex].author}
-                </p>
-                <p className="text-gray-400 text-xs mt-1.5 max-w-xs mx-auto leading-relaxed">
-                  {FIRE_HORSE_QUOTES[quoteIndex].description}
-                </p>
-              </div>
-
-              {/* Progress dots */}
-              <div className="flex justify-center gap-2 mt-5">
-                {FIRE_HORSE_QUOTES.map((_, i) => (
-                  <div
-                    key={i}
-                    className={`w-2 h-2 rounded-full transition-all duration-500 ${
-                      i === quoteIndex
-                        ? 'bg-gradient-to-r from-yellow-400 to-orange-500 scale-125 shadow-lg shadow-orange-500/50'
-                        : 'bg-gray-700'
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
+          <div className="bg-black/80 border border-fire-gold/20 rounded px-2 py-1 text-[11px] text-fire-gold/80">
+            🔥 &ldquo;{FIRE_HORSE_QUOTES[quoteIndex].quote.substring(0, 50)}...&rdquo; — {FIRE_HORSE_QUOTES[quoteIndex].author}
           </div>
         </div>
       )}
-
-      {/* CSS for gradient animation */}
-      <style jsx>{`
-        @keyframes gradient-shift {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-      `}</style>
 
       {/* Admin Test Button - Gear Icon */}
       <a
@@ -344,126 +254,121 @@ export default function Home() {
 
         {/* Product Card */}
         <div className="w-full border-glow bg-black/80 backdrop-blur-sm p-6 rounded-2xl space-y-5 mb-6">
-          {/* Section Header */}
-          <div className="text-center">
-            <p className="text-fire-gold font-bold text-lg">Choose Your Path</p>
-            <p className="text-gray-400 text-xs">Select one mode at checkout</p>
+
+          {/* ========== SECTION 1: FREE ORACLE ========== */}
+          <div className="bg-gradient-to-br from-green-950/50 to-black border-2 border-green-500/50 rounded-2xl p-5">
+            <div className="text-center mb-4">
+              <span className="text-4xl">🔮</span>
+              <h3 className="text-green-400 text-xl font-bold mt-2">START HERE — IT&apos;S FREE!</h3>
+            </div>
+
+            {/* Free Reading CTA */}
+            <a
+              href="/free"
+              className="block w-full bg-gradient-to-r from-green-600 via-green-500 to-green-600
+                         text-white font-bold text-lg md:text-xl py-4 rounded-xl text-center
+                         hover:scale-105 active:scale-95 transition-all duration-200
+                         shadow-xl shadow-green-500/30 border-2 border-green-400"
+            >
+              GET YOUR FREE RED HORSE ORACLE READING NOW
+            </a>
+
+            {/* Clear messaging about what FREE means */}
+            <div className="mt-3 text-center">
+              <p className="text-white font-bold text-sm">
+                ✓ No Payment &nbsp; ✓ No Personal Info &nbsp; ✓ No Login &nbsp; ✓ No Email
+              </p>
+              <p className="text-gray-400 text-xs mt-1">
+                Discover your Chinese Zodiac sign and 2026 Fire Horse forecast instantly
+              </p>
+            </div>
           </div>
 
-          {/* Product Modes */}
-          <div className="space-y-3">
-            {Object.values(PRODUCT_MODES).map((mode) => (
-              <div
-                key={mode.id}
-                className="bg-red-950/40 border border-red-900/30 rounded-xl p-3 hover:border-fire-gold/50 transition-colors"
-              >
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">{mode.emoji}</span>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-fire-gold text-sm">{mode.name}</span>
-                    </div>
-                    <p className="text-white text-sm font-semibold">
-                      {mode.description}
-                    </p>
-                    <p className="text-gray-500 text-xs italic">
-                      e.g., &quot;{mode.example}&quot;
-                    </p>
-                  </div>
+          {/* ========== OR DIVIDER ========== */}
+          <div className="flex items-center gap-4 py-2">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-fire-gold/50 to-transparent" />
+            <div className="bg-fire-gold/20 border border-fire-gold/50 rounded-full px-4 py-1">
+              <span className="text-fire-gold font-bold text-sm">OR</span>
+            </div>
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-fire-gold/50 to-transparent" />
+          </div>
+
+          {/* ========== SECTION 2: PAID ORACLE ========== */}
+          <div className="bg-gradient-to-br from-red-950/50 to-black border-2 border-fire-gold/50 rounded-2xl p-5">
+            <div className="text-center mb-3">
+              <span className="text-4xl">🔥</span>
+              <h3 className="text-fire-gold text-lg font-bold mt-2 leading-snug">
+                UNLOCK YOUR COMPLETE FORTUNE, LUCK,<br />
+                PROSPERITY, WEALTH, POWER, LOVE & PROTECTION
+              </h3>
+              <p className="text-gray-300 text-sm mt-2">
+                Bet on yourself in 2026 with your <span className="text-fire-gold font-semibold">Authenticated Limited Edition Oracle</span>
+              </p>
+            </div>
+
+            {/* Four Paths Preview */}
+            <div className="grid grid-cols-2 gap-2 mb-4">
+              {Object.values(PRODUCT_MODES).map((mode) => (
+                <div
+                  key={mode.id}
+                  className="bg-black/50 border border-fire-gold/30 rounded-lg p-2 text-center"
+                >
+                  <span className="text-xl">{mode.emoji}</span>
+                  <p className="text-fire-gold text-xs font-semibold">{mode.name}</p>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          {/* Divider */}
-          <div className="border-t border-red-900/50" />
+            {/* Paid CTA Button */}
+            <a
+              href={paymentLink}
+              className="block w-full bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600
+                         text-black font-bold text-xl py-4 rounded-xl text-center
+                         hover:scale-105 active:scale-95 transition-all duration-200
+                         shadow-xl shadow-yellow-500/30 glow-gold border-2 border-yellow-400"
+            >
+              🔥 GET MY ORACLE — $8.88
+            </a>
 
-          {/* Price Display */}
-          <div className="text-center">
-            <p className="text-gray-400 text-sm">One-time payment</p>
-            <p className="text-4xl font-bold text-fire-gold text-glow-gold">$8.88</p>
-
-            {/* Why $8.88 Button */}
+            {/* Why $8.88 Button - GREEN, under the purchase button */}
             <button
               onClick={() => setShowWhyPrice(!showWhyPrice)}
-              className="mt-2 text-fire-gold/80 hover:text-fire-gold text-sm font-medium
-                         underline underline-offset-2 decoration-dotted
-                         transition-colors duration-200 flex items-center justify-center gap-1 mx-auto"
+              className="mt-3 mx-auto block bg-green-700 hover:bg-green-600 text-white font-bold text-sm
+                         px-4 py-2 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
             >
-              Why $8.88? Tap to discover...
+              💰 Why $8.88? Tap to Discover
               <span className={`transition-transform duration-300 ${showWhyPrice ? 'rotate-180' : ''}`}>
                 ▼
               </span>
             </button>
 
-            {/* Expandable Explanation */}
+            {/* Expandable Why $8.88 Explanation */}
             <div
               className={`overflow-hidden transition-all duration-500 ease-in-out ${
                 showWhyPrice ? 'max-h-64 opacity-100 mt-3' : 'max-h-0 opacity-0'
               }`}
             >
-              <div className="bg-red-950/60 border border-fire-gold/30 rounded-xl p-4 text-left">
-                <p className="text-fire-gold font-bold text-sm mb-2">🎰 The Luckiest Number in Chinese Culture</p>
+              <div className="bg-green-950/60 border border-green-500/30 rounded-xl p-4 text-left">
+                <p className="text-green-400 font-bold text-sm mb-2">🎰 The Luckiest Number in Chinese Culture</p>
                 <p className="text-white text-sm leading-relaxed">
                   <strong>8</strong> sounds like <strong>&quot;發&quot; (fā)</strong> — meaning <em>prosperity</em> and <em>wealth</em>.
                 </p>
                 <p className="text-gray-300 text-sm mt-2 leading-relaxed">
                   Three 8s = <strong>triple fortune</strong>. That&apos;s why phone numbers, license plates, and addresses with 888 sell for premium prices across Asia.
                 </p>
-                <p className="text-fire-gold text-xs mt-3 italic">
+                <p className="text-green-400 text-xs mt-3 italic">
                   Your Oracle price IS your first lucky number. 🔥
                 </p>
               </div>
             </div>
-          </div>
 
-          {/* Free Reading CTA - Primary */}
-          <a
-            href="/free"
-            className="block w-full bg-gradient-to-r from-green-600 via-green-500 to-green-600
-                       text-white font-bold text-xl py-4 rounded-xl text-center
-                       hover:scale-105 active:scale-95 transition-all duration-200
-                       shadow-xl shadow-green-500/30 border-2 border-green-400"
-          >
-            🔮 FREE: DISCOVER YOUR 2026 DESTINY
-          </a>
-          <p className="text-center text-gray-400 text-xs -mt-2">
-            See your zodiac forecast instantly - no payment required
-          </p>
-
-          {/* Divider with Call to Action */}
-          <div className="text-center py-2">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="flex-1 border-t border-fire-gold/30" />
-              <span className="text-fire-gold text-xs">✦</span>
-              <div className="flex-1 border-t border-fire-gold/30" />
+            {/* Trust Badges */}
+            <div className="flex justify-center gap-4 text-xs text-gray-400 mt-3">
+              <span>🔒 Secure</span>
+              <span>⚡ Instant</span>
+              <span>🎨 AI Art</span>
+              <span>🛡️ Private</span>
             </div>
-            <p className="text-white font-bold text-base md:text-lg leading-snug">
-              Ready for your real, complete, authenticated
-              <br />
-              <span className="text-fire-gold">Limited Edition Red Horse Oracle?</span>
-            </p>
-            <p className="text-gray-400 text-sm mt-1">
-              Take a chance. Get your true prophecy.
-            </p>
-          </div>
-
-          {/* Paid CTA Button */}
-          <a
-            href={paymentLink}
-            className="block w-full bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600
-                       text-black font-bold text-xl py-4 rounded-xl text-center
-                       hover:scale-105 active:scale-95 transition-all duration-200
-                       shadow-xl shadow-yellow-500/30 glow-gold"
-          >
-            🔥 GET MY ORACLE - $8.88
-          </a>
-
-          {/* Trust Badges */}
-          <div className="flex justify-center gap-4 text-xs text-gray-500">
-            <span>🔒 Secure</span>
-            <span>⚡ Instant</span>
-            <span>🎨 AI Art</span>
           </div>
 
           {/* See Examples Link */}
