@@ -3,47 +3,64 @@
 import { useState, useEffect } from 'react';
 import { PRODUCT_MODES } from '@/constants/modes';
 
-// Background images to rotate through
+// Background images to rotate through - alternating main with grids
 const BACKGROUND_IMAGES = [
-  '/assets/Fire-Horse-2026-Chart-v2.jpeg',
-  '/assets/marketing-grid-4.jpg',
-  '/assets/marketing-grid-5-mobile.jpg',
-  '/assets/marketing-grid-1.jpg',
-  '/assets/marketing-grid-3.jpg',
+  '/assets/Fire-Horse-2026-Chart-v2.jpeg',  // Main
+  '/assets/marketing-grid-1.jpg',            // Grid 1
+  '/assets/Fire-Horse-2026-Chart-v2.jpeg',  // Main
+  '/assets/marketing-grid-3.jpg',            // Grid 3
 ];
 
-// Rotation interval in milliseconds (8 seconds)
-const ROTATION_INTERVAL = 8000;
+// Rotation interval in milliseconds (16 seconds)
+const ROTATION_INTERVAL = 16000;
 
 export default function Home() {
   const paymentLink = process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK || '#';
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [nextIndex, setNextIndex] = useState(1);
+  const [showNext, setShowNext] = useState(false);
 
-  // Rotate background images
+  // Rotate background images with smooth crossfade
   useEffect(() => {
     const interval = setInterval(() => {
-      setIsTransitioning(true);
+      // Start crossfade - show next image
+      setShowNext(true);
+
+      // After fade completes, swap images
       setTimeout(() => {
-        setCurrentImageIndex((prev) => (prev + 1) % BACKGROUND_IMAGES.length);
-        setIsTransitioning(false);
-      }, 500); // Half of transition duration
+        setCurrentIndex(nextIndex);
+        setNextIndex((nextIndex + 1) % BACKGROUND_IMAGES.length);
+        setShowNext(false);
+      }, 2500); // Match transition duration
     }, ROTATION_INTERVAL);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [nextIndex]);
 
   return (
     <main className="min-h-screen bg-fire-gradient relative overflow-hidden">
-      {/* Rotating Background Watermark */}
+      {/* Background Layer 1 - Current Image */}
       <div
-        className="fixed inset-0 z-0 pointer-events-none transition-opacity duration-1000"
+        className="fixed inset-0 z-0 pointer-events-none"
         style={{
-          backgroundImage: `url(${BACKGROUND_IMAGES[currentImageIndex]})`,
+          backgroundImage: `url(${BACKGROUND_IMAGES[currentIndex]})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat',
-          opacity: isTransitioning ? 0.15 : 0.30,
+          opacity: showNext ? 0 : 0.30,
+          transition: 'opacity 2.5s ease-in-out',
+        }}
+      />
+      {/* Background Layer 2 - Next Image (crossfade) */}
+      <div
+        className="fixed inset-0 z-0 pointer-events-none"
+        style={{
+          backgroundImage: `url(${BACKGROUND_IMAGES[nextIndex]})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center center',
+          backgroundRepeat: 'no-repeat',
+          opacity: showNext ? 0.30 : 0,
+          transition: 'opacity 2.5s ease-in-out',
         }}
       />
 
