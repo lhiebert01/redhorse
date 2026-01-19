@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { PRODUCT_MODES } from '@/constants/modes';
 
 // Background images to rotate through - alternating main with grids
@@ -11,56 +11,53 @@ const BACKGROUND_IMAGES = [
   '/assets/marketing-grid-3.jpg',            // Grid 3
 ];
 
-// Rotation interval in milliseconds (16 seconds)
-const ROTATION_INTERVAL = 16000;
+// Timing constants (in milliseconds)
+const FADE_DURATION = 3000;      // 3 seconds for smooth fade
+const DISPLAY_DURATION = 12000;  // 12 seconds showing each image
+const TOTAL_CYCLE = FADE_DURATION + DISPLAY_DURATION; // 15 seconds total per image
 
 export default function Home() {
   const paymentLink = process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK || '#';
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [nextIndex, setNextIndex] = useState(1);
-  const [showNext, setShowNext] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isFading, setIsFading] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Rotate background images with smooth crossfade
+  // Rotate background images with consistent timing
   useEffect(() => {
-    const interval = setInterval(() => {
-      // Start crossfade - show next image
-      setShowNext(true);
+    const startRotation = () => {
+      intervalRef.current = setInterval(() => {
+        // Start fade out
+        setIsFading(true);
 
-      // After fade completes, swap images
-      setTimeout(() => {
-        setCurrentIndex(nextIndex);
-        setNextIndex((nextIndex + 1) % BACKGROUND_IMAGES.length);
-        setShowNext(false);
-      }, 2500); // Match transition duration
-    }, ROTATION_INTERVAL);
+        // After fade completes, switch to next image and fade in
+        timeoutRef.current = setTimeout(() => {
+          setActiveIndex((prev) => (prev + 1) % BACKGROUND_IMAGES.length);
+          setIsFading(false);
+        }, FADE_DURATION);
+      }, TOTAL_CYCLE);
+    };
 
-    return () => clearInterval(interval);
-  }, [nextIndex]);
+    startRotation();
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []); // Empty dependency - only runs once on mount
 
   return (
     <main className="min-h-screen bg-fire-gradient relative overflow-hidden">
-      {/* Background Layer 1 - Current Image */}
+      {/* Single Background Layer with fade transition */}
       <div
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
-          backgroundImage: `url(${BACKGROUND_IMAGES[currentIndex]})`,
+          backgroundImage: `url(${BACKGROUND_IMAGES[activeIndex]})`,
           backgroundSize: 'contain',
           backgroundPosition: 'top center',
           backgroundRepeat: 'no-repeat',
-          opacity: showNext ? 0 : 0.30,
-          transition: 'opacity 2.5s ease-in-out',
-        }}
-      />
-      {/* Background Layer 2 - Next Image (crossfade) */}
-      <div
-        className="fixed inset-0 z-0 pointer-events-none"
-        style={{
-          backgroundImage: `url(${BACKGROUND_IMAGES[nextIndex]})`,
-          backgroundSize: 'contain',
-          backgroundPosition: 'top center',
-          backgroundRepeat: 'no-repeat',
-          opacity: showNext ? 0.30 : 0,
-          transition: 'opacity 2.5s ease-in-out',
+          opacity: isFading ? 0 : 0.30,
+          transition: `opacity ${FADE_DURATION}ms ease-in-out`,
         }}
       />
 
