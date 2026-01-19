@@ -232,34 +232,28 @@ export default function Home() {
           {/* ========== SECTION 2: PAID ORACLE ========== */}
           <div className="bg-gradient-to-br from-red-950/50 to-black border-2 border-fire-gold/50 rounded-2xl p-5">
             <div className="text-center mb-4">
-              <span className="text-4xl">🔥</span>
-              <h3 className="text-fire-gold text-lg font-bold mt-2">
-                WANT MORE? GET YOUR COMPLETE ORACLE
+              <h3 className="text-fire-gold text-lg font-bold">
+                🔥 Unlock Fortune, Power, Love & Protection
               </h3>
+              <p className="text-gray-400 text-sm mt-1">Your Authenticated Limited Edition Oracle</p>
             </div>
 
-            {/* Paid CTA Button - FIRST */}
+            {/* Paid CTA Button */}
             <a
               href={paymentLink}
               className="block w-full bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600
                          text-black font-bold text-xl py-4 rounded-xl text-center
                          hover:scale-105 active:scale-95 transition-all duration-200
-                         shadow-xl shadow-yellow-500/30 glow-gold border-2 border-yellow-400"
+                         shadow-xl shadow-yellow-500/30 glow-gold border-2 border-yellow-400 mb-3"
             >
-              🔥 GET MY ORACLE — $8.88
+              GET MY ORACLE — $8.88
             </a>
 
-            {/* What You Get - AFTER the button */}
-            <div className="mt-4 pt-4 border-t border-fire-gold/20">
-              <p className="text-gray-400 text-xs text-center mb-3">Choose your path at checkout:</p>
-              <div className="grid grid-cols-4 gap-1">
-                {Object.values(PRODUCT_MODES).map((mode) => (
-                  <div key={mode.id} className="text-center">
-                    <span className="text-lg">{mode.emoji}</span>
-                    <p className="text-fire-gold text-[10px] font-semibold">{mode.name}</p>
-                  </div>
-                ))}
-              </div>
+            {/* 4 Paths - compact inline */}
+            <div className="flex justify-center gap-3 text-sm">
+              {Object.values(PRODUCT_MODES).map((mode) => (
+                <span key={mode.id} className="text-fire-gold">{mode.emoji} {mode.name}</span>
+              ))}
             </div>
 
             {/* Why $8.88 Button */}
