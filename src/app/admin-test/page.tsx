@@ -37,6 +37,116 @@ const ELEMENT_COLORS: Record<string, string> = {
 // Shared authentication key with SuperAdmin
 const AUTH_STORAGE_KEY = 'superadmin_authenticated';
 
+// Collections Overview - All 12 in one view
+function CollectionsOverview() {
+  const [selectedCard, setSelectedCard] = useState<string | null>(null);
+  const [gridLayout, setGridLayout] = useState<'4x3' | '3x4' | '6x2'>('4x3');
+
+  const gridClasses = {
+    '4x3': 'grid-cols-4', // 4 columns, 3 rows
+    '3x4': 'grid-cols-3', // 3 columns, 4 rows
+    '6x2': 'grid-cols-6', // 6 columns, 2 rows
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Layout Toggle */}
+      <div className="flex justify-center gap-2 mb-4">
+        <span className="text-gray-400 text-sm self-center mr-2">Layout:</span>
+        {(['4x3', '3x4', '6x2'] as const).map((layout) => (
+          <button
+            key={layout}
+            onClick={() => setGridLayout(layout)}
+            className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+              gridLayout === layout
+                ? 'bg-fire-gold text-black'
+                : 'bg-black/50 text-gray-400 hover:text-white border border-fire-gold/30'
+            }`}
+          >
+            {layout}
+          </button>
+        ))}
+      </div>
+
+      {/* All 12 Collections Grid */}
+      <div className={`grid ${gridClasses[gridLayout]} gap-3`}>
+        {ANIMALS.map((animal) => (
+          <div
+            key={animal}
+            onClick={() => setSelectedCard(`${animal}-collection`)}
+            className="cursor-pointer rounded-xl overflow-hidden border-2 border-purple-500 bg-purple-500/10 transition-all hover:scale-105 hover:shadow-xl hover:shadow-purple-500/30"
+          >
+            <div className="aspect-[3/4] relative">
+              <img
+                src={`/assets/zodiac-badges/${animal}-collection.jpeg`}
+                alt={`${animal} collection`}
+                className="w-full h-full object-cover"
+              />
+              {/* Overlay with name */}
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-2">
+                <p className="text-white text-sm font-bold text-center">
+                  {ANIMAL_EMOJI[animal]} {animal.charAt(0).toUpperCase() + animal.slice(1)}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Lightbox Modal */}
+      {selectedCard && (
+        <div
+          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4"
+          onClick={() => setSelectedCard(null)}
+        >
+          <div className="relative max-w-4xl max-h-[90vh] w-full">
+            <button
+              onClick={() => setSelectedCard(null)}
+              className="absolute -top-12 right-0 text-white hover:text-fire-gold text-lg font-bold"
+            >
+              ✕ Close
+            </button>
+            <img
+              src={`/assets/zodiac-badges/${selectedCard}.jpeg`}
+              alt={selectedCard}
+              className="w-full h-auto max-h-[80vh] object-contain rounded-xl"
+              onClick={(e) => e.stopPropagation()}
+            />
+            <div className="mt-4 text-center">
+              <p className="text-fire-gold text-xl font-bold">
+                📚 {selectedCard.replace('-collection', '').charAt(0).toUpperCase() + selectedCard.replace('-collection', '').slice(1)} Collection
+              </p>
+            </div>
+            {/* Navigation */}
+            <div className="flex justify-center gap-4 mt-4">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const idx = ANIMALS.indexOf(selectedCard.replace('-collection', '') as typeof ANIMALS[number]);
+                  if (idx > 0) setSelectedCard(`${ANIMALS[idx - 1]}-collection`);
+                }}
+                className="bg-fire-gold/20 hover:bg-fire-gold/40 text-fire-gold px-4 py-2 rounded-lg"
+              >
+                ← Previous
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const idx = ANIMALS.indexOf(selectedCard.replace('-collection', '') as typeof ANIMALS[number]);
+                  if (idx < ANIMALS.length - 1) setSelectedCard(`${ANIMALS[idx + 1]}-collection`);
+                }}
+                className="bg-fire-gold/20 hover:bg-fire-gold/40 text-fire-gold px-4 py-2 rounded-lg"
+              >
+                Next →
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // Gallery Component
 function CardGallery() {
   const [filterAnimal, setFilterAnimal] = useState<string>('all');
@@ -262,12 +372,13 @@ function AdminTestContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const skipPin = searchParams.get('skip_pin') === 'true';
-  const initialTab = searchParams.get('tab') === 'gallery' ? 'gallery' : 'test';
+  const tabParam = searchParams.get('tab');
+  const initialTab = tabParam === 'gallery' ? 'gallery' : tabParam === 'collections' ? 'collections' : 'test';
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
-  const [activeTab, setActiveTab] = useState<'test' | 'gallery'>(initialTab);
+  const [activeTab, setActiveTab] = useState<'test' | 'gallery' | 'collections'>(initialTab);
 
   const [birthDate, setBirthDate] = useState('');
   const [focusMode, setFocusMode] = useState('wealth');
@@ -435,10 +546,10 @@ function AdminTestContent() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex justify-center gap-2 mb-6">
+        <div className="flex justify-center gap-2 mb-6 flex-wrap">
           <button
             onClick={() => setActiveTab('test')}
-            className={`px-6 py-3 rounded-xl font-bold transition-all ${
+            className={`px-5 py-3 rounded-xl font-bold transition-all ${
               activeTab === 'test'
                 ? 'bg-fire-gold text-black'
                 : 'bg-black/50 text-gray-400 hover:text-white border border-fire-gold/30'
@@ -447,19 +558,32 @@ function AdminTestContent() {
             ✨ Test Console
           </button>
           <button
+            onClick={() => setActiveTab('collections')}
+            className={`px-5 py-3 rounded-xl font-bold transition-all ${
+              activeTab === 'collections'
+                ? 'bg-purple-500 text-white'
+                : 'bg-black/50 text-gray-400 hover:text-white border border-purple-500/30'
+            }`}
+          >
+            📚 All 12 Collections
+          </button>
+          <button
             onClick={() => setActiveTab('gallery')}
-            className={`px-6 py-3 rounded-xl font-bold transition-all ${
+            className={`px-5 py-3 rounded-xl font-bold transition-all ${
               activeTab === 'gallery'
                 ? 'bg-fire-gold text-black'
                 : 'bg-black/50 text-gray-400 hover:text-white border border-fire-gold/30'
             }`}
           >
-            🎴 Card Gallery
+            🎴 Full Gallery
           </button>
         </div>
 
         {/* Tab Content */}
-        {activeTab === 'test' ? (
+        {activeTab === 'collections' ? (
+          /* Collections Overview Tab */
+          <CollectionsOverview />
+        ) : activeTab === 'test' ? (
           /* Test Console Tab */
           <div className="flex justify-center">
             <div className="bg-black/80 border border-fire-gold/30 rounded-2xl p-8 max-w-md w-full">
