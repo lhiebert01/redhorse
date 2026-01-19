@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Zodiac animals in traditional order
 const ANIMALS = ['rat', 'ox', 'tiger', 'rabbit', 'dragon', 'snake', 'horse', 'goat', 'monkey', 'rooster', 'dog', 'pig'] as const;
@@ -10,6 +10,18 @@ export default function CollectionsGridPage() {
   const [showControls, setShowControls] = useState(true);
   const [gap, setGap] = useState<'none' | 'small' | 'medium'>('small');
   const [background, setBackground] = useState<'black' | 'gradient' | 'transparent'>('black');
+  const [scale, setScale] = useState<'100' | '90' | '80' | '70'>('100');
+
+  // Keyboard shortcut handler
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'h' || e.key === 'H') {
+        setShowControls(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const gridClasses = {
     '4x3': 'grid-cols-4',
@@ -21,7 +33,7 @@ export default function CollectionsGridPage() {
   const gapClasses = {
     'none': 'gap-0',
     'small': 'gap-1',
-    'medium': 'gap-2',
+    'medium': 'gap-3',
   };
 
   const bgClasses = {
@@ -30,105 +42,128 @@ export default function CollectionsGridPage() {
     'transparent': 'bg-transparent',
   };
 
+  const scaleClasses = {
+    '100': 'scale-100',
+    '90': 'scale-90',
+    '80': 'scale-80',
+    '70': 'scale-[0.7]',
+  };
+
   return (
-    <div className={`min-h-screen ${bgClasses[background]} relative`}>
-      {/* Controls - Toggle visibility for clean screenshot */}
+    <div className={`min-h-screen ${bgClasses[background]} relative overflow-hidden`}>
+      {/* Controls Panel */}
       {showControls && (
-        <div className="fixed top-4 left-4 right-4 z-50 bg-black/90 border border-fire-gold/50 rounded-xl p-4 max-w-2xl mx-auto">
-          <div className="flex flex-wrap gap-4 items-center justify-center">
+        <div className="fixed top-4 left-4 right-4 z-50 bg-black/95 border-2 border-fire-gold rounded-xl p-4 max-w-3xl mx-auto shadow-2xl">
+          <h2 className="text-fire-gold text-center font-bold mb-4">Screenshot Settings</h2>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {/* Layout */}
-            <div className="flex items-center gap-2">
-              <span className="text-gray-400 text-xs">Layout:</span>
-              {(['4x3', '3x4', '6x2', '2x6'] as const).map((l) => (
-                <button
-                  key={l}
-                  onClick={() => setLayout(l)}
-                  className={`px-3 py-1 rounded text-sm font-bold ${
-                    layout === l ? 'bg-fire-gold text-black' : 'bg-gray-800 text-gray-400'
-                  }`}
-                >
-                  {l}
-                </button>
-              ))}
+            <div>
+              <p className="text-gray-400 text-xs mb-2 font-bold">LAYOUT</p>
+              <div className="flex flex-wrap gap-1">
+                {(['4x3', '3x4', '6x2', '2x6'] as const).map((l) => (
+                  <button
+                    key={l}
+                    onClick={() => setLayout(l)}
+                    className={`px-3 py-2 rounded text-sm font-bold transition-all ${
+                      layout === l ? 'bg-fire-gold text-black' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                    }`}
+                  >
+                    {l}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Gap */}
-            <div className="flex items-center gap-2">
-              <span className="text-gray-400 text-xs">Gap:</span>
-              {(['none', 'small', 'medium'] as const).map((g) => (
-                <button
-                  key={g}
-                  onClick={() => setGap(g)}
-                  className={`px-3 py-1 rounded text-sm font-bold ${
-                    gap === g ? 'bg-fire-gold text-black' : 'bg-gray-800 text-gray-400'
-                  }`}
-                >
-                  {g}
-                </button>
-              ))}
+            <div>
+              <p className="text-gray-400 text-xs mb-2 font-bold">GAP</p>
+              <div className="flex flex-wrap gap-1">
+                {(['none', 'small', 'medium'] as const).map((g) => (
+                  <button
+                    key={g}
+                    onClick={() => setGap(g)}
+                    className={`px-3 py-2 rounded text-sm font-bold transition-all ${
+                      gap === g ? 'bg-purple-500 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                    }`}
+                  >
+                    {g}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Scale */}
+            <div>
+              <p className="text-gray-400 text-xs mb-2 font-bold">SCALE</p>
+              <div className="flex flex-wrap gap-1">
+                {(['100', '90', '80', '70'] as const).map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setScale(s)}
+                    className={`px-3 py-2 rounded text-sm font-bold transition-all ${
+                      scale === s ? 'bg-green-500 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                    }`}
+                  >
+                    {s}%
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Background */}
-            <div className="flex items-center gap-2">
-              <span className="text-gray-400 text-xs">BG:</span>
-              {(['black', 'gradient', 'transparent'] as const).map((b) => (
-                <button
-                  key={b}
-                  onClick={() => setBackground(b)}
-                  className={`px-3 py-1 rounded text-sm font-bold ${
-                    background === b ? 'bg-fire-gold text-black' : 'bg-gray-800 text-gray-400'
-                  }`}
-                >
-                  {b}
-                </button>
-              ))}
+            <div>
+              <p className="text-gray-400 text-xs mb-2 font-bold">BACKGROUND</p>
+              <div className="flex flex-wrap gap-1">
+                {(['black', 'gradient', 'transparent'] as const).map((b) => (
+                  <button
+                    key={b}
+                    onClick={() => setBackground(b)}
+                    className={`px-2 py-2 rounded text-xs font-bold transition-all ${
+                      background === b ? 'bg-blue-500 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                    }`}
+                  >
+                    {b}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
-          <div className="text-center mt-3">
+          <div className="text-center mt-4 pt-4 border-t border-gray-700">
             <button
               onClick={() => setShowControls(false)}
-              className="bg-purple-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-purple-500"
+              className="bg-purple-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-purple-500 transition-all"
             >
-              Hide Controls for Screenshot
+              HIDE CONTROLS FOR SCREENSHOT
             </button>
+            <p className="text-gray-500 text-xs mt-2">
+              Press <span className="text-fire-gold font-bold">H</span> to toggle controls
+            </p>
           </div>
-
-          <p className="text-center text-gray-500 text-xs mt-2">
-            Press H to toggle controls • Right-click → Save Image or use screenshot tool
-          </p>
         </div>
       )}
 
-      {/* Hidden controls toggle */}
+      {/* Hidden controls toggle hint */}
       {!showControls && (
         <button
           onClick={() => setShowControls(true)}
-          className="fixed top-4 right-4 z-50 bg-black/50 text-white px-3 py-1 rounded text-sm opacity-30 hover:opacity-100"
+          className="fixed top-4 right-4 z-50 bg-black/70 text-fire-gold px-4 py-2 rounded-lg text-sm font-bold opacity-50 hover:opacity-100 transition-all border border-fire-gold/50"
         >
-          Show Controls (H)
+          Press H for Controls
         </button>
       )}
 
-      {/* Keyboard shortcut */}
-      <div
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'h' || e.key === 'H') {
-            setShowControls(!showControls);
-          }
-        }}
-        className="outline-none"
-      >
-        {/* The Grid - Clean for screenshot */}
-        <div className={`p-4 ${showControls ? 'pt-32' : 'pt-4'}`}>
-          <div className={`grid ${gridClasses[layout]} ${gapClasses[gap]} max-w-6xl mx-auto`}>
+      {/* The Grid - WIDE aspect ratio for collection tiles */}
+      <div className={`p-4 ${showControls ? 'pt-56' : 'pt-4'} flex items-center justify-center min-h-screen`}>
+        <div className={`${scaleClasses[scale]} transition-transform origin-center`}>
+          <div className={`grid ${gridClasses[layout]} ${gapClasses[gap]} max-w-7xl mx-auto`}>
             {ANIMALS.map((animal) => (
-              <div key={animal} className="aspect-[3/4]">
+              <div key={animal} className="aspect-[5/3]">
                 <img
                   src={`/assets/zodiac-badges/${animal}-collection.jpeg`}
                   alt={`${animal} collection`}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover rounded-sm"
                 />
               </div>
             ))}
@@ -137,14 +172,16 @@ export default function CollectionsGridPage() {
       </div>
 
       {/* Back link */}
-      <div className="fixed bottom-4 left-4">
-        <a
-          href="/admin-test?tab=collections"
-          className="text-gray-500 hover:text-fire-gold text-sm"
-        >
-          ← Back to Admin
-        </a>
-      </div>
+      {showControls && (
+        <div className="fixed bottom-4 left-4">
+          <a
+            href="/admin-test?tab=collections"
+            className="text-gray-500 hover:text-fire-gold text-sm"
+          >
+            ← Back to Admin
+          </a>
+        </div>
+      )}
     </div>
   );
 }
