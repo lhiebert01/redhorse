@@ -1919,4 +1919,143 @@ Created simple-named copies for dynamic loading:
 
 ---
 
+## Session Update: January 18, 2026 (Evening) - Visual Polish & Marketing Assets
+
+### Current Status: PRODUCTION READY - MARKETING LAUNCH IMMINENT
+
+### What Was Completed This Session
+
+#### 1. Rotating Background System (Landing Page)
+Implemented smooth crossfade background rotation on the main landing page:
+
+**Implementation:**
+- **Sequence:** Main Chart → Grid 1 → Main Chart → Grid 3
+- **Interval:** 16 seconds between transitions
+- **Fade Duration:** 2.5 seconds smooth crossfade
+- **Technique:** Two-layer approach (eliminates snapping)
+
+**Background Settings:**
+- `backgroundSize: 'contain'` - Shows full images without edge cutoff
+- `backgroundPosition: 'top center'` - Headers visible on grid images
+- `opacity: 0.30` - 30% opacity for landing page (brighter than inner pages)
+
+**Code Location:** `src/app/page.tsx` (lines 7-65)
+
+#### 2. Marketing Grid Assets
+Added 5 marketing grid screenshots for social media campaigns:
+
+| File | Orientation | Description |
+|------|-------------|-------------|
+| `marketing-grid-1.jpg` | Horizontal | 4x3 grid, all 60 zodiac cards |
+| `marketing-grid-2.jpg` | Horizontal | Alternative layout |
+| `marketing-grid-3.jpg` | Horizontal | Different sorting |
+| `marketing-grid-4.jpg` | Horizontal | Variant |
+| `marketing-grid-5-mobile.jpg` | Vertical | Mobile-optimized |
+
+**Location:** `/public/assets/`
+
+#### 3. Collections Grid Screenshot Tool
+Created dedicated page for generating marketing screenshots:
+
+**Page:** `/collections-grid`
+**Features:**
+- Columns control (1, 2, 3, 4)
+- Gap control (0px, 4px, 8px, 16px)
+- Scale control (60%, 70%, 80%, 90%, 100%)
+- Background options (black, gradient, transparent)
+- Press `H` to toggle controls for clean screenshots
+- Back link to admin panel
+
+**Also Added:** Collections tab to admin-test page with same controls
+
+#### 4. LinkedIn Share Button
+Enhanced share functionality on reveal page:
+
+**Changes:**
+- Added dedicated LinkedIn share button
+- Reorganized to 3x2 grid layout (was 2x3)
+- Added platform indicators: "Works!" / "Link only"
+- Removed unreliable native share button
+
+**Platforms:**
+- ✅ Twitter/X - Full text support
+- ✅ LinkedIn - Link sharing
+- ✅ WhatsApp - Full text support
+- ✅ Telegram - Full text support
+- ✅ Email - Full text support
+- ⚠️ Facebook - Link only (dimmed)
+
+#### 5. Background Transparency Refinements
+
+| Page | Opacity | Notes |
+|------|---------|-------|
+| Landing | 30% | Brighter for marketing impact |
+| Reveal | 18% | Subtle, non-distracting |
+| Examples | 18% | Consistent with reveal |
+
+- Removed blur filter on all pages for crystal-clear images
+- Changed from `center center` to `top center` positioning
+
+#### 6. OG Image Configuration (Verified)
+
+| Purpose | Image | Notes |
+|---------|-------|-------|
+| Social Sharing (OG) | `Fire-Horse-2026-Chart-v3.jpeg` | Full brightness, Fire Horse center |
+| Landing Background | `Fire-Horse-2026-Chart-v2.jpeg` | 30% opacity, all 12 unique animals |
+
+**Note:** v3 has duplicate Goat visible but looks fantastic for sharing. v2 has all 12 unique animals. Keeping both as-is.
+
+### Files Modified
+
+| File | Changes |
+|------|---------|
+| `src/app/page.tsx` | Rotating backgrounds, crossfade, contain/top-center |
+| `src/app/collections-grid/page.tsx` | New screenshot tool page |
+| `src/app/admin-test/page.tsx` | Collections tab with controls |
+| `src/components/reveal/ShareButtons.tsx` | LinkedIn button, 3x2 grid |
+| `src/app/reveal/page.tsx` | Background opacity 18% |
+| `src/app/examples/page.tsx` | Background opacity 18% |
+
+### Assets Added
+
+| File | Purpose |
+|------|---------|
+| `marketing-grid-1.jpg` | Social media marketing |
+| `marketing-grid-2.jpg` | Social media marketing |
+| `marketing-grid-3.jpg` | Social media marketing |
+| `marketing-grid-4.jpg` | Social media marketing |
+| `marketing-grid-5-mobile.jpg` | Mobile marketing |
+
+### Technical Notes
+
+#### Crossfade Implementation
+```typescript
+// Two-layer approach prevents "snapping" during transitions
+// Layer 1: Shows current image, fades to 0 opacity
+// Layer 2: Shows next image, fades to 30% opacity
+// After transition completes, swap indices and reset opacities
+
+const ROTATION_INTERVAL = 16000; // 16 seconds
+// Transition: 2.5 seconds
+// Total cycle: 64 seconds (4 images × 16 seconds)
+```
+
+#### Background Sizing Decision
+- `cover` was cropping edges of wide grid images
+- `contain` shows full image, grid headers visible
+- Trade-off: Some letterboxing on tall screens, but content integrity preserved
+
+### Next Steps Ready
+
+The app is now ready for marketing launch:
+1. ✅ Visual polish complete
+2. ✅ Marketing assets created
+3. ✅ OG image verified (LinkedIn, Facebook)
+4. ✅ Share buttons working
+5. 🟢 Ready for social media campaign
+6. 🟢 Ready for influencer outreach
+7. 🟢 Ready for CNY (Jan 29, 2026)
+
+---
+
 *火马年 2026 - Year of the Fire Horse*

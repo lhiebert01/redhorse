@@ -65,9 +65,17 @@ Each talisman is a **one-of-a-kind masterpiece** of Chinese zodiac artwork, pers
 - **Zodiac Summary** - Personalized 2026 Fire Horse forecast with characteristics and strengths
 - **Save Talisman** - Downloads AI artwork as `fire-horse-2026-{element}-{animal}-talisman.png`
 - **Save Zodiac Forecast** - Downloads zodiac card as `fire-horse-2026-{element}-{animal}-forecast.png`
-- **Share** - Native sharing or copy to clipboard
-- **Share to X/Twitter** - Pre-formatted tweet with prophecy link
+- **Copy Message** - Copies full prophecy + talisman link (most reliable)
+- **Share to X/Twitter** - Pre-formatted tweet with full text
+- **Share to LinkedIn** - Direct link sharing
+- **Share to WhatsApp/Telegram** - Full text + link support
 - **Navigation buttons** - Return home, get another reading, view examples
+
+### Landing Page Experience
+- **Rotating background images** with smooth crossfade transitions
+- **16-second intervals** cycling through main chart and marketing grids
+- **Crystal-clear imagery** - No blur, optimized opacity (30%)
+- **OG image optimized** for LinkedIn and Facebook sharing
 
 ### Limited Edition System
 - **888 editions per zodiac per mode** (42,624 total possible)
@@ -169,6 +177,8 @@ src/
 │   ├── reveal/               # Talisman reveal page
 │   ├── examples/             # Examples gallery page
 │   ├── admin-test/           # SuperAdmin test console
+│   ├── collections-grid/     # Screenshot tool for marketing
+│   ├── free/                 # Free zodiac reading page
 │   ├── terms/                # Terms of Service
 │   └── privacy/              # Privacy Policy
 ├── components/
@@ -191,8 +201,10 @@ src/
 public/
 ├── assets/
 │   ├── zodiac/               # 12 zodiac animal images + chart
+│   ├── zodiac-badges/        # 60 element-animal cards + 12 collections
 │   ├── examples/             # 12 generated talisman examples
-│   └── *.jpeg                # Hero images, Stripe graphic
+│   ├── marketing-grid-*.jpg  # 5 marketing grid screenshots
+│   └── *.jpeg                # Hero images, OG images, Stripe graphic
 ```
 
 ## API Endpoints
@@ -228,11 +240,12 @@ All 12 animals with authentic representations:
 
 - **[CLAUDE.md](./CLAUDE.md)** - Development guide for AI assistants
 - **[docs/EXEC-SUMMARY.md](./docs/EXEC-SUMMARY.md)** - Executive summary and document index
-- **[docs/NEXT-STEPS.md](./docs/NEXT-STEPS.md)** - Launch preparation checklist
+- **[docs/NEXT-STEPS.md](./docs/NEXT-STEPS.md)** - Launch preparation & marketing calendar
+- **[docs/SOCIAL-MEDIA-LAUNCH.md](./docs/SOCIAL-MEDIA-LAUNCH.md)** - Social media copy & strategy
 - **[docs/FEATURES.md](./docs/FEATURES.md)** - Detailed feature documentation
 - **[docs/DESIGN.md](./docs/DESIGN.md)** - Design philosophy and UX principles
 - **[docs/ANNOUNCEMENT.md](./docs/ANNOUNCEMENT.md)** - Press release and introduction
-- **[docs/RELEASE-NOTES.md](./docs/RELEASE-NOTES.md)** - Version history and changelog
+- **[docs/RELEASE-NOTES.md](./docs/RELEASE-NOTES.md)** - Version history and changelog (v1.3.0)
 
 ## Deployment
 

@@ -1,14 +1,14 @@
 # Red Horse Oracle - Next Steps & Launch Plan
 
-**Last Updated:** January 17, 2026
-**Current Phase:** ✅ PRODUCTION READY → MARKETING LAUNCH
-**Version:** 1.2.0
+**Last Updated:** January 18, 2026
+**Current Phase:** ✅ PRODUCTION READY → 🚀 MARKETING LAUNCH
+**Version:** 1.3.0
 
 ---
 
 ## Current Status Summary
 
-### ✅ COMPLETED (Jan 12-17)
+### ✅ COMPLETED (Jan 12-18)
 
 | Category | Tasks | Date |
 |----------|-------|------|
@@ -31,6 +31,13 @@
 | **Webhook Idempotency** | Prevent double-processing on retry | Jan 17 |
 | **Consistent Filenames** | element-animal-talisman/forecast.png | Jan 17 |
 | **User-Friendly Language** | PII → "Personally Identifiable Information" | Jan 17 |
+| **Rotating Backgrounds** | Smooth crossfade, Main + Grid images | Jan 18 |
+| **Marketing Grid Assets** | 5 grid screenshots for social media | Jan 18 |
+| **Collections Grid Tool** | /collections-grid for screenshot generation | Jan 18 |
+| **LinkedIn Share Button** | Added to reveal page share panel | Jan 18 |
+| **Background Polish** | Crystal clear images, proper positioning | Jan 18 |
+| **OG Image Verified** | LinkedIn + Facebook debugger confirmed | Jan 18 |
+| **Social Media Copy** | "Zombie User" activation copy ready | Jan 18 |
 
 ---
 
@@ -63,40 +70,86 @@
 
 ---
 
-## 🟢 PHASE 2: PRE-LAUNCH PREP (CURRENT)
+## ✅ PHASE 2: PRE-LAUNCH PREP (COMPLETE)
 
 **Goal:** Prepare marketing assets before announcement
 
-### Analytics Setup
+### Marketing Assets Ready
+- [x] Marketing grid images (5 versions) - `/public/assets/marketing-grid-*.jpg`
+- [x] Collections grid screenshot tool - `/collections-grid`
+- [x] 12 example talismans for all zodiac signs
+- [x] OG image verified on LinkedIn + Facebook
+- [x] "Zombie User" social copy (3 psychological angles)
+- [x] Hashtag sets organized by audience
+
+### Share Infrastructure
+- [x] LinkedIn share button added
+- [x] Twitter/X share with full text
+- [x] WhatsApp/Telegram share with full text
+- [x] Copy Message button (most reliable)
+- [x] Shareable talisman images (watermarked for free, clean for paid)
+
+### Pending (Optional)
 - [ ] Create GA4 property
 - [ ] Add `NEXT_PUBLIC_GA_MEASUREMENT_ID` to Vercel
-- [ ] Verify tracking works
-- [ ] Set up conversion events
-
-### Social Media Accounts
 - [ ] Create Twitter/X (@redhorseoracle)
 - [ ] Create Instagram account
-- [ ] Prepare 5-10 sample images for posts
-
-### Launch Announcements
-- [ ] Draft Hacker News "Show HN" post
-- [ ] Draft Reddit posts
-- [ ] Draft LinkedIn article
-- [ ] Prepare Product Hunt listing
 
 ---
 
-## 🟢 PHASE 3: MARKETING LAUNCH
+## 🚀 PHASE 3: MARKETING LAUNCH (CURRENT)
 
 **Goal:** Drive traffic and conversions
+**Timeline:** January 19-28, 2026 (Pre-CNY Push)
 
-### Launch Channels (Priority Order)
+---
 
-#### 1. Hacker News "Show HN"
+### 🎯 IMMEDIATE ACTION ITEMS (Jan 19-20)
+
+#### Day 1: Seed Initial Posts
+- [ ] Post on personal LinkedIn with Option 2 (Privacy angle)
+- [ ] Post first tweet with Option 3 (Direct action)
+- [ ] Share in 2-3 relevant subreddits
+- [ ] Send to 5 friends/family to test share flow
+
+#### Day 2: Monitor & Adjust
+- [ ] Check analytics for initial traction
+- [ ] Respond to all comments within 1 hour
+- [ ] Note which copy/angle performs best
+- [ ] Prepare Hacker News submission
+
+---
+
+### 📱 SOCIAL MEDIA SEEDING PLAN
+
+#### Platform-Specific Strategy
+
+| Platform | Copy Angle | Best Time | Frequency |
+|----------|------------|-----------|-----------|
+| **X/Twitter** | Option 2 (Privacy) | 9-11 AM EST | 3x/day |
+| **LinkedIn** | Option 2 (Privacy) | Tue-Thu AM | 1x/day |
+| **Instagram** | Option 1 (Scarcity) | 11 AM, 7 PM | 2x/day |
+| **TikTok** | Option 1 (Scarcity) | 7-9 PM | 1x/day |
+| **Reddit** | Option 2 (Privacy) | Varies | 1x/week per sub |
+
+#### Reddit Target Subreddits
+
+| Subreddit | Angle | Notes |
+|-----------|-------|-------|
+| r/SideProject | Privacy tech | Good for tech credibility |
+| r/ChineseZodiac | Cultural | Direct audience match |
+| r/astrology | Destiny | Large engaged community |
+| r/privacy | Rebellion | Privacy by Design angle |
+| r/InternetIsBeautiful | Link only | After traction established |
+| r/coolgithubprojects | Tech | Open source angle |
+
+---
+
+### 🔥 HACKER NEWS STRATEGY
 
 **Recommended Title:**
 ```
-Show HN: Red Horse Oracle – Limited edition AI zodiac art with Privacy by Design
+Show HN: Red Horse Oracle – Privacy-first AI zodiac art (zero PII stored)
 ```
 
 **Post Template:**
@@ -109,7 +162,7 @@ What makes it different:
 
 1. Privacy by Design: Birth date calculates zodiac locally and is immediately discarded. Zero PII stored.
 
-2. Limited Editions: Only 888 oracles per zodiac sign (10,656 total EVER) - numbered like fine art prints.
+2. Limited Editions: Only 888 oracles per zodiac sign per mode (42,624 total EVER) - numbered like fine art prints.
 
 3. Maker's Mark: Each oracle has a certificate of authenticity with provenance.
 
@@ -124,23 +177,49 @@ Feedback welcome on the privacy approach and limited edition concept.
 ```
 
 **Best time:** Tuesday-Thursday, 9-11 AM EST
+**Status:** [ ] Ready to submit
 
-#### 2. Reddit
+---
 
-| Subreddit | Post Type |
-|-----------|-----------|
-| r/SideProject | Project share |
-| r/ChineseZodiac | Resource share |
-| r/astrology | Discussion |
-| r/InternetIsBeautiful | Link (after traction) |
+### 📋 WEEKLY LAUNCH CALENDAR
 
-#### 3. LinkedIn
-- Personal post with talisman screenshot
-- Focus: Privacy by Design, AI innovation, limited editions
+#### Week 1: Jan 19-25 (Soft Launch)
+| Day | Action |
+|-----|--------|
+| Sun 19 | Personal LinkedIn + Twitter posts |
+| Mon 20 | Reddit posts (r/SideProject, r/privacy) |
+| Tue 21 | Hacker News "Show HN" submission |
+| Wed 22 | Instagram carousel of all 12 zodiac signs |
+| Thu 23 | LinkedIn article: "Building Privacy-First AI" |
+| Fri 24 | TikTok video: "Which Fire Horse zodiac are you?" |
+| Sat 25 | Influencer outreach begins (20 micro-influencers) |
 
-#### 4. Product Hunt
-- Schedule for Tuesday launch
-- Prepare all assets (logo, screenshots, video)
+#### Week 2: Jan 26 - Feb 1 (CNY Push)
+| Day | Action |
+|-----|--------|
+| Sun 26 | Amplify best-performing content |
+| Mon 27 | Reddit r/ChineseZodiac, r/astrology |
+| Tue 28 | Product Hunt launch (if traction supports) |
+| **Wed 29** | **🎆 CNY DAY 1 - Maximum posting** |
+| Thu 30 | CNY Day 2 - Respond to all engagement |
+| Fri 31 | CNY Day 3 - User testimonials |
+| Sat 1 | CNY Day 4 - Share viral content |
+
+---
+
+### 📊 SHARE BUTTON CAPABILITIES
+
+| Platform | Text Support | Image Support | Best Use |
+|----------|-------------|---------------|----------|
+| **Twitter/X** | ✅ Full text | Via URL | Primary share |
+| **LinkedIn** | ❌ Link only | Via URL | Link + manual paste |
+| **Facebook** | ❌ Link only | Via URL | Link + manual paste |
+| **WhatsApp** | ✅ Full text | Via URL | Mobile share |
+| **Telegram** | ✅ Full text | Via URL | Mobile share |
+| **Email** | ✅ Full text | N/A | Personal referral |
+| **Copy Message** | ✅ Full text | N/A | **Most reliable!** |
+
+**Recommendation:** Guide users to use "COPY MESSAGE" button then paste into their preferred platform. This ensures full text + talisman link every time.
 
 ---
 

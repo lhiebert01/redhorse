@@ -1,5 +1,115 @@
 # Red Horse Oracle - Release Notes
 
+## Version 1.3.0 - Visual Polish & Marketing Assets (January 18, 2026)
+
+**Status:** PRODUCTION LIVE
+**Release Date:** January 18, 2026
+
+---
+
+### Highlights
+
+This release adds **Rotating Background System**, **Collections Grid Screenshot Tool**, **LinkedIn Share Button**, **Marketing Grid Assets**, and visual refinements for the landing page.
+
+---
+
+### New Features
+
+#### Rotating Background System (Landing Page)
+- **Smooth crossfade transitions** between background images
+- **16-second intervals** with 2.5-second fade duration
+- **Two-layer approach** for seamless transitions (no snapping)
+- **Sequence:** Main Chart → Grid 1 → Main Chart → Grid 3
+- **Background sizing:** `contain` to show full images without edge cutoff
+- **Position anchoring:** `top center` to ensure headers visible
+
+#### Marketing Grid Assets
+Added 5 marketing screenshots to `/public/assets/`:
+- `marketing-grid-1.jpg` - 4x3 horizontal grid (all 60 zodiac cards)
+- `marketing-grid-2.jpg` - Alternative horizontal layout
+- `marketing-grid-3.jpg` - Horizontal with different sorting
+- `marketing-grid-4.jpg` - Horizontal variant
+- `marketing-grid-5-mobile.jpg` - Vertical layout for mobile
+
+#### Collections Grid Screenshot Tool
+- **New page:** `/collections-grid` - Dedicated page for screenshot capture
+- **Controls:** Columns (1-4), Gap (0-16px), Scale (60-100%), Background
+- **Keyboard shortcut:** Press `H` to toggle controls visibility
+- **Purpose:** Generate marketing materials showing all 12 zodiac collections
+
+#### LinkedIn Share Button
+- **New button** on reveal page share panel
+- **3x2 grid layout** for all share buttons
+- **Platform-specific indicators:** "Works!" for Twitter/WhatsApp/Telegram, "Link only" for Facebook
+- **Removed:** Native share button (unreliable across platforms)
+
+#### Background Transparency Refinements
+- **Landing page:** 30% opacity (increased from 18% for better visibility)
+- **Reveal page:** 18% opacity (subtle, non-distracting)
+- **Examples page:** 18% opacity
+- **Removed blur filter** for crystal-clear image quality
+
+#### OG Image Configuration
+- **Current OG image:** `Fire-Horse-2026-Chart-v3.jpeg` (full brightness for social sharing)
+- **Landing background:** `Fire-Horse-2026-Chart-v2.jpeg` (30% opacity)
+- **Verified:** LinkedIn Post Inspector and Facebook Sharing Debugger
+
+---
+
+### Modified Files
+
+| File | Changes |
+|------|---------|
+| `src/app/page.tsx` | Rotating backgrounds with crossfade, contain sizing, top positioning |
+| `src/app/collections-grid/page.tsx` | New collections screenshot page |
+| `src/app/admin-test/page.tsx` | Added Collections tab with grid controls |
+| `src/components/reveal/ShareButtons.tsx` | Added LinkedIn, 3x2 grid layout |
+| `src/app/reveal/page.tsx` | Background opacity adjustments |
+| `src/app/examples/page.tsx` | Background opacity adjustments |
+
+---
+
+### New Assets
+
+| File | Purpose |
+|------|---------|
+| `/public/assets/marketing-grid-1.jpg` | Horizontal marketing grid |
+| `/public/assets/marketing-grid-2.jpg` | Horizontal marketing grid |
+| `/public/assets/marketing-grid-3.jpg` | Horizontal marketing grid |
+| `/public/assets/marketing-grid-4.jpg` | Horizontal marketing grid |
+| `/public/assets/marketing-grid-5-mobile.jpg` | Vertical mobile grid |
+
+---
+
+### Technical Details
+
+#### Crossfade Implementation
+```typescript
+const BACKGROUND_IMAGES = [
+  '/assets/Fire-Horse-2026-Chart-v2.jpeg',  // Main
+  '/assets/marketing-grid-1.jpg',            // Grid 1
+  '/assets/Fire-Horse-2026-Chart-v2.jpeg',  // Main
+  '/assets/marketing-grid-3.jpg',            // Grid 3
+];
+
+const ROTATION_INTERVAL = 16000; // 16 seconds
+
+// Two-layer approach for smooth crossfade
+// Layer 1: currentIndex with opacity transition
+// Layer 2: nextIndex with inverse opacity transition
+// 2.5 second transition duration
+```
+
+#### Background CSS Settings
+```css
+backgroundSize: 'contain',      /* Full image, no cropping */
+backgroundPosition: 'top center', /* Headers visible */
+opacity: 0.30,                  /* 30% for landing page */
+transition: 'opacity 2.5s ease-in-out'
+```
+
+---
+
 ## Version 1.2.0 - Analytics & Sharing (January 17, 2026)
 
 **Status:** PRODUCTION LIVE
@@ -250,6 +360,7 @@ This release marks the **production launch** of Red Horse Oracle, the world's fi
 
 | Version | Date | Description |
 |---------|------|-------------|
+| 1.3.0 | Jan 18, 2026 | Rotating backgrounds, LinkedIn share, marketing assets |
 | 1.2.0 | Jan 17, 2026 | Analytics, Share Talisman Image, webhook idempotency |
 | 1.1.0 | Jan 16, 2026 | Limited Edition system, Maker's Mark, custom domain |
 | 1.0.0 | Jan 14, 2026 | Production launch - Stripe live, Privacy by Design |
