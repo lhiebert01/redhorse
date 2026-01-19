@@ -8,8 +8,7 @@ interface ShareButtonsProps {
 }
 
 export default function ShareButtons({ prophecy }: ShareButtonsProps) {
-  const [copied, setCopied] = useState(false);
-  const [shareStatus, setShareStatus] = useState<string>('');
+  const [shareStatus, setShareStatus] = useState<'idle' | 'copied'>('idle');
 
   const siteUrl = 'https://redhorseoracle.com';
 
@@ -36,27 +35,29 @@ export default function ShareButtons({ prophecy }: ShareButtonsProps) {
 
   const modeEmoji = getModeEmoji(prophecy.focus_mode);
 
-  // Base share content - more viral
-  const shareText = `🔥 I'm a ${zodiacInfo}! ${modeEmoji}
-
-My Fire Horse Oracle prophecy: "${mainText}"
-
-🐴 Year of the Fire Horse = once every 60 YEARS! (Last: 1966, Next: 2086)`;
-
-  // Full message for copy - VIRAL CONTENT with emojis and hashtags
+  // Full viral message for copy
   const fullMessage = shareableImageUrl
     ? `🔥 I just got my Authenticated Limited Edition Fire Horse Oracle! 🐴
 
+━━━━━━━━━━━━━━━━━━━━━━
+📜 MY FIRE HORSE PROPHECY
+━━━━━━━━━━━━━━━━━━━━━━
+
 ✨ I'm a ${zodiacInfo} ${modeEmoji}
 
-💬 My prophecy: "${mainText}"
+💬 My Oracle Prophecy:
+"${mainText}"
 
-🎨 VIEW MY TALISMAN: ${shareableImageUrl}
+🎨 VIEW MY TALISMAN:
+${shareableImageUrl}
 
-🔮 The Fire Horse returns only once every 60 years!
+━━━━━━━━━━━━━━━━━━━━━━
+🐎 Year of the Fire Horse 2026
+   Only happens once every 60 years!
    • Last: 1966
    • NOW: 2026
    • Next: 2086 (will you even be alive?)
+━━━━━━━━━━━━━━━━━━━━━━
 
 🎯 Get YOUR Fire Horse Oracle:
 ${siteUrl}
@@ -64,57 +65,31 @@ ${siteUrl}
 #FireHorse2026 #ChineseZodiac #${prophecy.zodiac_sign || 'Zodiac'} #AI #LimitedEdition`
     : `🔥 I just got my Authenticated Limited Edition Fire Horse Oracle! 🐴
 
+━━━━━━━━━━━━━━━━━━━━━━
+📜 MY FIRE HORSE PROPHECY
+━━━━━━━━━━━━━━━━━━━━━━
+
 ✨ I'm a ${zodiacInfo} ${modeEmoji}
 
-💬 My prophecy: "${mainText}"
+💬 My Oracle Prophecy:
+"${mainText}"
 
-🔮 The Fire Horse returns only once every 60 years!
+━━━━━━━━━━━━━━━━━━━━━━
+🐎 Year of the Fire Horse 2026
+   Only happens once every 60 years!
    • Last: 1966
    • NOW: 2026
    • Next: 2086 (will you even be alive?)
+━━━━━━━━━━━━━━━━━━━━━━
 
 🎯 Get YOUR Fire Horse Oracle:
 ${siteUrl}
 
 #FireHorse2026 #ChineseZodiac #${prophecy.zodiac_sign || 'Zodiac'} #AI #LimitedEdition`;
 
-  // =====================================================
-  // COPY TO CLIPBOARD - Most reliable method
-  // =====================================================
-  const handleCopyMessage = async () => {
-    try {
-      await navigator.clipboard.writeText(fullMessage);
-      setCopied(true);
-      setShareStatus('Copied to clipboard!');
-      setTimeout(() => {
-        setCopied(false);
-        setShareStatus('');
-      }, 3000);
-    } catch {
-      // Fallback for older browsers
-      const textArea = document.createElement('textarea');
-      textArea.value = fullMessage;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
-      setCopied(true);
-      setShareStatus('Copied!');
-      setTimeout(() => {
-        setCopied(false);
-        setShareStatus('');
-      }, 3000);
-    }
-  };
-
-  // =====================================================
-  // PLATFORM-SPECIFIC SHARE LINKS
-  // =====================================================
-
-  // Twitter/X - WORKS: Supports pre-filled text with URLs
-  const openTwitter = () => {
-    const tweetText = shareableImageUrl
-      ? `🔥 I'm a ${zodiacInfo}! ${modeEmoji}
+  // Twitter/X share text (shorter for character limit)
+  const twitterText = shareableImageUrl
+    ? `🔥 I'm a ${zodiacInfo}! ${modeEmoji}
 
 My Fire Horse Oracle: "${mainText}"
 
@@ -124,7 +99,7 @@ My Fire Horse Oracle: "${mainText}"
 Get yours: ${siteUrl}
 
 #FireHorse2026 #ChineseZodiac`
-      : `🔥 I'm a ${zodiacInfo}! ${modeEmoji}
+    : `🔥 I'm a ${zodiacInfo}! ${modeEmoji}
 
 My Fire Horse Oracle: "${mainText}"
 
@@ -132,196 +107,98 @@ My Fire Horse Oracle: "${mainText}"
 Get yours: ${siteUrl}
 
 #FireHorse2026 #ChineseZodiac`;
-    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+
+  // Copy to clipboard
+  const handleCopyMessage = async () => {
+    try {
+      await navigator.clipboard.writeText(fullMessage);
+      setShareStatus('copied');
+      setTimeout(() => setShareStatus('idle'), 5000);
+    } catch {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = fullMessage;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setShareStatus('copied');
+      setTimeout(() => setShareStatus('idle'), 5000);
+    }
+  };
+
+  // Copy then open LinkedIn
+  const handleLinkedIn = async () => {
+    await handleCopyMessage();
+    window.open('https://www.linkedin.com/feed/', '_blank');
+  };
+
+  // Copy then open Facebook
+  const handleFacebook = async () => {
+    await handleCopyMessage();
+    window.open('https://www.facebook.com/', '_blank');
+  };
+
+  // Open Twitter with pre-filled text
+  const handleTwitter = () => {
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(twitterText)}`;
     window.open(url, 'twitter-share', 'width=550,height=450');
-  };
-
-  // LinkedIn - Share talisman image URL directly
-  const openLinkedIn = () => {
-    // LinkedIn only supports URL sharing, so we share the talisman image
-    // Users should use Copy Message for full text on LinkedIn
-    const linkedInUrl = shareableImageUrl || siteUrl;
-    window.open(
-      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(linkedInUrl)}`,
-      'linkedin-share',
-      'width=550,height=450'
-    );
-  };
-
-  // WhatsApp - WORKS: Supports pre-filled text
-  const openWhatsApp = () => {
-    const waText = shareableImageUrl
-      ? `🔥 Check out my Fire Horse Oracle! 🐴
-
-I'm a ${zodiacInfo}! ${modeEmoji}
-
-My prophecy: "${mainText}"
-
-🎨 See my talisman: ${shareableImageUrl}
-
-🔮 Fire Horse = once every 60 years! (Last: 1966, Next: 2086)
-
-Get YOUR oracle: ${siteUrl}`
-      : `🔥 Check out my Fire Horse Oracle! 🐴
-
-I'm a ${zodiacInfo}! ${modeEmoji}
-
-My prophecy: "${mainText}"
-
-🔮 Fire Horse = once every 60 years!
-
-Get YOUR oracle: ${siteUrl}`;
-    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(waText)}`, '_blank');
-  };
-
-  // Telegram - WORKS: Supports pre-filled text
-  const openTelegram = () => {
-    const tgText = shareableImageUrl
-      ? `🔥 Check out my Fire Horse Oracle! 🐴
-
-I'm a ${zodiacInfo}! ${modeEmoji}
-
-My prophecy: "${mainText}"
-
-🎨 See my talisman: ${shareableImageUrl}
-
-🔮 Fire Horse = once every 60 years!
-
-Get YOUR oracle: ${siteUrl}`
-      : `🔥 Check out my Fire Horse Oracle! 🐴
-
-I'm a ${zodiacInfo}! ${modeEmoji}
-
-My prophecy: "${mainText}"
-
-🔮 Fire Horse = once every 60 years!
-
-Get YOUR oracle: ${siteUrl}`;
-    window.open(`https://t.me/share/url?url=${encodeURIComponent(siteUrl)}&text=${encodeURIComponent(tgText)}`, '_blank');
-  };
-
-  // Email (Gmail) - WORKS: Opens default mail client with pre-filled content
-  const openEmail = () => {
-    const subject = `Check out my Fire Horse Oracle talisman for 2026!`;
-    const body = fullMessage;
-    window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  };
-
-  // Facebook - Link only (FB doesn't support pre-filled text)
-  const openFacebook = () => {
-    const fbUrl = shareableImageUrl || siteUrl;
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fbUrl)}`, 'facebook-share', 'width=550,height=450');
   };
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      {/* Status message */}
-      {shareStatus && (
-        <div className="bg-green-600 text-white text-center py-2 px-4 rounded-lg font-bold animate-pulse">
-          {shareStatus}
+      {/* Header */}
+      <div className="text-center">
+        <p className="text-purple-300 text-lg font-bold mb-1">
+          📣 Share Your Oracle!
+        </p>
+        <p className="text-gray-400 text-sm">
+          Click to copy your post, then paste into your social app
+        </p>
+      </div>
+
+      {/* Copy Status Message */}
+      {shareStatus === 'copied' && (
+        <div className="bg-green-900/50 border border-green-500 rounded-xl p-3 animate-pulse">
+          <p className="text-green-300 text-sm font-bold text-center">
+            ✅ Copied! Now paste (Ctrl+V / Cmd+V) into your social app
+          </p>
         </div>
       )}
 
-      {/* PRIMARY: COPY MESSAGE - Most reliable across all platforms */}
-      <button
-        onClick={handleCopyMessage}
-        className={`w-full font-bold py-4 px-6 rounded-xl
-                   flex items-center justify-center gap-3 transition-all
-                   ${copied
-                     ? 'bg-green-600 text-white border-2 border-green-400'
-                     : 'bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 text-black border-2 border-yellow-400 hover:scale-[1.02] active:scale-95'}`}
-      >
-        <span className="text-xl">{copied ? 'COPIED!' : 'COPY MESSAGE + TALISMAN LINK'}</span>
-      </button>
-      <p className="text-center text-xs text-gray-400 -mt-2">
-        Best method - paste into any app including LinkedIn posts
-      </p>
-
-      {/* Divider */}
-      <div className="flex items-center gap-3 mt-2">
-        <div className="flex-1 h-px bg-gray-700"></div>
-        <span className="text-gray-500 text-xs">quick share buttons</span>
-        <div className="flex-1 h-px bg-gray-700"></div>
-      </div>
-
-      {/* PLATFORM BUTTONS - 6 buttons in 2 rows */}
-      <div className="grid grid-cols-3 gap-2">
-        {/* Twitter/X - WORKS */}
+      {/* 3 Share Buttons */}
+      <div className="flex flex-col gap-3">
+        {/* X/Twitter */}
         <button
-          onClick={openTwitter}
-          className="bg-black border-2 border-gray-600 text-white font-bold py-3 rounded-xl
-                     hover:bg-gray-800 hover:border-gray-400 active:scale-95 transition-all
-                     flex flex-col items-center justify-center"
-          title="Share on X/Twitter - includes full text!"
+          onClick={handleTwitter}
+          className="flex items-center justify-center gap-3 bg-black hover:bg-gray-900 border-2 border-gray-600 text-white font-bold py-4 px-6 rounded-xl transition-all hover:scale-[1.02]"
         >
-          <span className="text-lg font-bold">X</span>
-          <span className="text-[9px] text-green-400">Works!</span>
+          <span className="text-xl font-bold">𝕏</span>
+          <span>Share on X (Twitter)</span>
         </button>
 
-        {/* LinkedIn - NEW */}
+        {/* LinkedIn - Copy first, then open */}
         <button
-          onClick={openLinkedIn}
-          className="bg-[#0A66C2] border-2 border-[#0A66C2] text-white font-bold py-3 rounded-xl
-                     hover:bg-[#004182] active:scale-95 transition-all
-                     flex flex-col items-center justify-center"
-          title="Share on LinkedIn - shares talisman link"
+          onClick={handleLinkedIn}
+          className="flex items-center justify-center gap-3 bg-[#0A66C2] hover:bg-[#004182] border-2 border-[#0A66C2] text-white font-bold py-4 px-6 rounded-xl transition-all hover:scale-[1.02]"
         >
-          <span className="text-lg font-bold">in</span>
-          <span className="text-[9px] text-blue-200">LinkedIn</span>
+          <span className="text-xl font-bold">in</span>
+          <span>Copy & Share on LinkedIn</span>
         </button>
 
-        {/* WhatsApp - WORKS */}
+        {/* Facebook - Copy first, then open */}
         <button
-          onClick={openWhatsApp}
-          className="bg-[#25D366] border-2 border-[#25D366] text-white font-bold py-3 rounded-xl
-                     hover:bg-[#20BD5A] active:scale-95 transition-all
-                     flex flex-col items-center justify-center"
-          title="Share on WhatsApp - includes full text!"
+          onClick={handleFacebook}
+          className="flex items-center justify-center gap-3 bg-[#1877F2] hover:bg-[#166FE5] border-2 border-[#1877F2] text-white font-bold py-4 px-6 rounded-xl transition-all hover:scale-[1.02]"
         >
-          <span className="text-lg">WA</span>
-          <span className="text-[9px] text-green-100">Works!</span>
-        </button>
-
-        {/* Telegram - WORKS */}
-        <button
-          onClick={openTelegram}
-          className="bg-[#0088cc] border-2 border-[#0088cc] text-white font-bold py-3 rounded-xl
-                     hover:bg-[#006699] active:scale-95 transition-all
-                     flex flex-col items-center justify-center"
-          title="Share on Telegram - includes full text!"
-        >
-          <span className="text-lg">TG</span>
-          <span className="text-[9px] text-blue-200">Works!</span>
-        </button>
-
-        {/* Email - WORKS (Gmail) */}
-        <button
-          onClick={openEmail}
-          className="bg-gray-700 border-2 border-gray-600 text-white font-bold py-3 rounded-xl
-                     hover:bg-gray-600 active:scale-95 transition-all
-                     flex flex-col items-center justify-center"
-          title="Share via Email - opens mail app"
-        >
-          <span className="text-lg">@</span>
-          <span className="text-[9px] text-gray-300">Email</span>
-        </button>
-
-        {/* Facebook - Link only */}
-        <button
-          onClick={openFacebook}
-          className="bg-[#1877F2] border-2 border-[#1877F2] text-white font-bold py-3 rounded-xl
-                     hover:bg-[#166FE5] active:scale-95 transition-all
-                     flex flex-col items-center justify-center opacity-70"
-          title="Share on Facebook - link only, no text"
-        >
-          <span className="text-lg">f</span>
-          <span className="text-[9px] text-blue-200">Link only</span>
+          <span className="text-xl font-bold">f</span>
+          <span>Copy & Share on Facebook</span>
         </button>
       </div>
 
       {/* Help text */}
-      <p className="text-center text-[10px] text-gray-500 mt-1">
-        X, WhatsApp, Telegram include your prophecy text. LinkedIn/Facebook share talisman link only.
+      <p className="text-center text-xs text-gray-500">
+        📌 LinkedIn & Facebook: We copy your post first, then open the app. Just paste!
       </p>
     </div>
   );

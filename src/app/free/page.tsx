@@ -79,26 +79,57 @@ export default function FreeReadingPage() {
     return 'bg-gray-900/30 border-gray-700/50';
   };
 
-  // Generate viral share content
+  // Generate viral share content - First person "I learned..." format
   const generateShareContent = () => {
-    if (!result || !funFacts) return { text: '', shortText: '' };
+    if (!result || !funFacts || !forecast) return { text: '', shortText: '' };
 
-    const shareText = `🔥 I'm a ${result.element} ${result.animal}! ${funFacts.emoji}
+    // Get celebrity names only (first 3)
+    const celebNames = funFacts.famousPeople.slice(0, 3).map(p => p.name).join(', ');
 
-✨ "${funFacts.mantra}"
+    // Format strengths with emojis
+    const strengthsFormatted = forecast.coreStrengths
+      .map(s => `✓ ${s}`)
+      .join('\n');
 
-🌟 Famous ${result.element} ${result.animal}s: ${funFacts.famousPeople.join(', ')}
+    const shareText = `🔥 I just discovered I'm a ${result.element} ${result.animal}! ${funFacts.emoji}
 
-💬 "${funFacts.quote}" — ${funFacts.quoteAuthor}
+━━━━━━━━━━━━━━━━━━━━━━
+📜 MY FREE FIRE HORSE ORACLE
+━━━━━━━━━━━━━━━━━━━━━━
 
-🐴 Discover YOUR Chinese Zodiac destiny for the Year of the Fire Horse 2026:
+🐴 ${result.element} ${result.animal} Characteristics:
+${forecast.characteristics.split('.').slice(0, 2).join('.')}.
+
+💪 My Core Strengths:
+${strengthsFormatted}
+
+🌟 Famous ${result.element} ${result.animal}s I share my sign with:
+${celebNames}
+
+✨ My Mantra for 2026:
+"${funFacts.mantra}"
+
+🔮 Oracle Wisdom:
+"${forecast.oracleWisdom}"
+
+━━━━━━━━━━━━━━━━━━━━━━
+🐎 The Year of the Fire Horse 2026
+   Only happens once every 60 years!
+   Last: 1966 → NOW: 2026 → Next: 2086
+━━━━━━━━━━━━━━━━━━━━━━
+
+👉 Get YOUR FREE Fire Horse Oracle:
 🔗 redhorseoracle.com/free
 
-#FireHorse2026 #ChineseZodiac #${result.animal} #${result.element}${result.animal}`;
+#FireHorse2026 #ChineseZodiac #${result.animal} #YearOfTheHorse`;
 
-    const shortText = `🔥 I'm a ${result.element} ${result.animal}! "${funFacts.mantra}" ${funFacts.emoji}
+    const shortText = `🔥 I'm a ${result.element} ${result.animal}! ${funFacts.emoji}
 
-Find YOUR zodiac destiny → redhorseoracle.com/free #FireHorse2026`;
+My strengths: ${forecast.coreStrengths.join(' • ')}
+
+Get YOUR free Fire Horse Oracle → redhorseoracle.com/free
+
+#FireHorse2026 #ChineseZodiac`;
 
     return { text: shareText, shortText };
   };
@@ -323,83 +354,69 @@ Find YOUR zodiac destiny → redhorseoracle.com/free #FireHorse2026`;
                 <div className="flex-1 h-px bg-purple-700/50"></div>
               </div>
 
-              {/* Share Section */}
-              <p className="text-purple-300 text-base font-semibold mb-1">
-                📣 Share Your Zodiac — Go Viral!
-              </p>
-              <p className="text-red-400 text-sm font-bold mb-4">
-                Supplies won&apos;t last. Only 888 per zodiac sign.
-              </p>
-
-              {/* VIRAL SHARE BUTTON - Primary CTA */}
-              <button
-                onClick={handleViralShare}
-                className={`w-full max-w-md mx-auto mb-4 flex items-center justify-center gap-3 ${
-                  shareStatus === 'copied' || shareStatus === 'shared'
-                    ? 'bg-green-600 border-green-400'
-                    : 'bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 border-purple-400 hover:scale-105'
-                } border-2 text-white font-bold text-lg py-4 px-6 rounded-xl transition-all duration-200 shadow-lg`}
-              >
-                {shareStatus === 'copied' ? (
-                  <>
-                    <span className="text-2xl">✅</span>
-                    <span>Copied! Now Paste & Share</span>
-                  </>
-                ) : shareStatus === 'shared' ? (
-                  <>
-                    <span className="text-2xl">🎉</span>
-                    <span>Shared Successfully!</span>
-                  </>
-                ) : (
-                  <>
-                    <span className="text-2xl">🚀</span>
-                    <span>CREATE VIRAL POST</span>
-                    <span className="text-sm opacity-80">(Copy All)</span>
-                  </>
-                )}
-              </button>
-
-              {shareStatus !== 'idle' && (
-                <p className="text-green-400 text-sm mb-4 animate-pulse">
-                  ✨ Your personalized zodiac post is ready! Paste it anywhere.
+              {/* Share Section - 3 Simple Buttons */}
+              <div className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 border-2 border-purple-500/50 rounded-2xl p-5 mb-4">
+                <p className="text-purple-300 text-lg font-bold mb-2 text-center">
+                  📣 Share Your Zodiac Discovery!
                 </p>
-              )}
+                <p className="text-gray-300 text-sm mb-4 text-center">
+                  Click to copy your post, then paste into your favorite social app
+                </p>
 
-              {/* Share Buttons */}
-              <div className="flex flex-wrap justify-center gap-3">
-                <a
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
-                    funFacts
-                      ? `🔥 I'm a ${result.element} ${result.animal}! ${funFacts.emoji}\n\n✨ "${funFacts.mantra}"\n\nFind YOUR zodiac destiny → redhorseoracle.com/free #FireHorse2026`
-                      : `I just discovered I'm a ${result.element} ${result.animal}! 🔥🐴 Find YOUR zodiac destiny → redhorseoracle.com/free`
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-black hover:bg-gray-900 border border-gray-600 text-white font-semibold px-4 py-2.5 rounded-xl transition-all hover:scale-105"
-                >
-                  <span className="text-lg">𝕏</span>
-                  <span className="text-sm">Post on X</span>
-                </a>
-                <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=https://redhorseoracle.com/free&quote=${encodeURIComponent(
-                    funFacts
-                      ? `🔥 I'm a ${result.element} ${result.animal}! "${funFacts.mantra}" Find YOUR zodiac destiny!`
-                      : `I'm a ${result.element} ${result.animal} in the Year of the Fire Horse 2026!`
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4 py-2.5 rounded-xl transition-all hover:scale-105"
-                >
-                  <span className="text-lg">f</span>
-                  <span className="text-sm">Share on Facebook</span>
-                </a>
-                <button
-                  onClick={handleViralShare}
-                  className="flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white font-semibold px-4 py-2.5 rounded-xl transition-all hover:scale-105"
-                >
-                  <span className="text-lg">📋</span>
-                  <span className="text-sm">Copy Full Post</span>
-                </button>
+                {/* Copy Status Message */}
+                {shareStatus === 'copied' && (
+                  <div className="bg-green-900/50 border border-green-500 rounded-xl p-3 mb-4 animate-pulse">
+                    <p className="text-green-300 text-sm font-bold text-center">
+                      ✅ Copied! Now paste (Ctrl+V) into your social app
+                    </p>
+                  </div>
+                )}
+
+                {/* 3 Share Buttons */}
+                <div className="flex flex-col gap-3">
+                  {/* X/Twitter */}
+                  <a
+                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                      funFacts && forecast
+                        ? `🔥 I just discovered I'm a ${result.element} ${result.animal}! ${funFacts.emoji}\n\n💪 My strengths: ${forecast.coreStrengths.join(' • ')}\n\n✨ "${funFacts.mantra}"\n\nGet YOUR free Fire Horse Oracle:\n🔗 redhorseoracle.com/free\n\n#FireHorse2026 #ChineseZodiac`
+                        : `I just discovered I'm a ${result.element} ${result.animal}! 🔥🐴\n\nGet YOUR zodiac → redhorseoracle.com/free`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-3 bg-black hover:bg-gray-900 border-2 border-gray-600 text-white font-bold py-3 px-6 rounded-xl transition-all hover:scale-[1.02]"
+                  >
+                    <span className="text-xl font-bold">𝕏</span>
+                    <span>Share on X (Twitter)</span>
+                  </a>
+
+                  {/* LinkedIn - Copy first, then open */}
+                  <button
+                    onClick={async () => {
+                      await handleViralShare();
+                      window.open('https://www.linkedin.com/feed/', '_blank');
+                    }}
+                    className="flex items-center justify-center gap-3 bg-[#0A66C2] hover:bg-[#004182] border-2 border-[#0A66C2] text-white font-bold py-3 px-6 rounded-xl transition-all hover:scale-[1.02]"
+                  >
+                    <span className="text-xl font-bold">in</span>
+                    <span>Copy & Share on LinkedIn</span>
+                  </button>
+
+                  {/* Facebook - Copy first, then open */}
+                  <button
+                    onClick={async () => {
+                      await handleViralShare();
+                      window.open('https://www.facebook.com/', '_blank');
+                    }}
+                    className="flex items-center justify-center gap-3 bg-[#1877F2] hover:bg-[#166FE5] border-2 border-[#1877F2] text-white font-bold py-3 px-6 rounded-xl transition-all hover:scale-[1.02]"
+                  >
+                    <span className="text-xl font-bold">f</span>
+                    <span>Copy & Share on Facebook</span>
+                  </button>
+                </div>
+
+                <p className="text-gray-500 text-xs mt-4 text-center">
+                  📌 LinkedIn & Facebook: We copy your post first, then open the app. Just paste!
+                </p>
               </div>
 
               <p className="text-gray-500 text-xs mt-3">
