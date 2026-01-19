@@ -2261,4 +2261,203 @@ git add -A && git commit -m "message" && git push origin main
 
 ---
 
+## Session Update: January 19, 2026 - Landing Page Redesign & Simplification
+
+### Current Status: PRODUCTION READY - CLEAN & SIMPLE
+
+### What Was Completed This Session
+
+#### 1. Landing Page Complete Reorganization
+Restructured the landing page for clarity with TWO CLEAR PATHS:
+
+**Before:** Confusing layout with "Choose Your Path" options appearing before FREE button
+**After:** Clean separation - FREE first, then PAID
+
+**New Structure:**
+```
+1. RED HORSE ORACLE title + 丙午年
+2. Value Prop Badge (World's First, Authenticated Limited Edition, AI Zodiac Oracle)
+3. Three badges: ✦ NUMBERED | 🖼️ VERIFIED | 🛡️ PRIVATE
+4. Hero Image
+5. Product Card:
+   ├── 🔮 FREE Section (green border)
+   │   ├── "START HERE — IT'S FREE!"
+   │   ├── [GET YOUR FREE RED HORSE ORACLE READING NOW] button
+   │   └── ✓ No Payment ✓ No Personal Info ✓ No Login ✓ No Email
+   │
+   ├── ═══ OR ═══ divider
+   │
+   └── 🔥 PAID Section (gold border)
+       ├── "THE LIMITED EDITION — COMPLETE ORACLE"
+       ├── Oracle preview image
+       ├── [GET MY ORACLE — $8.88] button
+       ├── ✓ No Personal Info ✓ No Login ✓ No Email
+       └── 🎲 Wealth ⚔️ Power ❤️ Love 🛡️ Shield
+6. See Examples link
+7. Footer
+```
+
+#### 2. Scrolling Marquee Ticker
+Added celebrity quote ticker at bottom of page:
+
+**Features:**
+- Position: fixed bottom, z-0 (behind content)
+- Text: 2xl/3xl (~24-30px)
+- Opacity: 30% (subtle background element)
+- pointer-events: none (clicks pass through)
+- 45-second scroll loop
+
+**Quotes Include:**
+- 🔥 Beyoncé (Metal Rooster, 1981): "I don't like to gamble, but if there's one thing I'm willing to bet on, it's myself."
+- 🐴 Halle Berry (Fire Horse, 1966): "I'm going to follow my path. I'm going to run my race."
+- 🔥 Janet Jackson (Fire Horse, 1966): "I only have to follow my heart."
+- 🐴 Robin Wright (Fire Horse, 1966): "I was always willful. I'll do it my way."
+
+**Beyoncé Quote Significance:**
+- Metal Rooster = confident, ambitious, high standards
+- "Bet on yourself" ties directly to paid oracle CTA
+- Perfect marketing alignment
+
+#### 3. FREE Page Share Modal
+Fixed share buttons that weren't working:
+
+**Old:** Buttons copied text then immediately opened windows (confusing)
+**New:** Modal popup with:
+- Pre-formatted share text visible
+- Big "COPY POST TO CLIPBOARD" button
+- Success confirmation
+- Quick links to Twitter, LinkedIn, Facebook
+
+**Share Content Includes:**
+- User's zodiac element + animal
+- 2026 mantra
+- Fun fact
+- Famous person with same sign
+- Fire Horse 2026 mention
+- Link to redhorseoracle.com/free
+- Hashtags
+
+#### 4. Simplified Messaging
+Removed redundancy throughout:
+
+**Removed:**
+- "Google Gemini 3 Pro Powered" (too technical)
+- Detailed "Once-in-60-Year Opportunity" card (redundant with mode emojis)
+- Duplicate hero image inside paid section
+- Verbose Privacy by Design section (now just badges + button text)
+- Social proof quote with "(Fictional)"
+
+**Kept Simple:**
+- World's First
+- Authenticated Limited Edition
+- AI Zodiac Oracle
+- Three badges: NUMBERED, VERIFIED, PRIVATE
+
+#### 5. Privacy Badges Under Both Buttons
+Added consistent privacy messaging:
+
+**FREE button:** ✓ No Payment ✓ No Personal Info ✓ No Login ✓ No Email
+**PAID button:** ✓ No Personal Info ✓ No Login ✓ No Email (no "No Payment")
+
+### Files Modified
+
+| File | Changes |
+|------|---------|
+| `src/app/page.tsx` | Complete reorganization, marquee ticker, simplified value prop |
+| `src/app/free/page.tsx` | Share modal with copy-to-clipboard |
+| `src/constants/zodiac-fun-facts.ts` | Updated Fire Horse celebrities, added Beyoncé quote |
+
+### Design Principles Applied
+
+1. **Less text, more simple** - Removed verbose explanations
+2. **Non-redundant** - Each piece of info appears once
+3. **Two clear paths** - FREE (green) vs PAID (gold)
+4. **CTAs are the exception** - OK to repeat call-to-action buttons
+5. **Privacy as feature** - Badges + button text, not verbose sections
+6. **Background elements don't block UI** - Marquee at z-0, pointer-events-none
+
+### Current Version Status
+
+| Version | Date | Key Features |
+|---------|------|--------------|
+| **1.5.0** | **Jan 19** | **Landing page redesign, marquee ticker, share modal** |
+| 1.4.0 | Jan 19 | Celebrity quotes at TOP, viral share content |
+| 1.3.0 | Jan 18 | Rotating backgrounds, LinkedIn share, marketing grids |
+| 1.2.0 | Jan 17 | Analytics, Share Talisman Image |
+| 1.1.0 | Jan 16 | Limited Edition system, Maker's Mark |
+| 1.0.0 | Jan 14 | Production launch |
+
+---
+
+## Next Steps Plan
+
+### Immediate (When You Return)
+
+1. **Marketing Launch Prep**
+   - [ ] Create social media posts with screenshots of new landing page
+   - [ ] Draft LinkedIn article: "Building a Privacy-First AI Product"
+   - [ ] Prepare Product Hunt listing
+
+2. **Content Creation**
+   - [ ] Record short video walkthrough of FREE → PAID flow
+   - [ ] Create Instagram/TikTok content showing oracle generation
+   - [ ] Write press release for CNY launch
+
+3. **Technical (If Needed)**
+   - [ ] Test full payment flow end-to-end
+   - [ ] Verify all 4 modes generate correctly
+   - [ ] Mobile responsiveness check
+
+### Pre-CNY (Before Jan 29, 2026)
+
+1. **Influencer Outreach**
+   - Identify 10-20 astrology/Chinese culture influencers
+   - Prepare free oracle codes for gifting
+   - Draft outreach templates
+
+2. **Paid Advertising**
+   - Set up Facebook/Instagram ad account
+   - Create ad creatives using new landing page screenshots
+   - Define target audiences (Chinese diaspora, astrology enthusiasts)
+
+3. **SEO & Analytics**
+   - Verify Google Analytics tracking
+   - Submit sitemap to Google Search Console
+   - Check meta tags and OG images
+
+### CNY Launch Week (Jan 29 - Feb 5)
+
+1. **Product Hunt Launch** - Target Tuesday or Wednesday
+2. **Social Media Blitz** - Post across all platforms
+3. **Monitor & Optimize** - Watch conversion rates, fix issues
+
+---
+
+## Quick Reference
+
+### Live URLs
+| Page | URL |
+|------|-----|
+| Production | https://redhorseoracle.com |
+| Free Reading | https://redhorseoracle.com/free |
+| Examples | https://redhorseoracle.com/examples |
+| Admin Test | https://redhorseoracle.com/admin-test (PIN: 142857) |
+| SuperAdmin | https://redhorseoracle.com/superadmin (PIN: 142857) |
+
+### Quick Commands
+```bash
+cd /mnt/c/src/redhorse
+npm run dev              # Local development
+npm run build            # Production build
+npx tsc --noEmit         # Type check
+git add -A && git commit -m "message" && git push origin main  # Deploy
+```
+
+### Key Dates
+- **Today:** January 19, 2026
+- **CNY 2026:** January 29, 2026 (10 days away)
+- **Fire Horse Year Ends:** February 2027
+
+---
+
 *火马年 2026 - Year of the Fire Horse*
