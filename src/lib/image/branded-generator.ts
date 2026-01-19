@@ -269,22 +269,19 @@ function createMakerMarkSvg(size: number): string {
 }
 
 // ============================================================================
-// SHAREABLE IMAGE GENERATOR (Watermarked, NO Certificate)
+// SHAREABLE IMAGE GENERATOR (Watermarked, NO Certificate, NO Edition #)
 // ============================================================================
 
 /**
- * Generate a shareable talisman image with watermark but NO certificate number.
- * This version is for social sharing and prevents unauthorized copying.
+ * Generate a shareable talisman image with watermark only.
+ * NO certificate number, NO edition number - just the art with watermark.
+ * This version is for social sharing and protects the authenticated version.
  */
 export async function generateShareableImage(options: ShareableImageOptions): Promise<Buffer> {
   const {
     rawImageBuffer,
-    editionNumber,
-    totalEditions,
     zodiacSign,
     zodiacElement,
-    focusMode,
-    mainText,
   } = options;
 
   // Get dimensions of the raw image
@@ -293,32 +290,17 @@ export async function generateShareableImage(options: ShareableImageOptions): Pr
   const width = metadata.width || 576;
   const height = metadata.height || 1024;
 
-  // Calculate sizes for overlays
-  const headerHeight = Math.round(height * 0.08); // 8% for edition badge
-  const footerHeight = Math.round(height * 0.08); // 8% for footer (smaller than branded - no cert)
-  const newHeight = height + headerHeight + footerHeight;
+  // Only add a small footer for CTA - NO header (no edition badge)
+  const footerHeight = Math.round(height * 0.06); // 6% for simple CTA footer
+  const newHeight = height + footerHeight;
 
-  // Create header SVG with edition badge (same as branded)
-  const headerSvg = createHeaderSvg(width, headerHeight, editionNumber, totalEditions);
-
-  // Create footer SVG WITHOUT certificate (different from branded)
-  const footerSvg = createShareableFooterSvg(
-    width,
-    footerHeight,
-    zodiacSign,
-    zodiacElement,
-    focusMode,
-    mainText
-  );
-
-  // Create maker's mark SVG
-  const makerMarkSize = Math.round(width * 0.18);
-  const makerMarkSvg = createMakerMarkSvg(makerMarkSize);
+  // Create simple CTA footer (no edition, no certificate)
+  const footerSvg = createShareableCtaFooter(width, footerHeight, zodiacSign, zodiacElement);
 
   // Create diagonal watermark SVG that covers the image
   const watermarkSvg = createWatermarkSvg(width, height);
 
-  // Create the final composite image with watermark
+  // Create the final composite image with watermark only
   const shareableImage = await sharp({
     create: {
       width: width,
@@ -328,34 +310,22 @@ export async function generateShareableImage(options: ShareableImageOptions): Pr
     },
   })
     .composite([
-      // Header at top
-      {
-        input: Buffer.from(headerSvg),
-        top: 0,
-        left: 0,
-      },
-      // Raw image in middle
+      // Raw image at top (no header)
       {
         input: rawImageBuffer,
-        top: headerHeight,
+        top: 0,
         left: 0,
       },
       // WATERMARK overlay on the image (prevents copying)
       {
         input: await sharp(Buffer.from(watermarkSvg)).png().toBuffer(),
-        top: headerHeight,
+        top: 0,
         left: 0,
       },
-      // Maker's mark on the raw image (top-right corner)
-      {
-        input: await sharp(Buffer.from(makerMarkSvg)).png().toBuffer(),
-        top: headerHeight + Math.round(height * 0.02),
-        left: width - makerMarkSize - Math.round(width * 0.03),
-      },
-      // Footer at bottom (no certificate)
+      // Simple CTA footer at bottom
       {
         input: Buffer.from(footerSvg),
-        top: headerHeight + height,
+        top: height,
         left: 0,
       },
     ])
@@ -363,6 +333,50 @@ export async function generateShareableImage(options: ShareableImageOptions): Pr
     .toBuffer();
 
   return shareableImage;
+}
+
+/**
+ * Create simple CTA footer for shareable image (no edition, no certificate)
+ */
+function createShareableCtaFooter(
+  width: number,
+  height: number,
+  zodiacSign: string,
+  zodiacElement: string
+): string {
+  const fontSize = Math.round(height * 0.35);
+  const smallSize = Math.round(height * 0.25);
+
+  return `
+    <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="ctaFooterGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#1a0505"/>
+          <stop offset="100%" style="stop-color:#0a0000"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Background -->
+      <rect width="${width}" height="${height}" fill="url(#ctaFooterGradient)"/>
+
+      <!-- Top border line -->
+      <line x1="10%" y1="2" x2="90%" y2="2" stroke="#ca8a04" stroke-width="1" opacity="0.5"/>
+
+      <!-- Zodiac info -->
+      <text x="${width / 2}" y="${height * 0.45}"
+            font-family="Arial, sans-serif" font-size="${fontSize}px" font-weight="bold"
+            fill="#ffd700" text-anchor="middle">
+        ${zodiacElement} ${zodiacSign} x Fire Horse 2026
+      </text>
+
+      <!-- CTA -->
+      <text x="${width / 2}" y="${height * 0.82}"
+            font-family="Arial, sans-serif" font-size="${smallSize}px"
+            fill="#ca8a04" text-anchor="middle">
+        Get yours at RedHorseOracle.com
+      </text>
+    </svg>
+  `;
 }
 
 /**
@@ -430,67 +444,6 @@ function createWatermarkSvg(width: number, height: number): string {
           </text>
         </g>
       </g>
-    </svg>
-  `;
-}
-
-/**
- * Create footer SVG for shareable image (NO certificate number)
- */
-function createShareableFooterSvg(
-  width: number,
-  height: number,
-  zodiacSign: string,
-  zodiacElement: string,
-  focusMode: string,
-  mainText: string
-): string {
-  const titleSize = Math.round(height * 0.22);
-  const subtitleSize = Math.round(height * 0.16);
-  const smallSize = Math.round(height * 0.14);
-
-  const modeEmoji = {
-    wealth: '🎲',
-    power: '⚔️',
-    love: '❤️',
-    shield: '🛡️',
-  }[focusMode.toLowerCase()] || '🔥';
-
-  return `
-    <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="shareFooterGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style="stop-color:#1a0505"/>
-          <stop offset="100%" style="stop-color:#0a0000"/>
-        </linearGradient>
-      </defs>
-
-      <!-- Background -->
-      <rect width="${width}" height="${height}" fill="url(#shareFooterGradient)"/>
-
-      <!-- Top border line -->
-      <line x1="10%" y1="2" x2="90%" y2="2" stroke="#ca8a04" stroke-width="2" opacity="0.5"/>
-
-      <!-- Main prophecy text -->
-      <text x="${width / 2}" y="${height * 0.35}"
-            font-family="Arial, sans-serif" font-size="${titleSize}px" font-weight="bold"
-            fill="#ffd700" text-anchor="middle">
-        ${mainText}
-      </text>
-
-      <!-- Zodiac info -->
-      <text x="${width / 2}" y="${height * 0.60}"
-            font-family="Arial, sans-serif" font-size="${subtitleSize}px"
-            fill="#9ca3af" text-anchor="middle">
-        ${zodiacElement} ${zodiacSign} • ${modeEmoji} ${focusMode.charAt(0).toUpperCase() + focusMode.slice(1)} Oracle
-      </text>
-
-      <!-- CTA instead of certificate -->
-      <text x="${width / 2}" y="${height * 0.85}"
-            font-family="Arial, sans-serif" font-size="${smallSize}px" font-weight="bold"
-            fill="#ca8a04" text-anchor="middle">
-        🔥 Get yours at redhorseoracle.com • Year of the Fire Horse 2026
-      </text>
     </svg>
   `;
 }
