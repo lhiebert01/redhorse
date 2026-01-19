@@ -20,6 +20,7 @@ export default function Home() {
   const paymentLink = process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK || '#';
   const [activeIndex, setActiveIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
+  const [showWhyPrice, setShowWhyPrice] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const cycleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -185,7 +186,39 @@ export default function Home() {
           <div className="text-center">
             <p className="text-gray-400 text-sm">One-time payment</p>
             <p className="text-4xl font-bold text-fire-gold text-glow-gold">$8.88</p>
-            <p className="text-gray-500 text-xs mt-1">The number of fortune</p>
+
+            {/* Why $8.88 Button */}
+            <button
+              onClick={() => setShowWhyPrice(!showWhyPrice)}
+              className="mt-2 text-fire-gold/80 hover:text-fire-gold text-sm font-medium
+                         underline underline-offset-2 decoration-dotted
+                         transition-colors duration-200 flex items-center justify-center gap-1 mx-auto"
+            >
+              Why $8.88? Tap to discover...
+              <span className={`transition-transform duration-300 ${showWhyPrice ? 'rotate-180' : ''}`}>
+                ▼
+              </span>
+            </button>
+
+            {/* Expandable Explanation */}
+            <div
+              className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                showWhyPrice ? 'max-h-64 opacity-100 mt-3' : 'max-h-0 opacity-0'
+              }`}
+            >
+              <div className="bg-red-950/60 border border-fire-gold/30 rounded-xl p-4 text-left">
+                <p className="text-fire-gold font-bold text-sm mb-2">🎰 The Luckiest Number in Chinese Culture</p>
+                <p className="text-white text-sm leading-relaxed">
+                  <strong>8</strong> sounds like <strong>&quot;發&quot; (fā)</strong> — meaning <em>prosperity</em> and <em>wealth</em>.
+                </p>
+                <p className="text-gray-300 text-sm mt-2 leading-relaxed">
+                  Three 8s = <strong>triple fortune</strong>. That&apos;s why phone numbers, license plates, and addresses with 888 sell for premium prices across Asia.
+                </p>
+                <p className="text-fire-gold text-xs mt-3 italic">
+                  Your Oracle price IS your first lucky number. 🔥
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Free Reading CTA - Primary */}
