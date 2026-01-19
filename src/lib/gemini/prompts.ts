@@ -8,36 +8,42 @@ export function buildTextPrompt(params: {
   zodiacElement: ZodiacElement;
   fireHorseAdvice: string;
 }): string {
-  // MODE-SPECIFIC PROMPTS - Each mode produces a DIFFERENT type of output
+  // MODE-SPECIFIC PROMPTS - Each mode produces STRICTLY RELEVANT content only
 
   if (params.focusMode === 'wealth') {
-    return `You are the Ancient Fire Horse Oracle. Generate LUCKY NUMBERS for gambling and fortune.
+    return `You are the Ancient Fire Horse Oracle. Generate LUCKY NUMBERS and a WEALTH-ONLY prophecy.
 
 USER: ${params.zodiacSign} (${params.zodiacElement}) born ${params.birthDate}
 
-TASK: Generate 6 LUCKY NUMBERS for this person.
+TASK: Generate 6 LUCKY NUMBERS and a WEALTH-SPECIFIC prophecy.
 
 RULES:
 - main_text MUST be exactly 6 two-digit numbers separated by dashes
 - Format: XX-XX-XX-XX-XX-XX (e.g., "08-18-28-38-48-88")
 - Numbers between 01 and 99
 - Include lucky 8s (prosperity in Chinese culture)
-- Make numbers feel mystically connected to their zodiac
+- Make numbers feel mystically connected to their ${params.zodiacSign} zodiac
+
+CRITICAL: full_reading must ONLY discuss WEALTH topics:
+- Money, finances, investments, gambling luck
+- Business opportunities, career earnings, windfalls
+- Financial decisions, prosperity timing, lucky months for money
+- DO NOT mention love, romance, relationships, health, or protection
 
 RETURN ONLY THIS JSON:
 {
   "main_text": "XX-XX-XX-XX-XX-XX",
   "sub_text": "${params.zodiacElement} ${params.zodiacSign}, Fire Horse 2026",
-  "full_reading": "A 2-sentence prophecy about their lucky fortune in 2026, mentioning their ${params.zodiacSign} nature."
+  "full_reading": "A 3-4 sentence WEALTH prophecy for 2026. How does the Fire Horse energy affect the ${params.zodiacSign}'s financial fortune? When are lucky months for money? What financial opportunities await? Only discuss money/wealth/prosperity."
 }`;
   }
 
   if (params.focusMode === 'power') {
-    return `You are the Ancient Fire Horse Oracle. Generate a STRATEGIC BATTLE MOTTO.
+    return `You are the Ancient Fire Horse Oracle. Generate a STRATEGIC BATTLE MOTTO and POWER-ONLY prophecy.
 
 USER: ${params.zodiacSign} (${params.zodiacElement}) born ${params.birthDate}
 
-TASK: Generate a 3-WORD AGGRESSIVE STRATEGIC MOTTO like Sun Tzu would write.
+TASK: Generate a 3-WORD STRATEGIC MOTTO and POWER-SPECIFIC prophecy.
 
 RULES:
 - main_text MUST be exactly 3 WORDS in ALL CAPS
@@ -45,20 +51,26 @@ RULES:
 - Examples: "STRIKE THE NORTH", "CONQUER THEN REST", "BURN THE BRIDGES", "SEIZE ALL POWER"
 - Make it personal to their ${params.zodiacSign} warrior nature
 
+CRITICAL: full_reading must ONLY discuss POWER topics:
+- Career advancement, leadership, authority, dominance
+- Strategic moves, competition, rivals, victories
+- Professional success, promotions, influence, reputation
+- DO NOT mention love, romance, money/gambling, health, or protection
+
 RETURN ONLY THIS JSON:
 {
   "main_text": "THREE WORD MOTTO",
   "sub_text": "${params.zodiacElement} ${params.zodiacSign}, Fire Horse 2026",
-  "full_reading": "A 2-sentence prophecy about their path to power in 2026, mentioning their ${params.zodiacSign} strategic strengths."
+  "full_reading": "A 3-4 sentence POWER prophecy for 2026. How does the Fire Horse energy affect the ${params.zodiacSign}'s path to dominance? What strategic advantages do they have? When should they strike? Only discuss power/career/authority."
 }`;
   }
 
   if (params.focusMode === 'love') {
-    return `You are the Ancient Fire Horse Oracle. Generate a ROMANTIC DESTINY DECREE.
+    return `You are the Ancient Fire Horse Oracle. Generate a ROMANTIC DESTINY DECREE and LOVE-ONLY prophecy.
 
 USER: ${params.zodiacSign} (${params.zodiacElement}) born ${params.birthDate}
 
-TASK: Generate a 4-WORD ROMANTIC DESTINY PHRASE about love and relationships.
+TASK: Generate a 4-WORD ROMANTIC PHRASE and LOVE-SPECIFIC prophecy.
 
 RULES:
 - main_text MUST be exactly 4 WORDS in Title Case or ALL CAPS
@@ -66,20 +78,26 @@ RULES:
 - Examples: "LOVE FINDS YOU WORTHY", "Hearts Unite In Fire", "YOUR SOULMATE APPROACHES NOW"
 - Make it personal to their ${params.zodiacSign} romantic nature
 
+CRITICAL: full_reading must ONLY discuss LOVE topics:
+- Romance, relationships, soulmates, dating, marriage
+- Emotional connections, passion, intimacy, partnership
+- Lucky months for love, compatible signs, romantic opportunities
+- DO NOT mention money, career, power, health, or protection
+
 RETURN ONLY THIS JSON:
 {
   "main_text": "Four Word Love Phrase",
   "sub_text": "${params.zodiacElement} ${params.zodiacSign}, Fire Horse 2026",
-  "full_reading": "A 2-sentence prophecy about their love destiny in 2026, mentioning their ${params.zodiacSign} romantic qualities."
+  "full_reading": "A 3-4 sentence LOVE prophecy for 2026. How does the Fire Horse energy affect the ${params.zodiacSign}'s romantic destiny? When will love bloom? What type of partner is destined? Only discuss love/romance/relationships."
 }`;
   }
 
   if (params.focusMode === 'shield') {
-    return `You are the Ancient Fire Horse Oracle. Generate a PROTECTIVE SACRED MANTRA.
+    return `You are the Ancient Fire Horse Oracle. Generate a PROTECTIVE MANTRA and PROTECTION-ONLY prophecy.
 
 USER: ${params.zodiacSign} (${params.zodiacElement}) born ${params.birthDate}
 
-TASK: Generate a 3-WORD PROTECTIVE MANTRA for safety and peace.
+TASK: Generate a 3-WORD PROTECTIVE MANTRA and PROTECTION-SPECIFIC prophecy.
 
 RULES:
 - main_text MUST be exactly 3 WORDS in ALL CAPS
@@ -87,11 +105,17 @@ RULES:
 - Examples: "FIRE SHIELDS ME", "CHAOS CANNOT ENTER", "ANCESTORS GUARD ME"
 - Make it personal to their ${params.zodiacSign} protective nature
 
+CRITICAL: full_reading must ONLY discuss PROTECTION topics:
+- Safety, security, health, spiritual protection
+- Warding off negativity, avoiding danger, staying safe
+- Peaceful periods, times to be cautious, protective actions
+- DO NOT mention money, career, power, or romantic love
+
 RETURN ONLY THIS JSON:
 {
   "main_text": "THREE WORD MANTRA",
   "sub_text": "${params.zodiacElement} ${params.zodiacSign}, Fire Horse 2026",
-  "full_reading": "A 2-sentence prophecy about their protection in 2026, mentioning their ${params.zodiacSign} guardian strengths."
+  "full_reading": "A 3-4 sentence PROTECTION prophecy for 2026. How does the Fire Horse energy protect the ${params.zodiacSign}? What dangers should they avoid? When should they be cautious? Only discuss protection/safety/health."
 }`;
   }
 
@@ -388,105 +412,113 @@ export function buildImagePrompt(params: {
   const userElement = params.zodiacElement || 'Fire';
   const elementModifier = ELEMENT_MODIFIERS[userElement];
 
-  // Get the detailed element+animal masterpiece description
-  const elementAnimalKey = `${userElement}-${params.zodiacSign}`;
-  const masterPieceDescription = ELEMENT_ANIMAL_MASTERPIECES[elementAnimalKey] ||
-    getElementAnimalDescription(userElement, params.zodiacSign);
+  // Mode-specific visual instructions
+  const modeVisuals: Record<FocusMode, string> = {
+    wealth: `=== WEALTH MODE: PROSPERITY & FORTUNE ===
+The entire image RADIATES wealth and abundance:
+- Gold coins, ingots, and treasure scattered throughout
+- Luxurious golden light bathing the scene
+- Symbols of prosperity: koi fish, peonies, lucky coins with square holes
+- Rich, opulent atmosphere suggesting infinite wealth
+- The Fire Horse and ${params.zodiacSign} are surrounded by flowing gold and riches
+- Money symbols, gem stones, and treasure chests visible
+- Everything glows with the promise of financial success`,
 
-  return `Create a BREATHTAKING, VIRAL-WORTHY vertical digital art masterpiece (9:16 aspect ratio) - a collectible talisman for the Year of the Fire Horse 2026.
+    power: `=== POWER MODE: DOMINANCE & STRATEGY ===
+The entire image RADIATES power and authority:
+- Storm clouds, lightning, and dramatic weather
+- Military/strategic imagery: banners, mountains to conquer
+- Symbols of power: crowns, thrones, mountain peaks, dragon scales
+- Intense, commanding atmosphere of absolute authority
+- The Fire Horse and ${params.zodiacSign} appear as unstoppable conquerors
+- War drums, ancient weapons, imperial symbols visible
+- Everything suggests strategic dominance and victory`,
+
+    love: `=== LOVE MODE: ROMANCE & CONNECTION ===
+The entire image RADIATES love and romance:
+- Soft pink cherry blossoms and peach flowers everywhere
+- Romantic moonlight or sunset golden hour lighting
+- Symbols of love: paired mandarin ducks, red threads of fate, hearts
+- Tender, passionate, destined atmosphere
+- The Fire Horse and ${params.zodiacSign} share a romantic connection
+- Floating petals, love knots, intertwined destiny symbols
+- Everything glows with the warmth of true love`,
+
+    shield: `=== SHIELD MODE: PROTECTION & SAFETY ===
+The entire image RADIATES protection and security:
+- Protective barriers, shields, and sacred geometry
+- Guardian imagery: Fu lions, bagua mirrors, protective seals
+- Symbols of safety: armor, fortress walls, sacred talismans
+- Powerful, reassuring atmosphere of absolute protection
+- The Fire Horse and ${params.zodiacSign} stand as mighty guardians
+- Protective runes, barrier spells, ancestral shields visible
+- Everything suggests impenetrable divine protection`,
+  };
+
+  return `Create a BREATHTAKING vertical digital art masterpiece (9:16 aspect ratio) - a ${params.focusMode.toUpperCase()} talisman for the Year of the Fire Horse 2026.
 
 === ARTISTIC STYLE: CINEMATIC 3D HYPERREALISM ===
-This MUST look like:
-- AAA video game concept art / Blizzard / Riot Games quality
+- AAA video game concept art quality (Blizzard / Riot Games level)
 - High-end NFT collectible art
-- Hollywood movie poster / key art
 - Unreal Engine 5 cinematic render
 - ArtStation trending masterpiece
 
-NOT traditional 2D painting. This is MODERN, CINEMATIC, 3D HYPERREALISTIC digital art.
+=== DUAL HERO COMPOSITION: FIRE HORSE + ${userElement.toUpperCase()} ${params.zodiacSign.toUpperCase()} ===
 
-=== SINGLE HERO SUBJECT: ${userElement.toUpperCase()} ${params.zodiacSign.toUpperCase()} ===
-ONE magnificent creature commands the ENTIRE composition - the ${userElement} ${params.zodiacSign}.
+TWO magnificent creatures share this epic composition:
 
-${masterPieceDescription}
+**FIRE HORSE (Primary - Upper/Center, 40% of image):**
+A MAJESTIC, POWERFUL Fire Horse in full glory:
+- Muscular stallion with flowing mane and tail made of ACTUAL FLAMES
+- Body wreathed in fire, hooves leaving trails of flame
+- Eyes burning with fierce golden-red intensity
+- Rearing up or galloping through the sky/clouds
+- Embodiment of the Year 2026's wild, transformative Fire energy
+- Positioned prominently in upper portion of image
 
-=== ELEMENT SIGNATURE: ${userElement.toUpperCase()} ===
-The ${userElement} element DEFINES this creature's visual identity:
-- Material/Texture: ${elementModifier.texture}
-- Aura/Energy: ${elementModifier.aura}
-- Color Palette: ${elementModifier.colors}
-- Particle Effects: ${elementModifier.effect}
+**${userElement.toUpperCase()} ${params.zodiacSign.toUpperCase()} (Secondary - Lower/Center, 40% of image):**
+${zodiacBase.description}
+- Enhanced with ${userElement} elemental energy
+- ${elementModifier.aura}
+- ${elementModifier.texture}
+- ${zodiacBase.pose}
+- Positioned in lower portion, gazing up at or interacting with the Fire Horse
 
-=== FIRE HORSE 2026 INTEGRATION ===
-Subtle fire energy infuses the scene (it IS the Year of the Fire Horse):
-- Floating embers and sparks in the atmosphere
-- Warm golden/amber rim lighting
-- Subtle flame wisps at the edges
-- Fire Horse constellation or symbol in the sky/background
-But the ${userElement} ${params.zodiacSign} remains the UNDISPUTED HERO.
+**THEIR RELATIONSHIP:**
+The Fire Horse and ${params.zodiacSign} are connected by swirling energy/magic between them.
+They share a mystical bond - the Fire Horse blessing/empowering the ${params.zodiacSign}.
+Visual energy flows between them showing their cosmic connection.
 
-=== CINEMATIC COMPOSITION ===
-- DYNAMIC POSE: The ${params.zodiacSign} in powerful action - charging, roaring, leaping, or commanding
-- DRAMATIC CAMERA ANGLE: Slightly low angle looking up (heroic perspective)
-- DEPTH OF FIELD: Sharp subject, atmospheric background blur
-- VOLUMETRIC LIGHTING: God rays, dramatic shadows, rim lighting
-- PARTICLE EFFECTS: Floating elements matching the ${userElement} theme
-- ENVIRONMENTAL STORYTELLING: Setting that reflects ${modeTheme.atmosphere}
+${modeVisuals[params.focusMode]}
 
-=== COLOR GRADING ===
-Primary: ${elementModifier.colors}
-Accent: Warm gold and amber (Fire Horse year energy)
-Mood: ${modeTheme.atmosphere}
-Professional color grading like a Hollywood blockbuster.
+=== MODE-SPECIFIC SYMBOLS (${params.focusMode.toUpperCase()}) ===
+Atmosphere: ${modeTheme.atmosphere}
+Must include these symbols: ${modeTheme.symbols}
 
-=== ATMOSPHERE & THEME ===
-This talisman radiates: ${modeTheme.atmosphere}
-Visual symbols to integrate: ${modeTheme.symbols}
+=== COLOR PALETTE ===
+- Fire Horse: Blazing oranges, reds, and golden flames
+- ${params.zodiacSign}: ${elementModifier.colors}
+- Background: Rich, dramatic colors matching ${params.focusMode} theme
+- Overall: Warm golden light with mode-specific accent colors
 
 === DECORATIVE FRAME ===
-Elegant golden art deco / Chinese-inspired border frame:
-- Ornate corners with traditional Chinese patterns
-- Subtle geometric sacred geometry
-- The frame should enhance, not distract
-- Leave space for text overlays at top and bottom
+Elegant golden Chinese-inspired border with ${params.focusMode}-themed corners.
 
-=== TEXT OVERLAYS (CRITICAL - Perfectly Legible) ===
-TOP BANNER: "YEAR OF THE FIRE HORSE 2026" - elegant gold serif font
-CENTER/MIDDLE: "${params.mainText}" - LARGE, glowing, dramatic gold text with subtle glow
-BOTTOM BANNER: "${params.subText}" - refined, smaller text
+=== TEXT OVERLAYS ===
+TOP: "YEAR OF THE FIRE HORSE 2026" - elegant gold font
+CENTER: "${params.mainText}" - LARGE, glowing gold text
+BOTTOM: "${params.subText}" - smaller refined text
 
-Text must be:
-- Crystal clear and readable
-- Professionally designed typography
-- Integrated into the composition naturally
-- Gold/warm metallic color scheme
-
-=== TECHNICAL SPECIFICATIONS ===
+=== CRITICAL REQUIREMENTS ===
+- Fire Horse must be PROMINENT and POWERFUL (not tiny silhouettes!)
+- ${params.zodiacSign} must be equally impressive
+- ${params.focusMode.toUpperCase()} theme must be OBVIOUS throughout
+- Mode-specific symbols MUST be visible
 - 8K ultra-high resolution
-- Hyper-detailed textures (skin pores, fur strands, scale details)
-- Ray-traced lighting and reflections
-- Photorealistic materials (metal, stone, water, fire)
-- Professional VFX-quality particle effects
-- Zero artifacts, noise, or blur
-- Crisp, clean edges throughout
+- NO random text or gibberish
+- NO watermarks
 
-=== QUALITY BENCHMARKS ===
-This should look like:
-✓ A $50,000 commissioned digital art piece
-✓ Cover art for a AAA fantasy game
-✓ Trending #1 on ArtStation
-✓ An ultra-rare NFT collectible
-✓ Something people MUST share on social media
-
-=== ABSOLUTE REQUIREMENTS ===
-- NO random text or gibberish characters
-- NO watermarks or signatures
-- NO blurry or low-quality areas
-- The ${params.zodiacSign} must be AWE-INSPIRING
-- Every detail must be INTENTIONAL and BEAUTIFUL
-- This is a ONE-OF-A-KIND collectible masterpiece
-
-Create the most STUNNING, MESMERIZING, VIRAL-WORTHY digital art imaginable. This talisman should make viewers GASP and immediately want their own.`;
+This talisman should make viewers GASP - a ${params.focusMode.toUpperCase()} blessing from the Fire Horse to the ${userElement} ${params.zodiacSign}.`;
 }
 
 // ============================================================================

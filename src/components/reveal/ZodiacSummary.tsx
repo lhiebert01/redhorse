@@ -16,6 +16,8 @@ import {
 interface ZodiacSummaryProps {
   zodiacSign: string;
   zodiacElement?: string | null;
+  focusMode?: string | null;  // wealth, power, love, shield
+  fullReading?: string | null; // The mode-specific prophecy text
 }
 
 // Helper to normalize and validate zodiac sign
@@ -32,13 +34,23 @@ function normalizeElement(element: string | null | undefined): ZodiacElement | n
   return ZODIAC_ELEMENTS.includes(normalized as ZodiacElement) ? (normalized as ZodiacElement) : null;
 }
 
-export default function ZodiacSummary({ zodiacSign, zodiacElement }: ZodiacSummaryProps) {
+export default function ZodiacSummary({ zodiacSign, zodiacElement, focusMode, fullReading }: ZodiacSummaryProps) {
   const [isCapturing, setIsCapturing] = useState(false);
   const forecastRef = useRef<HTMLDivElement>(null);
 
   // Validate and normalize zodiac sign
   const animal = normalizeZodiacSign(zodiacSign);
   const element = normalizeElement(zodiacElement);
+
+  // Mode-specific labels
+  const modeLabels: Record<string, { title: string; icon: string }> = {
+    wealth: { title: 'WEALTH FORECAST', icon: '$' },
+    power: { title: 'POWER FORECAST', icon: '*' },
+    love: { title: 'LOVE FORECAST', icon: '<3' },
+    shield: { title: 'PROTECTION FORECAST', icon: '#' },
+  };
+  const currentMode = focusMode?.toLowerCase() || 'general';
+  const modeInfo = modeLabels[currentMode] || { title: 'FIRE HORSE FORECAST', icon: '' };
 
   // Return null if invalid zodiac sign
   if (!animal) {
@@ -193,14 +205,19 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement }: ZodiacSumma
           </p>
         </div>
 
-        {/* 2026 Forecast */}
+        {/* 2026 Mode-Specific Forecast */}
         <div className={`${getCompatibilityBg()} border rounded-xl p-4`}>
           <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">
-            2026 Fire Horse Forecast
+            2026 {modeInfo.title}
           </p>
           <p className="text-gray-200 text-sm leading-relaxed">
-            {profile.forecast2026}
+            {fullReading || profile.forecast2026}
           </p>
+          {focusMode && (
+            <p className="text-xs text-fire-gold/60 mt-2 italic">
+              {focusMode.charAt(0).toUpperCase() + focusMode.slice(1)} Oracle - Tailored to your path
+            </p>
+          )}
         </div>
 
         {/* Fire Horse Wisdom */}

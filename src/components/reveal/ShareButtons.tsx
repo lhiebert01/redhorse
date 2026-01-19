@@ -13,6 +13,9 @@ export default function ShareButtons({ prophecy }: ShareButtonsProps) {
 
   const siteUrl = 'https://redhorseoracle.com';
 
+  // Get shareable image URL (watermarked version)
+  const shareableImageUrl = prophecy.shareable_image_url || '';
+
   // Get text content with fallbacks
   const zodiacInfo = prophecy.zodiac_element && prophecy.zodiac_sign
     ? `${prophecy.zodiac_element} ${prophecy.zodiac_sign}`
@@ -20,12 +23,22 @@ export default function ShareButtons({ prophecy }: ShareButtonsProps) {
 
   const mainText = prophecy.main_text || 'My Fire Horse Prophecy';
 
-  // Base share content
+  // Base share content - includes BOTH the talisman image AND the site
   const shareTitle = `Fire Horse Oracle 2026 - ${zodiacInfo}`;
-  const shareText = `My ${zodiacInfo} prophecy: "${mainText}" - Year of the Fire Horse (once every 60 years!) Get yours at`;
+  const shareText = `My ${zodiacInfo} prophecy: "${mainText}" - Year of the Fire Horse (once every 60 years!)`;
 
-  // Full message for copy
-  const fullMessage = `Check out my Fire Horse Oracle for 2026!
+  // Full message for copy - includes image URL if available
+  const fullMessage = shareableImageUrl
+    ? `Check out my Fire Horse Oracle talisman for 2026!
+
+My ${zodiacInfo} prophecy: "${mainText}"
+
+VIEW MY TALISMAN: ${shareableImageUrl}
+
+Year of the Fire Horse = once every 60 YEARS!
+
+Get your own LIMITED EDITION talisman: ${siteUrl}`
+    : `Check out my Fire Horse Oracle for 2026!
 
 My ${zodiacInfo} prophecy: "${mainText}"
 
@@ -39,9 +52,14 @@ Get your own LIMITED EDITION talisman: ${siteUrl}`;
   const handleNativeShare = async () => {
     if (navigator.share) {
       try {
+        // Include shareable image URL if available
+        const nativeShareText = shareableImageUrl
+          ? `${shareText}\n\nView my talisman: ${shareableImageUrl}`
+          : shareText;
+
         await navigator.share({
           title: shareTitle,
-          text: shareText,
+          text: nativeShareText,
           url: siteUrl,
         });
         setShareStatus('Shared!');
@@ -88,35 +106,43 @@ Get your own LIMITED EDITION talisman: ${siteUrl}`;
   // DIRECT PLATFORM LINKS (open in new tab)
   // =====================================================
 
-  // Twitter - using simple format
+  // Twitter - includes both talisman image URL and site URL
   const openTwitter = () => {
-    const text = `${shareText} ${siteUrl}`;
-    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+    const tweetText = shareableImageUrl
+      ? `${shareText}\n\nSee my talisman: ${shareableImageUrl}\n\nGet yours: ${siteUrl}`
+      : `${shareText}\n\nGet yours: ${siteUrl}`;
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
     window.open(url, 'twitter-share', 'width=550,height=450');
   };
 
-  // WhatsApp
+  // WhatsApp - includes both URLs
   const openWhatsApp = () => {
-    const text = `${shareText} ${siteUrl}`;
-    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+    const waText = shareableImageUrl
+      ? `${shareText}\n\nView my talisman: ${shareableImageUrl}\n\nGet yours: ${siteUrl}`
+      : `${shareText}\n\nGet yours: ${siteUrl}`;
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(waText)}`, '_blank');
   };
 
-  // Telegram
+  // Telegram - includes both URLs
   const openTelegram = () => {
-    const text = `${shareText}`;
-    window.open(`https://t.me/share/url?url=${encodeURIComponent(siteUrl)}&text=${encodeURIComponent(text)}`, '_blank');
+    const tgText = shareableImageUrl
+      ? `${shareText}\n\nView my talisman: ${shareableImageUrl}`
+      : shareText;
+    const tgUrl = shareableImageUrl || siteUrl;
+    window.open(`https://t.me/share/url?url=${encodeURIComponent(tgUrl)}&text=${encodeURIComponent(tgText)}`, '_blank');
   };
 
-  // Email
+  // Email - full message with both URLs
   const openEmail = () => {
-    const subject = `Check out my Fire Horse Oracle for 2026!`;
+    const subject = `Check out my Fire Horse Oracle talisman for 2026!`;
     const body = fullMessage;
     window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
-  // Facebook (only shares link - platform limitation)
+  // Facebook - share the shareable image URL if available (so OG image shows the talisman)
   const openFacebook = () => {
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(siteUrl)}`, 'facebook-share', 'width=550,height=450');
+    const fbUrl = shareableImageUrl || siteUrl;
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fbUrl)}`, 'facebook-share', 'width=550,height=450');
   };
 
   return (

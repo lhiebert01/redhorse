@@ -192,6 +192,8 @@ function RevealContent() {
           <ZodiacSummary
             zodiacSign={prophecy.zodiac_sign}
             zodiacElement={prophecy.zodiac_element}
+            focusMode={prophecy.focus_mode}
+            fullReading={prophecy.full_reading}
           />
         </div>
       )}
