@@ -30,19 +30,17 @@ export default function ExamplesPage() {
 
   return (
     <main className="min-h-screen bg-fire-gradient relative overflow-hidden">
-      {/* Background Watermark */}
+      {/* Background Watermark - Crystal Clear, Subtle */}
       <div
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
-          backgroundImage: 'url(/assets/Year-of-Horse-Hero-Image3.jpeg)',
-          backgroundSize: '105%',
+          backgroundImage: 'url(/assets/Fire-Horse-2026-Chart-v2.jpeg)',
+          backgroundSize: 'cover',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat',
-          opacity: 0.55,
-          filter: 'blur(1px)',
+          opacity: 0.18,
         }}
       />
-      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-black/30 via-transparent to-black/40" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 py-6">
         {/* Back Link */}

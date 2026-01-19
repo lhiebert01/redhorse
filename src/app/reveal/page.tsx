@@ -167,7 +167,7 @@ function RevealContent() {
 
   return (
     <div className="min-h-screen bg-fire-gradient text-fire-gold flex flex-col items-center p-4 py-12 relative overflow-hidden">
-      {/* Background Watermark - Cinematic 12 Zodiac Chart */}
+      {/* Background Watermark - Cinematic 12 Zodiac Chart - Crystal Clear, Subtle */}
       <div
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
@@ -175,12 +175,9 @@ function RevealContent() {
           backgroundSize: 'cover',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat',
-          opacity: 0.4,
-          filter: 'blur(2px)',
+          opacity: 0.18,
         }}
       />
-      {/* Gradient overlay to blend watermark */}
-      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-black/30 via-transparent to-black/40" />
 
       <div className="relative z-10">
         <TalismanDisplay prophecy={prophecy} />
