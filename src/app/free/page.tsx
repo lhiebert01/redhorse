@@ -256,18 +256,18 @@ export default function FreeReadingPage() {
               </p>
             </div>
 
-            {/* Zodiac Identity Card */}
+            {/* Zodiac Identity Card - Using digital card style consistently */}
             <div className="bg-gradient-to-br from-red-950/50 to-black border border-fire-gold/30 rounded-2xl p-6 text-center">
               <p className="text-gray-400 text-sm uppercase tracking-widest mb-2">
                 Your Chinese Zodiac
               </p>
               <div className="flex items-center justify-center gap-4 mb-4">
-                <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-fire-gold">
+                <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-fire-gold shadow-lg shadow-fire-gold/30">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={`/assets/zodiac/${result.animal.toLowerCase()}.jpeg`}
-                    alt={result.animal}
-                    className="w-full h-full object-cover"
+                    src={`/assets/zodiac-badges/${result.element.toLowerCase()}-${result.animal.toLowerCase()}.jpeg`}
+                    alt={`${result.element} ${result.animal}`}
+                    className="w-full h-full object-cover scale-125"
                   />
                 </div>
                 <div>

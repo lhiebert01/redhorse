@@ -145,14 +145,16 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement }: ZodiacSumma
 
         {/* Zodiac Card */}
         <div className="bg-black/60 backdrop-blur-sm border border-fire-gold/30 rounded-2xl p-6 space-y-5">
-        {/* Animal Image and Title */}
+        {/* Animal Image and Title - Using digital card style consistently */}
         <div className="flex items-center gap-4">
-          <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-fire-gold shadow-lg">
+          <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-fire-gold shadow-lg shadow-fire-gold/30">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={`/assets/zodiac/${animal.toLowerCase()}.jpeg`}
-              alt={`${animal} zodiac`}
-              className="w-full h-full object-cover"
+              src={element
+                ? `/assets/zodiac-badges/${element.toLowerCase()}-${animal.toLowerCase()}.jpeg`
+                : `/assets/zodiac/${animal.toLowerCase()}.jpeg`}
+              alt={element ? `${element} ${animal}` : `${animal} zodiac`}
+              className="w-full h-full object-cover scale-125"
             />
           </div>
           <div>

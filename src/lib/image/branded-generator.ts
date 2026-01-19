@@ -145,7 +145,7 @@ function createHeaderSvg(width: number, height: number, editionNumber: number, t
       <text x="${width / 2}" y="${height * 0.62}"
             font-family="Arial, sans-serif" font-size="${fontSize}px" font-weight="bold"
             fill="#000000" text-anchor="middle">
-        ✦ LIMITED EDITION #${editionNumber} of ${totalEditions} ✦
+        * LIMITED EDITION #${editionNumber} of ${totalEditions} *
       </text>
     </svg>
   `;
@@ -167,12 +167,13 @@ function createFooterSvg(
   const subtitleSize = Math.round(height * 0.14);
   const smallSize = Math.round(height * 0.11);
 
-  const modeEmoji = {
-    wealth: '🎲',
-    power: '⚔️',
-    love: '❤️',
-    shield: '🛡️',
-  }[focusMode.toLowerCase()] || '🔥';
+  // Mode labels without emojis (emojis cause rendering issues on servers)
+  const modeLabel = {
+    wealth: 'WEALTH',
+    power: 'POWER',
+    love: 'LOVE',
+    shield: 'SHIELD',
+  }[focusMode.toLowerCase()] || 'ORACLE';
 
   return `
     <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
@@ -200,14 +201,14 @@ function createFooterSvg(
       <text x="${width / 2}" y="${height * 0.48}"
             font-family="Arial, sans-serif" font-size="${subtitleSize}px"
             fill="#9ca3af" text-anchor="middle">
-        ${zodiacElement} ${zodiacSign} • ${modeEmoji} ${focusMode.charAt(0).toUpperCase() + focusMode.slice(1)} Oracle
+        ${zodiacElement} ${zodiacSign} - ${modeLabel} Oracle
       </text>
 
       <!-- Certificate line -->
       <text x="${width / 2}" y="${height * 0.70}"
             font-family="Arial, sans-serif" font-size="${smallSize}px"
             fill="#6b7280" text-anchor="middle">
-        🔥 AUTHENTIC • VERIFIED • Certificate #${certificateId}
+        AUTHENTIC - VERIFIED - Certificate #${certificateId}
       </text>
 
       <!-- Bottom branding -->
@@ -337,6 +338,7 @@ export async function generateShareableImage(options: ShareableImageOptions): Pr
 
 /**
  * Create simple CTA footer for shareable image (no edition, no certificate)
+ * NOTE: Uses only ASCII characters to ensure proper rendering on all servers/platforms
  */
 function createShareableCtaFooter(
   width: number,
@@ -366,7 +368,7 @@ function createShareableCtaFooter(
       <text x="${width / 2}" y="${height * 0.45}"
             font-family="Arial, sans-serif" font-size="${fontSize}px" font-weight="bold"
             fill="#ffd700" text-anchor="middle">
-        ${zodiacElement} ${zodiacSign} x Fire Horse 2026
+        ${zodiacElement} ${zodiacSign} - Fire Horse 2026
       </text>
 
       <!-- CTA -->
@@ -430,7 +432,7 @@ function createWatermarkSvg(width: number, height: number): string {
           <text x="0" y="-${fontSize * 1.5}"
                 font-family="Arial, sans-serif" font-size="${fontSize * 1.5}px" font-weight="bold"
                 fill="rgba(255,215,0,0.25)" text-anchor="middle">
-            🐴 PREVIEW ONLY 🐴
+            PREVIEW ONLY
           </text>
           <text x="0" y="0"
                 font-family="Arial, sans-serif" font-size="${fontSize * 1.2}px" font-weight="bold"

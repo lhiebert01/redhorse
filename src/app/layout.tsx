@@ -38,10 +38,10 @@ export const metadata: Metadata = {
     url: siteUrl,
     images: [
       {
-        url: '/assets/Year-of-Horse-Hero-Image2.jpeg',
+        url: '/assets/Fire-Horse-2026-Chart-v3.jpeg',
         width: 1200,
         height: 630,
-        alt: 'Year of the Fire Horse 2026 - AI-Powered Chinese Zodiac Oracle',
+        alt: 'Year of the Fire Horse 2026 - All 12 Chinese Zodiac Animals - AI Oracle',
       },
     ],
   },
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Red Horse Oracle | AI Fire Horse 2026',
     description: 'World\'s first Gemini 3 Pro zodiac app with Privacy by Design. Fire Horse returns every 60 years. $8.88',
-    images: ['/assets/Year-of-Horse-Hero-Image2.jpeg'],
+    images: ['/assets/Fire-Horse-2026-Chart-v3.jpeg'],
     creator: '@redhorseoracle',
   },
   robots: {

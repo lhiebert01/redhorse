@@ -7,16 +7,16 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-fire-gradient relative overflow-hidden">
-      {/* Background Watermark - Zodiac Medallion */}
+      {/* Background Watermark - Cinematic 12 Zodiac Chart */}
       <div
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
-          backgroundImage: 'url(/assets/Year-of-Horse-Hero-Image3.jpeg)',
-          backgroundSize: '105%',
+          backgroundImage: 'url(/assets/Fire-Horse-2026-Chart-v2.jpeg)',
+          backgroundSize: 'cover',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat',
-          opacity: 0.55,
-          filter: 'blur(1px)',
+          opacity: 0.4,
+          filter: 'blur(2px)',
         }}
       />
       {/* Gradient overlay to blend watermark */}

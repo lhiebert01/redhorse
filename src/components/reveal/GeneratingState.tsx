@@ -57,9 +57,11 @@ export default function GeneratingState({ zodiacSign, zodiacElement, focusMode }
     return () => clearInterval(interval);
   }, [allMessages.length]);
 
-  // Get zodiac image path
+  // Get zodiac image path - Using digital card style when element is available
   const zodiacImagePath = zodiacSign
-    ? `/assets/zodiac/${zodiacSign.toLowerCase()}.jpeg`
+    ? (zodiacElement
+        ? `/assets/zodiac-badges/${zodiacElement.toLowerCase()}-${zodiacSign.toLowerCase()}.jpeg`
+        : `/assets/zodiac/${zodiacSign.toLowerCase()}.jpeg`)
     : null;
 
   return (

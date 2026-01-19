@@ -88,6 +88,7 @@ export async function generateProphecy(options: GenerateOptions): Promise<Genera
     mainText: textData.main_text,
     subText: textData.sub_text,
     zodiacSign: options.zodiacSign,
+    zodiacElement: options.zodiacElement, // Pass element for visually distinct styling
   });
 
   const imageResponse = await ai.models.generateContent({

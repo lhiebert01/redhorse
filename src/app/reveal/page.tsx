@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback, Suspense } from 'react';
+import { useEffect, useState, useCallback, Suspense, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getSupabaseClient } from '@/lib/supabase/client';
 import { Prophecy } from '@/types/prophecy';
@@ -22,6 +22,10 @@ function RevealContent() {
   const [loadingStartTime] = useState<number>(Date.now());
   const [minTimeElapsed, setMinTimeElapsed] = useState<boolean>(false);
 
+  // Track the last known status to prevent unnecessary re-renders
+  const lastStatusRef = useRef<string | null>(null);
+  const lastProphecyIdRef = useRef<string | null>(null);
+
   const fetchProphecy = useCallback(async () => {
     if (!sessionId) return;
 
@@ -35,25 +39,38 @@ function RevealContent() {
 
       if (error || !data) {
         // Not found yet - webhook may still be processing
-        setStatus('generating');
+        if (status !== 'generating') {
+          setStatus('generating');
+        }
         return;
       }
 
-      setProphecy(data as Prophecy);
+      // Only update prophecy state if it actually changed (prevent unnecessary re-renders)
+      const prophecyData = data as Prophecy;
+      const hasNewData = lastProphecyIdRef.current !== prophecyData.id ||
+                         lastStatusRef.current !== prophecyData.status;
 
-      if (data.status === 'completed') {
-        setStatus('ready');
-      } else if (data.status === 'failed') {
-        setStatus('error');
-        setErrorMessage(data.error_message || 'Generation failed. Please contact support.');
-      } else {
-        setStatus('generating');
+      if (hasNewData) {
+        lastProphecyIdRef.current = prophecyData.id;
+        lastStatusRef.current = prophecyData.status;
+        setProphecy(prophecyData);
+
+        if (prophecyData.status === 'completed') {
+          setStatus('ready');
+        } else if (prophecyData.status === 'failed') {
+          setStatus('error');
+          setErrorMessage(prophecyData.error_message || 'Generation failed. Please contact support.');
+        } else if (status !== 'generating') {
+          setStatus('generating');
+        }
       }
     } catch (err) {
       console.error('Error fetching prophecy:', err);
-      setStatus('generating');
+      if (status !== 'generating') {
+        setStatus('generating');
+      }
     }
-  }, [sessionId]);
+  }, [sessionId, status]);
 
   useEffect(() => {
     if (!sessionId) {
@@ -79,13 +96,19 @@ function RevealContent() {
         },
         (payload) => {
           const updated = payload.new as Prophecy;
-          setProphecy(updated);
 
-          if (updated.status === 'completed') {
-            setStatus('ready');
-          } else if (updated.status === 'failed') {
-            setStatus('error');
-            setErrorMessage(updated.error_message || 'Generation failed.');
+          // Only update if status actually changed (prevent unnecessary re-renders)
+          if (lastStatusRef.current !== updated.status) {
+            lastStatusRef.current = updated.status;
+            lastProphecyIdRef.current = updated.id;
+            setProphecy(updated);
+
+            if (updated.status === 'completed') {
+              setStatus('ready');
+            } else if (updated.status === 'failed') {
+              setStatus('error');
+              setErrorMessage(updated.error_message || 'Generation failed.');
+            }
           }
         }
       )
@@ -144,16 +167,16 @@ function RevealContent() {
 
   return (
     <div className="min-h-screen bg-fire-gradient text-fire-gold flex flex-col items-center p-4 py-12 relative overflow-hidden">
-      {/* Background Watermark - Zodiac Medallion */}
+      {/* Background Watermark - Cinematic 12 Zodiac Chart */}
       <div
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
-          backgroundImage: 'url(/assets/Year-of-Horse-Hero-Image3.jpeg)',
-          backgroundSize: '105%',
+          backgroundImage: 'url(/assets/Fire-Horse-2026-Chart-v2.jpeg)',
+          backgroundSize: 'cover',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat',
-          opacity: 0.55,
-          filter: 'blur(1px)',
+          opacity: 0.4,
+          filter: 'blur(2px)',
         }}
       />
       {/* Gradient overlay to blend watermark */}
