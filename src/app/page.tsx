@@ -7,6 +7,7 @@ import { PRODUCT_MODES } from '@/constants/modes';
 const BACKGROUND_IMAGES = [
   '/assets/Fire-Horse-2026-Chart-v2.jpeg',
   '/assets/marketing-grid-4.jpg',
+  '/assets/marketing-grid-5-mobile.jpg',
   '/assets/marketing-grid-1.jpg',
   '/assets/marketing-grid-3.jpg',
 ];
