@@ -23,8 +23,7 @@ export default function ShareButtons({ prophecy }: ShareButtonsProps) {
 
   const mainText = prophecy.main_text || 'My Fire Horse Prophecy';
 
-  // Base share content - includes BOTH the talisman image AND the site
-  const shareTitle = `Fire Horse Oracle 2026 - ${zodiacInfo}`;
+  // Base share content
   const shareText = `My ${zodiacInfo} prophecy: "${mainText}" - Year of the Fire Horse (once every 60 years!)`;
 
   // Full message for copy - includes image URL if available
@@ -47,34 +46,7 @@ Year of the Fire Horse = once every 60 YEARS!
 Get your own LIMITED EDITION talisman: ${siteUrl}`;
 
   // =====================================================
-  // NATIVE WEB SHARE API (works best on mobile)
-  // =====================================================
-  const handleNativeShare = async () => {
-    if (navigator.share) {
-      try {
-        // Include shareable image URL if available
-        const nativeShareText = shareableImageUrl
-          ? `${shareText}\n\nView my talisman: ${shareableImageUrl}`
-          : shareText;
-
-        await navigator.share({
-          title: shareTitle,
-          text: nativeShareText,
-          url: siteUrl,
-        });
-        setShareStatus('Shared!');
-        setTimeout(() => setShareStatus(''), 2000);
-      } catch (err) {
-        console.log('Share cancelled or failed:', err);
-      }
-    } else {
-      // Fallback to copy
-      handleCopyMessage();
-    }
-  };
-
-  // =====================================================
-  // COPY TO CLIPBOARD
+  // COPY TO CLIPBOARD - Most reliable method
   // =====================================================
   const handleCopyMessage = async () => {
     try {
@@ -85,7 +57,7 @@ Get your own LIMITED EDITION talisman: ${siteUrl}`;
         setCopied(false);
         setShareStatus('');
       }, 3000);
-    } catch (error) {
+    } catch {
       // Fallback for older browsers
       const textArea = document.createElement('textarea');
       textArea.value = fullMessage;
@@ -103,10 +75,10 @@ Get your own LIMITED EDITION talisman: ${siteUrl}`;
   };
 
   // =====================================================
-  // DIRECT PLATFORM LINKS (open in new tab)
+  // PLATFORM-SPECIFIC SHARE LINKS
   // =====================================================
 
-  // Twitter - includes both talisman image URL and site URL
+  // Twitter/X - WORKS: Supports pre-filled text with URLs
   const openTwitter = () => {
     const tweetText = shareableImageUrl
       ? `${shareText}\n\nSee my talisman: ${shareableImageUrl}\n\nGet yours: ${siteUrl}`
@@ -115,7 +87,19 @@ Get your own LIMITED EDITION talisman: ${siteUrl}`;
     window.open(url, 'twitter-share', 'width=550,height=450');
   };
 
-  // WhatsApp - includes both URLs
+  // LinkedIn - Share talisman image URL directly
+  const openLinkedIn = () => {
+    // LinkedIn only supports URL sharing, so we share the talisman image
+    // Users should use Copy Message for full text on LinkedIn
+    const linkedInUrl = shareableImageUrl || siteUrl;
+    window.open(
+      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(linkedInUrl)}`,
+      'linkedin-share',
+      'width=550,height=450'
+    );
+  };
+
+  // WhatsApp - WORKS: Supports pre-filled text
   const openWhatsApp = () => {
     const waText = shareableImageUrl
       ? `${shareText}\n\nView my talisman: ${shareableImageUrl}\n\nGet yours: ${siteUrl}`
@@ -123,23 +107,22 @@ Get your own LIMITED EDITION talisman: ${siteUrl}`;
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(waText)}`, '_blank');
   };
 
-  // Telegram - includes both URLs
+  // Telegram - WORKS: Supports pre-filled text
   const openTelegram = () => {
     const tgText = shareableImageUrl
-      ? `${shareText}\n\nView my talisman: ${shareableImageUrl}`
-      : shareText;
-    const tgUrl = shareableImageUrl || siteUrl;
-    window.open(`https://t.me/share/url?url=${encodeURIComponent(tgUrl)}&text=${encodeURIComponent(tgText)}`, '_blank');
+      ? `${shareText}\n\nView my talisman: ${shareableImageUrl}\n\nGet yours: ${siteUrl}`
+      : `${shareText}\n\nGet yours: ${siteUrl}`;
+    window.open(`https://t.me/share/url?url=${encodeURIComponent(siteUrl)}&text=${encodeURIComponent(tgText)}`, '_blank');
   };
 
-  // Email - full message with both URLs
+  // Email (Gmail) - WORKS: Opens default mail client with pre-filled content
   const openEmail = () => {
     const subject = `Check out my Fire Horse Oracle talisman for 2026!`;
     const body = fullMessage;
     window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
-  // Facebook - share the shareable image URL if available (so OG image shows the talisman)
+  // Facebook - Link only (FB doesn't support pre-filled text)
   const openFacebook = () => {
     const fbUrl = shareableImageUrl || siteUrl;
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fbUrl)}`, 'facebook-share', 'width=550,height=450');
@@ -149,25 +132,12 @@ Get your own LIMITED EDITION talisman: ${siteUrl}`;
     <div className="flex flex-col gap-4 w-full">
       {/* Status message */}
       {shareStatus && (
-        <div className="bg-green-600 text-white text-center py-2 px-4 rounded-lg font-bold">
+        <div className="bg-green-600 text-white text-center py-2 px-4 rounded-lg font-bold animate-pulse">
           {shareStatus}
         </div>
       )}
 
-      {/* PRIMARY: Native Share Button (best for mobile) */}
-      {'share' in navigator && (
-        <button
-          onClick={handleNativeShare}
-          className="w-full bg-gradient-to-r from-purple-600 via-purple-500 to-purple-600 text-white font-bold py-4 px-6 rounded-xl
-                     hover:scale-[1.02] active:scale-95 transition-all
-                     flex items-center justify-center gap-3 border-2 border-purple-400"
-        >
-          <span className="text-xl">SHARE</span>
-          <span className="text-sm opacity-80">(includes your prophecy text)</span>
-        </button>
-      )}
-
-      {/* COPY BUTTON - Most reliable */}
+      {/* PRIMARY: COPY MESSAGE - Most reliable across all platforms */}
       <button
         onClick={handleCopyMessage}
         className={`w-full font-bold py-4 px-6 rounded-xl
@@ -176,83 +146,97 @@ Get your own LIMITED EDITION talisman: ${siteUrl}`;
                      ? 'bg-green-600 text-white border-2 border-green-400'
                      : 'bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 text-black border-2 border-yellow-400 hover:scale-[1.02] active:scale-95'}`}
       >
-        <span className="text-xl">{copied ? 'COPIED!' : 'COPY MESSAGE'}</span>
-        <span className="text-sm opacity-80">{copied ? '' : '(paste anywhere)'}</span>
+        <span className="text-xl">{copied ? 'COPIED!' : 'COPY MESSAGE + TALISMAN LINK'}</span>
       </button>
+      <p className="text-center text-xs text-gray-400 -mt-2">
+        Best method - paste into any app including LinkedIn posts
+      </p>
 
       {/* Divider */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 mt-2">
         <div className="flex-1 h-px bg-gray-700"></div>
-        <span className="text-gray-500 text-xs">or share directly to</span>
+        <span className="text-gray-500 text-xs">quick share buttons</span>
         <div className="flex-1 h-px bg-gray-700"></div>
       </div>
 
-      {/* PLATFORM BUTTONS */}
-      <div className="grid grid-cols-5 gap-2">
-        {/* Twitter/X */}
+      {/* PLATFORM BUTTONS - 6 buttons in 2 rows */}
+      <div className="grid grid-cols-3 gap-2">
+        {/* Twitter/X - WORKS */}
         <button
           onClick={openTwitter}
-          className="bg-black border border-gray-600 text-white font-bold py-3 rounded-xl
-                     hover:bg-gray-800 active:scale-95 transition-all
+          className="bg-black border-2 border-gray-600 text-white font-bold py-3 rounded-xl
+                     hover:bg-gray-800 hover:border-gray-400 active:scale-95 transition-all
                      flex flex-col items-center justify-center"
-          title="Share on X/Twitter"
+          title="Share on X/Twitter - includes full text!"
         >
           <span className="text-lg font-bold">X</span>
-          <span className="text-[8px] text-gray-400">Twitter</span>
+          <span className="text-[9px] text-green-400">Works!</span>
         </button>
 
-        {/* WhatsApp */}
+        {/* LinkedIn - NEW */}
+        <button
+          onClick={openLinkedIn}
+          className="bg-[#0A66C2] border-2 border-[#0A66C2] text-white font-bold py-3 rounded-xl
+                     hover:bg-[#004182] active:scale-95 transition-all
+                     flex flex-col items-center justify-center"
+          title="Share on LinkedIn - shares talisman link"
+        >
+          <span className="text-lg font-bold">in</span>
+          <span className="text-[9px] text-blue-200">LinkedIn</span>
+        </button>
+
+        {/* WhatsApp - WORKS */}
         <button
           onClick={openWhatsApp}
-          className="bg-[#25D366] text-white font-bold py-3 rounded-xl
+          className="bg-[#25D366] border-2 border-[#25D366] text-white font-bold py-3 rounded-xl
                      hover:bg-[#20BD5A] active:scale-95 transition-all
                      flex flex-col items-center justify-center"
-          title="Share on WhatsApp"
+          title="Share on WhatsApp - includes full text!"
         >
-          <span className="text-lg">W</span>
-          <span className="text-[8px]">WhatsApp</span>
+          <span className="text-lg">WA</span>
+          <span className="text-[9px] text-green-100">Works!</span>
         </button>
 
-        {/* Telegram */}
+        {/* Telegram - WORKS */}
         <button
           onClick={openTelegram}
-          className="bg-[#0088cc] text-white font-bold py-3 rounded-xl
+          className="bg-[#0088cc] border-2 border-[#0088cc] text-white font-bold py-3 rounded-xl
                      hover:bg-[#006699] active:scale-95 transition-all
                      flex flex-col items-center justify-center"
-          title="Share on Telegram"
+          title="Share on Telegram - includes full text!"
         >
-          <span className="text-lg">T</span>
-          <span className="text-[8px]">Telegram</span>
+          <span className="text-lg">TG</span>
+          <span className="text-[9px] text-blue-200">Works!</span>
         </button>
 
-        {/* Email */}
+        {/* Email - WORKS (Gmail) */}
         <button
           onClick={openEmail}
-          className="bg-gray-600 text-white font-bold py-3 rounded-xl
-                     hover:bg-gray-500 active:scale-95 transition-all
+          className="bg-gray-700 border-2 border-gray-600 text-white font-bold py-3 rounded-xl
+                     hover:bg-gray-600 active:scale-95 transition-all
                      flex flex-col items-center justify-center"
-          title="Share via Email"
+          title="Share via Email - opens mail app"
         >
           <span className="text-lg">@</span>
-          <span className="text-[8px]">Email</span>
+          <span className="text-[9px] text-gray-300">Email</span>
         </button>
 
-        {/* Facebook */}
+        {/* Facebook - Link only */}
         <button
           onClick={openFacebook}
-          className="bg-[#1877F2] text-white font-bold py-3 rounded-xl
+          className="bg-[#1877F2] border-2 border-[#1877F2] text-white font-bold py-3 rounded-xl
                      hover:bg-[#166FE5] active:scale-95 transition-all
-                     flex flex-col items-center justify-center"
-          title="Share on Facebook (link only)"
+                     flex flex-col items-center justify-center opacity-70"
+          title="Share on Facebook - link only, no text"
         >
           <span className="text-lg">f</span>
-          <span className="text-[8px]">Facebook</span>
+          <span className="text-[9px] text-blue-200">Link only</span>
         </button>
       </div>
 
       {/* Help text */}
-      <p className="text-center text-[10px] text-gray-500">
-        Tip: Use "COPY MESSAGE" then paste into any app for best results
+      <p className="text-center text-[10px] text-gray-500 mt-1">
+        X, WhatsApp, Telegram include your prophecy text. LinkedIn/Facebook share talisman link only.
       </p>
     </div>
   );
