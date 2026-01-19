@@ -516,14 +516,14 @@ export const ZODIAC_FUN_FACTS: Record<string, ZodiacFunFact> = {
   'fire-horse': {
     years: [1966, 2026],
     famousPeople: [
-      { name: 'Mike Tyson', description: 'Heavyweight boxing champion' },
-      { name: 'Gordon Ramsay', description: 'Celebrity chef, Hell\'s Kitchen' },
-      { name: 'Janet Jackson', description: 'Pop icon, Jackson family' }
+      { name: 'Halle Berry', description: 'Academy Award-winning actress, Storm in X-Men' },
+      { name: 'Gordon Ramsay', description: 'Celebrity chef known for his fiery temper' },
+      { name: 'Janet Jackson', description: 'Pop icon, youngest of the Jackson family' }
     ],
     mantra: 'I blaze my own trail.',
-    quote: 'I\'m the best ever. I\'m the most brutal and vicious, and most ruthless champion there\'s ever been.',
-    quoteAuthor: 'Mike Tyson',
-    quoteAuthorDescription: 'Youngest heavyweight champion ever',
+    quote: 'I\'m going to follow my path. I\'m going to run my race. And it\'s not going to be like anyone else\'s.',
+    quoteAuthor: 'Halle Berry',
+    quoteAuthorDescription: 'First African American Best Actress Oscar winner',
     funFact: 'The Fire Horse is a rare and volatile sign in Chinese astrology; they are rebellious, adventurous, and often destined for extreme success or extreme struggle.',
     emoji: '🔥🐴'
   },
