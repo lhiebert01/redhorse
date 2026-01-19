@@ -146,6 +146,23 @@ export default function Home() {
           />
         </div>
 
+        {/* Once-in-60-Year Opportunity Card */}
+        <div className="w-full bg-gradient-to-b from-red-950/80 to-black/80 backdrop-blur-sm border border-fire-gold/40 rounded-2xl p-5 mb-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-1">
+            Fire Horse <span className="text-fire-gold">火马年</span>
+          </h2>
+          <p className="text-xl md:text-2xl text-fire-gold font-bold mb-3">
+            A Once-in-60-Year Opportunity
+          </p>
+          <p className="text-gray-200 text-sm md:text-base leading-relaxed">
+            The Fire Horse returns only once every 60 years. Its blazing energy can ignite your
+            <span className="text-yellow-400 font-bold"> wealth</span>,
+            amplify your <span className="text-red-400 font-bold">power</span>,
+            transform your <span className="text-pink-400 font-bold">love life</span>, or
+            strengthen your <span className="text-blue-400 font-bold">protection</span>.
+          </p>
+        </div>
+
         {/* Product Card */}
         <div className="w-full border-glow bg-black/80 backdrop-blur-sm p-6 rounded-2xl space-y-5 mb-6">
           {/* Section Header */}
