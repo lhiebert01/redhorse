@@ -6,7 +6,8 @@ import './globals.css';
 const siteUrl = 'https://redhorseoracle.com';
 
 // Google Analytics Measurement ID - Add yours from GA4
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+// Supports both variable names for flexibility
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 export const metadata: Metadata = {
   title: 'Red Horse Oracle | AI-Powered Fire Horse Prophecy 2026',
