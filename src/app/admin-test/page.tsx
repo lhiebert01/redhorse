@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import GeneratingState from '@/components/reveal/GeneratingState';
 import { getChineseZodiac } from '@/lib/zodiac/calculator';
+import { validateBirthDate, MIN_BIRTH_YEAR, MAX_BIRTH_YEAR } from '@/lib/validation/date-validator';
 
 const FOCUS_MODES = [
   { id: 'wealth', name: 'Wealth Mode', description: '6 Lucky Numbers (XX-XX-XX-XX-XX-XX)' },
@@ -427,17 +428,29 @@ function AdminTestContent() {
   const searchParams = useSearchParams();
   const skipPin = searchParams.get('skip_pin') === 'true';
   const tabParam = searchParams.get('tab');
-  const initialTab = tabParam === 'gallery' ? 'gallery' : tabParam === 'collections' ? 'collections' : 'test';
+  const initialTab = tabParam === 'gallery' ? 'gallery' : tabParam === 'collections' ? 'collections' : tabParam === 'analytics' ? 'analytics' : 'test';
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
-  const [activeTab, setActiveTab] = useState<'test' | 'gallery' | 'collections'>(initialTab);
+  const [activeTab, setActiveTab] = useState<'test' | 'gallery' | 'collections' | 'analytics'>(initialTab);
+
+  // Analytics state
+  const [analyticsData, setAnalyticsData] = useState<{
+    free: { total: number; byYear: Array<{ year: number; sign: string; element: string; count: number }>; bySign: Record<string, number> };
+    paid: { total: number; byYear: Array<{ year: number; sign: string; element: string; mode?: string; count: number }>; bySign: Record<string, number>; byMode: Record<string, number> };
+    combined: { total: number };
+    lastUpdated: string;
+  } | null>(null);
+  const [analyticsLoading, setAnalyticsLoading] = useState(false);
+  const [showZeroRows, setShowZeroRows] = useState(false);
+  const [analyticsView, setAnalyticsView] = useState<'free' | 'paid'>('free');
 
   const [birthDate, setBirthDate] = useState('');
   const [focusMode, setFocusMode] = useState('wealth');
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState('');
+  const [validationError, setValidationError] = useState<string | null>(null);
   const [generatingZodiac, setGeneratingZodiac] = useState<{sign: string, element: string} | null>(null);
 
   // Check sessionStorage on mount OR auto-authenticate if skip_pin
@@ -470,6 +483,16 @@ function AdminTestContent() {
     }
 
     setBirthDate(value);
+    setValidationError(null); // Clear validation error on change
+  };
+
+  // Convert MM/DD/YYYY to YYYY-MM-DD for validation
+  const convertDateFormat = (mmddyyyy: string): string => {
+    const parts = mmddyyyy.split('/');
+    if (parts.length === 3) {
+      return `${parts[2]}-${parts[0].padStart(2, '0')}-${parts[1].padStart(2, '0')}`;
+    }
+    return mmddyyyy;
   };
 
   const handlePinSubmit = (e: React.FormEvent) => {
@@ -487,6 +510,15 @@ function AdminTestContent() {
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setValidationError(null);
+
+    // Validate birth date range (1910-2027)
+    const dateForValidation = convertDateFormat(birthDate);
+    const validation = validateBirthDate(dateForValidation);
+    if (!validation.isValid) {
+      setValidationError(validation.errorMessage || 'Invalid date');
+      return;
+    }
 
     // Calculate zodiac to show in generating state
     try {
@@ -524,6 +556,34 @@ function AdminTestContent() {
       setIsGenerating(false);
       setGeneratingZodiac(null);
     }
+  };
+
+  // Load analytics data
+  const loadAnalytics = async () => {
+    setAnalyticsLoading(true);
+    try {
+      const response = await fetch(`/api/analytics/stats?pin=142857&showZeroRows=${showZeroRows}`);
+      const data = await response.json();
+      if (response.ok) {
+        setAnalyticsData(data);
+      }
+    } catch (error) {
+      console.error('Failed to load analytics:', error);
+    } finally {
+      setAnalyticsLoading(false);
+    }
+  };
+
+  // Load analytics when tab switches to analytics
+  useEffect(() => {
+    if (activeTab === 'analytics' && isAuthenticated && !analyticsData) {
+      loadAnalytics();
+    }
+  }, [activeTab, isAuthenticated]);
+
+  // Download CSV handler
+  const downloadCSV = (type: 'free' | 'paid') => {
+    window.open(`/api/analytics/stats?pin=142857&format=csv&csvType=${type}&showZeroRows=${showZeroRows}`, '_blank');
   };
 
   // Show bouncing pony animation while generating
@@ -631,6 +691,16 @@ function AdminTestContent() {
           >
             🎴 Full Gallery
           </button>
+          <button
+            onClick={() => setActiveTab('analytics')}
+            className={`px-5 py-3 rounded-xl font-bold transition-all ${
+              activeTab === 'analytics'
+                ? 'bg-green-500 text-white'
+                : 'bg-black/50 text-gray-400 hover:text-white border border-green-500/30'
+            }`}
+          >
+            📊 Analytics
+          </button>
         </div>
 
         {/* Tab Content */}
@@ -656,14 +726,31 @@ function AdminTestContent() {
                     value={birthDate}
                     onChange={handleDateChange}
                     placeholder="MM/DD/YYYY"
-                    className="w-full bg-black border border-red-900/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-fire-gold"
+                    className={`w-full bg-black border rounded-xl px-4 py-3 text-white focus:outline-none ${
+                      validationError
+                        ? 'border-red-500 focus:border-red-400'
+                        : 'border-red-900/50 focus:border-fire-gold'
+                    }`}
                     maxLength={10}
                     required
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    Just type numbers - slashes auto-added
+                    Just type numbers - slashes auto-added. Valid years: {MIN_BIRTH_YEAR}-{MAX_BIRTH_YEAR}
                   </p>
                 </div>
+
+                {/* Validation Error Display */}
+                {validationError && (
+                  <div className="bg-red-900/50 border border-red-500 rounded-xl p-4">
+                    <div className="flex items-start gap-2">
+                      <span className="text-xl">🐴</span>
+                      <div>
+                        <p className="text-red-300 font-bold text-sm mb-1">Date Outside Supported Range</p>
+                        <p className="text-red-200 text-xs leading-relaxed">{validationError}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Focus Mode */}
                 <div>
@@ -683,7 +770,7 @@ function AdminTestContent() {
                   </select>
                 </div>
 
-                {/* Error Display */}
+                {/* API Error Display */}
                 {error && (
                   <div className="bg-red-900/30 border border-red-500 rounded-xl p-4">
                     <p className="text-red-400 text-sm">{error}</p>
@@ -718,6 +805,189 @@ function AdminTestContent() {
                 </div>
               )}
             </div>
+          </div>
+        ) : activeTab === 'analytics' ? (
+          /* Analytics Tab */
+          <div className="bg-black/80 border border-green-500/30 rounded-2xl p-6">
+            {/* Analytics Header */}
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+              <div>
+                <h2 className="text-xl font-bold text-green-400">📊 Oracle Analytics</h2>
+                <p className="text-gray-400 text-sm">Track FREE and PAID oracle generations by Year, Sign, Element, and Mode</p>
+              </div>
+              <button
+                onClick={loadAnalytics}
+                disabled={analyticsLoading}
+                className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-lg transition-colors disabled:opacity-50"
+              >
+                {analyticsLoading ? '⏳ Loading...' : '🔄 Refresh Data'}
+              </button>
+            </div>
+
+            {/* Summary Cards */}
+            {analyticsData && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className="bg-green-900/30 border border-green-500/50 rounded-xl p-4 text-center">
+                  <p className="text-green-400 text-sm uppercase tracking-wider mb-1">FREE Oracles</p>
+                  <p className="text-3xl font-bold text-white">{analyticsData.free.total}</p>
+                </div>
+                <div className="bg-yellow-900/30 border border-yellow-500/50 rounded-xl p-4 text-center">
+                  <p className="text-yellow-400 text-sm uppercase tracking-wider mb-1">PAID Oracles</p>
+                  <p className="text-3xl font-bold text-white">{analyticsData.paid.total}</p>
+                </div>
+                <div className="bg-purple-900/30 border border-purple-500/50 rounded-xl p-4 text-center">
+                  <p className="text-purple-400 text-sm uppercase tracking-wider mb-1">Total Combined</p>
+                  <p className="text-3xl font-bold text-white">{analyticsData.combined.total}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Mode Summary for PAID */}
+            {analyticsData && analyticsData.paid.byMode && Object.keys(analyticsData.paid.byMode).length > 0 && (
+              <div className="mb-6">
+                <p className="text-yellow-400 text-sm uppercase tracking-wider mb-2">PAID Mode Distribution</p>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(analyticsData.paid.byMode).map(([mode, count]) => (
+                    <div key={mode} className="bg-yellow-900/30 border border-yellow-500/50 rounded-lg px-3 py-1">
+                      <span className="text-yellow-300 font-bold">{mode.toUpperCase()}</span>
+                      <span className="text-gray-400 ml-2">{count}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Controls */}
+            <div className="flex flex-wrap items-center gap-4 mb-4 p-4 bg-gray-900/50 rounded-xl">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setAnalyticsView('free')}
+                  className={`px-4 py-2 rounded-lg font-bold transition-all ${
+                    analyticsView === 'free'
+                      ? 'bg-green-500 text-white'
+                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  }`}
+                >
+                  FREE Users
+                </button>
+                <button
+                  onClick={() => setAnalyticsView('paid')}
+                  className={`px-4 py-2 rounded-lg font-bold transition-all ${
+                    analyticsView === 'paid'
+                      ? 'bg-yellow-500 text-black'
+                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  }`}
+                >
+                  PAID Users
+                </button>
+              </div>
+
+              <label className="flex items-center gap-2 text-sm text-gray-400">
+                <input
+                  type="checkbox"
+                  checked={showZeroRows}
+                  onChange={(e) => {
+                    setShowZeroRows(e.target.checked);
+                    loadAnalytics();
+                  }}
+                  className="w-4 h-4 accent-green-500"
+                />
+                Show all years (including zeros)
+              </label>
+
+              <button
+                onClick={() => downloadCSV(analyticsView)}
+                className="ml-auto bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg transition-colors"
+              >
+                📥 Download CSV
+              </button>
+            </div>
+
+            {/* Data Table */}
+            {analyticsData && (
+              <div className="overflow-x-auto">
+                {analyticsView === 'free' ? (
+                  /* FREE Users Table */
+                  <table className="w-full text-left">
+                    <thead>
+                      <tr className="border-b border-green-500/30">
+                        <th className="py-3 px-4 text-green-400 font-bold">Year</th>
+                        <th className="py-3 px-4 text-green-400 font-bold">Sign</th>
+                        <th className="py-3 px-4 text-green-400 font-bold">Element</th>
+                        <th className="py-3 px-4 text-green-400 font-bold text-right">Count</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {analyticsData.free.byYear.length === 0 ? (
+                        <tr>
+                          <td colSpan={4} className="py-8 text-center text-gray-500">
+                            No FREE oracle data yet. Generate some free oracles to see analytics.
+                          </td>
+                        </tr>
+                      ) : (
+                        analyticsData.free.byYear.map((row, idx) => (
+                          <tr key={idx} className="border-b border-gray-800 hover:bg-green-900/20">
+                            <td className="py-2 px-4 text-white font-mono">{row.year || 'Unknown'}</td>
+                            <td className="py-2 px-4 text-gray-300">{row.sign}</td>
+                            <td className="py-2 px-4 text-gray-300">{row.element}</td>
+                            <td className="py-2 px-4 text-green-400 font-bold text-right">{row.count}</td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                ) : (
+                  /* PAID Users Table */
+                  <table className="w-full text-left">
+                    <thead>
+                      <tr className="border-b border-yellow-500/30">
+                        <th className="py-3 px-4 text-yellow-400 font-bold">Year</th>
+                        <th className="py-3 px-4 text-yellow-400 font-bold">Sign</th>
+                        <th className="py-3 px-4 text-yellow-400 font-bold">Element</th>
+                        <th className="py-3 px-4 text-yellow-400 font-bold">Mode</th>
+                        <th className="py-3 px-4 text-yellow-400 font-bold text-right">Count</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {analyticsData.paid.byYear.length === 0 ? (
+                        <tr>
+                          <td colSpan={5} className="py-8 text-center text-gray-500">
+                            No PAID oracle data yet. Purchase some oracles to see analytics.
+                          </td>
+                        </tr>
+                      ) : (
+                        analyticsData.paid.byYear.map((row, idx) => (
+                          <tr key={idx} className="border-b border-gray-800 hover:bg-yellow-900/20">
+                            <td className="py-2 px-4 text-white font-mono">{row.year || 'Unknown'}</td>
+                            <td className="py-2 px-4 text-gray-300">{row.sign}</td>
+                            <td className="py-2 px-4 text-gray-300">{row.element}</td>
+                            <td className="py-2 px-4">
+                              <span className={`px-2 py-1 rounded text-xs font-bold ${
+                                row.mode === 'wealth' ? 'bg-yellow-700 text-yellow-200' :
+                                row.mode === 'power' ? 'bg-red-700 text-red-200' :
+                                row.mode === 'love' ? 'bg-pink-700 text-pink-200' :
+                                row.mode === 'shield' ? 'bg-blue-700 text-blue-200' :
+                                'bg-gray-700 text-gray-200'
+                              }`}>
+                                {(row.mode || 'unknown').toUpperCase()}
+                              </span>
+                            </td>
+                            <td className="py-2 px-4 text-yellow-400 font-bold text-right">{row.count}</td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+            )}
+
+            {/* Last Updated */}
+            {analyticsData && (
+              <p className="text-gray-500 text-xs mt-4 text-right">
+                Last updated: {new Date(analyticsData.lastUpdated).toLocaleString()}
+              </p>
+            )}
           </div>
         ) : (
           /* Gallery Tab */

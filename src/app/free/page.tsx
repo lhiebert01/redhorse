@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { getChineseZodiac } from '@/lib/zodiac/calculator';
+import { validateBirthDate, extractBirthYear, MIN_BIRTH_YEAR, MAX_BIRTH_YEAR } from '@/lib/validation/date-validator';
 import {
   ZodiacAnimal,
   ZodiacElement,
@@ -24,6 +25,7 @@ export default function FreeReadingPage() {
     animal: ZodiacAnimal;
     element: ZodiacElement;
   } | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
   const [showPriceExplainer, setShowPriceExplainer] = useState(false);
   const [shareStatus, setShareStatus] = useState<'idle' | 'copied' | 'shared'>('idle');
   const [showShareModal, setShowShareModal] = useState(false);
@@ -36,7 +38,19 @@ export default function FreeReadingPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!birthDate) return;
+    setValidationError(null);
+
+    if (!birthDate) {
+      setValidationError('Please enter your birth date.');
+      return;
+    }
+
+    // Validate the birth date range (1910-2027)
+    const validation = validateBirthDate(birthDate);
+    if (!validation.isValid) {
+      setValidationError(validation.errorMessage || 'Invalid date');
+      return;
+    }
 
     const zodiac = getChineseZodiac(birthDate);
     if (zodiac) {
@@ -46,13 +60,15 @@ export default function FreeReadingPage() {
       });
 
       // Track free oracle generation (non-blocking, fire-and-forget)
-      // No PII sent - only zodiac sign and element
+      // No PII sent - only zodiac sign, element, and birth year for analytics
+      const birthYear = extractBirthYear(birthDate);
       fetch('/api/analytics/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           zodiacSign: zodiac.animal,
           zodiacElement: zodiac.element,
+          birthYear: birthYear,
           type: 'free'
         })
       }).catch(() => {
@@ -189,25 +205,47 @@ export default function FreeReadingPage() {
                   <p className="text-gray-400 text-sm mb-4">
                     Calculated locally in your browser - never sent to any server
                   </p>
-                <input
-                  type="date"
-                  value={birthDate}
-                  onChange={(e) => setBirthDate(e.target.value)}
-                  className="w-full max-w-xs mx-auto block bg-black border-2 border-fire-gold/50 rounded-xl px-4 py-3 text-white text-center text-lg focus:border-fire-gold focus:outline-none"
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 text-black font-bold text-xl py-4 rounded-xl hover:scale-105 active:scale-95 transition-all duration-200 shadow-xl"
-              >
-                REVEAL MY 2026 DESTINY
-              </button>
-              <p className="text-center text-gray-500 text-xs">
-                100% free. No credit card required.
-              </p>
-            </form>
-          </div>
+                  <input
+                    type="date"
+                    value={birthDate}
+                    onChange={(e) => {
+                      setBirthDate(e.target.value);
+                      setValidationError(null); // Clear error on change
+                    }}
+                    min={`${MIN_BIRTH_YEAR}-01-01`}
+                    max={`${MAX_BIRTH_YEAR}-12-31`}
+                    className={`w-full max-w-xs mx-auto block bg-black border-2 rounded-xl px-4 py-3 text-white text-center text-lg focus:outline-none ${
+                      validationError
+                        ? 'border-red-500 focus:border-red-400'
+                        : 'border-fire-gold/50 focus:border-fire-gold'
+                    }`}
+                    required
+                  />
+
+                  {/* Validation Error Message */}
+                  {validationError && (
+                    <div className="mt-4 bg-red-900/50 border border-red-500 rounded-xl p-4 text-left max-w-sm mx-auto">
+                      <div className="flex items-start gap-2">
+                        <span className="text-xl">🐴</span>
+                        <div>
+                          <p className="text-red-300 font-bold text-sm mb-1">Date Outside Supported Range</p>
+                          <p className="text-red-200 text-xs leading-relaxed">{validationError}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 text-black font-bold text-xl py-4 rounded-xl hover:scale-105 active:scale-95 transition-all duration-200 shadow-xl"
+                >
+                  REVEAL MY 2026 DESTINY
+                </button>
+                <p className="text-center text-gray-500 text-xs">
+                  100% free. No credit card required. Valid for birth years {MIN_BIRTH_YEAR}-{MAX_BIRTH_YEAR}.
+                </p>
+              </form>
+            </div>
           </>
         ) : (
           /* Results Section */
