@@ -132,7 +132,7 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 NEXT_PUBLIC_STRIPE_PAYMENT_LINK=https://buy.stripe.com/5kQ8wPdmT73b54G1V124000
 GEMINI_API_KEY=<key>
 NEXT_PUBLIC_APP_URL=https://redhorseoracle.com
-NEXT_PUBLIC_GA_MEASUREMENT_ID=G-S90TFZBY84  # Google Analytics 4
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-EV6LX78YP1  # Google Analytics 4 (Note: hardcoded in layout.tsx)
 ```
 
 ### Local Development:
@@ -152,23 +152,23 @@ Copy from `import.env` (gitignored) or create `.env.local`
 ### GA4 Configuration
 | Setting | Value |
 |---------|-------|
-| **Measurement ID** | `G-S90TFZBY84` |
-| **Stream Name** | `redhorseoracle.com` |
+| **Measurement ID** | `G-EV6LX78YP1` |
+| **Property** | RedHorseOracle.Com |
 | **Stream URL** | `https://www.redhorseoracle.com` |
-| **Stream ID** | `13332978252` |
+| **Status** | ✅ Working - Real-time tracking active |
 
 ### How to Find GA4 Realtime
 1. Go to https://analytics.google.com
-2. Select the **redhorseoracle.com** property (dropdown at top)
+2. Select the **RedHorseOracle.Com** property (dropdown at top)
 3. Click **Reports** (📊 bar chart icon in left sidebar)
 4. Click **Realtime** (near top of Reports menu)
 5. Or click **"📈 Google Analytics (Realtime)"** link in Admin Console footer
 
 ### Implementation
-GA4 is implemented in `src/app/layout.tsx` using Next.js `<Script>` tags:
+GA4 is implemented in `src/app/layout.tsx` using raw `<script>` tags in `<head>`:
+- Hardcoded Measurement ID `G-EV6LX78YP1` for reliability
 - Loads `gtag.js` from Google Tag Manager
-- Only renders if `NEXT_PUBLIC_GA_MEASUREMENT_ID` env var is set
-- Uses `afterInteractive` strategy for optimal performance
+- No environment variable dependency
 
 ---
 
