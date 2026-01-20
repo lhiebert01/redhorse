@@ -5,9 +5,8 @@ import './globals.css';
 // Production domain
 const siteUrl = 'https://redhorseoracle.com';
 
-// Google Analytics Measurement ID - Add yours from GA4
-// Supports both variable names for flexibility
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+// Google Analytics Measurement ID - Hardcoded for reliability
+const GA_MEASUREMENT_ID = 'G-S90TFZBY84';
 
 export const metadata: Metadata = {
   title: 'Red Horse Oracle | AI-Powered Fire Horse Prophecy 2026',
@@ -120,23 +119,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="antialiased">
         {children}
 
-        {/* Google Analytics - Using Next.js Script component with afterInteractive */}
-        {GA_MEASUREMENT_ID && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-              strategy="afterInteractive"
-            />
-            <Script id="google-analytics" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${GA_MEASUREMENT_ID}');
-              `}
-            </Script>
-          </>
-        )}
+        {/* Google Analytics 4 */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-S90TFZBY84"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-S90TFZBY84');
+          `}
+        </Script>
       </body>
     </html>
   );
