@@ -84,7 +84,8 @@ Each talisman is a **one-of-a-kind masterpiece** of Chinese zodiac artwork, pers
 - **Closing date** - All editions close February 17, 2027 (end of Fire Horse year)
 
 ### Google Analytics 4 Integration
-- **GA4 Measurement ID:** `G-EV6LX78YP1`
+- **GA4 Measurement ID:** `G-S90TFZBY84`
+- **Stream Name:** `redhorseoracle.com`
 - **Realtime tracking** of all page views and user sessions
 - **Quick access link** to GA4 Realtime from Admin panel
 - **Privacy-compliant** - No PII collected by GA4
@@ -141,7 +142,7 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 NEXT_PUBLIC_STRIPE_PAYMENT_LINK=https://buy.stripe.com/...
 GEMINI_API_KEY=your_gemini_key
 NEXT_PUBLIC_APP_URL=http://localhost:3000
-NEXT_PUBLIC_GA_MEASUREMENT_ID=G-EV6LX78YP1
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-S90TFZBY84
 ```
 
 ### 3. Database Setup

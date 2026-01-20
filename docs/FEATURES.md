@@ -325,7 +325,7 @@ prophecies (
 ### Analytics & Tracking
 
 **Google Analytics 4 (GA4):**
-- Measurement ID: `G-EV6LX78YP1`
+- Measurement ID: `G-S90TFZBY84`
 - Stream Name: `RedHorseOracle.Com`
 - Realtime tracking of page views and sessions
 - Privacy-compliant implementation

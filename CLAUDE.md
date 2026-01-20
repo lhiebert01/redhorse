@@ -132,7 +132,7 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 NEXT_PUBLIC_STRIPE_PAYMENT_LINK=https://buy.stripe.com/5kQ8wPdmT73b54G1V124000
 GEMINI_API_KEY=<key>
 NEXT_PUBLIC_APP_URL=https://redhorseoracle.com
-NEXT_PUBLIC_GA_MEASUREMENT_ID=G-EV6LX78YP1  # Google Analytics 4
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-S90TFZBY84  # Google Analytics 4
 ```
 
 ### Local Development:
@@ -145,24 +145,24 @@ Copy from `import.env` (gitignored) or create `.env.local`
 ### Quick Access Links
 | Purpose | URL |
 |---------|-----|
-| **Realtime Dashboard** | https://analytics.google.com/analytics/web/#/a262520045p361701041/realtime/overview |
-| **All Reports** | https://analytics.google.com/analytics/web/#/a262520045p361701041/reports |
-| **Admin/Settings** | https://analytics.google.com/analytics/web/#/a262520045p361701041/admin |
+| **Realtime Dashboard** | https://analytics.google.com/analytics/web/?authuser=0#/p470aborealtime/overview (select redhorseoracle.com property) |
+| **All Reports** | https://analytics.google.com/analytics/web/ → Select redhorseoracle.com |
+| **Admin Panel Link** | Available in Admin Console footer: "📈 Google Analytics (Realtime)" |
 
 ### GA4 Configuration
 | Setting | Value |
 |---------|-------|
-| **Measurement ID** | `G-EV6LX78YP1` |
-| **Stream Name** | `RedHorseOracle.Com` |
-| **Stream ID** | `13332708678` |
-| **Property ID** | `361701041` |
-| **Account ID** | `262520045` |
+| **Measurement ID** | `G-S90TFZBY84` |
+| **Stream Name** | `redhorseoracle.com` |
+| **Stream URL** | `https://www.redhorseoracle.com` |
+| **Stream ID** | `13332978252` |
 
 ### How to Find GA4 Realtime
 1. Go to https://analytics.google.com
-2. Click **Reports** (📊 bar chart icon in left sidebar)
-3. Click **Realtime** (near top of Reports menu)
-4. Or use direct link: https://analytics.google.com/analytics/web/#/a262520045p361701041/realtime/overview
+2. Select the **redhorseoracle.com** property (dropdown at top)
+3. Click **Reports** (📊 bar chart icon in left sidebar)
+4. Click **Realtime** (near top of Reports menu)
+5. Or click **"📈 Google Analytics (Realtime)"** link in Admin Console footer
 
 ### Implementation
 GA4 is implemented in `src/app/layout.tsx` using Next.js `<Script>` tags:

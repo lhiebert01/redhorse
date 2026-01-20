@@ -16,7 +16,7 @@ This release adds **Google Analytics 4 (GA4) Integration**, **Enhanced Admin Das
 ### New Features
 
 #### Google Analytics 4 (GA4) Integration
-- **Measurement ID:** `G-EV6LX78YP1`
+- **Measurement ID:** `G-S90TFZBY84`
 - **Stream Name:** `RedHorseOracle.Com`
 - **Property ID:** `361701041`
 - **Implementation:** Next.js `<Script>` tags with `afterInteractive` strategy
@@ -110,7 +110,7 @@ ON oracle_analytics (oracle_type, birth_year);
 
 Added to Vercel:
 ```
-NEXT_PUBLIC_GA_MEASUREMENT_ID=G-EV6LX78YP1
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-S90TFZBY84
 ```
 
 ---
