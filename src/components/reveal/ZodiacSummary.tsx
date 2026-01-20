@@ -151,61 +151,65 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement, focusMode, fu
     <div className="w-full max-w-md mt-8 space-y-6">
       {/* ========== CELEBRITY QUOTE BANNER - TOP OF FORECAST ========== */}
       {funFacts && elementColors && element && (
-        <div className={`relative overflow-hidden rounded-2xl border-2 ${elementColors.border}`}>
-          {/* Layered gradient background with depth */}
-          <div className={`absolute inset-0 bg-gradient-to-br ${elementColors.gradient} opacity-20`}></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/40 to-transparent"></div>
-          {/* Subtle inner glow for depth */}
-          <div className={`absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.5)]`}></div>
+        <div className="relative">
+          {/* Outer glow effect - matching FREE page */}
+          <div className="absolute -inset-1 bg-gradient-to-r from-green-500/50 via-emerald-400/50 to-teal-500/50 rounded-2xl blur-sm"></div>
+          <div className="relative overflow-hidden rounded-2xl border-2 border-green-400/70 shadow-lg shadow-green-500/20">
+            {/* Colorful gradient background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-green-900/60 via-emerald-950/70 to-teal-950/60"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-green-700/30"></div>
+            {/* Inner glow effect */}
+            <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(34,197,94,0.2)]"></div>
 
-          <div className="relative p-4 text-center">
-            {/* Decorative corners - element colored */}
-            <div className={`absolute top-2 left-2 text-2xl ${elementColors.text} opacity-40`}>✦</div>
-            <div className={`absolute top-2 right-2 text-2xl ${elementColors.text} opacity-40`}>✦</div>
-            <div className={`absolute bottom-2 left-2 text-2xl ${elementColors.text} opacity-40`}>✦</div>
-            <div className={`absolute bottom-2 right-2 text-2xl ${elementColors.text} opacity-40`}>✦</div>
+            <div className="relative p-4 text-center">
+              {/* Decorative corners - brighter */}
+              <div className="absolute top-2 left-2 text-2xl text-emerald-400/60">✦</div>
+              <div className="absolute top-2 right-2 text-2xl text-emerald-400/60">✦</div>
+              <div className="absolute bottom-2 left-2 text-2xl text-emerald-400/60">✦</div>
+              <div className="absolute bottom-2 right-2 text-2xl text-emerald-400/60">✦</div>
 
-            {/* The Quote - Compact with inline quotes */}
-            <p className={`text-xl md:text-2xl font-black leading-snug text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]`}>
-              <span className={`${elementColors.text} opacity-70`}>&ldquo;</span>{funFacts.quote}<span className={`${elementColors.text} opacity-70`}>&rdquo;</span>
-            </p>
-
-            {/* Attribution - Compact */}
-            <div className="mt-3">
-              <p className={`${elementColors.text} font-bold text-lg`}>
-                — {funFacts.quoteAuthor}
+              {/* The Quote - Compact with inline quotes */}
+              <p className="text-xl md:text-2xl font-black leading-snug text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+                <span className="text-emerald-400">&ldquo;</span>{funFacts.quote}<span className="text-emerald-400">&rdquo;</span>
               </p>
-              <p className="text-gray-400 text-xs italic">
-                {funFacts.quoteAuthorDescription}
-              </p>
-            </div>
 
-            {/* Celebrity Badge with shadow */}
-            <div className={`inline-block mt-4 bg-gradient-to-r ${elementColors.gradient} rounded-full px-5 py-2 shadow-lg shadow-black/30`}>
-              <p className="text-black text-sm font-bold">
-                {funFacts.emoji} Famous {element} {animal} {funFacts.emoji}
-              </p>
+              {/* Attribution - Compact */}
+              <div className="mt-3">
+                <p className="text-emerald-300 font-bold text-lg">
+                  — {funFacts.quoteAuthor}
+                </p>
+                <p className="text-gray-400 text-xs italic">
+                  {funFacts.quoteAuthorDescription}
+                </p>
+              </div>
+
+              {/* Celebrity Badge - vibrant gradient */}
+              <div className="inline-block mt-4 bg-gradient-to-r from-green-500 via-emerald-400 to-teal-500 rounded-full px-5 py-2 shadow-lg shadow-emerald-500/40">
+                <p className="text-black text-sm font-bold">
+                  {funFacts.emoji} Famous {element} {animal} {funFacts.emoji}
+                </p>
+              </div>
             </div>
           </div>
         </div>
       )}
 
       {/* Capturable Forecast Section */}
-      <div ref={forecastRef} className="p-4 rounded-2xl space-y-6" style={{ backgroundColor: '#0a0000' }}>
-        {/* Section Header */}
+      <div ref={forecastRef} className="p-4 rounded-2xl space-y-6" style={{ backgroundColor: '#050a05' }}>
+        {/* Section Header - Green themed */}
         <div className="text-center space-y-1">
-          <p className="text-gray-500 text-xs uppercase tracking-widest">Powered by Gemini 3 Pro AI</p>
-          <h2 className="text-2xl font-bold text-fire-gold text-glow-gold">
+          <p className="text-green-600 text-xs uppercase tracking-widest">Powered by Gemini 3 Pro AI</p>
+          <h2 className="text-2xl font-bold text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.5)]">
             YOUR ZODIAC FORECAST
           </h2>
-          <p className="text-red-400 text-sm">Year of the Fire Horse 2026</p>
+          <p className="text-green-500 text-sm">Year of the Fire Horse 2026</p>
         </div>
 
-        {/* Zodiac Card */}
-        <div className="bg-black/60 backdrop-blur-sm border border-fire-gold/30 rounded-2xl p-6 space-y-5">
+        {/* Zodiac Card - Green themed */}
+        <div className="bg-gradient-to-br from-green-950/60 to-black border-2 border-green-500/40 rounded-2xl p-6 space-y-5 shadow-lg shadow-green-900/20">
         {/* Animal Image and Title - Using digital card style consistently */}
         <div className="flex items-center gap-4">
-          <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-fire-gold shadow-lg shadow-fire-gold/30">
+          <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-green-500 shadow-lg shadow-green-500/30">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={element
@@ -216,10 +220,10 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement, focusMode, fu
             />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-fire-gold">
+            <h3 className="text-xl font-bold text-green-400">
               {element ? `${element} ${animal}` : animal}
             </h3>
-            <p className="text-2xl text-red-300">
+            <p className="text-2xl text-emerald-300">
               {elementChinese}{animalChinese}
             </p>
             <p className={`text-sm ${getCompatibilityColor()}`}>
@@ -228,14 +232,14 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement, focusMode, fu
           </div>
         </div>
 
-        {/* Strengths */}
+        {/* Strengths - Green themed */}
         <div>
-          <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Core Strengths</p>
+          <p className="text-xs text-green-600 uppercase tracking-wider mb-2">Core Strengths</p>
           <div className="flex flex-wrap gap-2">
             {profile.strengths.map((strength) => (
               <span
                 key={strength}
-                className="bg-fire-gold/10 border border-fire-gold/30 text-fire-gold text-xs px-3 py-1 rounded-full"
+                className="bg-green-900/40 border border-green-500/50 text-green-300 text-xs px-3 py-1 rounded-full"
               >
                 {strength}
               </span>
@@ -243,52 +247,52 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement, focusMode, fu
           </div>
         </div>
 
-        {/* Characteristics */}
-        <div>
-          <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Characteristics</p>
-          <p className="text-gray-300 text-sm leading-relaxed">
+        {/* Characteristics - Green themed */}
+        <div className="bg-green-950/30 border border-green-700/30 rounded-xl p-3">
+          <p className="text-xs text-green-600 uppercase tracking-wider mb-2">Characteristics</p>
+          <p className="text-gray-200 text-sm leading-relaxed">
             {profile.characteristics}
           </p>
         </div>
 
-        {/* 2026 Mode-Specific Forecast */}
+        {/* 2026 Mode-Specific Forecast - Keep compatibility colors but green accents */}
         <div className={`${getCompatibilityBg()} border rounded-xl p-4`}>
-          <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">
+          <p className="text-xs text-green-600 uppercase tracking-wider mb-2">
             2026 {modeInfo.title}
           </p>
           <p className="text-gray-200 text-sm leading-relaxed">
             {fullReading || profile.forecast2026}
           </p>
           {focusMode && (
-            <p className="text-xs text-fire-gold/60 mt-2 italic">
+            <p className="text-xs text-green-400/70 mt-2 italic">
               {focusMode.charAt(0).toUpperCase() + focusMode.slice(1)} Oracle - Tailored to your path
             </p>
           )}
         </div>
 
-        {/* Fire Horse Wisdom */}
-        <div className="border-t border-fire-gold/20 pt-4">
-          <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Oracle Wisdom</p>
-          <p className="text-fire-gold text-sm italic">
+        {/* Fire Horse Wisdom - Green themed */}
+        <div className="border-t border-green-600/30 pt-4">
+          <p className="text-xs text-green-600 uppercase tracking-wider mb-2">Oracle Wisdom</p>
+          <p className="text-emerald-400 text-sm italic">
             &quot;{relation.advice}&quot;
           </p>
         </div>
       </div>
 
-        {/* Branding Footer in Capturable Area */}
-        <div className="text-center text-xs text-gray-600 pt-2">
+        {/* Branding Footer in Capturable Area - Green themed */}
+        <div className="text-center text-xs text-green-700 pt-2">
           <p>redhorseoracle.com • Year of the Fire Horse 2026</p>
         </div>
       </div>
 
-      {/* Save Zodiac Forecast Button - Outside capturable area */}
+      {/* Save Zodiac Forecast Button - Green themed */}
       <button
         onClick={handleDownloadForecast}
         disabled={isCapturing}
-        className="w-full bg-gradient-to-r from-red-800 via-red-700 to-red-800 text-white font-bold py-3 px-6 rounded-xl
+        className="w-full bg-gradient-to-r from-green-700 via-emerald-600 to-green-700 text-white font-bold py-3 px-6 rounded-xl
                    hover:scale-105 active:scale-95 transition-transform
                    flex items-center justify-center gap-2 disabled:opacity-50
-                   border border-fire-gold/30"
+                   border border-green-500/50 shadow-lg shadow-green-900/30"
       >
         <span>{isCapturing ? '...' : '📜'}</span>
         {isCapturing ? 'Capturing...' : 'Save Zodiac Forecast'}
@@ -297,22 +301,23 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement, focusMode, fu
       {/* ========== CELEBRITY FUN FACTS SECTION (Premium Content) ========== */}
       {funFacts && elementColors && element && (
         <div className="space-y-4 mt-6">
-          {/* Section Header */}
+          {/* Section Header - Green themed for consistency */}
           <div className="text-center">
-            <div className={`inline-block ${elementColors.bg} border-2 ${elementColors.border} rounded-full px-5 py-2`}>
-              <p className={`${elementColors.text} text-sm font-bold uppercase tracking-wider`}>
+            <div className="inline-block bg-green-900/40 border-2 border-green-500/60 rounded-full px-5 py-2">
+              <p className="text-green-400 text-sm font-bold uppercase tracking-wider">
                 {funFacts.emoji} {element} {animal} INSIGHTS {funFacts.emoji}
               </p>
             </div>
           </div>
 
-          {/* Mantra Card */}
-          <div className={`relative overflow-hidden rounded-xl border-2 ${elementColors.border}`}>
-            <div className={`absolute inset-0 bg-gradient-to-br ${elementColors.gradient} opacity-10`}></div>
+          {/* Mantra Card - Green themed */}
+          <div className="relative overflow-hidden rounded-xl border-2 border-green-500/50">
+            <div className="absolute inset-0 bg-gradient-to-br from-green-900/40 via-emerald-950/50 to-teal-950/40"></div>
+            <div className="absolute inset-0 shadow-[inset_0_0_30px_rgba(34,197,94,0.1)]"></div>
             <div className="relative p-4">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <span className="text-lg">🧘</span>
-                <p className={`${elementColors.text} text-xs uppercase tracking-widest font-bold`}>
+                <p className="text-green-400 text-xs uppercase tracking-widest font-bold">
                   Your {element} {animal} Mantra
                 </p>
               </div>
