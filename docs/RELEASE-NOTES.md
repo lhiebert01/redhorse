@@ -1,5 +1,136 @@
 # Red Horse Oracle - Release Notes
 
+## Version 1.5.0 - Google Analytics & Admin Enhancements (January 20, 2026)
+
+**Status:** PRODUCTION LIVE
+**Release Date:** January 20, 2026
+
+---
+
+### Highlights
+
+This release adds **Google Analytics 4 (GA4) Integration**, **Enhanced Admin Dashboard**, **Date Validation**, **Comprehensive Analytics Tracking**, and **Green-Themed UI Consistency** across FREE and PAID pages.
+
+---
+
+### New Features
+
+#### Google Analytics 4 (GA4) Integration
+- **Measurement ID:** `G-EV6LX78YP1`
+- **Stream Name:** `RedHorseOracle.Com`
+- **Property ID:** `361701041`
+- **Implementation:** Next.js `<Script>` tags with `afterInteractive` strategy
+- **Environment Variable:** `NEXT_PUBLIC_GA_MEASUREMENT_ID`
+- **Quick Access:** Direct link to GA4 Realtime from Admin panel
+
+#### GA4 Quick Access Links
+| Purpose | URL |
+|---------|-----|
+| **Realtime Dashboard** | https://analytics.google.com/analytics/web/#/a262520045p361701041/realtime/overview |
+| **All Reports** | https://analytics.google.com/analytics/web/#/a262520045p361701041/reports |
+| **Admin/Settings** | https://analytics.google.com/analytics/web/#/a262520045p361701041/admin |
+
+#### Enhanced Admin Dashboard
+- **New Analytics Tab:** Track FREE and PAID oracles by Year, Sign, Element, Mode
+- **Summary Cards:** FREE total, PAID total, Combined total
+- **Mode Distribution:** Shows PAID oracles breakdown by Wealth/Power/Love/Shield
+- **CSV Export:** Download analytics data for FREE or PAID tables
+- **Show Zero Rows Toggle:** Option to include all years even with zero counts
+- **GA4 Link:** Direct link to Google Analytics Realtime in footer
+
+#### Date Validation (1910-2027)
+- **Friendly error messages** for dates outside supported range
+- **Prevents spoofing/hacking** with extreme dates
+- **Applied to:** FREE page date input, Admin Test Console
+- **New utility:** `/src/lib/validation/date-validator.ts`
+- **Error messaging:** "The Fire Horse Oracle supports years from 1910 to 2027..."
+
+#### Analytics Tracking Enhancements
+- **Birth Year Tracking:** Now tracks birth year (not full DOB - privacy preserved)
+- **Focus Mode Tracking:** Tracks which oracle mode (Wealth/Power/Love/Shield)
+- **Composite Key Format:** `YYYY-Sign-Element-Type-Mode`
+- **Database Migration:** Added `birth_year` and `focus_mode` columns
+
+#### Green-Themed UI Consistency (PAID Page)
+- **Quote Banner:** Emerald/teal gradient with outer glow
+- **Zodiac Card:** Green border with gradient background
+- **Strengths Badges:** Green themed styling
+- **Characteristics:** Green gradient treatment
+- **Oracle Wisdom:** Green themed card
+- **Save Button:** Green gradient with hover effects
+- **Fun Facts:** Green header and mantra styling
+- **Background:** Dark green (`#050a05`) for consistency with FREE page
+
+---
+
+### Modified Files
+
+| File | Changes |
+|------|---------|
+| `src/app/layout.tsx` | GA4 script integration with env var support |
+| `src/app/admin-test/page.tsx` | Analytics tab, date validation, GA4 link in footer |
+| `src/app/free/page.tsx` | Date validation with friendly errors |
+| `src/app/api/analytics/track/route.ts` | Birth year and focus mode tracking |
+| `src/app/api/analytics/stats/route.ts` | Comprehensive stats API with CSV export |
+| `src/components/reveal/ZodiacSummary.tsx` | Green UI treatments for PAID page |
+| `src/lib/validation/date-validator.ts` | NEW - Date validation utility |
+| `CLAUDE.md` | Added GA4 section with quick access links |
+
+---
+
+### New Files
+
+| File | Purpose |
+|------|---------|
+| `src/lib/validation/date-validator.ts` | Date validation for 1910-2027 range |
+| `docs/migrations/003_analytics_birth_year.sql` | SQL migration for analytics columns |
+
+---
+
+### Database Migration
+
+Run in Supabase SQL Editor:
+```sql
+-- Add new columns to oracle_analytics table
+ALTER TABLE oracle_analytics
+ADD COLUMN IF NOT EXISTS birth_year INTEGER,
+ADD COLUMN IF NOT EXISTS focus_mode TEXT;
+
+-- Create indexes for analytics queries
+CREATE INDEX IF NOT EXISTS idx_oracle_analytics_birth_year
+ON oracle_analytics (birth_year);
+
+CREATE INDEX IF NOT EXISTS idx_oracle_analytics_type_year
+ON oracle_analytics (oracle_type, birth_year);
+```
+
+---
+
+### Environment Variables
+
+Added to Vercel:
+```
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-EV6LX78YP1
+```
+
+---
+
+### Admin Panel Enhancements
+
+#### Footer Links (Updated)
+```
+📈 Google Analytics (Realtime) | 📊 SuperAdmin Dashboard | 📸 Collections Screenshot | 🎨 Examples Page | Return to Home
+```
+
+#### Analytics Tab Features
+- View FREE or PAID analytics separately
+- Filter by showing/hiding zero rows
+- Download CSV for either table
+- See mode distribution for PAID oracles
+- Auto-refresh capability
+
+---
+
 ## Version 1.4.0 - Celebrity Quotes & Viral Share Content (January 19, 2026)
 
 **Status:** PRODUCTION LIVE
@@ -460,6 +591,8 @@ This release marks the **production launch** of Red Horse Oracle, the world's fi
 
 | Version | Date | Description |
 |---------|------|-------------|
+| 1.5.0 | Jan 20, 2026 | Google Analytics 4, Admin enhancements, date validation |
+| 1.4.0 | Jan 19, 2026 | Celebrity quotes, viral share content, quote descriptions |
 | 1.3.0 | Jan 18, 2026 | Rotating backgrounds, LinkedIn share, marketing assets |
 | 1.2.0 | Jan 17, 2026 | Analytics, Share Talisman Image, webhook idempotency |
 | 1.1.0 | Jan 16, 2026 | Limited Edition system, Maker's Mark, custom domain |

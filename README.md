@@ -83,12 +83,19 @@ Each talisman is a **one-of-a-kind masterpiece** of Chinese zodiac artwork, pers
 - **Maker's Mark** - Certificate of authenticity on every oracle
 - **Closing date** - All editions close February 17, 2027 (end of Fire Horse year)
 
+### Google Analytics 4 Integration
+- **GA4 Measurement ID:** `G-EV6LX78YP1`
+- **Realtime tracking** of all page views and user sessions
+- **Quick access link** to GA4 Realtime from Admin panel
+- **Privacy-compliant** - No PII collected by GA4
+
 ### Analytics Dashboard (Admin)
-- **Access:** `/admin-analytics` (PIN required)
-- **Tracks:** Free readings and paid oracles by zodiac sign
-- **No PII collected** - Only counters for marketing purposes
-- **Auto-refresh** every 30 seconds
-- **Revenue tracking** - Shows gross revenue by zodiac sign
+- **Access:** `/admin-test` → Analytics tab (PIN required)
+- **Tracks:** FREE and PAID oracles by Year, Sign, Element, Mode
+- **Summary Cards:** FREE total, PAID total, Combined total
+- **Mode Distribution:** Breakdown by Wealth/Power/Love/Shield
+- **CSV Export:** Download analytics data for reporting
+- **GA4 Link:** Direct access to Google Analytics Realtime
 
 ### Payment & Integration
 - **$8.88 price point** (auspicious number in Chinese culture)
@@ -108,6 +115,7 @@ Each talisman is a **one-of-a-kind masterpiece** of Chinese zodiac artwork, pers
 | Payments | Stripe Payment Links (LIVE) |
 | AI Text | Google Gemini 3 Pro |
 | AI Images | Google Gemini 3 Pro (Native) |
+| Analytics | Google Analytics 4 (GA4) |
 | Hosting | Vercel Edge Network |
 
 ## Quick Start
@@ -133,6 +141,7 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 NEXT_PUBLIC_STRIPE_PAYMENT_LINK=https://buy.stripe.com/...
 GEMINI_API_KEY=your_gemini_key
 NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-EV6LX78YP1
 ```
 
 ### 3. Database Setup
@@ -191,6 +200,7 @@ src/
 │   ├── stripe/               # Payment processing
 │   ├── gemini/               # AI generation
 │   ├── zodiac/               # Zodiac calculations
+│   ├── validation/           # Input validation (date-validator.ts)
 │   └── utils/                # Utilities
 ├── constants/
 │   ├── modes.ts              # Product modes
@@ -214,6 +224,8 @@ public/
 | `/api/webhook` | POST | Stripe webhook handler |
 | `/api/prophecy/[id]` | GET | Get prophecy by ID |
 | `/api/admin-test` | POST | Generate test prophecy (requires PIN) |
+| `/api/analytics/track` | POST | Track oracle generation (FREE/PAID) |
+| `/api/analytics/stats` | GET | Get analytics stats (requires PIN) |
 | `/api/export-examples` | GET | Export example prophecy data |
 | `/api/health` | GET | Health check |
 
@@ -245,7 +257,7 @@ All 12 animals with authentic representations:
 - **[docs/FEATURES.md](./docs/FEATURES.md)** - Detailed feature documentation
 - **[docs/DESIGN.md](./docs/DESIGN.md)** - Design philosophy and UX principles
 - **[docs/ANNOUNCEMENT.md](./docs/ANNOUNCEMENT.md)** - Press release and introduction
-- **[docs/RELEASE-NOTES.md](./docs/RELEASE-NOTES.md)** - Version history and changelog (v1.3.0)
+- **[docs/RELEASE-NOTES.md](./docs/RELEASE-NOTES.md)** - Version history and changelog (v1.5.0)
 
 ## Deployment
 

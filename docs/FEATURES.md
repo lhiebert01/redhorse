@@ -103,7 +103,7 @@ A protective mantra for spiritual defense:
 
 ### Image Generation Technology
 
-Talismans are generated using **Google Gemini 2.0 Flash** with advanced image generation capabilities:
+Talismans are generated using **Google Gemini 3 Pro** with advanced image generation capabilities:
 
 - **Resolution:** High-resolution masterpiece artwork
 - **Style:** Authentic Chinese zodiac artistic traditions
@@ -321,6 +321,26 @@ prophecies (
 - Retry mechanisms for AI API calls
 - User-friendly error messages
 - Admin console for manual testing
+
+### Analytics & Tracking
+
+**Google Analytics 4 (GA4):**
+- Measurement ID: `G-EV6LX78YP1`
+- Stream Name: `RedHorseOracle.Com`
+- Realtime tracking of page views and sessions
+- Privacy-compliant implementation
+
+**Internal Analytics:**
+- Tracks FREE and PAID oracle generations
+- Aggregates by Year, Sign, Element, Mode
+- No PII collected (birth year only, not full date)
+- CSV export for reporting
+- Admin dashboard at `/admin-test` → Analytics tab
+
+**Data Validation:**
+- Birth date validation (1910-2027 range)
+- Friendly error messages for invalid dates
+- Prevents spoofing/hacking attempts
 
 ---
 
