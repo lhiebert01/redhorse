@@ -997,7 +997,7 @@ function AdminTestContent() {
         {/* Footer Links */}
         <div className="flex flex-wrap gap-4 mt-8 justify-center">
           <a
-            href="https://analytics.google.com/analytics/web/#/a262520045p361701041/realtime/overview"
+            href="https://analytics.google.com/analytics/web/#/a262520045p520655951/realtime/overview"
             target="_blank"
             rel="noopener noreferrer"
             className="text-green-400 text-sm hover:text-green-300 font-medium"

@@ -145,8 +145,8 @@ Copy from `import.env` (gitignored) or create `.env.local`
 ### Quick Access Links
 | Purpose | URL |
 |---------|-----|
-| **Realtime Dashboard** | https://analytics.google.com/analytics/web/?authuser=0#/p470aborealtime/overview (select redhorseoracle.com property) |
-| **All Reports** | https://analytics.google.com/analytics/web/ → Select redhorseoracle.com |
+| **Realtime Dashboard** | https://analytics.google.com/analytics/web/#/a262520045p520655951/realtime/overview |
+| **All Reports** | https://analytics.google.com/analytics/web/#/a262520045p520655951/reports |
 | **Admin Panel Link** | Available in Admin Console footer: "📈 Google Analytics (Realtime)" |
 
 ### GA4 Configuration
