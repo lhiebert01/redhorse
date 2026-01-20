@@ -214,40 +214,44 @@ export default function FreeReadingPage() {
           <div className="space-y-8">
             {/* ========== CELEBRITY QUOTE BANNER - TOP OF PAGE ========== */}
             {funFacts && elementColors && (
-              <div className="relative overflow-hidden rounded-2xl border-2 border-green-500/60">
-                {/* Subtle green gradient background with inner glow */}
-                <div className="absolute inset-0 bg-gradient-to-br from-green-900/40 via-green-950/60 to-black"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-green-800/20"></div>
-                {/* Inner glow effect */}
-                <div className="absolute inset-0 shadow-[inset_0_0_30px_rgba(34,197,94,0.15)]"></div>
+              <div className="relative">
+                {/* Outer glow effect */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-green-500/50 via-emerald-400/50 to-teal-500/50 rounded-2xl blur-sm"></div>
+                <div className="relative overflow-hidden rounded-2xl border-2 border-green-400/70 shadow-lg shadow-green-500/20">
+                  {/* Colorful gradient background */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-green-900/60 via-emerald-950/70 to-teal-950/60"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-green-700/30"></div>
+                  {/* Inner glow effect */}
+                  <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(34,197,94,0.2)]"></div>
 
-                <div className="relative p-4 text-center">
-                  {/* Decorative corners - green themed */}
-                  <div className="absolute top-2 left-2 text-2xl text-green-400/40">✦</div>
-                  <div className="absolute top-2 right-2 text-2xl text-green-400/40">✦</div>
-                  <div className="absolute bottom-2 left-2 text-2xl text-green-400/40">✦</div>
-                  <div className="absolute bottom-2 right-2 text-2xl text-green-400/40">✦</div>
+                  <div className="relative p-4 text-center">
+                    {/* Decorative corners - brighter */}
+                    <div className="absolute top-2 left-2 text-2xl text-emerald-400/60">✦</div>
+                    <div className="absolute top-2 right-2 text-2xl text-emerald-400/60">✦</div>
+                    <div className="absolute bottom-2 left-2 text-2xl text-emerald-400/60">✦</div>
+                    <div className="absolute bottom-2 right-2 text-2xl text-emerald-400/60">✦</div>
 
-                  {/* The Quote - Compact with inline quotes */}
-                  <p className="text-xl md:text-2xl font-black leading-snug text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
-                    <span className="text-green-400 opacity-70">&ldquo;</span>{funFacts.quote}<span className="text-green-400 opacity-70">&rdquo;</span>
-                  </p>
-
-                  {/* Attribution - Compact */}
-                  <div className="mt-3">
-                    <p className="text-green-400 font-bold text-lg">
-                      — {funFacts.quoteAuthor}
+                    {/* The Quote - Compact with inline quotes */}
+                    <p className="text-xl md:text-2xl font-black leading-snug text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+                      <span className="text-emerald-400">&ldquo;</span>{funFacts.quote}<span className="text-emerald-400">&rdquo;</span>
                     </p>
-                    <p className="text-gray-400 text-xs italic">
-                      {funFacts.quoteAuthorDescription}
-                    </p>
-                  </div>
 
-                  {/* Celebrity Badge - green themed */}
-                  <div className="inline-block mt-4 bg-gradient-to-r from-green-600 via-green-500 to-green-600 rounded-full px-5 py-2 shadow-lg shadow-green-500/30">
-                    <p className="text-black text-sm font-bold">
-                      {funFacts.emoji} Famous {result.element} {result.animal} {funFacts.emoji}
-                    </p>
+                    {/* Attribution - Compact */}
+                    <div className="mt-3">
+                      <p className="text-emerald-300 font-bold text-lg">
+                        — {funFacts.quoteAuthor}
+                      </p>
+                      <p className="text-gray-400 text-xs italic">
+                        {funFacts.quoteAuthorDescription}
+                      </p>
+                    </div>
+
+                    {/* Celebrity Badge - vibrant gradient */}
+                    <div className="inline-block mt-4 bg-gradient-to-r from-green-500 via-emerald-400 to-teal-500 rounded-full px-5 py-2 shadow-lg shadow-emerald-500/40">
+                      <p className="text-black text-sm font-bold">
+                        {funFacts.emoji} Famous {result.element} {result.animal} {funFacts.emoji}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
