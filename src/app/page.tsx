@@ -74,28 +74,27 @@ export default function Home() {
         }}
       />
 
-      {/* Fire Horse Quote Ticker - Smooth infinite scroll */}
-      <div className="fixed bottom-2 left-0 right-0 z-0 pointer-events-none overflow-hidden">
+      {/* Fire Horse Quote Ticker - Smooth infinite scroll with fade edges */}
+      <div className="fixed bottom-2 left-0 right-0 z-0 pointer-events-none overflow-hidden marquee-container">
         <div className="marquee-track flex whitespace-nowrap py-3">
-          <span className="marquee-content text-3xl md:text-4xl font-semibold text-fire-gold/30 px-4">
+          <span className="marquee-content text-3xl md:text-4xl font-semibold text-fire-gold/30 px-8">
             {FIRE_HORSE_TICKER_TEXT}
           </span>
-          <span className="marquee-content text-3xl md:text-4xl font-semibold text-fire-gold/30 px-4">
-            {FIRE_HORSE_TICKER_TEXT}
-          </span>
-          <span className="marquee-content text-3xl md:text-4xl font-semibold text-fire-gold/30 px-4">
-            {FIRE_HORSE_TICKER_TEXT}
-          </span>
-          <span className="marquee-content text-3xl md:text-4xl font-semibold text-fire-gold/30 px-4">
+          <span className="marquee-content text-3xl md:text-4xl font-semibold text-fire-gold/30 px-8">
             {FIRE_HORSE_TICKER_TEXT}
           </span>
         </div>
       </div>
 
-      {/* Smooth marquee animation */}
+      {/* Smooth marquee animation with fade edges */}
       <style jsx>{`
+        .marquee-container {
+          mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+          -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+        }
         .marquee-track {
-          animation: scroll 30s linear infinite;
+          animation: scroll 25s linear infinite;
+          width: max-content;
         }
         @keyframes scroll {
           0% { transform: translateX(0); }
