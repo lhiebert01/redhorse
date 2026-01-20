@@ -83,14 +83,14 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Marquee animation - 4x faster */}
+      {/* Marquee animation - 3x faster */}
       <style jsx>{`
         @keyframes marquee {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
         .animate-marquee {
-          animation: marquee 11s linear infinite;
+          animation: marquee 15s linear infinite;
         }
       `}</style>
 
