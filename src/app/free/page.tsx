@@ -254,18 +254,18 @@ export default function FreeReadingPage() {
             )}
 
             {/* BIG HERO TITLE - Make it OBVIOUS this is their FREE Oracle */}
-            <div className="bg-gradient-to-r from-fire-gold via-yellow-500 to-fire-gold rounded-2xl p-1">
-              <div className="bg-black rounded-xl p-6 text-center">
-                <p className="text-fire-gold text-xs uppercase tracking-[0.25em] mb-2">
+            <div className="bg-gradient-to-r from-green-500 via-emerald-400 to-green-500 rounded-2xl p-1">
+              <div className="bg-gradient-to-b from-green-950/80 to-black rounded-xl p-6 text-center">
+                <p className="text-green-400 text-xs uppercase tracking-[0.25em] mb-2">
                   Your Personalized Reading is Ready
                 </p>
                 <h1 className="text-2xl md:text-3xl font-bold text-white leading-tight mb-2">
-                  HERE IS YOUR <span className="text-fire-gold">FREE</span> ORACLE
+                  HERE IS YOUR <span className="text-green-400">FREE</span> ORACLE
                   <br />
                   <span className="text-lg md:text-xl text-gray-300">for the Year of the Fire Horse 2026</span>
                 </h1>
-                <div className="mt-4 inline-block bg-fire-gold/20 border-2 border-fire-gold rounded-xl px-6 py-3">
-                  <p className="text-fire-gold text-lg font-bold">
+                <div className="mt-4 inline-block bg-green-900/40 border-2 border-green-500/70 rounded-xl px-6 py-3">
+                  <p className="text-green-300 text-lg font-bold">
                     You are a {result.element} {result.animal}
                   </p>
                   <p className="text-3xl mt-1">
@@ -432,12 +432,12 @@ export default function FreeReadingPage() {
             )}
 
             {/* Zodiac Identity Card - Using digital card style consistently */}
-            <div className="bg-gradient-to-br from-red-950/50 to-black border border-fire-gold/30 rounded-2xl p-6 text-center">
-              <p className="text-gray-400 text-sm uppercase tracking-widest mb-2">
+            <div className="bg-gradient-to-br from-green-950/50 to-black border border-green-500/40 rounded-2xl p-6 text-center">
+              <p className="text-green-400/80 text-sm uppercase tracking-widest mb-2">
                 Your Chinese Zodiac
               </p>
               <div className="flex items-center justify-center gap-4 mb-4">
-                <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-fire-gold shadow-lg shadow-fire-gold/30">
+                <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-green-500 shadow-lg shadow-green-500/30">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={`/assets/zodiac-badges-free/${result.element.toLowerCase()}-${result.animal.toLowerCase()}.jpeg`}
@@ -446,10 +446,10 @@ export default function FreeReadingPage() {
                   />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-bold text-fire-gold">
+                  <h2 className="text-3xl font-bold text-green-400">
                     {result.element} {result.animal}
                   </h2>
-                  <p className="text-4xl text-red-300">
+                  <p className="text-4xl text-emerald-300">
                     {ELEMENT_CHINESE[result.element]}{ZODIAC_CHINESE[result.animal]}
                   </p>
                 </div>
