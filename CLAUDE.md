@@ -170,6 +170,23 @@ GA4 is implemented in `src/app/layout.tsx` using raw `<script>` tags in `<head>`
 - Loads `gtag.js` from Google Tag Manager
 - No environment variable dependency
 
+### Troubleshooting GA4
+
+**IMPORTANT:** See `docs/LESSONS-LEARNED.md` for detailed troubleshooting guide.
+
+**Quick Tips:**
+1. **Don't change the Measurement ID** - Google caches domain associations
+2. **Use hardcoded IDs** - Environment variables can fail silently
+3. **Check Network tab** - Filter by "collect" to see if tracking fires
+4. **Test in Incognito** - Bypasses ad blockers and cache
+5. **Raw `<script>` tags work better** than Next.js `<Script>` component for GA4
+
+**If GA4 stops working:**
+1. First verify the Measurement ID matches `G-EV6LX78YP1`
+2. Check `src/app/layout.tsx` for correct script tags
+3. Test in Incognito browser
+4. Check Network tab for "collect" requests
+
 ---
 
 ## AI Image Generation

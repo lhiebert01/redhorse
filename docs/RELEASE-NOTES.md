@@ -16,19 +16,20 @@ This release adds **Google Analytics 4 (GA4) Integration**, **Enhanced Admin Das
 ### New Features
 
 #### Google Analytics 4 (GA4) Integration
-- **Measurement ID:** `G-S90TFZBY84`
-- **Stream Name:** `RedHorseOracle.Com`
-- **Property ID:** `361701041`
-- **Implementation:** Next.js `<Script>` tags with `afterInteractive` strategy
-- **Environment Variable:** `NEXT_PUBLIC_GA_MEASUREMENT_ID`
+- **Measurement ID:** `G-EV6LX78YP1` (hardcoded for reliability)
+- **Property Name:** `RedHorseOracle.Com`
+- **Implementation:** Raw `<script>` tags in `<head>` section of `layout.tsx`
+- **Status:** ✅ Working - Real-time tracking active
 - **Quick Access:** Direct link to GA4 Realtime from Admin panel
 
 #### GA4 Quick Access Links
 | Purpose | URL |
 |---------|-----|
-| **Realtime Dashboard** | https://analytics.google.com/analytics/web/#/a262520045p361701041/realtime/overview |
-| **All Reports** | https://analytics.google.com/analytics/web/#/a262520045p361701041/reports |
-| **Admin/Settings** | https://analytics.google.com/analytics/web/#/a262520045p361701041/admin |
+| **Realtime Dashboard** | https://analytics.google.com → Select RedHorseOracle.Com → Realtime |
+| **All Reports** | https://analytics.google.com → Select RedHorseOracle.Com |
+
+#### GA4 Lessons Learned (January 20, 2026)
+See `docs/LESSONS-LEARNED.md` for detailed troubleshooting guide.
 
 #### Enhanced Admin Dashboard
 - **New Analytics Tab:** Track FREE and PAID oracles by Year, Sign, Element, Mode
