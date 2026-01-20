@@ -219,40 +219,26 @@ export default function FreeReadingPage() {
                 <div className={`absolute inset-0 bg-gradient-to-r ${elementColors.gradient} opacity-30`}></div>
                 <div className="absolute inset-0 bg-black/70"></div>
 
-                <div className="relative p-6 text-center">
+                <div className="relative p-4 text-center">
                   {/* Decorative corners */}
-                  <div className="absolute top-3 left-3 text-3xl opacity-30">✦</div>
-                  <div className="absolute top-3 right-3 text-3xl opacity-30">✦</div>
-                  <div className="absolute bottom-3 left-3 text-3xl opacity-30">✦</div>
-                  <div className="absolute bottom-3 right-3 text-3xl opacity-30">✦</div>
+                  <div className="absolute top-2 left-2 text-2xl opacity-30">✦</div>
+                  <div className="absolute top-2 right-2 text-2xl opacity-30">✦</div>
+                  <div className="absolute bottom-2 left-2 text-2xl opacity-30">✦</div>
+                  <div className="absolute bottom-2 right-2 text-2xl opacity-30">✦</div>
 
-                  {/* Quote marks with element color */}
-                  <div className={`text-6xl mb-2 ${elementColors.text} opacity-60 font-serif`}>&ldquo;</div>
+                  {/* The Quote - Compact with inline quotes */}
+                  <p className={`text-xl md:text-2xl font-black leading-snug text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]`}>
+                    <span className={`${elementColors.text} opacity-70`}>&ldquo;</span>{funFacts.quote}<span className={`${elementColors.text} opacity-70`}>&rdquo;</span>
+                  </p>
 
-                  {/* The Quote - Artistic Typography */}
-                  <blockquote className="relative">
-                    <p className={`text-2xl md:text-3xl font-black leading-relaxed mb-2 text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]`}>
-                      {funFacts.quote}
+                  {/* Attribution - Compact */}
+                  <div className="mt-3">
+                    <p className={`${elementColors.text} font-bold text-lg`}>
+                      — {funFacts.quoteAuthor}
                     </p>
-                  </blockquote>
-
-                  {/* Closing quote */}
-                  <div className={`text-4xl ${elementColors.text} opacity-40 font-serif -mt-2`}>&rdquo;</div>
-
-                  {/* Attribution Line with Description */}
-                  <div className="mt-4 space-y-2">
-                    <div className="flex items-center justify-center gap-3">
-                      <div className={`h-px w-16 bg-gradient-to-r ${elementColors.gradient}`}></div>
-                      <div className="text-center">
-                        <p className={`${elementColors.text} font-bold text-xl`}>
-                          — {funFacts.quoteAuthor}
-                        </p>
-                        <p className="text-gray-400 text-sm italic">
-                          {funFacts.quoteAuthorDescription}
-                        </p>
-                      </div>
-                      <div className={`h-px w-16 bg-gradient-to-r ${elementColors.gradient}`}></div>
-                    </div>
+                    <p className="text-gray-400 text-xs italic">
+                      {funFacts.quoteAuthorDescription}
+                    </p>
                   </div>
 
                   {/* Celebrity Badge */}
