@@ -9,6 +9,17 @@ export default function TermsPage() {
   return (
     <main className="min-h-screen bg-black text-gray-300 py-12 px-4">
       <div className="max-w-2xl mx-auto">
+        {/* Prominent Back Button at TOP */}
+        <div className="mb-8">
+          <a
+            href="/"
+            className="inline-flex items-center gap-2 bg-fire-gold hover:bg-yellow-500 text-black font-bold text-lg px-6 py-3 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg"
+          >
+            <span className="text-xl">←</span>
+            <span>Back to Home</span>
+          </a>
+        </div>
+
         <h1 className="text-3xl font-bold text-fire-gold mb-8">Terms of Service</h1>
 
         <p className="text-gray-500 mb-8">Last Updated: January 13, 2026</p>
@@ -99,9 +110,14 @@ export default function TermsPage() {
           </section>
         </div>
 
+        {/* Prominent Back Button at BOTTOM */}
         <div className="mt-12 pt-8 border-t border-gray-800">
-          <a href="/" className="text-fire-gold hover:underline">
-            ← Back to Home
+          <a
+            href="/"
+            className="inline-flex items-center gap-2 bg-fire-gold hover:bg-yellow-500 text-black font-bold text-lg px-6 py-3 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg"
+          >
+            <span className="text-xl">←</span>
+            <span>Back to Home</span>
           </a>
         </div>
       </div>

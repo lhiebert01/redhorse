@@ -1082,9 +1082,14 @@ export default function FreeReadingPage() {
         </div>
 
         {/* Back to Home */}
+        {/* Prominent Back Button */}
         <div className="mt-8 text-center">
-          <a href="/" className="text-fire-gold hover:underline text-sm">
-            ← Back to Home
+          <a
+            href="/"
+            className="inline-flex items-center gap-2 bg-fire-gold hover:bg-yellow-500 text-black font-bold text-lg px-6 py-3 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg"
+          >
+            <span className="text-xl">←</span>
+            <span>Back to Home</span>
           </a>
         </div>
 

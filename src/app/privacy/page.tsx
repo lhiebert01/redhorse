@@ -9,6 +9,17 @@ export default function PrivacyPage() {
   return (
     <main className="min-h-screen bg-black text-gray-300 py-12 px-4">
       <div className="max-w-2xl mx-auto">
+        {/* Prominent Back Button at TOP */}
+        <div className="mb-8">
+          <a
+            href="/"
+            className="inline-flex items-center gap-2 bg-fire-gold hover:bg-yellow-500 text-black font-bold text-lg px-6 py-3 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg"
+          >
+            <span className="text-xl">←</span>
+            <span>Back to Home</span>
+          </a>
+        </div>
+
         <h1 className="text-3xl font-bold text-fire-gold mb-4">Privacy Policy</h1>
         <p className="text-xl text-green-400 font-bold mb-8">Privacy by Design - Zero PII Collection</p>
 
@@ -237,9 +248,14 @@ export default function PrivacyPage() {
           </ul>
         </div>
 
+        {/* Prominent Back Button at BOTTOM */}
         <div className="mt-12 pt-8 border-t border-gray-800">
-          <a href="/" className="text-fire-gold hover:underline">
-            ← Back to Home
+          <a
+            href="/"
+            className="inline-flex items-center gap-2 bg-fire-gold hover:bg-yellow-500 text-black font-bold text-lg px-6 py-3 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg"
+          >
+            <span className="text-xl">←</span>
+            <span>Back to Home</span>
           </a>
         </div>
       </div>

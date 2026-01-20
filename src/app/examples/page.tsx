@@ -45,9 +45,14 @@ export default function ExamplesPage() {
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 py-6">
         {/* Back Link */}
-        <div className="text-center mb-4">
-          <a href="/" className="text-fire-gold hover:text-yellow-300 text-sm">
-            ← Back to Home
+        {/* Prominent Back Button */}
+        <div className="mb-6">
+          <a
+            href="/"
+            className="inline-flex items-center gap-2 bg-fire-gold hover:bg-yellow-500 text-black font-bold text-base px-5 py-2.5 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg"
+          >
+            <span className="text-lg">←</span>
+            <span>Back to Home</span>
           </a>
         </div>
 
