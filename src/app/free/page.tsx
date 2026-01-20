@@ -214,26 +214,28 @@ export default function FreeReadingPage() {
           <div className="space-y-8">
             {/* ========== CELEBRITY QUOTE BANNER - TOP OF PAGE ========== */}
             {funFacts && elementColors && (
-              <div className={`relative overflow-hidden rounded-2xl border-2 ${elementColors.border}`}>
-                {/* Animated gradient background */}
-                <div className={`absolute inset-0 bg-gradient-to-r ${elementColors.gradient} opacity-30`}></div>
-                <div className="absolute inset-0 bg-black/70"></div>
+              <div className="relative overflow-hidden rounded-2xl border-2 border-green-500/60">
+                {/* Subtle green gradient background with inner glow */}
+                <div className="absolute inset-0 bg-gradient-to-br from-green-900/40 via-green-950/60 to-black"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-green-800/20"></div>
+                {/* Inner glow effect */}
+                <div className="absolute inset-0 shadow-[inset_0_0_30px_rgba(34,197,94,0.15)]"></div>
 
                 <div className="relative p-4 text-center">
-                  {/* Decorative corners */}
-                  <div className="absolute top-2 left-2 text-2xl opacity-30">✦</div>
-                  <div className="absolute top-2 right-2 text-2xl opacity-30">✦</div>
-                  <div className="absolute bottom-2 left-2 text-2xl opacity-30">✦</div>
-                  <div className="absolute bottom-2 right-2 text-2xl opacity-30">✦</div>
+                  {/* Decorative corners - green themed */}
+                  <div className="absolute top-2 left-2 text-2xl text-green-400/40">✦</div>
+                  <div className="absolute top-2 right-2 text-2xl text-green-400/40">✦</div>
+                  <div className="absolute bottom-2 left-2 text-2xl text-green-400/40">✦</div>
+                  <div className="absolute bottom-2 right-2 text-2xl text-green-400/40">✦</div>
 
                   {/* The Quote - Compact with inline quotes */}
-                  <p className={`text-xl md:text-2xl font-black leading-snug text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]`}>
-                    <span className={`${elementColors.text} opacity-70`}>&ldquo;</span>{funFacts.quote}<span className={`${elementColors.text} opacity-70`}>&rdquo;</span>
+                  <p className="text-xl md:text-2xl font-black leading-snug text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+                    <span className="text-green-400 opacity-70">&ldquo;</span>{funFacts.quote}<span className="text-green-400 opacity-70">&rdquo;</span>
                   </p>
 
                   {/* Attribution - Compact */}
                   <div className="mt-3">
-                    <p className={`${elementColors.text} font-bold text-lg`}>
+                    <p className="text-green-400 font-bold text-lg">
                       — {funFacts.quoteAuthor}
                     </p>
                     <p className="text-gray-400 text-xs italic">
@@ -241,8 +243,8 @@ export default function FreeReadingPage() {
                     </p>
                   </div>
 
-                  {/* Celebrity Badge */}
-                  <div className={`inline-block mt-4 bg-gradient-to-r ${elementColors.gradient} rounded-full px-5 py-2 shadow-lg`}>
+                  {/* Celebrity Badge - green themed */}
+                  <div className="inline-block mt-4 bg-gradient-to-r from-green-600 via-green-500 to-green-600 rounded-full px-5 py-2 shadow-lg shadow-green-500/30">
                     <p className="text-black text-sm font-bold">
                       {funFacts.emoji} Famous {result.element} {result.animal} {funFacts.emoji}
                     </p>

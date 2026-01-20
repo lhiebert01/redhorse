@@ -152,16 +152,18 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement, focusMode, fu
       {/* ========== CELEBRITY QUOTE BANNER - TOP OF FORECAST ========== */}
       {funFacts && elementColors && element && (
         <div className={`relative overflow-hidden rounded-2xl border-2 ${elementColors.border}`}>
-          {/* Animated gradient background */}
-          <div className={`absolute inset-0 bg-gradient-to-r ${elementColors.gradient} opacity-30`}></div>
-          <div className="absolute inset-0 bg-black/70"></div>
+          {/* Layered gradient background with depth */}
+          <div className={`absolute inset-0 bg-gradient-to-br ${elementColors.gradient} opacity-20`}></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/40 to-transparent"></div>
+          {/* Subtle inner glow for depth */}
+          <div className={`absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.5)]`}></div>
 
           <div className="relative p-4 text-center">
-            {/* Decorative corners */}
-            <div className="absolute top-2 left-2 text-2xl opacity-30">✦</div>
-            <div className="absolute top-2 right-2 text-2xl opacity-30">✦</div>
-            <div className="absolute bottom-2 left-2 text-2xl opacity-30">✦</div>
-            <div className="absolute bottom-2 right-2 text-2xl opacity-30">✦</div>
+            {/* Decorative corners - element colored */}
+            <div className={`absolute top-2 left-2 text-2xl ${elementColors.text} opacity-40`}>✦</div>
+            <div className={`absolute top-2 right-2 text-2xl ${elementColors.text} opacity-40`}>✦</div>
+            <div className={`absolute bottom-2 left-2 text-2xl ${elementColors.text} opacity-40`}>✦</div>
+            <div className={`absolute bottom-2 right-2 text-2xl ${elementColors.text} opacity-40`}>✦</div>
 
             {/* The Quote - Compact with inline quotes */}
             <p className={`text-xl md:text-2xl font-black leading-snug text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]`}>
@@ -178,8 +180,8 @@ export default function ZodiacSummary({ zodiacSign, zodiacElement, focusMode, fu
               </p>
             </div>
 
-            {/* Celebrity Badge */}
-            <div className={`inline-block mt-4 bg-gradient-to-r ${elementColors.gradient} rounded-full px-5 py-2 shadow-lg`}>
+            {/* Celebrity Badge with shadow */}
+            <div className={`inline-block mt-4 bg-gradient-to-r ${elementColors.gradient} rounded-full px-5 py-2 shadow-lg shadow-black/30`}>
               <p className="text-black text-sm font-bold">
                 {funFacts.emoji} Famous {element} {animal} {funFacts.emoji}
               </p>
