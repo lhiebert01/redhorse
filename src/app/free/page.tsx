@@ -862,7 +862,7 @@ export default function FreeReadingPage() {
                 <p className="text-gray-400 text-sm">
                   After this date, <span className="text-red-400 font-bold">NO MORE {result.animal} Oracles</span> will be minted for Fire Horse 2026.
                 </p>
-                <p className="text-gray-500 text-xs">
+                <p className="text-white text-base font-bold">
                   Next Fire Horse year: <span className="text-red-400">2086</span> — Will you even be alive?
                 </p>
               </div>
@@ -872,7 +872,7 @@ export default function FreeReadingPage() {
               </p>
 
               <div className="bg-black/50 border border-gray-700 rounded-xl p-4 space-y-2">
-                <p className="text-gray-400 text-xs uppercase tracking-widest">The Question Is:</p>
+                <p className="text-white text-sm font-bold uppercase tracking-widest">THE QUESTION IS:</p>
                 <p className="text-white text-xl font-bold leading-relaxed">
                   Are you someone who <span className="text-red-400">ACTS</span>?
                 </p>
