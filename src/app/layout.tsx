@@ -109,7 +109,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Google Analytics 4 - Raw script tags for maximum compatibility */}
         <script
           async
-          src="https://www.googletagmanager.com/gtag/js?id=G-EV6LX78YP1"
+          src="https://www.googletagmanager.com/gtag/js?id=G-L2RG9HQ5HJ"
         />
         <script
           dangerouslySetInnerHTML={{
@@ -117,7 +117,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'G-EV6LX78YP1');
+              gtag('config', 'G-L2RG9HQ5HJ');
             `,
           }}
         />
