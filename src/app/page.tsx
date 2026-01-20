@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { PRODUCT_MODES } from '@/constants/modes';
 
-// Celebrity Quotes for ticker
-const FIRE_HORSE_TICKER_TEXT = '🔥 "I don\'t like to gamble, but if there\'s one thing I\'m willing to bet on, it\'s myself." — Beyoncé (Metal Rooster, 1981)  •  🐴 "I\'m going to follow my path. I\'m going to run my race." — Halle Berry (Fire Horse, 1966)  •  🔥 "I only have to follow my heart." — Janet Jackson (Fire Horse, 1966)  •  🐴 "I was always willful. I\'ll do it my way." — Robin Wright (Fire Horse, 1966)  •  ✨ Fire Horse year: 2026 — Only once every 60 years!  •  ';
+// Celebrity Quotes for ticker - Fire Horse celebrities + Beyoncé "bet on yourself"
+const FIRE_HORSE_TICKER_TEXT = '🔥 "I don\'t like to gamble, but if there\'s one thing I\'m willing to bet on, it\'s myself." — Beyoncé  •  🐴 "I\'m going to follow my path. I\'m going to run my race." — Halle Berry (Fire Horse, 1966)  •  🔥 "I only have to follow my heart." — Janet Jackson (Fire Horse, 1966)  •  🐴 "I was always willful. I\'ll do it my way." — Robin Wright (Fire Horse, 1966)  •  ✨ Fire Horse 2026 — Once every 60 years!  •  ';
 
 // Background images to rotate through - alternating main with grids
 const BACKGROUND_IMAGES = [
