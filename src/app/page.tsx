@@ -74,23 +74,23 @@ export default function Home() {
         }}
       />
 
-      {/* Fire Horse Quote Ticker - Bottom strip, 3x bigger */}
+      {/* Fire Horse Quote Ticker - Bottom strip */}
       <div className="fixed bottom-2 left-0 right-0 z-0 pointer-events-none overflow-hidden">
-        <div className="animate-marquee whitespace-nowrap py-2">
-          <span className="text-2xl md:text-3xl font-semibold text-fire-gold/30">
+        <div className="animate-marquee whitespace-nowrap py-3">
+          <span className="text-3xl md:text-4xl font-semibold text-fire-gold/30">
             {FIRE_HORSE_TICKER_TEXT}{FIRE_HORSE_TICKER_TEXT}
           </span>
         </div>
       </div>
 
-      {/* Marquee animation */}
+      {/* Marquee animation - 4x faster */}
       <style jsx>{`
         @keyframes marquee {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
         .animate-marquee {
-          animation: marquee 45s linear infinite;
+          animation: marquee 11s linear infinite;
         }
       `}</style>
 
