@@ -1,12 +1,8 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import './globals.css';
 
 // Production domain
 const siteUrl = 'https://redhorseoracle.com';
-
-// Google Analytics Measurement ID - Hardcoded for reliability
-const GA_MEASUREMENT_ID = 'G-S90TFZBY84';
 
 export const metadata: Metadata = {
   title: 'Red Horse Oracle | AI-Powered Fire Horse Prophecy 2026',
@@ -110,6 +106,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
+        {/* Google Analytics 4 - Raw script tags for maximum compatibility */}
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-S90TFZBY84"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-S90TFZBY84');
+            `,
+          }}
+        />
         {/* Structured Data for SEO */}
         <script
           type="application/ld+json"
@@ -118,20 +129,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="antialiased">
         {children}
-
-        {/* Google Analytics 4 */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-S90TFZBY84"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-S90TFZBY84');
-          `}
-        </Script>
       </body>
     </html>
   );
