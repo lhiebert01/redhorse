@@ -57,11 +57,12 @@
 
 ---
 
-## 3. FACEBOOK
+## 3. FACEBOOK ✅ LIVE + BOOSTED
 
-**Date Posted:** ___________
-**Time Posted:** ___________
-**URL:** ___________
+**Date Posted:** January 21, 2026
+**Time Posted:** Afternoon
+**URL:** https://www.facebook.com/share/p/1DbTTFyi8S/
+**Ad Boost:** YES — Paid promotion active
 
 ### Post Content:
 
@@ -70,14 +71,21 @@
 ```
 
 ### Image Used:
-- [ ] `Fire-Horse-2026-Chart-v3.jpeg`
+- [x] `Fire-Horse-2026-Chart-v3.jpeg`
 - [ ] `james-miller-dragon-wealth.png`
 - [ ] Other: ___________
+
+### Groups Shared To:
+- Chinese Culture/CNY groups
+- Astrology/Zodiac groups
+- AI/Tech Enthusiast groups
 
 ### Engagement (Update Daily):
 | Date | Reach | Likes | Comments | Shares |
 |------|-------|-------|----------|--------|
-| | | | | |
+| Jan 21 | | | | |
+| Jan 22 | | | | |
+| Jan 23 | | | | |
 
 ---
 
