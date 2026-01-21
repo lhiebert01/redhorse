@@ -36,6 +36,7 @@
 **Date Posted:** January 21, 2026
 **Time Posted:** Morning
 **URL:** https://x.com/Lindsay_Hiebert/status/2014017460811297052
+**X Premium:** $8/month ($84/year) — enables longer posts
 
 ### Post Content:
 
