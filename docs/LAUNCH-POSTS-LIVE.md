@@ -98,17 +98,14 @@
 **Date Posted:** January 21, 2026
 **Time Posted:** Afternoon
 **URL:** https://www.instagram.com/p/DTyEaPvCbsr/
-
-### Post Content:
-
-```
-[PASTE THE EXACT POST YOU USED HERE]
-```
+**2nd Post:** Also posted with Chart v3 image
 
 ### Image Used:
-- [ ] `Fire-Horse-2026-Chart-v3.jpeg`
-- [x] `james-miller-dragon-wealth.png`
+- [x] `Fire-Horse-2026-Chart-v3.jpeg` (2nd post)
+- [x] `james-miller-dragon-wealth.png` (1st post)
 - [ ] Other: ___________
+
+**Note:** Posted twice — talisman image + chart image for variety
 
 ### Engagement (Update Daily):
 | Date | Reach | Likes | Comments | Saves |
