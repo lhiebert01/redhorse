@@ -63,6 +63,9 @@
 **Time Posted:** Afternoon
 **URL:** https://www.facebook.com/share/p/1DbTTFyi8S/
 **Ad Boost:** YES — Paid promotion active
+**Ad Budget:** $6/day × 4 days = $24 total
+**Projected Reach:** 2,500 additional users
+**Ad End Date:** January 25, 2026
 
 ### Post Content:
 
