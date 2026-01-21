@@ -93,11 +93,11 @@
 
 ---
 
-## 4. INSTAGRAM
+## 4. INSTAGRAM ✅ LIVE
 
-**Date Posted:** ___________
-**Time Posted:** ___________
-**URL:** ___________
+**Date Posted:** January 21, 2026
+**Time Posted:** Afternoon
+**URL:** https://www.instagram.com/p/DTyDmNACbkU/?igsh=MW9qcWQ4NGM5eXpqMQ==
 
 ### Post Content:
 
@@ -107,13 +107,15 @@
 
 ### Image Used:
 - [ ] `Fire-Horse-2026-Chart-v3.jpeg`
-- [ ] `james-miller-dragon-wealth.png`
+- [x] `james-miller-dragon-wealth.png`
 - [ ] Other: ___________
 
 ### Engagement (Update Daily):
 | Date | Reach | Likes | Comments | Saves |
 |------|-------|-------|----------|-------|
-| | | | | |
+| Jan 21 | | | | |
+| Jan 22 | | | | |
+| Jan 23 | | | | |
 
 ---
 
