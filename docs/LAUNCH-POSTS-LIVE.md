@@ -142,12 +142,12 @@ Show HN: Red Horse Oracle – Privacy-first AI art, zero data stored
 
 ---
 
-## 6. REDDIT
+## 6. REDDIT ✅ LIVE
 
-**Subreddit:** ___________
-**Date Posted:** ___________
-**Time Posted:** ___________
-**URL:** ___________
+**Subreddit:** r/SideProject
+**Date Posted:** January 21, 2026
+**Time Posted:** Evening
+**URL:** https://www.reddit.com/r/SideProject/comments/1qj70hs/i_built_an_ai_art_generator_with_privacy_by/
 
 ### Title Used:
 
