@@ -120,7 +120,7 @@
 
 **Date Posted:** January 21, 2026
 **Time Posted:** Evening
-**URL:** https://news.ycombinator.com/item?id=TBD
+**URL:** https://news.ycombinator.com/item?id=46709387
 **Username:** lindsayhiebert
 
 ### Title Used:
