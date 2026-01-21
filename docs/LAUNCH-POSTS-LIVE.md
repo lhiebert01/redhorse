@@ -116,16 +116,17 @@
 
 ---
 
-## 5. HACKER NEWS
+## 5. HACKER NEWS ✅ LIVE
 
-**Date Posted:** ___________
-**Time Posted:** ___________
-**URL:** ___________
+**Date Posted:** January 21, 2026
+**Time Posted:** Evening
+**URL:** https://news.ycombinator.com/item?id=TBD
+**Username:** lindsayhiebert
 
 ### Title Used:
 
 ```
-[PASTE THE EXACT TITLE YOU USED HERE]
+Show HN: Red Horse Oracle – Privacy-first AI art, zero data stored
 ```
 
 ### First Comment:
