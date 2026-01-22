@@ -295,6 +295,33 @@ If you're curious how to build AI that doesn't harvest user data — give it a r
 
 ---
 
+## PAID MARKETING & INFLUENCERS
+
+### Day 1 Investment Summary
+
+| Item | Cost | Platform | Notes |
+|------|------|----------|-------|
+| X Premium | $8/mo | Twitter/X | Longer posts, verification |
+| Facebook Ad | $24 | Facebook | 4 days, 2,500 projected reach |
+| Influencer | $29 | Freelancers.com | Promoting app + blog posts |
+| Fiverr | TBD | Fiverr | Requesting bids |
+| **Total Spent** | **$61** | | |
+
+### Influencer Details
+
+**Freelancers.com Influencer ($29):**
+- Status: Hired
+- Deliverables: Promote app + Medium article
+- Platform(s): TBD
+- Link to their post(s): ___________
+
+**Fiverr Bids:**
+- Status: Requesting bids
+- Budget: TBD
+- Notes: ___________
+
+---
+
 ## CONVERSION TRACKING
 
 | Date | Platform | Clicks | Free Readings | Paid Oracles | Revenue |
