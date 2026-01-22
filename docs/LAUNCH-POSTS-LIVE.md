@@ -199,6 +199,98 @@ Show HN: Red Horse Oracle – Privacy-first AI art, zero data stored
 
 ---
 
+## 8. MEDIUM ✅ LIVE
+
+**Date Posted:** January 21, 2026
+**Time Posted:** Evening
+**URL:** https://medium.com/@lindsay.hiebert/i-built-an-ai-app-that-stores-zero-personal-data-heres-exactly-how-7776cf4b71a6
+
+### Article Title:
+```
+🧠🔒 I Built an AI App That Stores Zero Personal Data - Here's Exactly How
+```
+
+### Tags Used:
+Privacy, Artificial Intelligence, Startup, Side Project, Tech
+
+### LinkedIn Announcement Post:
+```
+I wrote about something that's been bothering me.
+
+Every AI product wants your data. Name, email, birth date, location — harvested and stored forever.
+
+I wanted to prove there's another way.
+
+So I built an AI app that personalizes your experience... then 𝗗𝗘𝗟𝗘𝗧𝗘𝗦 your data immediately.
+
+🚫 No accounts
+🚫 No emails
+🚫 No tracking
+🚫 Zero personal data stored
+
+Here's exactly how the privacy architecture works (no hand-waving):
+
+👉 https://medium.com/@lindsay.hiebert/i-built-an-ai-app-that-stores-zero-personal-data-heres-exactly-how-7776cf4b71a6
+
+The product is Red Horse Oracle — AI-generated zodiac prophecies and museum-quality digital art for the Year of the Fire Horse 2026.
+
+But the real story is proving that AI products don't have to harvest user data to work.
+
+🐎🔥 redhorseoracle.com
+
+#PrivacyByDesign #AI #Tech #Startup #BuildingInPublic
+```
+
+### X/Twitter Announcement Post:
+```
+🧠🔒 I built an AI app that stores zero personal data.
+
+Not "we take privacy seriously" corporate speak.
+
+Architecturally: store nothing.
+
+Here's exactly how it works:
+
+👉 https://medium.com/@lindsay.hiebert/i-built-an-ai-app-that-stores-zero-personal-data-heres-exactly-how-7776cf4b71a6
+
+Birth date goes in → zodiac comes out → date is DELETED.
+
+No accounts. No emails. No tracking.
+
+🐎🔥 redhorseoracle.com
+
+#PrivacyByDesign #AI
+```
+
+### Facebook Announcement Post:
+```
+🧠🔒 I wrote about something that's been bothering me.
+
+Every AI app wants your data. Name, email, birth date, location — collected and stored forever.
+
+I wanted to prove there's another way.
+
+So I built an AI app that personalizes your experience... then DELETES your data immediately.
+
+No accounts. No emails. No tracking. Zero personal data stored.
+
+Here's exactly how it works (no hand-waving, actual architecture):
+
+👉 https://medium.com/@lindsay.hiebert/i-built-an-ai-app-that-stores-zero-personal-data-heres-exactly-how-7776cf4b71a6
+
+The product is Red Horse Oracle — AI-generated zodiac prophecies and museum-quality digital art for the Year of the Fire Horse 2026.
+
+But the real story is the privacy architecture.
+
+If you're curious how to build AI that doesn't harvest user data — give it a read.
+
+🐎🔥 redhorseoracle.com
+
+#PrivacyByDesign #AI #Tech #Startup #BuildingInPublic
+```
+
+---
+
 ## CONVERSION TRACKING
 
 | Date | Platform | Clicks | Free Readings | Paid Oracles | Revenue |
