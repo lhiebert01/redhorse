@@ -213,7 +213,9 @@ Show HN: Red Horse Oracle – Privacy-first AI art, zero data stored
 ### Tags Used:
 Privacy, Artificial Intelligence, Startup, Side Project, Tech
 
-### LinkedIn Announcement Post:
+### LinkedIn Announcement Post: ✅ POSTED
+**URL:** https://www.linkedin.com/posts/lindsayhiebert_red-horse-oracle-ai-fire-horse-prophecy-activity-7419913565005979648-noB-
+
 ```
 I wrote about something that's been bothering me.
 
