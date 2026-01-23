@@ -81,10 +81,15 @@ export async function GET(request: Request) {
     // PAID ORACLE ANALYTICS
     // =====================
     // Get from prophecies table (authoritative source for paid oracles)
+    // IMPORTANT: Only count REAL paid transactions (cs_live_ prefix)
+    // This excludes:
+    //   - Admin test console (admin-test-*)
+    //   - Stripe test mode (cs_test_*)
     const { data: prophecies, error: propheciesError } = await supabase
       .from('prophecies')
-      .select('zodiac_sign, zodiac_element, focus_mode, birth_date, created_at')
+      .select('zodiac_sign, zodiac_element, focus_mode, birth_date, created_at, stripe_session_id')
       .eq('status', 'completed')
+      .like('stripe_session_id', 'cs_live_%')
       .order('created_at', { ascending: true });
 
     // Aggregate PAID stats by year + mode
