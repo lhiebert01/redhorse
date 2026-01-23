@@ -24,6 +24,7 @@ export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
   const [showWhyPrice, setShowWhyPrice] = useState(false);
+  const [showInstallModal, setShowInstallModal] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const cycleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -128,6 +129,129 @@ export default function Home() {
           />
         </svg>
       </a>
+
+      {/* Install App Button - Top Left */}
+      <button
+        onClick={() => setShowInstallModal(true)}
+        className="absolute top-4 left-4 bg-fire-gold/90 hover:bg-fire-gold text-black font-bold text-xs px-3 py-2 rounded-lg transition-all duration-300 z-20 flex items-center gap-1.5 shadow-lg"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+        </svg>
+        Install App
+      </button>
+
+      {/* Install App Modal */}
+      {showInstallModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 border-2 border-fire-gold rounded-2xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">📲</span>
+                <h3 className="text-fire-gold text-xl font-bold">Install Red Horse Oracle</h3>
+              </div>
+              <button
+                onClick={() => setShowInstallModal(false)}
+                className="text-gray-400 hover:text-white text-2xl font-bold"
+              >
+                ×
+              </button>
+            </div>
+
+            <p className="text-gray-300 text-sm mb-6 text-center">
+              Add Red Horse Oracle to your home screen for the best experience — just like a native app!
+            </p>
+
+            {/* iPhone Instructions */}
+            <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-4 mb-4">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-2xl"></span>
+                <h4 className="text-white font-bold text-lg">iPhone / iPad</h4>
+              </div>
+              <ol className="text-gray-300 text-sm space-y-2">
+                <li className="flex gap-2">
+                  <span className="text-fire-gold font-bold">1.</span>
+                  <span>Open <strong className="text-white">Safari</strong> browser</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-fire-gold font-bold">2.</span>
+                  <span>Go to <strong className="text-fire-gold">redhorseoracle.com</strong></span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-fire-gold font-bold">3.</span>
+                  <span>Tap the <strong className="text-white">Share</strong> button <span className="bg-gray-700 px-1.5 py-0.5 rounded text-xs">⬆️</span></span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-fire-gold font-bold">4.</span>
+                  <span>Scroll down and tap <strong className="text-white">&quot;Add to Home Screen&quot;</strong></span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-fire-gold font-bold">5.</span>
+                  <span>Tap <strong className="text-white">Add</strong></span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-fire-gold font-bold">6.</span>
+                  <span>Find the 🐴 icon on your home screen!</span>
+                </li>
+              </ol>
+            </div>
+
+            {/* Android Instructions */}
+            <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-4 mb-4">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-2xl">🤖</span>
+                <h4 className="text-white font-bold text-lg">Android</h4>
+              </div>
+              <ol className="text-gray-300 text-sm space-y-2">
+                <li className="flex gap-2">
+                  <span className="text-fire-gold font-bold">1.</span>
+                  <span>Open <strong className="text-white">Chrome</strong> browser</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-fire-gold font-bold">2.</span>
+                  <span>Go to <strong className="text-fire-gold">redhorseoracle.com</strong></span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-fire-gold font-bold">3.</span>
+                  <span>Tap the <strong className="text-white">3 dots</strong> menu <span className="bg-gray-700 px-1.5 py-0.5 rounded text-xs">⋮</span></span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-fire-gold font-bold">4.</span>
+                  <span>Tap <strong className="text-white">&quot;Add to Home Screen&quot;</strong> or <strong className="text-white">&quot;Install App&quot;</strong></span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-fire-gold font-bold">5.</span>
+                  <span>Tap <strong className="text-white">Add</strong></span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-fire-gold font-bold">6.</span>
+                  <span>Find the 🐴 icon on your home screen!</span>
+                </li>
+              </ol>
+            </div>
+
+            {/* Benefits */}
+            <div className="bg-fire-gold/10 border border-fire-gold/30 rounded-xl p-3 mb-4">
+              <p className="text-fire-gold text-sm font-bold text-center mb-2">Why Install?</p>
+              <div className="flex flex-wrap justify-center gap-2 text-xs">
+                <span className="bg-black/50 text-white px-2 py-1 rounded">✓ Full Screen</span>
+                <span className="bg-black/50 text-white px-2 py-1 rounded">✓ Faster Loading</span>
+                <span className="bg-black/50 text-white px-2 py-1 rounded">✓ App Icon</span>
+                <span className="bg-black/50 text-white px-2 py-1 rounded">✓ No Browser Bar</span>
+              </div>
+            </div>
+
+            {/* Close Button */}
+            <button
+              onClick={() => setShowInstallModal(false)}
+              className="w-full bg-fire-gold hover:bg-yellow-500 text-black font-bold py-3 rounded-xl transition-colors"
+            >
+              Got It!
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Added pb-12 to ensure footer isn't covered by fixed ticker */}
       <div className="max-w-lg mx-auto px-4 py-8 pb-12 flex flex-col items-center min-h-screen relative z-10">
