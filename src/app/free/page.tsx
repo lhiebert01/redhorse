@@ -180,42 +180,91 @@ export default function FreeReadingPage() {
               </div>
             )}
 
-            {/* ========== YOUR ZODIAC CARD (Semi-visible with watermark) ========== */}
-            <div className="relative">
-              <p className="text-fire-gold text-sm font-semibold text-center mb-2">
-                ✨ Your {result.element} {result.animal} Digital Art Card ✨
+            {/* ========== YOUR CARD - LARGE SHOWCASE ========== */}
+            <div className="bg-gradient-to-b from-yellow-950/30 via-black to-yellow-950/20 border-2 border-fire-gold rounded-2xl p-4 md:p-6">
+              <p className="text-fire-gold text-xs uppercase tracking-widest text-center mb-2">
+                🏆 Your Collectible Digital Art Card
               </p>
-              <div className="relative rounded-xl overflow-hidden border-2 border-fire-gold/50">
-                {/* Semi-visible Image - shows quality but not full resolution */}
+              <p className="text-white text-xl md:text-2xl font-bold text-center mb-4">
+                {result.element} {result.animal}
+              </p>
+
+              {/* LARGE Card - Their specific card */}
+              <div className="relative rounded-2xl overflow-hidden border-4 border-fire-gold shadow-2xl shadow-fire-gold/30 mb-4">
+                {/* Full quality image from main badges folder */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={`/assets/zodiac-badges-free/${result.element.toLowerCase()}-${result.animal.toLowerCase()}.jpeg`}
-                  alt={`${result.element} ${result.animal}`}
-                  className="w-full h-auto blur-[2px] brightness-90"
+                  src={`/assets/zodiac-badges/${result.element.toLowerCase()}-${result.animal.toLowerCase()}.jpeg`}
+                  alt={`${result.element} ${result.animal} Digital Art Card`}
+                  className="w-full h-auto"
                 />
-                {/* Watermark Overlay */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30"></div>
-                  <p className="text-white/40 text-2xl font-bold tracking-wider rotate-[-15deg]">
-                    FREE PREVIEW
-                  </p>
+                {/* Watermark */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="bg-black/20 rounded-2xl px-6 py-3">
+                    <p className="text-white/40 text-3xl md:text-5xl font-bold tracking-wider rotate-[-15deg] select-none">
+                      PREVIEW
+                    </p>
+                  </div>
                 </div>
-                {/* Bottom Banner */}
-                <div className="absolute bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm p-3 text-center">
-                  <p className="text-gray-300 text-xs mb-2">
-                    HD downloadable version included in Complete Oracle
-                  </p>
-                  <a
-                    href={paymentLink}
-                    className="inline-block bg-fire-gold hover:bg-yellow-400 text-black font-bold text-xs px-4 py-1.5 rounded-lg transition-all hover:scale-105"
-                  >
-                    GET HD VERSION — $8.88
-                  </a>
+                {/* Top Badge */}
+                <div className="absolute top-3 left-3 bg-fire-gold text-black text-xs font-bold px-3 py-1 rounded-full">
+                  YOUR CARD
+                </div>
+                {/* Bottom Label */}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/95 to-transparent p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-fire-gold font-bold text-xl">
+                        {result.element} {result.animal}
+                      </p>
+                      <p className="text-gray-400 text-sm">
+                        {ELEMENT_CHINESE[result.element]}{ZODIAC_CHINESE[result.animal]} • {funFacts?.years.join(', ')}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-white text-sm font-bold">HD Download</p>
+                      <p className="text-green-400 text-xs">Included FREE</p>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <p className="text-center text-gray-500 text-xs mt-2">
-                🎨 Collectible digital art • 60 unique designs (5 elements × 12 animals)
-              </p>
+
+              {/* This is YOURS message */}
+              <div className="bg-green-900/30 border border-green-500/50 rounded-xl p-4 mb-4 text-center">
+                <p className="text-green-400 font-bold text-lg mb-1">
+                  ✓ This Card is YOURS
+                </p>
+                <p className="text-gray-300 text-sm">
+                  HD download included when you get your Complete Oracle.
+                  <br />
+                  <span className="text-gray-500">One of 60 unique designs in the collection.</span>
+                </p>
+              </div>
+
+              {/* Card Stats */}
+              <div className="grid grid-cols-3 gap-2 mb-4 text-center text-xs">
+                <div className="bg-fire-gold/10 rounded-lg p-2 border border-fire-gold/30">
+                  <p className="text-fire-gold font-bold text-lg">12</p>
+                  <p className="text-gray-400">Animals</p>
+                </div>
+                <div className="bg-fire-gold/10 rounded-lg p-2 border border-fire-gold/30">
+                  <p className="text-fire-gold font-bold text-lg">5</p>
+                  <p className="text-gray-400">Elements</p>
+                </div>
+                <div className="bg-fire-gold/10 rounded-lg p-2 border border-fire-gold/30">
+                  <p className="text-fire-gold font-bold text-lg">60</p>
+                  <p className="text-gray-400">Unique Cards</p>
+                </div>
+              </div>
+
+              <div className="text-center">
+                <a
+                  href={paymentLink}
+                  className="inline-block bg-gradient-to-r from-yellow-600 via-fire-gold to-yellow-600 text-black font-bold text-lg py-3 px-8 rounded-xl transition-all hover:scale-105 shadow-xl shadow-fire-gold/30"
+                >
+                  🎨 GET MY {result.element.toUpperCase()} {result.animal.toUpperCase()} CARD — $8.88
+                </a>
+              </div>
             </div>
 
             {/* ========== PARTIAL FORECAST (2 Sentences) ========== */}
