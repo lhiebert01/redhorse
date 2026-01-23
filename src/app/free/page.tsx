@@ -277,22 +277,65 @@ export default function FreeReadingPage() {
               </div>
             )}
 
-            {/* ========== COURAGE SECTION - Fire Horse Quotes ========== */}
-            <div className="bg-gradient-to-br from-red-950/50 via-black to-orange-950/30 border border-orange-500/40 rounded-2xl p-5">
-              <p className="text-orange-400 text-xs uppercase tracking-widest text-center mb-4">
-                🔥 Fortune Favors the Bold 🔥
-              </p>
+            {/* ========== THE HOOK - FOMO & SCARCITY ========== */}
+            <div className="bg-gradient-to-b from-red-900 via-red-950 to-black border-2 border-red-500 rounded-2xl p-5 relative overflow-hidden">
+              {/* Animated border glow */}
+              <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 via-orange-500/20 to-red-500/20 animate-pulse"></div>
 
-              {/* Main Quote */}
+              <div className="relative z-10">
+                <p className="text-red-400 text-xs uppercase tracking-widest text-center mb-2 font-bold">
+                  ⚠️ ONCE EVERY 60 YEARS ⚠️
+                </p>
+
+                <h3 className="text-white text-xl md:text-2xl font-bold text-center mb-3">
+                  The Fire Horse Window is Closing
+                </h3>
+
+                {/* Timeline */}
+                <div className="flex justify-center items-center gap-2 text-sm mb-4">
+                  <span className="text-gray-500">1966</span>
+                  <span className="text-gray-600">→</span>
+                  <span className="text-fire-gold font-bold text-lg px-3 py-1 bg-fire-gold/20 rounded-lg border border-fire-gold">2026</span>
+                  <span className="text-gray-600">→</span>
+                  <span className="text-gray-500">2086</span>
+                </div>
+
+                <p className="text-center text-red-300 text-sm font-semibold mb-4">
+                  Will you even be ALIVE in 2086?
+                </p>
+
+                {/* Scarcity Counter */}
+                <div className="bg-black/60 rounded-xl p-4 mb-4">
+                  <div className="grid grid-cols-2 gap-4 text-center">
+                    <div>
+                      <p className="text-3xl font-bold text-fire-gold">888</p>
+                      <p className="text-gray-400 text-xs">Max {result.animal} Oracles</p>
+                    </div>
+                    <div>
+                      <p className="text-3xl font-bold text-red-400">390</p>
+                      <p className="text-gray-400 text-xs">Days Remaining</p>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-gray-400 text-xs text-center">
+                  When they&apos;re gone, they&apos;re gone. No reprints. No exceptions.
+                </p>
+              </div>
+            </div>
+
+            {/* ========== BET ON YOURSELF ========== */}
+            <div className="bg-gradient-to-br from-orange-950/50 via-black to-yellow-950/30 border border-orange-500/40 rounded-2xl p-5">
               <div className="text-center mb-4">
-                <p className="text-white text-lg md:text-xl italic leading-relaxed mb-2">
+                <p className="text-5xl mb-2">🎰</p>
+                <p className="text-white text-xl md:text-2xl font-bold italic leading-relaxed">
                   &ldquo;I don&apos;t like to gamble, but if there&apos;s one thing I&apos;m willing to bet on, it&apos;s myself.&rdquo;
                 </p>
-                <p className="text-orange-300 text-sm font-semibold">— Beyoncé</p>
+                <p className="text-orange-300 text-sm font-semibold mt-2">— Beyoncé</p>
               </div>
 
               {/* Fire Horse Quotes */}
-              <div className="space-y-3 mb-4">
+              <div className="space-y-2 mb-4">
                 <div className="bg-black/40 rounded-lg p-3 border-l-2 border-fire-gold">
                   <p className="text-gray-300 text-sm italic">&ldquo;I&apos;m going to follow my path. I&apos;m going to run my race.&rdquo;</p>
                   <p className="text-fire-gold text-xs mt-1">— Halle Berry <span className="text-gray-500">(Fire Horse, 1966)</span></p>
@@ -303,19 +346,93 @@ export default function FreeReadingPage() {
                 </div>
               </div>
 
-              {/* Call to Action Message */}
-              <div className="bg-fire-gold/10 border border-fire-gold/30 rounded-xl p-4 text-center">
-                <p className="text-white text-sm font-semibold mb-2">
-                  The Fire Horse returns only once every 60 years.
+              <div className="text-center">
+                <p className="text-fire-gold font-bold text-lg mb-1">
+                  What&apos;s YOUR Fire Horse moment?
                 </p>
-                <p className="text-gray-300 text-xs mb-3">
-                  Will you bet on yourself? Get your <span className="text-fire-gold font-bold">AUTHENTICATED LIMITED EDITION</span> Oracle —
-                  unique AI art, numbered certificate, and <span className="text-green-400 font-bold">100% Privacy by Design</span>.
-                </p>
-                <p className="text-gray-500 text-xs">
-                  No personal data stored. Ever. That&apos;s our promise.
+                <p className="text-gray-400 text-sm">
+                  $8.88 to bet on yourself. That&apos;s less than a coffee.
                 </p>
               </div>
+            </div>
+
+            {/* ========== DON'T BE A ZOMBIE FREE USER ========== */}
+            <div className="bg-gradient-to-b from-gray-900 to-black border border-gray-600 rounded-2xl p-5">
+              <div className="text-center mb-4">
+                <p className="text-4xl mb-2">🧟 vs 🔥</p>
+                <h3 className="text-white text-lg font-bold">
+                  Two Types of People See This Page
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                {/* Zombie Column */}
+                <div className="bg-gray-800/50 rounded-xl p-3 border border-gray-700">
+                  <p className="text-gray-400 text-center font-bold mb-2">🧟 The Zombie</p>
+                  <ul className="text-gray-500 text-xs space-y-1">
+                    <li>• Takes the free thing</li>
+                    <li>• Never commits</li>
+                    <li>• Waits for "someday"</li>
+                    <li>• Forgets by tomorrow</li>
+                    <li>• Same life, same year</li>
+                  </ul>
+                </div>
+
+                {/* Fire Column */}
+                <div className="bg-fire-gold/10 rounded-xl p-3 border border-fire-gold/50">
+                  <p className="text-fire-gold text-center font-bold mb-2">🔥 The Fire</p>
+                  <ul className="text-fire-gold/80 text-xs space-y-1">
+                    <li>• Bets on themselves</li>
+                    <li>• Takes action NOW</li>
+                    <li>• Owns something rare</li>
+                    <li>• Joins the movement</li>
+                    <li>• Makes 2026 count</li>
+                  </ul>
+                </div>
+              </div>
+
+              <p className="text-center text-white text-sm font-semibold">
+                Which one are you?
+              </p>
+            </div>
+
+            {/* ========== JOIN THE COMMUNITY ========== */}
+            <div className="bg-gradient-to-br from-green-950/40 via-black to-green-950/20 border border-green-500/40 rounded-2xl p-5">
+              <p className="text-green-400 text-xs uppercase tracking-widest text-center mb-3">
+                🛡️ More Than an Oracle
+              </p>
+
+              <h3 className="text-white text-lg font-bold text-center mb-3">
+                Join the Privacy by Design Movement
+              </h3>
+
+              <p className="text-gray-300 text-sm text-center mb-4">
+                Every purchase supports building a future where <span className="text-green-400 font-bold">your data stays YOURS</span>.
+                We&apos;re proving AI can be personal WITHOUT being invasive.
+              </p>
+
+              <div className="bg-black/50 rounded-xl p-4 mb-4">
+                <div className="flex items-center justify-center gap-4 text-center">
+                  <div>
+                    <p className="text-green-400 text-2xl font-bold">0</p>
+                    <p className="text-gray-500 text-xs">Data Points<br/>Stored</p>
+                  </div>
+                  <div className="text-gray-600 text-2xl">|</div>
+                  <div>
+                    <p className="text-green-400 text-2xl font-bold">100%</p>
+                    <p className="text-gray-500 text-xs">Privacy<br/>Guaranteed</p>
+                  </div>
+                  <div className="text-gray-600 text-2xl">|</div>
+                  <div>
+                    <p className="text-fire-gold text-2xl font-bold">1st</p>
+                    <p className="text-gray-500 text-xs">Privacy-First<br/>AI Oracle</p>
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-gray-400 text-xs text-center">
+                Your $8.88 says: <span className="text-green-400">&ldquo;I believe in a better way.&rdquo;</span>
+              </p>
             </div>
 
             {/* ========== YOUR PROPHECY (BLURRED TEASE) ========== */}
