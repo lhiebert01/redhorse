@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     url: `${siteUrl}/free`,
     images: [
       {
-        url: '/assets/og-free-reading.jpeg',
+        url: 'https://redhorseoracle.com/assets/og-free-reading.jpeg',
         width: 1200,
         height: 630,
         alt: 'FREE 2026 Fire Horse Reading - Red Horse Oracle',
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'FREE 2026 Fire Horse Reading',
     description: 'What does the Fire Horse reveal about YOUR 2026? Get your FREE reading. No email required.',
-    images: ['/assets/og-free-reading.jpeg'],
+    images: ['https://redhorseoracle.com/assets/og-free-reading.jpeg'],
     creator: '@redhorseoracle',
   },
 };
