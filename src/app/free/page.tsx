@@ -75,10 +75,12 @@ export default function FreeReadingPage() {
     ? getForecast(result.element as ForecastElement, result.animal as ZodiacAnimalType)
     : null;
 
-  // Get only first sentence of forecast for FREE preview
-  const getFirstSentence = (text: string) => {
-    const match = text.match(/^[^.!?]+[.!?]/);
-    return match ? match[0] : text.substring(0, 80) + '...';
+  // Get first 2-3 sentences of forecast for FREE preview
+  const getPreviewSentences = (text: string) => {
+    const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
+    // Return first 2 sentences, or first 3 if they're short
+    const preview = sentences.slice(0, 2).join(' ');
+    return preview || text.substring(0, 120) + '...';
   };
 
   return (
@@ -178,84 +180,143 @@ export default function FreeReadingPage() {
               </div>
             )}
 
-            {/* ========== TEASER: Your Zodiac Card (BLURRED) ========== */}
+            {/* ========== YOUR ZODIAC CARD (Semi-visible with watermark) ========== */}
             <div className="relative">
               <p className="text-fire-gold text-sm font-semibold text-center mb-2">
-                Your {result.element} {result.animal} Digital Art Card
+                ✨ Your {result.element} {result.animal} Digital Art Card ✨
               </p>
               <div className="relative rounded-xl overflow-hidden border-2 border-fire-gold/50">
-                {/* Blurred Image */}
+                {/* Semi-visible Image - shows quality but not full resolution */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`/assets/zodiac-badges-free/${result.element.toLowerCase()}-${result.animal.toLowerCase()}.jpeg`}
                   alt={`${result.element} ${result.animal}`}
-                  className="w-full h-auto blur-lg scale-105"
+                  className="w-full h-auto blur-[2px] brightness-90"
                 />
-                {/* Unlock Overlay */}
-                <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center">
-                  <span className="text-5xl mb-3">🔒</span>
-                  <p className="text-white text-lg font-bold mb-1">Full Image Locked</p>
-                  <p className="text-gray-300 text-sm mb-3">Unlock with your Complete Oracle</p>
+                {/* Watermark Overlay */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30"></div>
+                  <p className="text-white/40 text-2xl font-bold tracking-wider rotate-[-15deg]">
+                    FREE PREVIEW
+                  </p>
+                </div>
+                {/* Bottom Banner */}
+                <div className="absolute bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm p-3 text-center">
+                  <p className="text-gray-300 text-xs mb-2">
+                    HD downloadable version included in Complete Oracle
+                  </p>
                   <a
                     href={paymentLink}
-                    className="bg-fire-gold hover:bg-yellow-400 text-black font-bold text-sm px-6 py-2 rounded-lg transition-all hover:scale-105"
+                    className="inline-block bg-fire-gold hover:bg-yellow-400 text-black font-bold text-xs px-4 py-1.5 rounded-lg transition-all hover:scale-105"
                   >
-                    UNLOCK — $8.88
+                    GET HD VERSION — $8.88
                   </a>
                 </div>
               </div>
+              <p className="text-center text-gray-500 text-xs mt-2">
+                🎨 Collectible digital art • 60 unique designs (5 elements × 12 animals)
+              </p>
             </div>
 
-            {/* ========== PARTIAL FORECAST (First Sentence Only) ========== */}
+            {/* ========== PARTIAL FORECAST (2 Sentences) ========== */}
             {forecast && (
               <div className="bg-gradient-to-b from-green-950/40 to-black border border-green-500/50 rounded-xl p-5">
                 <p className="text-green-400 text-xs uppercase tracking-widest text-center mb-3">
-                  2026 Fire Horse Preview
+                  Your 2026 Fire Horse Preview
                 </p>
 
-                {/* First sentence only */}
+                {/* First 2 sentences */}
                 <p className="text-white text-base leading-relaxed mb-3">
-                  {getFirstSentence(forecast.forecast)}
+                  {getPreviewSentences(forecast.forecast)}
                 </p>
 
-                {/* Blurred remaining text */}
-                <div className="relative">
-                  <p className="text-white text-base leading-relaxed blur-sm select-none">
-                    The Fire Horse energy will amplify your natural abilities. This year brings opportunities for growth and transformation. Your element alignment creates unique advantages...
+                {/* Teaser for more */}
+                <div className="bg-black/60 border border-fire-gold/30 rounded-lg p-3 text-center">
+                  <p className="text-gray-400 text-sm mb-1">
+                    Your complete {result.element} {result.animal} × Fire Horse forecast continues...
                   </p>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="bg-black/80 border border-fire-gold/50 rounded-lg px-4 py-2">
-                      <p className="text-fire-gold text-sm font-bold">
-                        🔒 Full Forecast in Complete Oracle
-                      </p>
-                    </div>
-                  </div>
+                  <p className="text-fire-gold text-sm font-semibold">
+                    🔓 Unlock full forecast in your Complete Oracle
+                  </p>
                 </div>
               </div>
             )}
 
-            {/* ========== FAMOUS PEOPLE (Show 1, Tease Others) ========== */}
+            {/* ========== FAMOUS PEOPLE (Show 2, Tease Others) ========== */}
             {funFacts && (
               <div className="bg-gradient-to-br from-yellow-950/30 to-black border border-yellow-500/40 rounded-xl p-5">
                 <p className="text-yellow-400 text-xs uppercase tracking-widest text-center mb-3">
-                  Famous {result.element} {result.animal}
+                  ⭐ Famous {result.element} {result.animal}s ⭐
                 </p>
 
-                {/* Show only first celebrity */}
-                <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-3 mb-3">
-                  <p className="text-yellow-300 font-bold">{funFacts.famousPeople[0].name}</p>
-                  <p className="text-gray-400 text-sm">{funFacts.famousPeople[0].description}</p>
+                {/* Show first 2 celebrities */}
+                <div className="space-y-2 mb-3">
+                  {funFacts.famousPeople.slice(0, 2).map((person, idx) => (
+                    <div key={idx} className="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-3 flex items-center gap-3">
+                      <span className="text-yellow-400 font-bold text-lg">{idx + 1}</span>
+                      <div>
+                        <p className="text-yellow-300 font-bold">{person.name}</p>
+                        <p className="text-gray-400 text-sm">{person.description}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
                 {/* Teaser for more */}
-                <div className="bg-black/50 border border-gray-700 rounded-lg p-3 text-center">
-                  <p className="text-gray-400 text-sm">
-                    <span className="text-yellow-400 font-bold">+{funFacts.famousPeople.length - 1} more</span> famous {result.element} {result.animal}s
-                  </p>
-                  <p className="text-gray-500 text-xs mt-1">Unlock in Complete Oracle</p>
-                </div>
+                {funFacts.famousPeople.length > 2 && (
+                  <div className="bg-black/50 border border-gray-700 rounded-lg p-3 text-center">
+                    <p className="text-gray-400 text-sm">
+                      <span className="text-yellow-400 font-bold">+{funFacts.famousPeople.length - 2} more</span> famous {result.element} {result.animal}s in Complete Oracle
+                    </p>
+                  </div>
+                )}
+
+                <p className="text-center text-gray-500 text-xs mt-3">
+                  You share your zodiac with these legends!
+                </p>
               </div>
             )}
+
+            {/* ========== COURAGE SECTION - Fire Horse Quotes ========== */}
+            <div className="bg-gradient-to-br from-red-950/50 via-black to-orange-950/30 border border-orange-500/40 rounded-2xl p-5">
+              <p className="text-orange-400 text-xs uppercase tracking-widest text-center mb-4">
+                🔥 Fortune Favors the Bold 🔥
+              </p>
+
+              {/* Main Quote */}
+              <div className="text-center mb-4">
+                <p className="text-white text-lg md:text-xl italic leading-relaxed mb-2">
+                  &ldquo;I don&apos;t like to gamble, but if there&apos;s one thing I&apos;m willing to bet on, it&apos;s myself.&rdquo;
+                </p>
+                <p className="text-orange-300 text-sm font-semibold">— Beyoncé</p>
+              </div>
+
+              {/* Fire Horse Quotes */}
+              <div className="space-y-3 mb-4">
+                <div className="bg-black/40 rounded-lg p-3 border-l-2 border-fire-gold">
+                  <p className="text-gray-300 text-sm italic">&ldquo;I&apos;m going to follow my path. I&apos;m going to run my race.&rdquo;</p>
+                  <p className="text-fire-gold text-xs mt-1">— Halle Berry <span className="text-gray-500">(Fire Horse, 1966)</span></p>
+                </div>
+                <div className="bg-black/40 rounded-lg p-3 border-l-2 border-fire-gold">
+                  <p className="text-gray-300 text-sm italic">&ldquo;I only have to follow my heart.&rdquo;</p>
+                  <p className="text-fire-gold text-xs mt-1">— Janet Jackson <span className="text-gray-500">(Fire Horse, 1966)</span></p>
+                </div>
+              </div>
+
+              {/* Call to Action Message */}
+              <div className="bg-fire-gold/10 border border-fire-gold/30 rounded-xl p-4 text-center">
+                <p className="text-white text-sm font-semibold mb-2">
+                  The Fire Horse returns only once every 60 years.
+                </p>
+                <p className="text-gray-300 text-xs mb-3">
+                  Will you bet on yourself? Get your <span className="text-fire-gold font-bold">AUTHENTICATED LIMITED EDITION</span> Oracle —
+                  unique AI art, numbered certificate, and <span className="text-green-400 font-bold">100% Privacy by Design</span>.
+                </p>
+                <p className="text-gray-500 text-xs">
+                  No personal data stored. Ever. That&apos;s our promise.
+                </p>
+              </div>
+            </div>
 
             {/* ========== YOUR PROPHECY (BLURRED TEASE) ========== */}
             <div className="relative bg-gradient-to-b from-red-950 via-black to-red-950 border-2 border-fire-gold rounded-2xl p-6 overflow-hidden">
@@ -297,31 +358,78 @@ export default function FreeReadingPage() {
               </div>
             </div>
 
-            {/* ========== AI TALISMAN PREVIEW (BLURRED) ========== */}
+            {/* ========== AI TALISMAN PREVIEW (Semi-visible) ========== */}
             <div className="bg-gradient-to-b from-purple-950/50 to-black border border-purple-500/50 rounded-2xl p-5">
               <p className="text-purple-400 text-xs uppercase tracking-widest text-center mb-3">
-                Your AI-Generated Talisman
+                🎨 Your AI-Generated Talisman Preview
               </p>
 
               <div className="relative rounded-xl overflow-hidden border border-purple-500/30 mb-4">
-                {/* Use example talisman as preview, heavily blurred */}
+                {/* Show example talisman - semi-blurred to show quality */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`/assets/examples/${result.animal.toLowerCase()}.png`}
                   alt="Talisman Preview"
-                  className="w-full h-auto blur-xl scale-110"
+                  className="w-full h-auto blur-[4px] brightness-75"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent flex flex-col items-center justify-center">
-                  <span className="text-6xl mb-2">🎨</span>
-                  <p className="text-white text-lg font-bold">One-of-a-Kind AI Artwork</p>
-                  <p className="text-gray-300 text-sm mb-1">Featuring YOUR {result.element} {result.animal}</p>
-                  <p className="text-purple-400 text-xs">× Fire Horse 2026</p>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <div className="bg-black/70 backdrop-blur-sm rounded-xl p-4 text-center max-w-[80%]">
+                    <p className="text-white text-lg font-bold mb-1">Your Unique Masterpiece</p>
+                    <p className="text-purple-300 text-sm mb-2">
+                      {result.element} {result.animal} × Fire Horse 2026
+                    </p>
+                    <p className="text-gray-400 text-xs">
+                      Generated by Google Gemini 3 Pro AI
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              <p className="text-gray-400 text-xs text-center">
-                Each talisman is uniquely generated by Google Gemini AI — no two are alike
+              <p className="text-gray-300 text-xs text-center mb-2">
+                ✨ Each talisman is <span className="text-purple-400 font-bold">uniquely generated</span> — no two are alike
               </p>
+              <p className="text-gray-500 text-xs text-center">
+                Combining traditional Chinese art with cutting-edge AI
+              </p>
+            </div>
+
+            {/* ========== FREE vs PAID COMPARISON ========== */}
+            <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900 border border-gray-700 rounded-2xl p-5">
+              <p className="text-white text-sm font-bold text-center mb-4">
+                FREE Preview vs Complete Oracle
+              </p>
+
+              <div className="grid grid-cols-2 gap-3 text-xs">
+                {/* FREE Column */}
+                <div className="space-y-2">
+                  <p className="text-green-400 font-bold text-center mb-2">✓ FREE</p>
+                  <div className="bg-green-900/20 rounded p-2 text-gray-300">Zodiac revealed</div>
+                  <div className="bg-green-900/20 rounded p-2 text-gray-300">2 famous people</div>
+                  <div className="bg-green-900/20 rounded p-2 text-gray-300">Forecast preview</div>
+                  <div className="bg-green-900/20 rounded p-2 text-gray-300">Card preview</div>
+                </div>
+
+                {/* PAID Column */}
+                <div className="space-y-2">
+                  <p className="text-fire-gold font-bold text-center mb-2">🔥 $8.88</p>
+                  <div className="bg-fire-gold/20 rounded p-2 text-fire-gold">HD Zodiac Card ↓</div>
+                  <div className="bg-fire-gold/20 rounded p-2 text-fire-gold">All celebrities</div>
+                  <div className="bg-fire-gold/20 rounded p-2 text-fire-gold">Full Forecast</div>
+                  <div className="bg-fire-gold/20 rounded p-2 text-fire-gold">AI Talisman Art</div>
+                  <div className="bg-fire-gold/20 rounded p-2 text-fire-gold">Lucky #s / Motto</div>
+                  <div className="bg-fire-gold/20 rounded p-2 text-fire-gold">Edition Certificate</div>
+                  <div className="bg-fire-gold/20 rounded p-2 text-fire-gold">#X of 888</div>
+                </div>
+              </div>
+
+              <div className="mt-4 text-center">
+                <a
+                  href={paymentLink}
+                  className="inline-block bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 text-black font-bold text-sm py-2 px-6 rounded-xl hover:scale-105 transition-all"
+                >
+                  UPGRADE TO COMPLETE — $8.88
+                </a>
+              </div>
             </div>
 
             {/* ========== WHAT YOU GET (Clear Value Prop) ========== */}
