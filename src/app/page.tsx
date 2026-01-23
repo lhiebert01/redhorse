@@ -452,9 +452,9 @@ export default function Home() {
         {/* Social Proof */}
         <div className="text-center mb-6 bg-black/40 backdrop-blur-sm border border-red-900/50 rounded-xl p-4">
           <p className="text-red-300 text-xl md:text-2xl italic font-medium">
-            &quot;The Oracle revealed my path. I won $500 the next day.&quot;
+            &quot;The Fire Horse only comes once every 60 years. I wasn&apos;t going to miss my chance.&quot;
           </p>
-          <p className="text-gray-400 text-sm mt-2">— Fire Horse Believer (Fictional)</p>
+          <p className="text-gray-400 text-sm mt-2">— Early Believer, January 2026</p>
         </div>
 
         {/* Footer / Disclaimer */}
