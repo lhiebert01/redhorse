@@ -524,6 +524,62 @@ export default function FreeReadingPage() {
               </div>
             </div>
 
+            {/* ========== THE FORGING EXPERIENCE TEASER ========== */}
+            <div className="bg-gradient-to-b from-orange-950/50 via-black to-red-950/50 border-2 border-orange-500/50 rounded-2xl p-5 relative overflow-hidden">
+              {/* Subtle background glow */}
+              <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 via-red-500/10 to-orange-500/5 animate-pulse"></div>
+
+              <div className="relative z-10">
+                <p className="text-orange-400 text-xs uppercase tracking-widest text-center mb-2">
+                  ✨ The Forging Experience ✨
+                </p>
+                <p className="text-white text-lg font-bold text-center mb-4">
+                  Watch Your Oracle Come to Life
+                </p>
+
+                {/* Bouncing Pony Preview */}
+                <div className="flex justify-center mb-4">
+                  <div className="relative w-32 h-32">
+                    {/* Fire frame */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/assets/loading/fire-frame.png"
+                      alt="Fire Frame"
+                      className="absolute inset-0 w-full h-full animate-spin"
+                      style={{ animationDuration: '20s' }}
+                    />
+                    {/* Bouncing horse */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/assets/loading/fire-horse-bouncing-3.png"
+                      alt="Fire Horse"
+                      className="absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] object-contain animate-bounce"
+                      style={{ animationDuration: '2s' }}
+                    />
+                  </div>
+                </div>
+
+                {/* Mystical Messages Preview */}
+                <div className="bg-black/60 rounded-xl p-4 mb-4">
+                  <p className="text-gray-400 text-xs text-center mb-2">Experience messages like:</p>
+                  <div className="space-y-2 text-center">
+                    <p className="text-orange-300 text-sm italic">&ldquo;Forging your destiny in fire...&rdquo;</p>
+                    <p className="text-red-300 text-sm italic">&ldquo;The Oracle consults the stars...&rdquo;</p>
+                    <p className="text-yellow-300 text-sm italic">&ldquo;Your talisman crystallizes...&rdquo;</p>
+                  </div>
+                </div>
+
+                <p className="text-gray-300 text-sm text-center mb-3">
+                  30-60 seconds of <span className="text-orange-400 font-bold">pure magic</span> as Google Gemini 3 Pro
+                  creates your one-of-a-kind talisman in real-time.
+                </p>
+
+                <p className="text-gray-500 text-xs text-center">
+                  🔥 An experience you&apos;ll want to watch (and share!)
+                </p>
+              </div>
+            </div>
+
             {/* ========== AI TALISMAN - REAL EXAMPLE ========== */}
             <div className="bg-gradient-to-b from-purple-950/50 to-black border-2 border-purple-500/50 rounded-2xl p-5">
               <p className="text-purple-400 text-xs uppercase tracking-widest text-center mb-2">
