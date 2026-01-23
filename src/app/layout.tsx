@@ -106,6 +106,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
+        {/* PWA Meta Tags */}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#dc2626" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Red Horse Oracle" />
+        <link rel="apple-touch-icon" href="/assets/icons/icon-192x192.png" />
+
         {/* Google Analytics 4 - Raw script tags for maximum compatibility */}
         <script
           async
@@ -125,6 +133,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+        {/* Service Worker Registration */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                    console.log('SW registered: ', registration);
+                  }).catch(function(error) {
+                    console.log('SW registration failed: ', error);
+                  });
+                });
+              }
+            `,
+          }}
         />
       </head>
       <body className="antialiased">
