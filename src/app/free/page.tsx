@@ -144,6 +144,44 @@ export default function FreeReadingPage() {
                 </p>
               </form>
             </div>
+
+            {/* Privacy by Design Section */}
+            <div className="bg-gradient-to-r from-green-950/40 via-black to-green-950/40 border border-green-500/50 rounded-2xl p-5 mt-6">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <span className="text-2xl">🛡️</span>
+                <h3 className="text-green-400 text-lg font-bold">Privacy by Design</h3>
+              </div>
+
+              <p className="text-white text-center text-sm mb-4">
+                The <span className="text-green-400 font-bold">ONLY</span> Red Horse Oracle with
+                <span className="text-green-400 font-bold"> COMPLETE Privacy by Design</span>
+              </p>
+
+              {/* Checkmarks */}
+              <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mb-4 text-sm">
+                <span className="text-green-400">✓ No Payment</span>
+                <span className="text-green-400">✓ No Personal Info</span>
+                <span className="text-green-400">✓ No Login</span>
+                <span className="text-green-400">✓ No Email</span>
+              </div>
+
+              <div className="bg-black/40 rounded-xl p-4 mb-4">
+                <p className="text-gray-300 text-sm text-center leading-relaxed">
+                  <span className="text-green-400 font-bold">Zero data stored.</span> Your birth date calculates your zodiac
+                  and is <span className="text-red-400 font-semibold">immediately discarded</span>.
+                  No names, birthdays, or personal data ever stored.
+                </p>
+              </div>
+
+              <div className="text-center">
+                <a
+                  href="/privacy"
+                  className="inline-flex items-center gap-2 text-green-400 hover:text-green-300 font-semibold"
+                >
+                  LEARN MORE →
+                </a>
+              </div>
+            </div>
           </>
         ) : (
           /* ========== RESULTS SECTION - CONVERSION OPTIMIZED ========== */
