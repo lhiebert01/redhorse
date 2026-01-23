@@ -396,6 +396,55 @@ export default function FreeReadingPage() {
               </p>
             </div>
 
+            {/* ========== PROSPER VS BORING ========== */}
+            <div className="bg-gradient-to-r from-fire-gold/20 via-black to-fire-gold/20 border-2 border-fire-gold rounded-2xl p-6 text-center">
+              <p className="text-fire-gold text-xs uppercase tracking-widest mb-3">
+                💡 Here&apos;s the Truth
+              </p>
+
+              <h3 className="text-white text-xl md:text-2xl font-bold mb-4">
+                Most People Don&apos;t Do Anything.
+              </h3>
+
+              <p className="text-gray-300 text-base mb-4">
+                They scroll. They browse. They think <span className="italic">&ldquo;maybe later.&rdquo;</span>
+                <br />
+                They close the tab and forget.
+              </p>
+
+              <div className="bg-black/60 rounded-xl p-4 mb-4">
+                <p className="text-fire-gold text-lg md:text-xl font-bold mb-2">
+                  Guess what?
+                </p>
+                <p className="text-white text-xl md:text-2xl font-bold">
+                  The ones who <span className="text-green-400">TAKE ACTION</span>...
+                  <span className="text-fire-gold"> PROSPER.</span>
+                </p>
+              </div>
+
+              <p className="text-gray-400 text-sm mb-4">
+                Same information. Same opportunity. Different results.
+                <br />
+                The only difference? <span className="text-white font-bold">They clicked the button.</span>
+              </p>
+
+              <div className="border-t border-fire-gold/30 pt-4">
+                <p className="text-white text-lg font-bold mb-2">
+                  Do you want to <span className="text-green-400">PROSPER</span>?
+                </p>
+                <p className="text-gray-500 text-sm mb-4">
+                  Or stay <span className="text-gray-600">boring</span>?
+                </p>
+
+                <a
+                  href={paymentLink}
+                  className="inline-block bg-gradient-to-r from-green-600 via-green-500 to-green-600 text-white font-bold text-lg py-3 px-8 rounded-xl hover:scale-105 active:scale-95 transition-all shadow-xl shadow-green-500/30 border-2 border-green-400"
+                >
+                  🚀 I CHOOSE TO PROSPER — $8.88
+                </a>
+              </div>
+            </div>
+
             {/* ========== JOIN THE COMMUNITY ========== */}
             <div className="bg-gradient-to-br from-green-950/40 via-black to-green-950/20 border border-green-500/40 rounded-2xl p-5">
               <p className="text-green-400 text-xs uppercase tracking-widest text-center mb-3">
