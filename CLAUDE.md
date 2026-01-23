@@ -2430,7 +2430,8 @@ Added consistent privacy messaging:
 
 | Version | Date | Key Features |
 |---------|------|--------------|
-| **1.5.0** | **Jan 19** | **Landing page redesign, marquee ticker, share modal** |
+| **1.6.0** | **Jan 22** | **PWA support - Install App button, service worker, manifest** |
+| 1.5.0 | Jan 19 | Landing page redesign, marquee ticker, share modal |
 | 1.4.0 | Jan 19 | Celebrity quotes at TOP, viral share content |
 | 1.3.0 | Jan 18 | Rotating backgrounds, LinkedIn share, marketing grids |
 | 1.2.0 | Jan 17 | Analytics, Share Talisman Image |
@@ -2504,9 +2505,136 @@ git add -A && git commit -m "message" && git push origin main  # Deploy
 ```
 
 ### Key Dates
-- **Today:** January 19, 2026
-- **CNY 2026:** January 29, 2026 (10 days away)
+- **Today:** January 22, 2026
+- **CNY 2026:** January 29, 2026 (7 days away)
 - **Fire Horse Year Ends:** February 2027
+
+---
+
+## Session Update: January 22, 2026 - PWA Support
+
+### Current Status: v1.6.0 PRODUCTION LIVE
+
+### What Was Completed This Session
+
+#### 1. Progressive Web App (PWA) Implementation
+Made the app installable on iPhone/Android without App Store:
+
+**New Files Created:**
+| File | Purpose |
+|------|---------|
+| `/public/manifest.json` | App metadata (name, icons, colors, display mode) |
+| `/public/sw.js` | Service worker for caching static assets |
+| `/public/assets/icons/icon-192x192.png` | Small app icon |
+| `/public/assets/icons/icon-512x512.png` | Large app icon |
+
+**Modified Files:**
+| File | Changes |
+|------|---------|
+| `/src/app/layout.tsx` | Added PWA meta tags + service worker registration |
+| `/src/app/page.tsx` | Added Install App button + instructions modal |
+
+#### 2. Install App Button & Modal
+Added visible "Install App" button on landing page:
+- **Position:** Top-left corner, gold button
+- **Modal:** Step-by-step instructions for iPhone and Android
+- **Benefits listed:** Faster loading, works offline, no browser bar
+
+#### 3. Unique OG Images Per Page
+Fixed social sharing images:
+- **Main page:** Uses `Fire-Horse-2026-Chart-v3.jpeg`
+- **/free page:** Uses `og-free-reading.jpeg` (created `/src/app/free/layout.tsx`)
+- **Key fix:** OG images require ABSOLUTE URLs, not relative
+
+#### 4. PWA Documentation
+Created comprehensive reusable guide:
+- **File:** `/docs/PWA-SETUP-GUIDE.md`
+- **Contents:** Step-by-step PWA setup for any Next.js app
+- **Includes:** manifest.json template, service worker template, layout.tsx additions, install button code
+
+### PWA Quick Reference
+
+**Required Files:**
+```
+/public/manifest.json          # App metadata
+/public/sw.js                  # Service worker
+/public/assets/icons/icon-192x192.png
+/public/assets/icons/icon-512x512.png
+```
+
+**Layout.tsx Additions:**
+```tsx
+<head>
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#dc2626" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Your App Name" />
+  <link rel="apple-touch-icon" href="/assets/icons/icon-192x192.png" />
+  {/* Service Worker Registration Script */}
+</head>
+```
+
+**Testing PWA:**
+1. Chrome DevTools → Application tab → Manifest (verify loads)
+2. Chrome DevTools → Application tab → Service Workers (verify registration)
+3. Mobile: Share → Add to Home Screen
+
+---
+
+## Best Practices & Lessons Learned
+
+### Standard Practice: Add PWA to Every Web App
+
+**Why:** Increases perceived value, enables "Install App" without App Store, faster repeat visits.
+
+**Implementation Time:** 30-60 minutes
+
+**Files Required:**
+1. `/public/manifest.json` - App metadata
+2. `/public/sw.js` - Service worker for caching
+3. `/public/assets/icons/icon-192x192.png` - Small icon
+4. `/public/assets/icons/icon-512x512.png` - Large icon
+5. Layout.tsx updates - Meta tags + SW registration
+
+**See:** `/docs/PWA-SETUP-GUIDE.md` for complete implementation guide.
+
+### OG Images Must Use Absolute URLs
+
+**Problem:** Relative paths like `/assets/og-image.jpeg` don't work for social sharing.
+
+**Solution:** Always use full URLs:
+```tsx
+openGraph: {
+  images: [{
+    url: 'https://yourdomain.com/assets/og-image.jpeg',  // ABSOLUTE
+    width: 1200,
+    height: 630,
+  }],
+}
+```
+
+### Page-Specific Metadata in Next.js App Router
+
+**Problem:** Different pages need different OG images.
+
+**Solution:** Create `layout.tsx` in route folder:
+```
+/src/app/free/layout.tsx  → Unique OG for /free
+/src/app/examples/layout.tsx → Unique OG for /examples
+```
+
+### iOS PWA Limitations
+
+| Feature | iOS Support |
+|---------|-------------|
+| Add to Home Screen | ✅ Yes |
+| Full-screen mode | ✅ Yes |
+| App icon | ✅ Yes |
+| Push notifications | ❌ No |
+| Background sync | ❌ No |
+
+**Recommendation:** PWA is sufficient for most apps. Only go native if you need iOS push notifications.
 
 ---
 
