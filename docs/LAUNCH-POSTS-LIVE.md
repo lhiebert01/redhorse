@@ -218,6 +218,12 @@ AI Art, Chinese Zodiac, Chinese New Year, Limited Edition, Astrology
 - `RedHorseOracle-Hero2.jpeg` (hero talisman)
 - `Fire-Horse-2026-Chart-v3.jpeg` (zodiac chart)
 
+### LinkedIn Announcement Post: ✅ POSTED
+**URL:** https://www.linkedin.com/posts/lindsayhiebert_ai-chinesezodiac-firehorse2026-activity-7420277485159981056-35xG
+
+### X/Twitter Announcement Post: ⏳ PENDING URL
+**URL:** ___________
+
 ### Performance:
 | Date | Views | Likes | Comments |
 |------|-------|-------|----------|
