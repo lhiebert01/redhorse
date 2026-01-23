@@ -221,8 +221,8 @@ AI Art, Chinese Zodiac, Chinese New Year, Limited Edition, Astrology
 ### LinkedIn Announcement Post: ✅ POSTED
 **URL:** https://www.linkedin.com/posts/lindsayhiebert_ai-chinesezodiac-firehorse2026-activity-7420277485159981056-35xG
 
-### X/Twitter Announcement Post: ⏳ PENDING URL
-**URL:** ___________
+### X/Twitter Announcement Post: ✅ POSTED
+**URL:** https://x.com/Lindsay_Hiebert/status/2014512040719642838
 
 ### Performance:
 | Date | Views | Likes | Comments |
