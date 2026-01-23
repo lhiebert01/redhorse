@@ -199,7 +199,34 @@ Show HN: Red Horse Oracle – Privacy-first AI art, zero data stored
 
 ---
 
-## 8. MEDIUM ✅ LIVE
+## 8. SUBSTACK ✅ LIVE
+
+**Date Posted:** January 22, 2026
+**Time Posted:** Evening
+**URL:** https://open.substack.com/pub/lindsayhiebert/p/red-horse-oracle-limited-edition
+**Angle:** Product-first (not privacy-first)
+
+### Article Title:
+```
+Red Horse Oracle: Limited Edition AI Art for the Once-in-60-Year Fire Horse — Now Live
+```
+
+### Tags Used:
+AI Art, Chinese Zodiac, Chinese New Year, Limited Edition, Astrology
+
+### Images Used:
+- `RedHorseOracle-Hero2.jpeg` (hero talisman)
+- `Fire-Horse-2026-Chart-v3.jpeg` (zodiac chart)
+
+### Performance:
+| Date | Views | Likes | Comments |
+|------|-------|-------|----------|
+| Jan 22 | | | |
+| Jan 23 | | | |
+
+---
+
+## 9. MEDIUM ✅ LIVE
 
 **Date Posted:** January 21, 2026
 **Time Posted:** Evening
