@@ -490,43 +490,41 @@ export default function FreeReadingPage() {
               </div>
             </div>
 
-            {/* ========== DON'T BE A ZOMBIE FREE USER ========== */}
+            {/* ========== TWO WAYS TO ENTER 2026 ========== */}
             <div className="bg-gradient-to-b from-gray-900 to-black border border-gray-600 rounded-2xl p-5">
               <div className="text-center mb-4">
-                <p className="text-4xl mb-2">🧟 vs 🔥</p>
+                <p className="text-3xl mb-2">👁️ vs 🏛️</p>
                 <h3 className="text-white text-lg font-bold">
-                  Two Types of People See This Page
+                  Two Ways to Enter 2026
                 </h3>
               </div>
 
               <div className="grid grid-cols-2 gap-3 mb-4">
-                {/* Zombie Column */}
+                {/* Spectator Column */}
                 <div className="bg-gray-800/50 rounded-xl p-3 border border-gray-700">
-                  <p className="text-gray-400 text-center font-bold mb-2">🧟 The Zombie</p>
-                  <ul className="text-gray-500 text-xs space-y-1">
-                    <li>• Takes the free thing</li>
-                    <li>• Never commits</li>
-                    <li>• Waits for "someday"</li>
-                    <li>• Forgets by tomorrow</li>
-                    <li>• Same life, same year</li>
+                  <p className="text-gray-400 text-center font-bold mb-2">👁️ The Spectator</p>
+                  <ul className="text-gray-500 text-xs space-y-1.5">
+                    <li>• Takes the free preview</li>
+                    <li>• Stays in the crowd</li>
+                    <li>• Lets the Fire Horse year happen <em>to</em> them</li>
+                    <li>• Watches others lead</li>
                   </ul>
                 </div>
 
-                {/* Fire Column */}
+                {/* Architect Column */}
                 <div className="bg-fire-gold/10 rounded-xl p-3 border border-fire-gold/50">
-                  <p className="text-fire-gold text-center font-bold mb-2">🔥 The Fire</p>
-                  <ul className="text-fire-gold/80 text-xs space-y-1">
-                    <li>• Bets on themselves</li>
-                    <li>• Takes action NOW</li>
-                    <li>• Owns something rare</li>
-                    <li>• Joins the movement</li>
-                    <li>• Makes 2026 count</li>
+                  <p className="text-fire-gold text-center font-bold mb-2">🏛️ The Architect</p>
+                  <ul className="text-fire-gold/80 text-xs space-y-1.5">
+                    <li>• Owns their data</li>
+                    <li>• Claims their unique 2026 Talisman</li>
+                    <li>• Uses the Oracle to <em>lead</em></li>
+                    <li>• Builds their legacy</li>
                   </ul>
                 </div>
               </div>
 
               <p className="text-center text-white text-sm font-semibold">
-                Which one are you?
+                Which legacy are you building?
               </p>
             </div>
 
@@ -579,42 +577,43 @@ export default function FreeReadingPage() {
               </div>
             </div>
 
-            {/* ========== JOIN THE COMMUNITY ========== */}
+            {/* ========== ZERO-KNOWLEDGE PROPHECY ========== */}
             <div className="bg-gradient-to-br from-green-950/40 via-black to-green-950/20 border border-green-500/40 rounded-2xl p-5">
               <p className="text-green-400 text-xs uppercase tracking-widest text-center mb-3">
-                🛡️ More Than an Oracle
+                🛡️ The Zero-Knowledge Prophecy
               </p>
 
               <h3 className="text-white text-lg font-bold text-center mb-3">
-                Join the Privacy by Design Movement
+                Your Destiny is For Your Eyes Only
               </h3>
 
-              <p className="text-gray-300 text-sm text-center mb-4">
-                Every purchase supports building a future where <span className="text-green-400 font-bold">your data stays YOURS</span>.
-                We&apos;re proving AI can be personal WITHOUT being invasive.
-              </p>
-
               <div className="bg-black/50 rounded-xl p-4 mb-4">
-                <div className="flex items-center justify-center gap-4 text-center">
-                  <div>
-                    <p className="text-green-400 text-2xl font-bold">0</p>
-                    <p className="text-gray-500 text-xs">Data Points<br/>Stored</p>
-                  </div>
-                  <div className="text-gray-600 text-2xl">|</div>
-                  <div>
-                    <p className="text-green-400 text-2xl font-bold">100%</p>
-                    <p className="text-gray-500 text-xs">Privacy<br/>Guaranteed</p>
-                  </div>
-                  <div className="text-gray-600 text-2xl">|</div>
-                  <div>
-                    <p className="text-fire-gold text-2xl font-bold">1st</p>
-                    <p className="text-gray-500 text-xs">Privacy-First<br/>AI Oracle</p>
-                  </div>
+                <p className="text-gray-300 text-sm text-center italic leading-relaxed">
+                  &ldquo;In a world that trades your soul for &apos;free&apos; apps, Red Horse Oracle is the first
+                  <span className="text-green-400 font-bold"> Zero-Knowledge Prophecy</span>.
+                  No tracking. No database. Just AI-powered insight.&rdquo;
+                </p>
+              </div>
+
+              <div className="flex items-center justify-center gap-4 text-center mb-4">
+                <div>
+                  <p className="text-green-400 text-2xl font-bold">0</p>
+                  <p className="text-gray-500 text-xs">Data Stored</p>
+                </div>
+                <div className="text-gray-600 text-2xl">|</div>
+                <div>
+                  <p className="text-green-400 text-2xl font-bold">100%</p>
+                  <p className="text-gray-500 text-xs">Private</p>
+                </div>
+                <div className="text-gray-600 text-2xl">|</div>
+                <div>
+                  <p className="text-fire-gold text-2xl font-bold">1st</p>
+                  <p className="text-gray-500 text-xs">Zero-Knowledge AI</p>
                 </div>
               </div>
 
               <p className="text-gray-400 text-xs text-center">
-                Your $8.88 says: <span className="text-green-400">&ldquo;I believe in a better way.&rdquo;</span>
+                Your $8.88 says: <span className="text-green-400">&ldquo;My data. My destiny. My terms.&rdquo;</span>
               </p>
             </div>
 
@@ -784,29 +783,34 @@ export default function FreeReadingPage() {
             {/* ========== FREE vs PAID COMPARISON ========== */}
             <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900 border border-gray-700 rounded-2xl p-5">
               <p className="text-white text-sm font-bold text-center mb-4">
-                FREE Preview vs Complete Oracle
+                FREE Preview vs 🔥 Complete Oracle
               </p>
 
-              <div className="grid grid-cols-2 gap-3 text-xs">
-                {/* FREE Column */}
-                <div className="space-y-2">
-                  <p className="text-green-400 font-bold text-center mb-2">✓ FREE</p>
-                  <div className="bg-green-900/20 rounded p-2 text-gray-300">Zodiac revealed</div>
-                  <div className="bg-green-900/20 rounded p-2 text-gray-300">2 famous people</div>
-                  <div className="bg-green-900/20 rounded p-2 text-gray-300">Forecast preview</div>
-                  <div className="bg-green-900/20 rounded p-2 text-gray-300">Card preview</div>
+              <div className="space-y-2 text-xs">
+                {/* Row: Zodiac Insight */}
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="bg-gray-800/50 rounded p-2 text-gray-400">Basic Reveal</div>
+                  <div className="bg-fire-gold/20 rounded p-2 text-fire-gold font-semibold">Full 2026 Strategy Guide</div>
                 </div>
-
-                {/* PAID Column */}
-                <div className="space-y-2">
-                  <p className="text-fire-gold font-bold text-center mb-2">🔥 $8.88</p>
-                  <div className="bg-fire-gold/20 rounded p-2 text-fire-gold">HD Zodiac Card ↓</div>
-                  <div className="bg-fire-gold/20 rounded p-2 text-fire-gold">All celebrities</div>
-                  <div className="bg-fire-gold/20 rounded p-2 text-fire-gold">Full Forecast</div>
-                  <div className="bg-fire-gold/20 rounded p-2 text-fire-gold">AI Talisman Art</div>
-                  <div className="bg-fire-gold/20 rounded p-2 text-fire-gold">Lucky #s / Motto</div>
-                  <div className="bg-fire-gold/20 rounded p-2 text-fire-gold">Edition Certificate</div>
-                  <div className="bg-fire-gold/20 rounded p-2 text-fire-gold">#X of 888</div>
+                {/* Row: Famous Peers */}
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="bg-gray-800/50 rounded p-2 text-gray-400">2 Names</div>
+                  <div className="bg-fire-gold/20 rounded p-2 text-fire-gold font-semibold">Council of Legends</div>
+                </div>
+                {/* Row: Privacy */}
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="bg-gray-800/50 rounded p-2 text-gray-400">Local Calc</div>
+                  <div className="bg-fire-gold/20 rounded p-2 text-fire-gold font-semibold">Zero-Knowledge Generation</div>
+                </div>
+                {/* Row: Digital Asset */}
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="bg-gray-800/50 rounded p-2 text-gray-400">Preview Card</div>
+                  <div className="bg-fire-gold/20 rounded p-2 text-fire-gold font-semibold">HD Talisman + Certificate</div>
+                </div>
+                {/* Row: Personalization */}
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="bg-gray-800/50 rounded p-2 text-gray-400">Generic</div>
+                  <div className="bg-fire-gold/20 rounded p-2 text-fire-gold font-semibold">Wealth / Power / Love / Shield</div>
                 </div>
               </div>
 
@@ -815,7 +819,7 @@ export default function FreeReadingPage() {
                   href={paymentLink}
                   className="inline-block bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 text-black font-bold text-sm py-2 px-6 rounded-xl hover:scale-105 transition-all"
                 >
-                  UPGRADE TO COMPLETE — $8.88
+                  CLAIM MY TALISMAN — $8.88
                 </a>
               </div>
             </div>
@@ -860,24 +864,35 @@ export default function FreeReadingPage() {
               </div>
             </div>
 
-            {/* ========== MAIN CTA ========== */}
-            <div className="bg-gradient-to-r from-yellow-900/30 via-red-900/30 to-yellow-900/30 border-2 border-fire-gold rounded-2xl p-6 text-center">
-              <p className="text-white text-lg font-bold mb-2">
-                Ready to unlock your complete {result.element} {result.animal} Oracle?
+            {/* ========== CLOSING PITCH - DON'T LEAVE 2026 TO CHANCE ========== */}
+            <div className="bg-gradient-to-b from-red-950 via-black to-red-950 border-2 border-fire-gold rounded-2xl p-6 text-center">
+              <h3 className="text-white text-xl md:text-2xl font-bold mb-3">
+                Don&apos;t Leave 2026 to Chance
+              </h3>
+
+              <p className="text-gray-300 text-sm mb-4 leading-relaxed">
+                The Fire Horse moves fast. If you don&apos;t grab the reins, you get left behind.
+                <br />
+                For the cost of a coffee, get the roadmap and the art that marks your year of transition.
               </p>
-              <p className="text-gray-400 text-sm mb-4">
-                One-time payment • Instant delivery • Privacy by design
-              </p>
+
+              {/* Live Availability Counter */}
+              <div className="bg-black/60 rounded-xl p-3 mb-4 inline-block">
+                <p className="text-fire-gold text-sm font-mono">
+                  <span className="animate-pulse">●</span> {result.element} {result.animal} Availability:
+                  <span className="text-white font-bold"> ~800/888 remaining</span>
+                </p>
+              </div>
 
               <a
                 href={paymentLink}
                 className="block w-full bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 text-black font-bold text-xl py-4 rounded-xl hover:scale-105 active:scale-95 transition-all shadow-xl shadow-yellow-500/30 border-2 border-yellow-400 mb-3"
               >
-                🔥 GET MY COMPLETE ORACLE — $8.88
+                🚀 I&apos;M READY TO LEAD — $8.88
               </a>
 
               <p className="text-gray-500 text-xs">
-                Limited to 888 editions per zodiac • Fire Horse year ends Feb 2027
+                One-time • Instant delivery • Zero-Knowledge Privacy
               </p>
             </div>
 
