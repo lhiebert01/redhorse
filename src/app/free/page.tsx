@@ -103,6 +103,31 @@ export default function FreeReadingPage() {
       <div className="max-w-xl mx-auto px-4 py-8">
         {!result ? (
           <>
+            {/* Fire Horse WHY Card */}
+            <div className="bg-gradient-to-b from-red-950/60 via-black to-red-950/40 border-2 border-fire-gold rounded-2xl p-6 mb-6 text-center">
+              <p className="text-fire-gold text-2xl md:text-3xl font-bold mb-1">
+                Fire Horse 火马年
+              </p>
+              <p className="text-white text-lg md:text-xl font-semibold mb-4">
+                A Once-in-60-Year Opportunity
+              </p>
+
+              <p className="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
+                The Fire Horse returns only once every 60 years. Its blazing energy can
+                <span className="text-yellow-400 font-semibold"> ignite your wealth</span>,
+                <span className="text-red-400 font-semibold"> amplify your power</span>,
+                <span className="text-pink-400 font-semibold"> transform your love life</span>, or
+                <span className="text-blue-400 font-semibold"> strengthen your protection</span>.
+              </p>
+
+              <div className="flex justify-center gap-2 text-2xl">
+                <span>🎲</span>
+                <span>⚔️</span>
+                <span>❤️</span>
+                <span>🛡️</span>
+              </div>
+            </div>
+
             {/* Birth Date Input Form */}
             <div className="bg-red-950/30 border border-red-900/50 rounded-2xl p-6">
               <form onSubmit={handleSubmit} className="space-y-5">
@@ -363,6 +388,28 @@ export default function FreeReadingPage() {
                 </p>
               </div>
             )}
+
+            {/* ========== FIRE HORSE WHY - In Results ========== */}
+            <div className="bg-gradient-to-b from-red-950/60 via-black to-red-950/40 border-2 border-fire-gold rounded-2xl p-5 text-center">
+              <p className="text-fire-gold text-xl md:text-2xl font-bold mb-1">
+                🔥 Fire Horse 火马年 🔥
+              </p>
+              <p className="text-white text-base md:text-lg font-semibold mb-3">
+                A Once-in-60-Year Opportunity
+              </p>
+
+              <p className="text-gray-300 text-sm leading-relaxed mb-3">
+                The Fire Horse returns only once every 60 years. Its blazing energy can
+                <span className="text-yellow-400 font-semibold"> ignite your wealth</span>,
+                <span className="text-red-400 font-semibold"> amplify your power</span>,
+                <span className="text-pink-400 font-semibold"> transform your love life</span>, or
+                <span className="text-blue-400 font-semibold"> strengthen your protection</span>.
+              </p>
+
+              <p className="text-fire-gold text-sm font-semibold">
+                Your {result.element} {result.animal} + Fire Horse = Unique 2026 Destiny
+              </p>
+            </div>
 
             {/* ========== THE HOOK - FOMO & SCARCITY ========== */}
             <div className="bg-gradient-to-b from-red-900 via-red-950 to-black border-2 border-red-500 rounded-2xl p-5 relative overflow-hidden">
