@@ -7,6 +7,7 @@ import { Prophecy } from '@/types/prophecy';
 import TalismanDisplay from '@/components/reveal/TalismanDisplay';
 import ZodiacSummary from '@/components/reveal/ZodiacSummary';
 import GeneratingState from '@/components/reveal/GeneratingState';
+import StatusCard from '@/components/reveal/StatusCard';
 
 // Minimum time to show loading animation (15 seconds)
 const MIN_LOADING_TIME_MS = 15000;
@@ -191,6 +192,19 @@ function RevealContent() {
             zodiacElement={prophecy.zodiac_element}
             focusMode={prophecy.focus_mode}
             fullReading={prophecy.full_reading}
+          />
+        </div>
+      )}
+
+      {/* Viral Status Card Section */}
+      {prophecy.zodiac_sign && prophecy.edition_number && (
+        <div className="relative z-10">
+          <StatusCard
+            zodiacSign={prophecy.zodiac_sign}
+            zodiacElement={prophecy.zodiac_element || 'Fire'}
+            editionNumber={prophecy.edition_number}
+            totalEditions={prophecy.total_editions || 888}
+            focusMode={prophecy.focus_mode || 'wealth'}
           />
         </div>
       )}

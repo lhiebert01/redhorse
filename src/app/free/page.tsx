@@ -18,6 +18,38 @@ import {
 } from '@/constants/zodiac-forecasts';
 import { getZodiacFunFacts, getElementColors } from '@/constants/zodiac-fun-facts';
 
+// Mode descriptions for the selector
+const MODE_DATA = {
+  wealth: {
+    emoji: '🎲',
+    name: 'Wealth Mode',
+    vibe: 'The Harvest',
+    description: 'Strategic timing for investments, hidden "Fire Horse" market opportunities, and when to play your hand high.',
+    confirmation: 'The path to abundance is clear. Gemini 3 Pro is ready to reveal your hidden wealth channels for 2026.',
+  },
+  power: {
+    emoji: '⚔️',
+    name: 'Power Mode',
+    vibe: 'The Conqueror',
+    description: 'How to leverage your leadership to dominate your industry. Key dates for "Bold Moves" and public launches.',
+    confirmation: 'Excellent choice. Your natural authority combined with Fire Horse momentum is a rare "Kingmaker" alignment.',
+  },
+  love: {
+    emoji: '❤️',
+    name: 'Love Mode',
+    vibe: 'The Magnet',
+    description: 'Harmonizing the chaotic Fire Horse energy to deepen existing bonds or attract a high-frequency partner.',
+    confirmation: 'Hearts align in the Fire Horse year. Gemini 3 Pro will map your romantic destiny for 2026.',
+  },
+  shield: {
+    emoji: '🛡️',
+    name: 'Shield Mode',
+    vibe: 'The Fortress',
+    description: 'Defensive strategies for 2026. How to protect your assets, your data, and your peace from the noise.',
+    confirmation: 'Protection activated. Your Shield Oracle will fortify you against the chaos of the Fire Horse year.',
+  },
+};
+
 export default function FreeReadingPage() {
   const [birthDate, setBirthDate] = useState('');
   const [result, setResult] = useState<{
@@ -25,8 +57,64 @@ export default function FreeReadingPage() {
     element: ZodiacElement;
   } | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [selectedMode, setSelectedMode] = useState<string | null>(null);
+  const [copiedTemplate, setCopiedTemplate] = useState<string | null>(null);
 
   const paymentLink = process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK || '#';
+
+  // Copy share template to clipboard
+  const copyToClipboard = async (text: string, templateName: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedTemplate(templateName);
+      setTimeout(() => setCopiedTemplate(null), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
+  // Generate personalized share templates
+  const getShareTemplates = (element: string, animal: string) => {
+    const modeEmoji = selectedMode ? MODE_DATA[selectedMode as keyof typeof MODE_DATA]?.emoji : '🎲';
+    const modeName = selectedMode ? MODE_DATA[selectedMode as keyof typeof MODE_DATA]?.name.replace(' Mode', '') : 'Wealth';
+
+    return {
+      elite: `Just claimed my ${element} ${animal} 1-of-888 Talisman for the 2026 Fire Horse year. 🐴🔥
+
+Most people are scrolling into 2026 as "Spectators," but I'm taking the "Privacy by Design" route. This was forged by Gemini 3 Pro and then the data was instantly deleted. No tracking, just pure prophecy.
+
+I chose ${modeName} Mode. ${modeEmoji}
+
+Only 888 editions exist per sign. Don't be a spectator.
+Claim your seat: RedHorseOracle.com
+
+#RedHorseOracle #PrivacyByDesign #Gemini3 #2026FireHorse`,
+
+      mystic: `The Fire Horse only returns once every 60 years. 🐎🔥
+
+I just unlocked my unique 2026 Talisman from RedHorseOracle.com. It's a 1-of-1 digital artifact forged by AI specifically for my ${element} ${animal} alignment.
+
+The best part? They use Privacy by Design, so my data stays mine. No databases, no storage—just a personal prophecy and high-end art. 🛡️✨
+
+888 editions. Once they're gone, the forge closes until 2086.
+
+Are you the Spectator or the Architect? 👁️ vs 🏛️
+
+RedHorseOracle.com
+
+#DigitalArt #AIAstrology #${animal.replace(' ', '')} #FireHorse2026`,
+
+      short: `1 of 888. 🐴
+
+I just got my 2026 ${element} ${animal} Talisman from Red Horse Oracle.
+
+🤖 Forged by Gemini 3 Pro
+🛡️ 100% Privacy (Zero data stored)
+🎰 Fire Horse year is coming... are you ready?
+
+Get yours before your sign sells out: RedHorseOracle.com`,
+    };
+  };
 
   // Get fun facts for the result
   const funFacts = result ? getZodiacFunFacts(result.element, result.animal) : null;
@@ -486,6 +574,201 @@ export default function FreeReadingPage() {
                 </p>
                 <p className="text-gray-400 text-sm">
                   $8.88 to bet on yourself. That&apos;s less than a coffee.
+                </p>
+              </div>
+            </div>
+
+            {/* ========== CHOOSE YOUR 2026 TRANSMISSION ========== */}
+            <div className="bg-gradient-to-b from-purple-950/50 via-black to-purple-950/30 border-2 border-purple-500/50 rounded-2xl p-5">
+              <p className="text-purple-400 text-xs uppercase tracking-widest text-center mb-2">
+                ⚡ Choose Your 2026 Transmission
+              </p>
+              <p className="text-white text-lg font-bold text-center mb-2">
+                Select Your Oracle Mode
+              </p>
+              <p className="text-gray-400 text-sm text-center mb-4">
+                Which frequency should Gemini 3 Pro prioritize for your {result.element} {result.animal} Talisman?
+              </p>
+
+              {/* Mode Selector Grid */}
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                {Object.entries(MODE_DATA).map(([key, mode]) => (
+                  <button
+                    key={key}
+                    onClick={() => setSelectedMode(key)}
+                    className={`relative p-4 rounded-xl border-2 transition-all ${
+                      selectedMode === key
+                        ? 'border-fire-gold bg-fire-gold/20 scale-105 shadow-lg shadow-fire-gold/30'
+                        : 'border-gray-700 bg-black/50 hover:border-gray-500'
+                    }`}
+                  >
+                    {selectedMode === key && (
+                      <div className="absolute -top-2 -right-2 bg-fire-gold text-black text-xs font-bold px-2 py-0.5 rounded-full">
+                        ✓
+                      </div>
+                    )}
+                    <div className="text-3xl mb-1">{mode.emoji}</div>
+                    <p className={`font-bold text-sm ${selectedMode === key ? 'text-fire-gold' : 'text-white'}`}>
+                      {mode.name}
+                    </p>
+                    <p className="text-gray-500 text-xs">{mode.vibe}</p>
+                  </button>
+                ))}
+              </div>
+
+              {/* Mode Description */}
+              {selectedMode && (
+                <div className="bg-fire-gold/10 border border-fire-gold/40 rounded-xl p-4 mb-4 animate-fade-in">
+                  <p className="text-white text-sm mb-2">
+                    {MODE_DATA[selectedMode as keyof typeof MODE_DATA].description}
+                  </p>
+                  <p className="text-fire-gold text-sm font-semibold italic">
+                    &ldquo;{MODE_DATA[selectedMode as keyof typeof MODE_DATA].confirmation}&rdquo;
+                  </p>
+                </div>
+              )}
+
+              {/* Personalized CTA */}
+              <a
+                href={paymentLink}
+                className={`block w-full text-center font-bold text-lg py-4 rounded-xl transition-all hover:scale-105 ${
+                  selectedMode
+                    ? 'bg-gradient-to-r from-yellow-600 via-fire-gold to-yellow-600 text-black shadow-xl shadow-fire-gold/30'
+                    : 'bg-gray-700 text-gray-300 cursor-pointer'
+                }`}
+              >
+                {selectedMode
+                  ? `🔥 GENERATE MY ${MODE_DATA[selectedMode as keyof typeof MODE_DATA].name.toUpperCase()} — $8.88`
+                  : '👆 SELECT A MODE ABOVE'}
+              </a>
+            </div>
+
+            {/* ========== VIRAL SHARE TEMPLATES ========== */}
+            <div className="bg-gradient-to-br from-blue-950/40 via-black to-blue-950/30 border border-blue-500/40 rounded-2xl p-5">
+              <p className="text-blue-400 text-xs uppercase tracking-widest text-center mb-2">
+                📣 Share Your Discovery
+              </p>
+              <p className="text-white text-lg font-bold text-center mb-2">
+                Tell The World About Your {result.element} {result.animal}
+              </p>
+              <p className="text-gray-400 text-sm text-center mb-4">
+                Use these ready-to-post templates (click to copy)
+              </p>
+
+              {/* Template Cards */}
+              <div className="space-y-3">
+                {/* Elite/Tech Template */}
+                <button
+                  onClick={() => copyToClipboard(getShareTemplates(result.element, result.animal).elite, 'elite')}
+                  className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
+                    copiedTemplate === 'elite'
+                      ? 'border-green-500 bg-green-500/20'
+                      : 'border-gray-700 bg-black/50 hover:border-blue-500/50'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-blue-400">🔷</span>
+                      <span className="text-white font-bold text-sm">Elite/Tech Vibe</span>
+                      <span className="text-gray-500 text-xs">(X/LinkedIn)</span>
+                    </div>
+                    <span className={`text-xs px-2 py-1 rounded ${
+                      copiedTemplate === 'elite' ? 'bg-green-500 text-white' : 'bg-gray-700 text-gray-400'
+                    }`}>
+                      {copiedTemplate === 'elite' ? '✓ Copied!' : 'Click to copy'}
+                    </span>
+                  </div>
+                  <p className="text-gray-400 text-xs line-clamp-2">
+                    &ldquo;Just claimed my {result.element} {result.animal} 1-of-888 Talisman... Privacy by Design route... forged by Gemini 3 Pro...&rdquo;
+                  </p>
+                </button>
+
+                {/* Mystic Template */}
+                <button
+                  onClick={() => copyToClipboard(getShareTemplates(result.element, result.animal).mystic, 'mystic')}
+                  className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
+                    copiedTemplate === 'mystic'
+                      ? 'border-green-500 bg-green-500/20'
+                      : 'border-gray-700 bg-black/50 hover:border-purple-500/50'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-purple-400">✨</span>
+                      <span className="text-white font-bold text-sm">Aesthetic/Mystic Vibe</span>
+                      <span className="text-gray-500 text-xs">(Instagram/Threads)</span>
+                    </div>
+                    <span className={`text-xs px-2 py-1 rounded ${
+                      copiedTemplate === 'mystic' ? 'bg-green-500 text-white' : 'bg-gray-700 text-gray-400'
+                    }`}>
+                      {copiedTemplate === 'mystic' ? '✓ Copied!' : 'Click to copy'}
+                    </span>
+                  </div>
+                  <p className="text-gray-400 text-xs line-clamp-2">
+                    &ldquo;The Fire Horse only returns once every 60 years... 1-of-1 digital artifact... Privacy by Design...&rdquo;
+                  </p>
+                </button>
+
+                {/* Short Template */}
+                <button
+                  onClick={() => copyToClipboard(getShareTemplates(result.element, result.animal).short, 'short')}
+                  className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
+                    copiedTemplate === 'short'
+                      ? 'border-green-500 bg-green-500/20'
+                      : 'border-gray-700 bg-black/50 hover:border-orange-500/50'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-orange-400">⚡</span>
+                      <span className="text-white font-bold text-sm">Short & Punchy</span>
+                      <span className="text-gray-500 text-xs">(Stories/TikTok)</span>
+                    </div>
+                    <span className={`text-xs px-2 py-1 rounded ${
+                      copiedTemplate === 'short' ? 'bg-green-500 text-white' : 'bg-gray-700 text-gray-400'
+                    }`}>
+                      {copiedTemplate === 'short' ? '✓ Copied!' : 'Click to copy'}
+                    </span>
+                  </div>
+                  <p className="text-gray-400 text-xs line-clamp-2">
+                    &ldquo;1 of 888. I just got my 2026 {result.element} {result.animal} Talisman... Forged by Gemini 3 Pro...&rdquo;
+                  </p>
+                </button>
+              </div>
+
+              {/* Quick Share Buttons */}
+              <div className="flex justify-center gap-3 mt-4">
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(getShareTemplates(result.element, result.animal).short)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-black border border-gray-600 hover:border-white text-white px-4 py-2 rounded-lg text-sm font-bold transition-all"
+                >
+                  𝕏 Post
+                </a>
+                <a
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=https://redhorseoracle.com/free`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition-all"
+                >
+                  LinkedIn
+                </a>
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=https://redhorseoracle.com/free`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-blue-800 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition-all"
+                >
+                  Facebook
+                </a>
+              </div>
+
+              {/* Certificate Flex Tip */}
+              <div className="bg-fire-gold/10 border border-fire-gold/30 rounded-lg p-3 mt-4 text-center">
+                <p className="text-fire-gold text-xs font-semibold mb-1">💡 Pro Tip: The Certificate Flex</p>
+                <p className="text-gray-400 text-xs">
+                  When you get your Oracle, post your Edition Certificate: <span className="text-white">&ldquo;I&apos;m {result.element} {result.animal} #422. Who are the other 887? 🐴&rdquo;</span>
                 </p>
               </div>
             </div>
