@@ -449,6 +449,53 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Charitable Giving - AI for Good */}
+        <div className="w-full bg-gradient-to-br from-purple-950/40 via-black/60 to-blue-950/40 backdrop-blur-sm border border-purple-500/40 rounded-xl p-5 mb-6">
+          <div className="text-center mb-4">
+            <span className="text-3xl">👁️</span>
+            <h3 className="text-purple-300 text-lg font-bold mt-2">
+              The Oracle&apos;s Gift
+            </h3>
+          </div>
+
+          {/* Greek Philosophy Quote */}
+          <div className="bg-black/40 rounded-lg p-3 mb-4 border-l-2 border-purple-400">
+            <p className="text-gray-300 text-sm italic leading-relaxed">
+              &quot;In ancient Greece, the blind seer <span className="text-purple-300 font-semibold">Tiresias</span> saw further than any mortal. The Greeks believed those without physical sight possessed the greatest <span className="text-fire-gold font-semibold">inner vision</span>.&quot;
+            </p>
+          </div>
+
+          {/* AFB Donation */}
+          <div className="bg-purple-900/30 border border-purple-500/30 rounded-xl p-4 text-center">
+            <p className="text-white text-sm font-bold mb-2">
+              🤍 20% of Every Oracle Supports
+            </p>
+            <p className="text-purple-300 text-lg font-bold mb-1">
+              American Foundation for the Blind
+            </p>
+            <p className="text-gray-400 text-xs mb-3">
+              Founded 1921 • Helen Keller, Co-Founder
+            </p>
+            <p className="text-gray-300 text-sm leading-relaxed mb-2">
+              Sight is the most precious gift. Even if you&apos;re skeptical about your own future,
+              <span className="text-purple-300 font-semibold"> you&apos;ll know your action today helps another human being.</span>
+            </p>
+            <p className="text-fire-gold text-sm italic font-semibold">
+              What better way to build positive karma for 2026?
+            </p>
+          </div>
+
+          {/* AI for Good Badge */}
+          <div className="flex justify-center gap-3 mt-4">
+            <span className="bg-purple-900/50 border border-purple-500/50 text-purple-300 text-xs px-3 py-1.5 rounded-full">
+              🤖 AI for Good
+            </span>
+            <span className="bg-purple-900/50 border border-purple-500/50 text-purple-300 text-xs px-3 py-1.5 rounded-full">
+              💜 Charitable Partner
+            </span>
+          </div>
+        </div>
+
         {/* Social Proof */}
         <div className="text-center mb-6 bg-black/40 backdrop-blur-sm border border-red-900/50 rounded-xl p-4">
           <p className="text-red-300 text-xl md:text-2xl italic font-medium">

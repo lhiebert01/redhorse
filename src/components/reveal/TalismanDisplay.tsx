@@ -357,6 +357,47 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
           <span className="bg-green-900/50 border border-green-700 text-green-300 text-[10px] px-2 py-1 rounded">✓ SAFE TO SHARE</span>
         </div>
       </div>
+
+      {/* ========== CHARITABLE GIVING THANK YOU ========== */}
+      <div className="w-full bg-gradient-to-br from-purple-950/40 via-black/60 to-blue-950/40 border border-purple-500/40 rounded-2xl p-5">
+        <div className="text-center">
+          <span className="text-3xl">👁️</span>
+          <h3 className="text-purple-300 text-lg font-bold mt-2 mb-3">
+            Thank You — Your Oracle Gives Back
+          </h3>
+
+          <div className="bg-black/40 rounded-lg p-3 mb-4 border-l-2 border-purple-400">
+            <p className="text-gray-300 text-sm italic">
+              &quot;In ancient Greece, the blind seer <span className="text-purple-300 font-semibold">Tiresias</span> possessed the greatest vision of all.&quot;
+            </p>
+          </div>
+
+          <div className="bg-purple-900/30 border border-purple-500/30 rounded-xl p-4">
+            <p className="text-white text-sm font-bold mb-1">
+              🤍 20% of your purchase supports
+            </p>
+            <p className="text-purple-300 text-lg font-bold mb-2">
+              American Foundation for the Blind
+            </p>
+            <p className="text-gray-300 text-sm leading-relaxed">
+              Sight — the ability to see, to envision, to experience a bright future.
+              <span className="text-purple-300 font-semibold"> Something many of us take for granted.</span>
+            </p>
+            <p className="text-fire-gold text-xs mt-2 italic">
+              Your Oracle just built positive karma for 2026. Thank you.
+            </p>
+          </div>
+
+          <div className="flex justify-center gap-2 mt-4">
+            <span className="bg-purple-900/50 border border-purple-500/50 text-purple-300 text-xs px-3 py-1.5 rounded-full">
+              🤖 AI for Good
+            </span>
+            <span className="bg-purple-900/50 border border-purple-500/50 text-purple-300 text-xs px-3 py-1.5 rounded-full">
+              💜 You Made a Difference
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
