@@ -169,6 +169,8 @@ Even if you're skeptical about prophecies, your purchase helps someone who can't
 
 🤍 AFB (Founded 1921, Helen Keller Co-Founder)
 
+📚 *Want to learn more about the ancient Oracle tradition? Check out the lectures from Dr. John R. Hale at The Great Courses — fascinating archaeological research on the Oracle of Delphi.*
+
 ---
 
 ## 🎁 Try It (No Email, No Payment)

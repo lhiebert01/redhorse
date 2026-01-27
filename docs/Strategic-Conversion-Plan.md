@@ -350,6 +350,9 @@ In ancient Greece, the blind seer **Tiresias** saw further than any mortal. The 
 - 💜 Charitable Partner
 - 👁️ The Oracle's Gift
 
+**Learn More:**
+> For those who want to learn more about the ancient Greek Oracle tradition, we highly recommend the lectures from **Dr. John R. Hale** (University of Louisville) available at **The Great Courses**. His archaeological research on the Oracle of Delphi provides fascinating insight into how ancient civilizations sought wisdom for health, wealth, love, and protection.
+
 ---
 
 ## Privacy as Differentiator

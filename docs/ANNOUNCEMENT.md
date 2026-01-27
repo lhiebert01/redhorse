@@ -77,6 +77,8 @@ Even if you're skeptical about prophecies, your purchase helps someone who can't
 
 🤖 **AI for Good** | 💜 **Charitable Partner** | 👁️ **The Oracle's Gift**
 
+📚 *Want to learn more about the ancient Oracle tradition? We recommend the lectures from Dr. John R. Hale at The Great Courses — fascinating archaeological research on the Oracle of Delphi.*
+
 ---
 
 ## The Technology: Google Gemini 3 Pro
