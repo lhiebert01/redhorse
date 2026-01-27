@@ -5,9 +5,36 @@
 **Read Time:** 4 min
 **Status:** ✅ FINAL — READY TO PUBLISH
 
-**Hero Image:** `/public/assets/last-time-firehorse-roared.png`
+---
 
-![1966: The Last Time the Fire Horse Roared](../public/assets/last-time-firehorse-roared.png)
+## 🖼️ IMAGE STRATEGY (3 Images)
+
+### Image 1: "Heritage & Future" Anchor
+**File:** `last-time-firehorse-roared.png`
+**Shows:** Fire Horse rising above dual skyline (traditional + futuristic), 火 character, 1966/2026 dates
+**Use:** Medium HERO image — sets cinematic, storytelling tone
+
+### Image 2: "Class of 1966" Social Proof
+**File:** `redhorse-oracle-class-of-1966.png`
+**Shows:** Celebrity portraits (Berry, Jackson, Sandler, Tyson, Crawford, Wright) + branding
+**Use:** LinkedIn PRIMARY — looks like "Power List" or "Who's Who" article
+
+### Image 3: "Intellectual Hook" Data Visualization
+**File:** `redhorse-oracle-superstition-was-wrong.png`
+**Shows:** -25% birth rate stat, "The Superstition Was Wrong", Health/Wealth/Love/Protection pillars, CTA
+**Use:** Medium MID-ARTICLE — breaks up text, forces engagement with data
+
+---
+
+## 📱 PLATFORM-SPECIFIC USAGE
+
+| Platform | Primary Image | Secondary |
+|----------|---------------|-----------|
+| **LinkedIn** | Image 2 (Class of 1966) | — |
+| **Medium** | Image 1 (Hero) | Image 3 (mid-article) |
+| **Facebook Ad** | Image 2 or 3 | — |
+| **Instagram** | Image 2 (carousel slide 1) | Image 3 (slide 2) |
+| **Twitter/X** | Image 3 (data hook stops scrollers) | — |
 
 ---
 
