@@ -5,6 +5,10 @@
 **Read Time:** 4 min
 **Status:** ✅ FINAL — READY TO PUBLISH
 
+**Hero Image:** `/public/assets/last-time-firehorse-roared.png`
+
+![1966: The Last Time the Fire Horse Roared](../public/assets/last-time-firehorse-roared.png)
+
 ---
 
 # 1966: The Last Time the Fire Horse Roared (And Why 2026 Changes Everything)
