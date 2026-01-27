@@ -123,11 +123,53 @@ What will YOU do with Fire Horse energy?
 
 All in `/public/assets/`:
 
-| Image | File |
-|-------|------|
-| Heritage & Future | `last-time-firehorse-roared.png` |
-| Class of 1966 | `redhorse-oracle-class-of-1966.png` |
-| Data Hook (-25%) | `redhorse-oracle-superstition-was-wrong.png` |
+| Image | File | Purpose |
+|-------|------|---------|
+| Heritage & Future | `last-time-firehorse-roared.png` | Story/Hero |
+| Class of 1966 | `redhorse-oracle-class-of-1966.png` | Social Proof |
+| Data Hook (-25%) | `redhorse-oracle-superstition-was-wrong.png` | Pattern Interrupt |
+| **Oracle in Action** | `redhorse-oracle-in-action.png` | **Product/Conversion** |
+
+---
+
+## 📱 IMAGE 4: ORACLE IN ACTION (Product Shot)
+
+**Use for:** Conversion ads, retargeting, bottom-of-funnel
+
+### Twitter Teaser (Product-Focused):
+```
+This is what your 2026 Fire Horse Oracle looks like. 🔥📱
+
+Powered by Google Gemini 3 Pro. Zero data stored. One-of-a-kind AI art.
+
+Health. Wealth. Love. Protection.
+
+Which path will you choose?
+
+Get your FREE reading: redhorseoracle.com/free
+
+#FireHorse2026 #AI #Oracle
+```
+
+### Instagram Caption (Product-Focused):
+```
+This is the moment. 📱🔥
+
+Your personalized 2026 Fire Horse Oracle — powered by Google Gemini 3 Pro, designed with Privacy by Design, and limited to just 888 editions per zodiac sign.
+
+Choose your path:
+🏥 Health
+💰 Wealth
+❤️ Love
+🛡️ Protection
+
+The Fire Horse returns only once every 60 years. What will you do with this rare energy?
+
+✨ Get your FREE reading: redhorseoracle.com/free
+🔥 Claim your talisman: redhorseoracle.com
+
+#RedHorseOracle #FireHorse2026 #AIArt #PersonalizedOracle #2026Goals
+```
 
 ---
 
