@@ -2,8 +2,30 @@
 ## FINAL APPROVED VERSION
 
 **Date:** January 21, 2026
+**Updated:** January 26, 2026 (Added Charitable Giving Messaging)
 **Status:** ✅ APPROVED — READY TO EXECUTE
 **Launch Status:** GO
+
+---
+
+## 🤍 CHARITABLE GIVING — NEW KEY MESSAGE
+
+**Add this to ALL new posts:**
+
+> 🤍 20% of every Oracle supports the American Foundation for the Blind
+>
+> In ancient Greece, the blind seer Tiresias saw further than any mortal. True vision comes from within.
+>
+> Even if you're skeptical about your future, your purchase helps someone who can't see.
+> **What better way to build positive karma for 2026?**
+
+**Short Version (for tweets/captions):**
+> 🤍 20% supports the American Foundation for the Blind — AI for Good
+
+**Hashtags to Add:**
+```
+#AIforGood #CharitableGiving
+```
 
 ---
 

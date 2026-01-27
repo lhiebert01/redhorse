@@ -318,6 +318,40 @@ A downloadable social graphic (9:16 aspect ratio) designed specifically for shar
 
 ---
 
+## Charitable Giving — The Oracle's Gift
+
+### 20% to American Foundation for the Blind
+
+Red Horse Oracle donates **20% of every purchase** to the American Foundation for the Blind (AFB).
+
+**The Philosophy:**
+
+In ancient Greece, the blind seer **Tiresias** saw further than any mortal. The Greeks believed those without physical sight possessed the greatest **inner vision**.
+
+**The Messaging:**
+
+> "Sight is the most precious gift. Even if you're skeptical about your own future, you'll know your action today helps another human being. What better way to build positive karma for 2026?"
+
+**Key Points:**
+- **AFB Founded:** 1921
+- **Co-Founder:** Helen Keller
+- **Mission:** Expanding possibilities for people with vision loss
+- **Donation:** 20% of every $8.88 purchase (~$1.78)
+
+**Value Proposition Angles:**
+| Audience | Message |
+|----------|---------|
+| **Skeptics** | "Even if you don't believe in prophecies, your purchase helps someone who can't see" |
+| **Believers** | "The Oracle gives back — true inner vision" |
+| **Tech Users** | "AI for Good — Privacy by Design + Charitable Impact" |
+
+**Badges:**
+- 🤖 AI for Good
+- 💜 Charitable Partner
+- 👁️ The Oracle's Gift
+
+---
+
 ## Privacy as Differentiator
 
 ### The "Zero-Knowledge Prophecy" USP

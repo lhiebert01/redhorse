@@ -109,13 +109,38 @@ Not ready to commit? Start with a free reading.
 
 ## Privacy by Design
 
-One more thing.
+One more thing about privacy.
 
 Red Horse Oracle is built with **Privacy by Design**.
 
 Your birth date is used once to calculate your zodiac — then immediately deleted. We store zero personal information.
 
 Your oracle is safe to share publicly. Nothing in it identifies you.
+
+---
+
+## The Oracle's Gift — AI for Good
+
+**20% of every purchase supports the American Foundation for the Blind.**
+
+Did you know the ancient Greeks treasured their Oracle at Delphi? People traveled from across the Mediterranean to receive wisdom about:
+
+- 🏥 **Health**
+- 💰 **Wealth**
+- ❤️ **Love**
+- 🛡️ **Protection**
+
+These are the exact four paths of Red Horse Oracle. Ancient wisdom meets Google Gemini 3 Pro.
+
+The blind seer **Tiresias** saw further than any mortal. The Greeks believed those without physical sight possessed the greatest **inner vision**.
+
+> "Sight — the ability to see, to envision, to experience a bright future. Something many of us take for granted."
+
+Even if you're skeptical about prophecies, your purchase helps someone who can't see.
+
+**What better way to build positive karma for 2026?**
+
+🤍 AFB (Founded 1921, Helen Keller Co-Founder)
 
 ---
 

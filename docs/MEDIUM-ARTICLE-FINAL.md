@@ -145,6 +145,32 @@ A "wild spirit" year that pushes change. 🌪️
 
 It felt like the right moment to build something symbolic… and do it the right way. ✨
 
+## 👁️ The Oracle's Gift — AI for Good
+
+One more thing that makes this meaningful.
+
+**20% of every Oracle supports the American Foundation for the Blind.**
+
+In ancient Greece, the blind seer **Tiresias** saw further than any mortal. The Greeks believed those without physical sight possessed the greatest **inner vision**.
+
+The ancient Greeks treasured their Oracle at Delphi — a sacred source of wisdom for:
+- 🏥 **Health**
+- 💰 **Wealth**
+- ❤️ **Love**
+- 🛡️ **Protection**
+
+Red Horse Oracle was designed with the same four paths. Ancient wisdom meets modern AI.
+
+> "Sight — the ability to see, to envision, to experience a bright future. Something many of us take for granted."
+
+Even if you're skeptical about prophecies, your purchase helps someone who can't see.
+
+**What better way to build positive karma for 2026?**
+
+🤍 AFB (Founded 1921, Helen Keller Co-Founder)
+
+---
+
 ## 🎁 Try It (No Email, No Payment)
 
 If you want to see it in action:

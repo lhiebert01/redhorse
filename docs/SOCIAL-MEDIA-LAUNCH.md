@@ -1,6 +1,30 @@
 # Red Horse Oracle — Social Media Launch Kit
 
-**Last Updated:** January 18, 2026
+**Last Updated:** January 26, 2026
+
+---
+
+## 🤍 CHARITABLE GIVING — KEY MESSAGE (ADD TO ALL POSTS)
+
+**20% of every Oracle supports the American Foundation for the Blind.**
+
+**The Greek Oracle Connection:**
+
+Did you know the ancient Greeks treasured their Oracle at Delphi? People traveled from across the Mediterranean to receive wisdom about **Health, Wealth, Love, and Protection** — the exact four paths of Red Horse Oracle.
+
+The blind seer **Tiresias** saw further than any mortal. The Greeks believed those without physical sight possessed the greatest **inner vision**.
+
+**Key Messaging:**
+- "Even if you're skeptical about your future, your purchase helps someone who can't see"
+- "What better way to build positive karma for 2026?"
+- "Sight = Vision = Ability to see a bright future"
+- "AI for Good — Privacy by Design + Charitable Impact"
+
+**Short Version:** 🤍 20% supports the American Foundation for the Blind
+
+**AFB Info:** Founded 1921, Helen Keller Co-Founder
+
+**Hashtags:** #AIforGood #CharitableGiving
 
 ---
 

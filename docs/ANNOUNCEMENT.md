@@ -61,6 +61,24 @@ This isn't a marketing claim. It's architecture. It's code. It's principle.
 
 ---
 
+## The Oracle's Gift — AI for Good
+
+**20% of every purchase supports the American Foundation for the Blind.**
+
+In ancient Greece, the blind seer **Tiresias** saw further than any mortal. The Greeks believed those without physical sight possessed the greatest **inner vision**.
+
+> "Sight — the ability to see, to envision, to experience a bright future. Something many of us take for granted."
+
+Red Horse Oracle isn't just privacy-first. It's **purpose-driven**.
+
+🤍 **20% of every Oracle** supports the AFB (Founded 1921, Helen Keller Co-Founder)
+
+Even if you're skeptical about prophecies, your purchase helps someone who can't see. **What better way to build positive karma for 2026?**
+
+🤖 **AI for Good** | 💜 **Charitable Partner** | 👁️ **The Oracle's Gift**
+
+---
+
 ## The Technology: Google Gemini 3 Pro
 
 Red Horse Oracle harnesses the most advanced AI on the planet:
