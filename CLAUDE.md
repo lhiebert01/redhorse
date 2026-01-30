@@ -2638,4 +2638,154 @@ openGraph: {
 
 ---
 
+## Session Update: January 29, 2026 - Fire Horse Trivia Party Game
+
+### Current Status: COMPLETE - READY FOR DEPLOYMENT
+
+### Major Feature: Kahoot-Style Party Trivia Game
+
+Built a complete multiplayer trivia game for CNY 2026 parties at `/party`.
+
+#### Pricing & Passes
+
+| Pass | Price | Duration | Max Games | Max Players |
+|------|-------|----------|-----------|-------------|
+| **Day Pass** | $4.88 | 24 hours | 5 | 20 |
+| **Weekend Pass** | $8.88 | 48 hours | 10 | 20 |
+| **Festival Pass** | $14.88 | 72 hours | 15 | 20 |
+
+#### Key Features
+
+- **Real-time multiplayer** with Supabase Realtime
+- **400 trivia questions** across 16 categories
+- **Scoring system** with speed bonuses and streak bonuses
+- **Leaderboard** with zodiac-specific rankings
+- **CSV export** for results/prizes
+- **Mobile-first** design with large touch targets
+
+#### New Pages
+
+| Route | Purpose |
+|-------|---------|
+| `/party` | Landing page with host/join options |
+| `/party/host/[code]` | Host console (control game flow) |
+| `/party/join` | Enter party code and nickname |
+| `/party/play/[code]` | Player game screen |
+| `/party/results/[code]` | Game results and leaderboard |
+| `/party/success` | Post-purchase confirmation |
+
+#### New API Routes
+
+| Route | Purpose |
+|-------|---------|
+| `/api/party/create` | Create Stripe checkout for pass |
+| `/api/party/join` | Join a party as player |
+| `/api/party/answer` | Submit answer |
+| `/api/party/webhook` | Handle Stripe payments |
+
+#### New Files
+
+| File | Purpose |
+|------|---------|
+| `src/types/party.ts` | TypeScript interfaces and helper functions |
+| `src/constants/party-questions.ts` | 400 questions (3,282 lines) |
+| `docs/GAME-FEATURE-DESIGN.md` | Complete feature specification |
+| `docs/migrations/003_party_game_tables.sql` | Database schema |
+
+### Database Tables (Run Migration)
+
+```sql
+-- Run this in Supabase SQL Editor:
+-- docs/migrations/003_party_game_tables.sql
+
+-- Tables created:
+-- party_passes - Purchased passes with party codes
+-- party_games - Individual game sessions
+-- party_players - Players in each game
+-- party_answers - Individual answer submissions
+-- party_scores - Final scores for leaderboard
+```
+
+### Question Categories (400 Total)
+
+| Category | Count |
+|----------|-------|
+| Fire Horse & The Great Race | 25 |
+| CNY Traditions & Food | 25 |
+| History, Art & Horse Lore | 25 |
+| 2026 Astronomy & Traditions | 25 |
+| Modern Culture & Global Horses | 25 |
+| Logic, Math & Zodiac Riddles | 25 |
+| Biological & Scientific Facts | 25 |
+| Historical War Horses | 25 |
+| Horse Equipment & Sports | 25 |
+| The Five Elements | 25 |
+| Horse Idioms & Phrases | 25 |
+| Literature, Myth & Fantasy | 25 |
+| Pop Music, Songs & Sound | 25 |
+| 2026 CNY Taboos & Superstitions | 25 |
+| Grandmaster Zodiac & Math | 25 |
+| Final Countdown & Future Lore | 25 |
+
+### Scoring System
+
+| Factor | Points |
+|--------|--------|
+| Correct Answer | 100 |
+| Speed Bonus (first 25% of time) | +50 |
+| Speed Bonus (first 50% of time) | +25 |
+| Streak Bonus (3 in a row) | +25 |
+| Streak Bonus (5 in a row) | +50 |
+| Streak Bonus (10 in a row) | +100 |
+
+### Game Flow
+
+1. **Host purchases pass** → Gets 6-character party code
+2. **Players join free** → Enter code + nickname + birth year
+3. **Host starts game** → 3-2-1 countdown
+4. **Questions appear** → Timer counts down
+5. **Players answer** → Points calculated instantly
+6. **Host reveals answer** → Stats shown
+7. **Repeat for all questions** → Game ends
+8. **Leaderboard displayed** → Export CSV option
+
+### Stripe Webhook Configuration
+
+Add a new webhook endpoint:
+- **URL:** `https://redhorseoracle.com/api/party/webhook`
+- **Events:** `checkout.session.completed`
+- **Secret:** Store in `STRIPE_PARTY_WEBHOOK_SECRET` (or use main secret)
+
+### Revenue Projections (Party Game)
+
+| Scenario | Passes Sold | Revenue |
+|----------|-------------|---------|
+| Conservative | 500 | $4,440 |
+| Medium | 2,000 | $17,760 |
+| Viral | 10,000 | $88,800 |
+
+### Quick Commands
+
+```bash
+# Run migration
+# Go to Supabase Dashboard → SQL Editor
+# Paste contents of docs/migrations/003_party_game_tables.sql
+
+# Test locally
+npm run dev
+# Visit http://localhost:3000/party
+```
+
+### Party URLs (Production)
+
+| Page | URL |
+|------|-----|
+| Landing | https://redhorseoracle.com/party |
+| Join | https://redhorseoracle.com/party/join |
+| Host Console | https://redhorseoracle.com/party/host/[CODE] |
+| Player Screen | https://redhorseoracle.com/party/play/[CODE] |
+| Results | https://redhorseoracle.com/party/results/[CODE] |
+
+---
+
 *火马年 2026 - Year of the Fire Horse*
