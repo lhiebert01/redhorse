@@ -46,11 +46,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('[ANSWER API] Game found, current_question_index:', game.current_question_index, 'submitted:', question_index);
+    // IMPORTANT: Convert question_index to number to handle type mismatches from JSON
+    const questionIndexNum = Number(question_index);
+    console.log('[ANSWER API] Game found, current_question_index:', game.current_question_index, 'submitted:', questionIndexNum, 'types:', typeof game.current_question_index, typeof question_index);
 
-    // Verify this is the current question
-    if (game.current_question_index !== question_index) {
-      console.log('[ANSWER API] Question index mismatch');
+    // Verify this is the current question (use number comparison)
+    if (game.current_question_index !== questionIndexNum) {
+      console.log('[ANSWER API] Question index mismatch:', game.current_question_index, '!==', questionIndexNum);
       return NextResponse.json(
         { error: 'This question has already ended' },
         { status: 400 }
@@ -63,7 +65,7 @@ export async function POST(request: NextRequest) {
       .select('*')
       .eq('party_game_id', game_id)
       .eq('player_id', player_id)
-      .eq('question_index', question_index)
+      .eq('question_index', questionIndexNum)
       .single();
 
     if (existingAnswer) {
@@ -74,9 +76,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Get the correct answer from question bank
-    const question = PARTY_QUESTIONS.find((q) => q.id === question_id);
+    // IMPORTANT: Convert question_id to number to handle type mismatches from JSON
+    const questionIdNum = Number(question_id);
+    console.log('[ANSWER API] Looking for question:', { question_id, questionIdNum, typeofOriginal: typeof question_id });
+
+    const question = PARTY_QUESTIONS.find((q) => q.id === questionIdNum);
     if (!question) {
-      console.log('[ANSWER API] Question not found in bank:', question_id, 'typeof:', typeof question_id);
+      console.log('[ANSWER API] Question not found in bank:', questionIdNum);
       console.log('[ANSWER API] Available question IDs (first 10):', PARTY_QUESTIONS.slice(0, 10).map(q => q.id));
       return NextResponse.json(
         { error: 'Question not found' },
@@ -142,9 +148,9 @@ export async function POST(request: NextRequest) {
     console.log('[ANSWER API] Inserting answer:', {
       party_game_id: game_id,
       player_id: player_id,
-      question_index,
-      question_id,
-      answer_given,
+      question_index: questionIndexNum,
+      question_id: questionIdNum,
+      answer_given: trimmedAnswer,
       is_correct: isCorrect,
       total_points: points.total,
     });
@@ -154,9 +160,9 @@ export async function POST(request: NextRequest) {
       .insert({
         party_game_id: game_id,
         player_id: player_id,
-        question_index: question_index,
-        question_id: question_id,
-        answer_given: answer_given,
+        question_index: questionIndexNum,
+        question_id: questionIdNum,
+        answer_given: trimmedAnswer,
         is_correct: isCorrect,
         answer_time_ms: answer_time_ms,
         base_points: points.base,
