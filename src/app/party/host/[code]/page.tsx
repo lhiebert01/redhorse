@@ -1036,6 +1036,10 @@ export default function HostConsolePage() {
             <div className="text-3xl font-bold">{pass.games_remaining}</div>
           </div>
         </div>
+        {/* DEBUG: Pass Info */}
+        <div className="text-xs text-gray-500 text-right mt-1">
+          Pass: {pass.id.slice(0, 8)}... | Game: {game?.id?.slice(0, 8) || 'none'}... | Status: {game?.status || 'no game'}
+        </div>
       </div>
 
       {/* Main Content */}
