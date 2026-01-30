@@ -46,6 +46,8 @@ interface LeaderboardEntry {
   total_points: number;
   rank: number;
   player_id: string;
+  zodiac_sign?: string;
+  zodiac_element?: string;
 }
 
 export default function PlayerGamePage() {
@@ -383,26 +385,34 @@ export default function PlayerGamePage() {
                 Q{gameState.current_question_index + 1} of{' '}
                 {gameState.total_questions}
               </div>
-              <div
-                className={`text-3xl font-bold font-mono ${
-                  timeRemaining < 5000 ? 'text-red-500 animate-pulse' : 'text-yellow-400'
-                }`}
-              >
-                {formatTimeRemaining(timeRemaining)}
-              </div>
+              {gameState.timer_seconds === 0 ? (
+                <div className="text-2xl font-bold text-blue-400">
+                  📋 MANUAL
+                </div>
+              ) : (
+                <div
+                  className={`text-3xl font-bold font-mono ${
+                    timeRemaining < 5000 ? 'text-red-500 animate-pulse' : 'text-yellow-400'
+                  }`}
+                >
+                  {formatTimeRemaining(timeRemaining)}
+                </div>
+              )}
             </div>
 
-            {/* Timer Bar */}
-            <div className="h-3 bg-gray-800 rounded-full mb-4 overflow-hidden">
-              <div
-                className={`h-full transition-all duration-100 ${
-                  timeRemaining < 5000 ? 'bg-red-500' : 'bg-yellow-400'
-                }`}
-                style={{
-                  width: `${(timeRemaining / (gameState.timer_seconds * 1000)) * 100}%`,
-                }}
-              />
-            </div>
+            {/* Timer Bar (only show if not manual mode) */}
+            {gameState.timer_seconds > 0 && (
+              <div className="h-3 bg-gray-800 rounded-full mb-4 overflow-hidden">
+                <div
+                  className={`h-full transition-all duration-100 ${
+                    timeRemaining < 5000 ? 'bg-red-500' : 'bg-yellow-400'
+                  }`}
+                  style={{
+                    width: `${(timeRemaining / (gameState.timer_seconds * 1000)) * 100}%`,
+                  }}
+                />
+              </div>
+            )}
 
             {/* Category Badge */}
             <div className="text-center mb-3">
@@ -611,23 +621,30 @@ export default function PlayerGamePage() {
                   {leaderboard.slice(0, 5).map((entry, i) => (
                     <div
                       key={i}
-                      className={`flex justify-between items-center p-2 rounded ${
+                      className={`p-2 rounded ${
                         entry.player_id === playerState.player_id
                           ? 'bg-yellow-900/50 border border-yellow-600'
                           : 'bg-gray-800/50'
                       }`}
                     >
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-lg">
-                          {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}.`}
-                        </span>
-                        <span className={entry.player_id === playerState.player_id ? 'font-bold' : ''}>
-                          {entry.nickname}
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-lg w-6">
+                            {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}.`}
+                          </span>
+                          <span className={entry.player_id === playerState.player_id ? 'font-bold' : ''}>
+                            {entry.nickname}
+                          </span>
+                        </div>
+                        <span className="font-bold text-xl text-yellow-400">
+                          {entry.total_points}
                         </span>
                       </div>
-                      <span className="font-bold text-xl text-yellow-400">
-                        {entry.total_points}
-                      </span>
+                      {entry.zodiac_sign && (
+                        <div className="text-xs text-gray-400 ml-8">
+                          {entry.zodiac_element} {entry.zodiac_sign}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -666,23 +683,30 @@ export default function PlayerGamePage() {
                 {finalScores.slice(0, 10).map((score, i) => (
                   <div
                     key={i}
-                    className={`flex justify-between items-center p-3 rounded ${
+                    className={`p-3 rounded ${
                       score.player_id === playerState.player_id
                         ? 'bg-yellow-900/50 border-2 border-yellow-600'
                         : 'bg-gray-800/50'
                     }`}
                   >
-                    <div className="flex items-center gap-3">
-                      <span className="font-bold text-xl">
-                        {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}.`}
-                      </span>
-                      <span className={`text-lg ${score.player_id === playerState.player_id ? 'font-bold' : ''}`}>
-                        {score.nickname}
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-3">
+                        <span className="font-bold text-xl w-8">
+                          {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}.`}
+                        </span>
+                        <span className={`text-lg ${score.player_id === playerState.player_id ? 'font-bold' : ''}`}>
+                          {score.nickname}
+                        </span>
+                      </div>
+                      <span className="font-bold text-2xl text-yellow-400">
+                        {score.total_points}
                       </span>
                     </div>
-                    <span className="font-bold text-2xl text-yellow-400">
-                      {score.total_points}
-                    </span>
+                    {score.zodiac_sign && (
+                      <div className="text-xs text-gray-400 ml-11">
+                        {score.zodiac_element} {score.zodiac_sign}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

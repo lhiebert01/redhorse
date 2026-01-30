@@ -56,8 +56,29 @@ export default function HostConsolePage() {
   const [timeRemaining, setTimeRemaining] = useState(30);
   const [timerActive, setTimerActive] = useState(false);
 
+  // Timer configuration (0 = manual/no timer)
+  const [selectedTimer, setSelectedTimer] = useState(30);
+  const TIMER_OPTIONS = [
+    { value: 30, label: '30 sec' },
+    { value: 60, label: '60 sec' },
+    { value: 90, label: '90 sec' },
+    { value: 120, label: '2 min' },
+    { value: 0, label: 'Manual' },
+  ];
+
   // Countdown before game
   const [countdown, setCountdown] = useState<number | null>(null);
+
+  // Leaderboard state (updated after each question)
+  interface LeaderboardEntry {
+    player_id: string;
+    nickname: string;
+    total_points: number;
+    zodiac_sign?: string;
+    zodiac_element?: string;
+    rank: number;
+  }
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
 
   // Load party pass and game data
   useEffect(() => {
@@ -196,8 +217,11 @@ export default function HostConsolePage() {
       setCurrentQuestion(question as Question);
       setShowingAnswer(false);
       setAnswerStats({ total: 0, correct: 0, distribution: {} });
-      setTimeRemaining(game.timer_seconds);
-      setTimerActive(true);
+
+      // Use selectedTimer; if manual (0), don't start timer
+      const timerSeconds = selectedTimer || 9999; // Large number for manual mode display
+      setTimeRemaining(timerSeconds);
+      setTimerActive(selectedTimer > 0); // Only activate timer if not manual
 
       // Update game in database
       await supabase
@@ -206,11 +230,12 @@ export default function HostConsolePage() {
           current_question_index: questionIndex,
           status: 'playing',
           started_at: game.started_at || new Date().toISOString(),
+          timer_seconds: selectedTimer || 30, // Store selected timer
         })
         .eq('id', game.id);
 
       setGame((prev) =>
-        prev ? { ...prev, current_question_index: questionIndex, status: 'playing' } : null
+        prev ? { ...prev, current_question_index: questionIndex, status: 'playing', timer_seconds: selectedTimer || 30 } : null
       );
 
       // Broadcast question to players
@@ -227,11 +252,11 @@ export default function HostConsolePage() {
             category: question.category,
             difficulty: question.difficulty,
           },
-          timer_seconds: game.timer_seconds,
+          timer_seconds: selectedTimer, // 0 = manual mode for players
         },
       });
     },
-    [game, partyCode]
+    [game, partyCode, selectedTimer]
   );
 
   // Handle question end (timer expired or manual)
@@ -294,10 +319,10 @@ export default function HostConsolePage() {
 
     const { data: gamePlayers } = await supabase
       .from('party_players')
-      .select('id, nickname')
+      .select('id, nickname, zodiac_sign, zodiac_element')
       .eq('party_game_id', game.id);
 
-    let leaderboard: Array<{ player_id: string; nickname: string; total_points: number; rank: number }> = [];
+    let leaderboardData: LeaderboardEntry[] = [];
 
     if (allAnswers && gamePlayers) {
       // Sum up points per player
@@ -306,20 +331,25 @@ export default function HostConsolePage() {
         pointsMap.set(ans.player_id, (pointsMap.get(ans.player_id) || 0) + ans.total_points);
       });
 
-      // Build leaderboard
-      leaderboard = gamePlayers
+      // Build leaderboard with zodiac info
+      leaderboardData = gamePlayers
         .map((p) => ({
           player_id: p.id,
           nickname: p.nickname,
           total_points: pointsMap.get(p.id) || 0,
+          zodiac_sign: p.zodiac_sign || undefined,
+          zodiac_element: p.zodiac_element || undefined,
           rank: 0,
         }))
         .sort((a, b) => b.total_points - a.total_points);
 
       // Assign ranks
-      leaderboard.forEach((entry, i) => {
+      leaderboardData.forEach((entry, i) => {
         entry.rank = i + 1;
       });
+
+      // Update the leaderboard state
+      setLeaderboard(leaderboardData);
     }
 
     // Broadcast answer reveal WITH leaderboard
@@ -336,7 +366,7 @@ export default function HostConsolePage() {
           correct: correctCount,
           distribution,
         },
-        leaderboard,
+        leaderboard: leaderboardData,
       },
     });
   }, [game, currentQuestion, partyCode]);
@@ -432,7 +462,7 @@ export default function HostConsolePage() {
 
       setGame((prev) => (prev ? { ...prev, status: 'finished' } : null));
 
-      // Broadcast game end
+      // Broadcast game end with zodiac info
       const channel = supabase.channel(`party:${partyCode}`);
       await channel.send({
         type: 'broadcast',
@@ -444,6 +474,8 @@ export default function HostConsolePage() {
             total_points: s.total_points,
             rank: s.rank,
             player_id: s.player_id,
+            zodiac_sign: s.zodiac_sign,
+            zodiac_element: s.zodiac_element,
           })),
         },
       });
@@ -589,6 +621,31 @@ export default function HostConsolePage() {
               )}
             </div>
 
+            {/* Timer Settings */}
+            <div className="bg-gradient-to-r from-orange-900/30 to-red-900/30 rounded-xl p-6 mb-6 border border-orange-600/30">
+              <h3 className="text-lg font-bold mb-3 text-center">⏱️ Question Timer</h3>
+              <div className="flex flex-wrap justify-center gap-2">
+                {TIMER_OPTIONS.map((option) => (
+                  <button
+                    key={option.value}
+                    onClick={() => setSelectedTimer(option.value)}
+                    className={`px-4 py-3 rounded-xl font-bold text-lg transition-all ${
+                      selectedTimer === option.value
+                        ? 'bg-orange-500 text-white ring-2 ring-orange-300 shadow-lg'
+                        : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+              <p className="text-center text-gray-400 text-sm mt-3">
+                {selectedTimer === 0
+                  ? '📋 Manual Mode: You control when to reveal answers and move to next question'
+                  : `⏰ Each question will auto-end after ${selectedTimer} seconds`}
+              </p>
+            </div>
+
             {/* Start Button */}
             <button
               onClick={startGame}
@@ -608,150 +665,219 @@ export default function HostConsolePage() {
 
         {/* PLAYING / SHOWING ANSWER */}
         {game && (game.status === 'playing' || game.status === 'showing_answer') && currentQuestion && (
-          <div>
-            {/* Progress & Timer */}
-            <div className="flex justify-between items-center mb-4">
-              <div className="text-lg">
-                Question <span className="font-bold">{game.current_question_index + 1}</span>
-                {' of '}
-                <span className="font-bold">{game.questions_per_game}</span>
+          <div className="flex gap-6">
+            {/* Main Content */}
+            <div className="flex-1">
+              {/* Progress & Timer */}
+              <div className="flex justify-between items-center mb-4">
+                <div className="text-lg">
+                  Question <span className="font-bold">{game.current_question_index + 1}</span>
+                  {' of '}
+                  <span className="font-bold">{game.questions_per_game}</span>
+                </div>
+                <div
+                  className={`text-4xl font-bold font-mono ${
+                    selectedTimer === 0
+                      ? 'text-blue-400'
+                      : timeRemaining <= 5
+                      ? 'text-red-500 animate-pulse'
+                      : 'text-yellow-400'
+                  }`}
+                >
+                  {selectedTimer === 0 ? '📋 MANUAL' : timeRemaining}
+                </div>
               </div>
-              <div
-                className={`text-4xl font-bold font-mono ${
-                  timeRemaining <= 5 ? 'text-red-500 animate-pulse' : 'text-yellow-400'
-                }`}
-              >
-                {timeRemaining}
-              </div>
-            </div>
 
-            {/* Timer Bar */}
-            <div className="h-3 bg-gray-800 rounded-full mb-6 overflow-hidden">
-              <div
-                className={`h-full transition-all ${
-                  timeRemaining <= 5 ? 'bg-red-500' : 'bg-yellow-400'
-                }`}
-                style={{
-                  width: `${(timeRemaining / (game.timer_seconds || 30)) * 100}%`,
-                }}
-              />
-            </div>
-
-            {/* Category Badge */}
-            <div className="text-center mb-4">
-              <span className="bg-gray-800 px-4 py-1 rounded-full text-sm text-gray-400">
-                {currentQuestion.category}
-              </span>
-            </div>
-
-            {/* Question */}
-            <div className="text-2xl md:text-3xl font-bold text-center mb-8">
-              {currentQuestion.question}
-            </div>
-
-            {/* Answer Options */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              {currentQuestion.options.map((option, index) => {
-                const color = ANSWER_COLORS[index];
-                const isCorrect = option === currentQuestion.correctAnswer;
-                const answerCount = answerStats?.distribution[option] || 0;
-                const percentage = answerStats?.total
-                  ? Math.round((answerCount / answerStats.total) * 100)
-                  : 0;
-
-                return (
+              {/* Timer Bar (only show if not manual) */}
+              {selectedTimer > 0 && (
+                <div className="h-3 bg-gray-800 rounded-full mb-6 overflow-hidden">
                   <div
-                    key={index}
-                    className={`p-6 rounded-xl font-bold text-xl relative overflow-hidden ${
-                      showingAnswer && isCorrect
-                        ? 'ring-4 ring-green-400'
-                        : ''
+                    className={`h-full transition-all ${
+                      timeRemaining <= 5 ? 'bg-red-500' : 'bg-yellow-400'
                     }`}
                     style={{
-                      backgroundColor: color.bg,
-                      color: color.text,
+                      width: `${(timeRemaining / selectedTimer) * 100}%`,
                     }}
-                  >
-                    {/* Answer Percentage Bar */}
-                    {showingAnswer && (
-                      <div
-                        className="absolute inset-0 bg-black/30"
-                        style={{ width: `${percentage}%` }}
-                      />
-                    )}
-                    <span className="relative z-10 flex justify-between items-center">
-                      <span>{option}</span>
-                      {showingAnswer && (
-                        <span className="text-sm">
-                          {answerCount} ({percentage}%)
-                        </span>
-                      )}
-                    </span>
-                    {showingAnswer && isCorrect && (
-                      <span className="absolute top-2 right-2 text-2xl">✅</span>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Answer Stats */}
-            {showingAnswer && answerStats && (
-              <div className="bg-gray-900/50 rounded-xl p-4 mb-6 text-center">
-                <div className="text-lg">
-                  <span className="text-green-400 font-bold">
-                    {answerStats.correct}
-                  </span>
-                  {' of '}
-                  <span className="font-bold">{answerStats.total}</span>
-                  {' players got it right '}
-                  ({Math.round((answerStats.correct / Math.max(1, answerStats.total)) * 100)}%)
+                  />
                 </div>
-                {currentQuestion.explanation && (
-                  <p className="text-gray-400 text-sm mt-2">
-                    💡 {currentQuestion.explanation}
-                  </p>
+              )}
+
+              {/* Category Badge */}
+              <div className="text-center mb-4">
+                <span className="bg-gray-800 px-4 py-1 rounded-full text-sm text-gray-400">
+                  {currentQuestion.category}
+                </span>
+              </div>
+
+              {/* Question */}
+              <div className="text-2xl md:text-3xl font-bold text-center mb-8">
+                {currentQuestion.question}
+              </div>
+
+              {/* Answer Options */}
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                {currentQuestion.options.map((option, index) => {
+                  const color = ANSWER_COLORS[index];
+                  const isCorrect = option === currentQuestion.correctAnswer;
+                  const answerCount = answerStats?.distribution[option] || 0;
+                  const percentage = answerStats?.total
+                    ? Math.round((answerCount / answerStats.total) * 100)
+                    : 0;
+
+                  return (
+                    <div
+                      key={index}
+                      className={`p-6 rounded-xl font-bold text-xl relative overflow-hidden ${
+                        showingAnswer && isCorrect
+                          ? 'ring-4 ring-green-400'
+                          : ''
+                      }`}
+                      style={{
+                        backgroundColor: color.bg,
+                        color: color.text,
+                      }}
+                    >
+                      {/* Answer Percentage Bar */}
+                      {showingAnswer && (
+                        <div
+                          className="absolute inset-0 bg-black/30"
+                          style={{ width: `${percentage}%` }}
+                        />
+                      )}
+                      <span className="relative z-10 flex justify-between items-center">
+                        <span>{option}</span>
+                        {showingAnswer && (
+                          <span className="text-sm">
+                            {answerCount} ({percentage}%)
+                          </span>
+                        )}
+                      </span>
+                      {showingAnswer && isCorrect && (
+                        <span className="absolute top-2 right-2 text-2xl">✅</span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Answer Stats */}
+              {showingAnswer && answerStats && (
+                <div className="bg-gray-900/50 rounded-xl p-4 mb-6 text-center">
+                  <div className="text-lg">
+                    <span className="text-green-400 font-bold">
+                      {answerStats.correct}
+                    </span>
+                    {' of '}
+                    <span className="font-bold">{answerStats.total}</span>
+                    {' players got it right '}
+                    ({Math.round((answerStats.correct / Math.max(1, answerStats.total)) * 100)}%)
+                  </div>
+                  {currentQuestion.explanation && (
+                    <p className="text-gray-400 text-sm mt-2">
+                      💡 {currentQuestion.explanation}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Answers Received Counter */}
+              {!showingAnswer && (
+                <div className="text-center text-gray-400 mb-6">
+                  {answerStats?.total || 0} of {players.length} answered
+                </div>
+              )}
+
+              {/* Control Buttons */}
+              <div className="flex gap-4">
+                {/* Show End Question button in timed mode with active timer OR in manual mode */}
+                {!showingAnswer && (timerActive || selectedTimer === 0) && (
+                  <button
+                    onClick={handleQuestionEnd}
+                    className="flex-1 py-4 bg-orange-600 hover:bg-orange-500 rounded-xl font-bold text-lg"
+                  >
+                    {selectedTimer === 0 ? 'End Question & Show Answer' : 'End Question Early'}
+                  </button>
+                )}
+
+                {/* Show Answer button after timer ends (timed mode only) */}
+                {!showingAnswer && !timerActive && selectedTimer > 0 && (
+                  <button
+                    onClick={showAnswer}
+                    className="flex-1 py-4 bg-green-600 hover:bg-green-500 rounded-xl font-bold text-lg"
+                  >
+                    Show Answer
+                  </button>
+                )}
+
+                {showingAnswer && (
+                  <button
+                    onClick={nextQuestion}
+                    className="flex-1 py-4 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 rounded-xl font-bold text-lg"
+                  >
+                    {game.current_question_index + 1 >= game.questions_per_game
+                      ? 'Finish Game →'
+                      : 'Next Question →'}
+                  </button>
                 )}
               </div>
-            )}
+            </div>
 
-            {/* Answers Received Counter */}
-            {!showingAnswer && (
-              <div className="text-center text-gray-400 mb-6">
-                {answerStats?.total || 0} of {players.length} answered
+            {/* Sidebar Leaderboard */}
+            <div className="w-72 hidden lg:block">
+              <div className="bg-gray-900/70 rounded-xl p-4 sticky top-4">
+                <h3 className="text-lg font-bold mb-3 text-center text-yellow-400">🏆 Leaderboard</h3>
+                <div className="space-y-2 max-h-[60vh] overflow-y-auto">
+                  {leaderboard.length > 0 ? (
+                    leaderboard.map((entry) => (
+                      <div
+                        key={entry.player_id}
+                        className={`p-2 rounded ${
+                          entry.rank <= 3 ? 'bg-yellow-900/30' : 'bg-gray-800/50'
+                        }`}
+                      >
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-gray-400 w-6">
+                              {entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : `${entry.rank}.`}
+                            </span>
+                            <span className="truncate max-w-[100px] font-medium">{entry.nickname}</span>
+                          </div>
+                          <span className="font-bold text-yellow-400 text-lg">{entry.total_points}</span>
+                        </div>
+                        {entry.zodiac_sign && (
+                          <div className="text-xs text-gray-400 ml-8">
+                            {entry.zodiac_element} {entry.zodiac_sign}
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    // Show players waiting for first scores
+                    players.map((p, i) => {
+                      const player = p as unknown as { nickname: string; zodiac_sign?: string; zodiac_element?: string };
+                      return (
+                        <div
+                          key={i}
+                          className="p-2 rounded bg-gray-800/50"
+                        >
+                          <div className="flex justify-between items-center">
+                            <span className="truncate max-w-[120px]">{player.nickname}</span>
+                            <span className="text-gray-500">--</span>
+                          </div>
+                          {player.zodiac_sign && (
+                            <div className="text-xs text-gray-400">
+                              {player.zodiac_element} {player.zodiac_sign}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })
+                  )}
+                  {players.length === 0 && leaderboard.length === 0 && (
+                    <p className="text-gray-500 text-center text-sm">No players yet</p>
+                  )}
+                </div>
               </div>
-            )}
-
-            {/* Control Buttons */}
-            <div className="flex gap-4">
-              {!showingAnswer && timerActive && (
-                <button
-                  onClick={handleQuestionEnd}
-                  className="flex-1 py-4 bg-orange-600 hover:bg-orange-500 rounded-xl font-bold text-lg"
-                >
-                  End Question Early
-                </button>
-              )}
-
-              {!showingAnswer && !timerActive && (
-                <button
-                  onClick={showAnswer}
-                  className="flex-1 py-4 bg-green-600 hover:bg-green-500 rounded-xl font-bold text-lg"
-                >
-                  Show Answer
-                </button>
-              )}
-
-              {showingAnswer && (
-                <button
-                  onClick={nextQuestion}
-                  className="flex-1 py-4 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 rounded-xl font-bold text-lg"
-                >
-                  {game.current_question_index + 1 >= game.questions_per_game
-                    ? 'Finish Game →'
-                    : 'Next Question →'}
-                </button>
-              )}
             </div>
           </div>
         )}
