@@ -556,6 +556,23 @@ export default function PlayerGamePage() {
               })}
             </div>
 
+            {/* Correct Answer Box */}
+            <div className="bg-gradient-to-r from-green-900/50 to-emerald-900/50 rounded-xl p-4 mb-4 border-2 border-green-500">
+              <div className="text-center">
+                <div className="text-sm text-green-300 font-bold mb-1">✅ CORRECT ANSWER</div>
+                <div className="text-2xl font-bold text-white mb-2">
+                  {correctAnswer}
+                </div>
+                {explanation && (
+                  <div className="bg-black/30 rounded-lg p-3 mt-2">
+                    <div className="text-sm text-gray-300">
+                      💡 <span className="text-yellow-300">Why?</span> {explanation}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
             {/* Your Result */}
             <div
               className={`p-4 rounded-xl text-center mb-4 ${
@@ -577,30 +594,15 @@ export default function PlayerGamePage() {
                   <div className="text-3xl font-bold text-red-400">
                     ❌ WRONG
                   </div>
-                  <div className="text-lg text-gray-300 mt-1">
-                    Correct: <span className="text-green-400 font-bold">{correctAnswer}</span>
-                  </div>
                 </>
               ) : (
                 <>
                   <div className="text-2xl font-bold text-gray-400">
                     ⏰ TIME'S UP!
                   </div>
-                  <div className="text-lg text-gray-300 mt-1">
-                    Correct: <span className="text-green-400 font-bold">{correctAnswer}</span>
-                  </div>
                 </>
               )}
             </div>
-
-            {/* Explanation if available */}
-            {explanation && (
-              <div className="bg-blue-900/30 rounded-xl p-3 mb-4 border border-blue-600/50">
-                <div className="text-sm text-blue-300">
-                  💡 {explanation}
-                </div>
-              </div>
-            )}
 
             {/* Your Score */}
             <div className="bg-gradient-to-r from-yellow-900/50 to-red-900/50 rounded-xl p-4 mb-4 text-center">

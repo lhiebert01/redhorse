@@ -866,6 +866,25 @@ export default function HostConsolePage() {
                 })}
               </div>
 
+              {/* Correct Answer Box */}
+              {showingAnswer && (
+                <div className="bg-gradient-to-r from-green-900/50 to-emerald-900/50 rounded-xl p-5 mb-4 border-2 border-green-500">
+                  <div className="text-center">
+                    <div className="text-sm text-green-300 font-bold mb-1">✅ CORRECT ANSWER</div>
+                    <div className="text-3xl font-bold text-white mb-2">
+                      {currentQuestion.correctAnswer}
+                    </div>
+                    {currentQuestion.explanation && (
+                      <div className="bg-black/30 rounded-lg p-3 mt-3">
+                        <div className="text-sm text-gray-300">
+                          💡 <span className="text-yellow-300">Why?</span> {currentQuestion.explanation}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* Answer Stats */}
               {showingAnswer && answerStats && (
                 <div className="bg-gray-900/50 rounded-xl p-4 mb-6 text-center">
@@ -878,11 +897,6 @@ export default function HostConsolePage() {
                     {' players got it right '}
                     ({Math.round((answerStats.correct / Math.max(1, answerStats.total)) * 100)}%)
                   </div>
-                  {currentQuestion.explanation && (
-                    <p className="text-gray-400 text-sm mt-2">
-                      💡 {currentQuestion.explanation}
-                    </p>
-                  )}
                 </div>
               )}
 
