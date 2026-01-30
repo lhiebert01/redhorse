@@ -1,7 +1,7 @@
 // Types for Fire Horse Trivia Party Game
 
 export type PassType = 'day' | 'weekend' | 'festival';
-export type GameStatus = 'lobby' | 'countdown' | 'playing' | 'showing_answer' | 'finished';
+export type GameStatus = 'lobby' | 'countdown' | 'playing' | 'showing_answer' | 'finished' | 'abandoned';
 
 // ============================================================
 // PASS CONFIGURATION
