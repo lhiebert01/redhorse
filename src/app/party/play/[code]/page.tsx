@@ -432,10 +432,15 @@ export default function PlayerGamePage() {
           </div>
         )}
 
-        {/* PLAYING */}
-        {gameState.status === 'playing' && currentQuestion && (
-          <div>
-            {/* Progress & Timer */}
+        {/* PLAYING / SHOWING ANSWER - with Sidebar Layout */}
+        {(gameState.status === 'playing' || gameState.status === 'showing_answer') && currentQuestion && (
+          <div className="flex gap-4 lg:gap-6">
+            {/* Main Content */}
+            <div className="flex-1">
+              {/* PLAYING STATE */}
+              {gameState.status === 'playing' && (
+                <div>
+                  {/* Progress & Timer */}
             <div className="flex justify-between items-center mb-2">
               <div className="text-sm text-gray-400">
                 Question {gameState.current_question_index + 1} of{' '}
@@ -565,13 +570,13 @@ export default function PlayerGamePage() {
                 {currentQuestion.question}
               </div>
             </div>
-          </div>
-        )}
+                </div>
+              )}
 
-        {/* SHOWING ANSWER */}
-        {gameState.status === 'showing_answer' && currentQuestion && (
-          <div>
-            {/* Category Badge */}
+              {/* SHOWING ANSWER STATE */}
+              {gameState.status === 'showing_answer' && (
+                <div>
+                  {/* Category Badge */}
             <div className="text-center mb-3">
               <span className="bg-gray-800 px-4 py-1 rounded-full text-sm text-gray-400">
                 {currentQuestion.category}
@@ -689,58 +694,105 @@ export default function PlayerGamePage() {
               )}
             </div>
 
-            {/* Your Score */}
-            <div className="bg-gradient-to-r from-yellow-900/50 to-red-900/50 rounded-xl p-4 mb-4 text-center">
-              <div className="text-sm text-gray-400">Your Total Score</div>
-              <div className="text-5xl font-bold text-yellow-400">{totalPoints}</div>
-              {myRank && (
-                <div className="text-xl text-gray-300 mt-1">
-                  Rank: <span className="text-yellow-400 font-bold">#{myRank}</span>
+                  {/* Your Score */}
+                  <div className="bg-gradient-to-r from-yellow-900/50 to-red-900/50 rounded-xl p-4 mb-4 text-center">
+                    <div className="text-sm text-gray-400">Your Total Score</div>
+                    <div className="text-5xl font-bold text-yellow-400">{totalPoints}</div>
+                    {myRank && (
+                      <div className="text-xl text-gray-300 mt-1">
+                        Rank: <span className="text-yellow-400 font-bold">#{myRank}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Waiting message */}
+                  <div className="text-center mt-4 text-gray-400">
+                    <div className="animate-pulse">Waiting for next question...</div>
+                  </div>
+
+                  {/* Mobile Leaderboard - shown on small screens only */}
+                  <div className="lg:hidden mt-4">
+                    {leaderboard.length > 0 && (
+                      <div className="bg-gray-900/50 rounded-xl p-4">
+                        <h3 className="text-lg font-bold mb-3 text-center text-yellow-400">🏆 Leaderboard</h3>
+                        <div className="space-y-2">
+                          {leaderboard.slice(0, 5).map((entry, i) => (
+                            <div
+                              key={i}
+                              className={`p-2 rounded ${
+                                entry.player_id === playerState?.player_id
+                                  ? 'bg-yellow-900/50 border border-yellow-600'
+                                  : 'bg-gray-800/50'
+                              }`}
+                            >
+                              <div className="flex justify-between items-center">
+                                <div className="flex items-center gap-2">
+                                  <span className="font-bold text-lg w-6">
+                                    {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}.`}
+                                  </span>
+                                  <span className={entry.player_id === playerState?.player_id ? 'font-bold' : ''}>
+                                    {entry.nickname}
+                                  </span>
+                                </div>
+                                <span className="font-bold text-xl text-yellow-400">
+                                  {entry.total_points}
+                                </span>
+                              </div>
+                              {entry.zodiac_sign && (
+                                <div className="text-xs text-gray-400 ml-8">
+                                  {entry.zodiac_element} {entry.zodiac_sign}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
 
-            {/* Live Leaderboard */}
-            {leaderboard.length > 0 && (
-              <div className="bg-gray-900/50 rounded-xl p-4">
-                <h3 className="text-lg font-bold mb-3 text-center">🏆 Leaderboard</h3>
-                <div className="space-y-2">
-                  {leaderboard.slice(0, 5).map((entry, i) => (
-                    <div
-                      key={i}
-                      className={`p-2 rounded ${
-                        entry.player_id === playerState.player_id
-                          ? 'bg-yellow-900/50 border border-yellow-600'
-                          : 'bg-gray-800/50'
-                      }`}
-                    >
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-lg w-6">
-                            {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}.`}
-                          </span>
-                          <span className={entry.player_id === playerState.player_id ? 'font-bold' : ''}>
-                            {entry.nickname}
-                          </span>
+            {/* Sidebar Leaderboard - visible on large screens */}
+            <div className="w-64 hidden lg:block">
+              <div className="bg-gray-900/70 rounded-xl p-4 sticky top-4">
+                <h3 className="text-lg font-bold mb-3 text-center text-yellow-400">🏆 Leaderboard</h3>
+                <div className="space-y-2 max-h-[60vh] overflow-y-auto">
+                  {leaderboard.length > 0 ? (
+                    leaderboard.map((entry, i) => (
+                      <div
+                        key={entry.player_id}
+                        className={`p-2 rounded ${
+                          entry.player_id === playerState?.player_id
+                            ? 'bg-yellow-900/50 border border-yellow-600'
+                            : entry.rank <= 3
+                            ? 'bg-yellow-900/30'
+                            : 'bg-gray-800/50'
+                        }`}
+                      >
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-gray-400 w-6">
+                              {entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : `${entry.rank}.`}
+                            </span>
+                            <span className={`truncate max-w-[100px] ${entry.player_id === playerState?.player_id ? 'font-bold text-yellow-300' : 'font-medium'}`}>
+                              {entry.nickname}
+                            </span>
+                          </div>
+                          <span className="font-bold text-yellow-400 text-lg">{entry.total_points}</span>
                         </div>
-                        <span className="font-bold text-xl text-yellow-400">
-                          {entry.total_points}
-                        </span>
+                        {entry.zodiac_sign && (
+                          <div className="text-xs text-gray-400 ml-8">
+                            {entry.zodiac_element} {entry.zodiac_sign}
+                          </div>
+                        )}
                       </div>
-                      {entry.zodiac_sign && (
-                        <div className="text-xs text-gray-400 ml-8">
-                          {entry.zodiac_element} {entry.zodiac_sign}
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <p className="text-gray-500 text-center text-sm">Scores loading...</p>
+                  )}
                 </div>
               </div>
-            )}
-
-            {/* Waiting message */}
-            <div className="text-center mt-4 text-gray-400">
-              <div className="animate-pulse">Waiting for next question...</div>
             </div>
           </div>
         )}
