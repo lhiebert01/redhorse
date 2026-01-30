@@ -197,8 +197,8 @@ export default function PartyLandingPage() {
                 >
                   ENTER PARTY CODE →
                 </button>
-                <p className="text-center text-xs text-gray-500 mt-3">
-                  No account needed • No payment required
+                <p className="text-center text-lg text-white font-bold mt-4">
+                  ✓ No account needed • ✓ No payment required
                 </p>
               </div>
             ) : (
