@@ -658,11 +658,14 @@ export default function HostConsolePage() {
     }
 
     // Decrement games remaining
+    const newGamesRemaining = (pass?.games_remaining || 1) - 1;
     await supabase
       .from('party_passes')
-      .update({ games_remaining: (pass?.games_remaining || 1) - 1 })
+      .update({ games_remaining: newGamesRemaining })
       .eq('id', pass?.id);
 
+    // Update local pass state to reflect the decrement
+    setPass((prev) => prev ? { ...prev, games_remaining: newGamesRemaining } : null);
     setGame((prev) => (prev ? { ...prev, status: 'finished' } : null));
 
     // Show celebration!
@@ -718,14 +721,17 @@ export default function HostConsolePage() {
       return;
     }
 
-    // Track questions from previous game to avoid repeats
-    if (game?.question_ids) {
-      setUsedQuestionIds(prev => [...prev, ...game.question_ids]);
-    }
+    // Compute the combined list of used IDs synchronously (state updates are async!)
+    const previouslyUsedIds = game?.question_ids
+      ? [...usedQuestionIds, ...game.question_ids]
+      : usedQuestionIds;
 
     // Generate new random questions, avoiding previously used ones
     const questionsPerGame = 20;
-    const newQuestionIds = generateRandomQuestionIds(questionsPerGame, usedQuestionIds);
+    const newQuestionIds = generateRandomQuestionIds(questionsPerGame, previouslyUsedIds);
+
+    // Update state for next game
+    setUsedQuestionIds(previouslyUsedIds);
 
     console.log('[NEW GAME] Creating new game with question IDs:', newQuestionIds.slice(0, 5), '...');
 

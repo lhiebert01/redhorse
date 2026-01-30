@@ -100,7 +100,7 @@ export default function PartyLandingPage() {
             </div>
 
             {/* Step 1: Pass Selection */}
-            <div className="mb-4 p-3 bg-green-900/30 border-2 border-green-500 rounded-xl">
+            <div className="mb-4 p-3 bg-green-900/30 rounded-xl">
               <div className="flex items-center gap-3">
                 <span className="text-lg font-bold text-white bg-green-600 px-3 py-1 rounded-lg">
                   STEP 1
@@ -156,7 +156,7 @@ export default function PartyLandingPage() {
             </div>
 
             {/* Step 2: Purchase */}
-            <div className="mb-4 p-3 bg-green-900/30 border-2 border-green-500 rounded-xl">
+            <div className="mb-4 p-3 bg-green-900/30 rounded-xl">
               <div className="flex items-center gap-3">
                 <span className="text-lg font-bold text-white bg-green-600 px-3 py-1 rounded-lg">
                   STEP 2

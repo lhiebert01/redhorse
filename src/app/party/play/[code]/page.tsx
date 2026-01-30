@@ -297,12 +297,22 @@ export default function PlayerGamePage() {
         });
 
         const data = await response.json();
-        if (data.is_correct) {
+
+        // Check if API returned an error
+        if (!response.ok || data.error) {
+          console.error('[ANSWER] API error:', data.error || response.statusText);
+          // Don't mark as wrong for API errors - leave isCorrect as null
+          // The correct answer will be shown when host reveals
+          return;
+        }
+
+        // Only process if we got a valid response with is_correct field
+        if (data.is_correct === true) {
           setIsCorrect(true);
           setPointsEarned(data.total_points);
           setCurrentStreak(data.current_streak);
           setTotalPoints((prev) => prev + data.total_points);
-        } else {
+        } else if (data.is_correct === false) {
           setIsCorrect(false);
           setCurrentStreak(0);
         }
