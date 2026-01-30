@@ -1,0 +1,403 @@
+// Types for Fire Horse Trivia Party Game
+
+export type PassType = 'day' | 'weekend' | 'festival';
+export type GameStatus = 'lobby' | 'countdown' | 'playing' | 'showing_answer' | 'finished';
+
+// ============================================================
+// PASS CONFIGURATION
+// ============================================================
+
+export interface PassConfig {
+  type: PassType;
+  name: string;
+  price: number; // in cents
+  priceDisplay: string;
+  durationHours: number;
+  maxGames: number;
+  description: string;
+}
+
+export const PASS_CONFIGS: Record<PassType, PassConfig> = {
+  day: {
+    type: 'day',
+    name: 'Day Pass',
+    price: 488,
+    priceDisplay: '$4.88',
+    durationHours: 24,
+    maxGames: 5,
+    description: '24 hours • 5 games • Up to 20 players',
+  },
+  weekend: {
+    type: 'weekend',
+    name: 'Weekend Pass',
+    price: 888,
+    priceDisplay: '$8.88',
+    durationHours: 48,
+    maxGames: 10,
+    description: '48 hours • 10 games • Up to 20 players',
+  },
+  festival: {
+    type: 'festival',
+    name: 'Festival Pass',
+    price: 1488,
+    priceDisplay: '$14.88',
+    durationHours: 72,
+    maxGames: 15,
+    description: '72 hours • 15 games • Up to 20 players',
+  },
+};
+
+// ============================================================
+// DATABASE TYPES (matching Supabase schema)
+// ============================================================
+
+export interface PartyPass {
+  id: string;
+  created_at: string;
+  stripe_session_id: string;
+  stripe_payment_intent?: string;
+  host_email: string;
+  party_code: string;
+  pass_type: PassType;
+  expires_at: string;
+  games_remaining: number;
+  games_total: number;
+  settings: GameSettings;
+  is_active: boolean;
+}
+
+export interface GameSettings {
+  timer_seconds: 15 | 30 | 45 | 60;
+  questions_per_game: 10 | 15 | 20 | 25;
+}
+
+export interface PartyGame {
+  id: string;
+  party_pass_id: string;
+  created_at: string;
+  started_at?: string;
+  ended_at?: string;
+  timer_seconds: number;
+  questions_per_game: number;
+  question_ids: number[];
+  current_question_index: number;
+  status: GameStatus;
+}
+
+export interface PartyPlayer {
+  id: string;
+  party_game_id: string;
+  nickname: string;
+  birth_year?: number;
+  zodiac_sign?: string;
+  zodiac_element?: string;
+  joined_at: string;
+  is_connected: boolean;
+  last_seen_at: string;
+}
+
+export interface PartyAnswer {
+  id: string;
+  party_game_id: string;
+  player_id: string;
+  question_index: number;
+  question_id: number;
+  answer_given: string;
+  is_correct: boolean;
+  answer_time_ms: number;
+  base_points: number;
+  speed_bonus: number;
+  streak_bonus: number;
+  total_points: number;
+  current_streak: number;
+  answered_at: string;
+}
+
+export interface PartyScore {
+  id: string;
+  party_game_id: string;
+  player_id: string;
+  nickname: string;
+  zodiac_sign?: string;
+  zodiac_element?: string;
+  total_points: number;
+  correct_answers: number;
+  total_questions: number;
+  accuracy_percent: number;
+  best_streak: number;
+  fastest_answer_ms?: number;
+  rank: number;
+  completed_at: string;
+}
+
+// ============================================================
+// REALTIME EVENT TYPES
+// ============================================================
+
+export type RealtimeEvent =
+  | 'game_start'
+  | 'countdown'
+  | 'next_question'
+  | 'question_end'
+  | 'show_answer'
+  | 'game_end'
+  | 'player_joined'
+  | 'player_left'
+  | 'player_answered';
+
+export interface RealtimePayload {
+  event: RealtimeEvent;
+  data?: unknown;
+}
+
+export interface GameStartPayload {
+  event: 'game_start';
+  data: {
+    game_id: string;
+    total_questions: number;
+    timer_seconds: number;
+  };
+}
+
+export interface CountdownPayload {
+  event: 'countdown';
+  data: {
+    seconds_remaining: number;
+  };
+}
+
+export interface QuestionPayload {
+  event: 'next_question';
+  data: {
+    question_index: number;
+    question: {
+      id: number;
+      question: string;
+      options: [string, string, string, string];
+      category: string;
+      difficulty: string;
+    };
+    timer_seconds: number;
+  };
+}
+
+export interface QuestionEndPayload {
+  event: 'question_end';
+  data: {
+    question_index: number;
+  };
+}
+
+export interface ShowAnswerPayload {
+  event: 'show_answer';
+  data: {
+    question_index: number;
+    correct_answer: string;
+    explanation?: string;
+    stats: {
+      total_answers: number;
+      correct_count: number;
+      answer_distribution: Record<string, number>;
+    };
+  };
+}
+
+export interface GameEndPayload {
+  event: 'game_end';
+  data: {
+    game_id: string;
+    scores: PartyScore[];
+  };
+}
+
+export interface PlayerJoinedPayload {
+  event: 'player_joined';
+  data: {
+    player: PartyPlayer;
+    total_players: number;
+  };
+}
+
+export interface PlayerLeftPayload {
+  event: 'player_left';
+  data: {
+    player_id: string;
+    nickname: string;
+    total_players: number;
+  };
+}
+
+export interface PlayerAnsweredPayload {
+  event: 'player_answered';
+  data: {
+    player_id: string;
+    question_index: number;
+    answers_received: number;
+    total_players: number;
+  };
+}
+
+// ============================================================
+// SCORING CONSTANTS
+// ============================================================
+
+export const SCORING = {
+  BASE_CORRECT: 100,
+  SPEED_BONUS_FAST: 50, // Answer in first 25% of time
+  SPEED_BONUS_MEDIUM: 25, // Answer in first 50% of time
+  STREAK_BONUS_3: 25,
+  STREAK_BONUS_5: 50,
+  STREAK_BONUS_10: 100,
+  MAX_PER_QUESTION: 150, // 100 + 50 speed
+} as const;
+
+// ============================================================
+// UI CONSTANTS
+// ============================================================
+
+export const MAX_PLAYERS = 20;
+export const PARTY_CODE_LENGTH = 6;
+export const COUNTDOWN_SECONDS = 3;
+
+// Color scheme for answer buttons (Kahoot-style)
+export const ANSWER_COLORS = [
+  { bg: '#E53935', text: 'white', icon: '🔴' }, // Red
+  { bg: '#1E88E5', text: 'white', icon: '🔵' }, // Blue
+  { bg: '#43A047', text: 'white', icon: '🟢' }, // Green
+  { bg: '#FDD835', text: 'black', icon: '🟡' }, // Yellow
+] as const;
+
+// ============================================================
+// HELPER FUNCTIONS
+// ============================================================
+
+/**
+ * Calculate speed bonus based on answer time
+ */
+export function calculateSpeedBonus(
+  answerTimeMs: number,
+  timerSeconds: number
+): number {
+  const timerMs = timerSeconds * 1000;
+  const percentOfTime = answerTimeMs / timerMs;
+
+  if (percentOfTime <= 0.25) {
+    return SCORING.SPEED_BONUS_FAST;
+  } else if (percentOfTime <= 0.5) {
+    return SCORING.SPEED_BONUS_MEDIUM;
+  }
+  return 0;
+}
+
+/**
+ * Calculate streak bonus based on current streak
+ */
+export function calculateStreakBonus(streak: number): number {
+  if (streak >= 10) return SCORING.STREAK_BONUS_10;
+  if (streak >= 5) return SCORING.STREAK_BONUS_5;
+  if (streak >= 3) return SCORING.STREAK_BONUS_3;
+  return 0;
+}
+
+/**
+ * Calculate total points for an answer
+ */
+export function calculatePoints(
+  isCorrect: boolean,
+  answerTimeMs: number,
+  timerSeconds: number,
+  currentStreak: number
+): { base: number; speed: number; streak: number; total: number } {
+  if (!isCorrect) {
+    return { base: 0, speed: 0, streak: 0, total: 0 };
+  }
+
+  const base = SCORING.BASE_CORRECT;
+  const speed = calculateSpeedBonus(answerTimeMs, timerSeconds);
+  const streak = calculateStreakBonus(currentStreak + 1); // +1 for this answer
+
+  return {
+    base,
+    speed,
+    streak,
+    total: base + speed + streak,
+  };
+}
+
+/**
+ * Format time remaining for display
+ */
+export function formatTimeRemaining(ms: number): string {
+  const seconds = Math.ceil(ms / 1000);
+  return seconds.toString().padStart(2, '0');
+}
+
+/**
+ * Get zodiac sign from birth year
+ */
+export function getZodiacFromYear(year: number): {
+  sign: string;
+  element: string;
+} {
+  const animals = [
+    'Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake',
+    'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig',
+  ];
+  const elements = ['Wood', 'Fire', 'Earth', 'Metal', 'Water'];
+
+  // Chinese zodiac starts at 1924 for calculation purposes
+  const startYear = 1924;
+  const offset = year - startYear;
+
+  const animalIndex = ((offset % 12) + 12) % 12;
+  const elementIndex = Math.floor(((offset % 10) + 10) % 10 / 2);
+
+  return {
+    sign: animals[animalIndex],
+    element: elements[elementIndex],
+  };
+}
+
+/**
+ * Generate a random party code
+ */
+export function generatePartyCode(): string {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // No I, O, 0, 1
+  let code = '';
+  for (let i = 0; i < PARTY_CODE_LENGTH; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return code;
+}
+
+/**
+ * Check if a party pass is still valid
+ */
+export function isPassValid(pass: PartyPass): boolean {
+  if (!pass.is_active) return false;
+  if (pass.games_remaining <= 0) return false;
+  if (new Date(pass.expires_at) < new Date()) return false;
+  return true;
+}
+
+/**
+ * Get time remaining until pass expires
+ */
+export function getPassTimeRemaining(pass: PartyPass): {
+  hours: number;
+  minutes: number;
+  expired: boolean;
+} {
+  const now = new Date();
+  const expires = new Date(pass.expires_at);
+  const diffMs = expires.getTime() - now.getTime();
+
+  if (diffMs <= 0) {
+    return { hours: 0, minutes: 0, expired: true };
+  }
+
+  const hours = Math.floor(diffMs / (1000 * 60 * 60));
+  const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+  return { hours, minutes, expired: false };
+}
