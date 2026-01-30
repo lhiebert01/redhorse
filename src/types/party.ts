@@ -62,6 +62,8 @@ export interface PartyPass {
   expires_at: string;
   games_remaining: number;
   games_total: number;
+  games_played: number; // Track how many games have been started (0-indexed for question_sets)
+  question_sets: number[][]; // Pre-generated question sets for ALL games
   settings: GameSettings;
   is_active: boolean;
 }
@@ -82,6 +84,7 @@ export interface PartyGame {
   question_ids: number[];
   current_question_index: number;
   status: GameStatus;
+  game_number?: number; // Which game this is (1, 2, 3, etc.) - corresponds to question_sets index
 }
 
 export interface PartyPlayer {

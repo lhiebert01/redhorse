@@ -73,7 +73,15 @@ export async function POST(request: NextRequest) {
       const expiresAt = new Date();
       expiresAt.setHours(expiresAt.getHours() + durationHours);
 
-      // Create party pass record
+      // PRE-GENERATE ALL QUESTION SETS AT PURCHASE TIME
+      // This ensures non-redundant random questions across ALL games for this pass
+      const questionsPerGame = 20;
+      const questionSets = generateAllQuestionSets(maxGames, questionsPerGame);
+
+      console.log(`[PASS CREATION] Pre-generated ${maxGames} question sets for ${passType} pass`);
+      console.log(`[PASS CREATION] Set 1 preview: [${questionSets[0].slice(0, 5).join(', ')}...]`);
+
+      // Create party pass record with pre-generated question sets
       const { data: pass, error: insertError } = await supabase
         .from('party_passes')
         .insert({
@@ -85,9 +93,11 @@ export async function POST(request: NextRequest) {
           expires_at: expiresAt.toISOString(),
           games_remaining: maxGames,
           games_total: maxGames,
+          games_played: 0, // Track how many games have been started
+          question_sets: questionSets, // Pre-generated question sets for all games
           settings: {
             timer_seconds: 30,
-            questions_per_game: 20,
+            questions_per_game: questionsPerGame,
           },
           is_active: true,
         })
@@ -102,16 +112,17 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      console.log(`Party pass created: ${partyCode} (${passType})`);
+      console.log(`Party pass created: ${partyCode} (${passType}) with ${maxGames} pre-generated question sets`);
 
-      // Create initial game in lobby state
+      // Create initial game in lobby state using the FIRST pre-generated set
       const { error: gameError } = await supabase
         .from('party_games')
         .insert({
           party_pass_id: pass.id,
           timer_seconds: 30,
-          questions_per_game: 20,
-          question_ids: generateRandomQuestionIds(20),
+          questions_per_game: questionsPerGame,
+          question_ids: questionSets[0], // Use first pre-generated set
+          game_number: 1, // Track which game number this is
           status: 'lobby',
         });
 
@@ -136,6 +147,51 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({ received: true });
 }
 
+/**
+ * Generate ALL question sets for a party pass at purchase time.
+ * This pre-generates non-redundant random questions for ALL games upfront.
+ *
+ * @param numGames - Number of games (5 for Day, 10 for Weekend, 15 for Festival)
+ * @param questionsPerGame - Questions per game (default 20)
+ * @returns Array of question ID arrays: [[set1], [set2], ...]
+ */
+function generateAllQuestionSets(numGames: number, questionsPerGame: number = 20): number[][] {
+  const totalQuestions = 400;
+  const totalNeeded = numGames * questionsPerGame;
+
+  // Generate all unique question IDs we'll need
+  const allIds: number[] = [];
+  const used = new Set<number>();
+
+  // Use Fisher-Yates shuffle for true randomness
+  const available = Array.from({ length: totalQuestions }, (_, i) => i + 1);
+  for (let i = available.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [available[i], available[j]] = [available[j], available[i]];
+  }
+
+  // Take the first totalNeeded IDs (or all if we need more than 400)
+  allIds.push(...available.slice(0, Math.min(totalNeeded, totalQuestions)));
+
+  // If we need more than 400 questions, cycle back through (unlikely but safe)
+  while (allIds.length < totalNeeded) {
+    allIds.push(available[allIds.length % totalQuestions]);
+  }
+
+  // Split into sets of questionsPerGame
+  const questionSets: number[][] = [];
+  for (let i = 0; i < numGames; i++) {
+    const start = i * questionsPerGame;
+    const set = allIds.slice(start, start + questionsPerGame);
+    questionSets.push(set);
+  }
+
+  console.log(`[PASS CREATION] Generated ${numGames} question sets of ${questionsPerGame} each (${totalNeeded} total unique questions)`);
+
+  return questionSets;
+}
+
+// Legacy function for backwards compatibility
 function generateRandomQuestionIds(count: number): number[] {
   const totalQuestions = 400;
   const ids: number[] = [];
