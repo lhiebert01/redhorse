@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@supabase/supabase-js';
 import { PARTY_QUESTIONS } from '@/constants/party-questions';
+import { Confetti, Fireworks } from '@/components/party/Celebration';
 import {
   PartyPass,
   PartyGame,
@@ -99,6 +100,10 @@ export default function HostConsolePage() {
     rank: number;
   }
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+
+  // Celebration state
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [celebrationType, setCelebrationType] = useState<'confetti' | 'fireworks'>('confetti');
 
   // Load party pass and game data
   useEffect(() => {
@@ -660,6 +665,11 @@ export default function HostConsolePage() {
 
     setGame((prev) => (prev ? { ...prev, status: 'finished' } : null));
 
+    // Show celebration!
+    setCelebrationType(Math.random() > 0.5 ? 'confetti' : 'fireworks');
+    setShowCelebration(true);
+    setTimeout(() => setShowCelebration(false), 6000); // Hide after 6 seconds
+
     // Broadcast game end
     const channel = supabase.channel(`party:${partyCode}`);
     await channel.send({
@@ -677,6 +687,28 @@ export default function HostConsolePage() {
         })),
       },
     });
+  }, [game, pass, partyCode]);
+
+  // End the entire party (host's choice)
+  const endParty = useCallback(async () => {
+    if (!game || !pass) return;
+
+    console.log('[END PARTY] Host ending the party');
+
+    // Broadcast party end to all players
+    const channel = supabase.channel(`party:${partyCode}`);
+    await channel.send({
+      type: 'broadcast',
+      event: 'party_end',
+      payload: {
+        message: 'The host has ended the party. Thank you for playing!',
+        party_code: partyCode,
+      },
+    });
+
+    // Show fireworks for host
+    setCelebrationType('fireworks');
+    setShowCelebration(true);
   }, [game, pass, partyCode]);
 
   // Start a new game with fresh random questions
@@ -1205,29 +1237,106 @@ export default function HostConsolePage() {
 
         {/* FINISHED */}
         {game?.status === 'finished' && (
-          <div className="text-center">
-            <div className="text-6xl mb-4">🎉</div>
-            <h2 className="text-3xl font-bold mb-4">Game Complete!</h2>
-            <p className="text-gray-400 mb-8">
-              Thanks for playing Fire Horse Trivia!
-            </p>
+          <div className="text-center relative">
+            {/* Celebration Animation */}
+            {showCelebration && (
+              celebrationType === 'confetti' ? <Confetti count={150} /> : <Fireworks />
+            )}
 
+            {/* Celebration Header */}
+            <div className="mb-6">
+              <div className="text-7xl mb-4 animate-bounce">🎉🐴🎉</div>
+              <h2 className="text-4xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-400 to-yellow-400">
+                Game Complete!
+              </h2>
+              <p className="text-xl text-yellow-300">
+                Great job, everyone! 🔥
+              </p>
+            </div>
+
+            {/* Final Leaderboard */}
+            {leaderboard.length > 0 && (
+              <div className="bg-gradient-to-r from-yellow-900/40 to-orange-900/40 rounded-2xl p-6 mb-6 border border-yellow-600/30 max-w-lg mx-auto">
+                <h3 className="text-xl font-bold text-yellow-400 mb-4">🏆 Final Standings</h3>
+                <div className="space-y-3">
+                  {leaderboard.slice(0, 5).map((entry) => (
+                    <div
+                      key={entry.player_id}
+                      className={`flex items-center justify-between p-3 rounded-xl ${
+                        entry.rank === 1
+                          ? 'bg-gradient-to-r from-yellow-600/50 to-yellow-700/50 ring-2 ring-yellow-400'
+                          : entry.rank === 2
+                          ? 'bg-gradient-to-r from-gray-400/30 to-gray-500/30'
+                          : entry.rank === 3
+                          ? 'bg-gradient-to-r from-amber-700/30 to-amber-800/30'
+                          : 'bg-gray-800/50'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">
+                          {entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : `${entry.rank}.`}
+                        </span>
+                        <div className="text-left">
+                          <div className="font-bold">{entry.nickname}</div>
+                          {entry.zodiac_sign && (
+                            <div className="text-xs text-gray-400">
+                              {entry.zodiac_element} {entry.zodiac_sign}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="text-2xl font-bold text-yellow-400">
+                        {entry.total_points}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Action Buttons */}
             <div className="flex flex-col gap-4 max-w-md mx-auto">
               <Link
                 href={`/party/results/${partyCode}`}
-                className="py-4 bg-yellow-600 hover:bg-yellow-500 rounded-xl font-bold text-lg"
+                className="py-4 bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-500 hover:to-orange-500 rounded-xl font-bold text-lg shadow-lg"
               >
-                View Full Results
+                📊 View Full Results
               </Link>
 
               {(pass.games_remaining || 0) > 0 && (
                 <button
                   onClick={startNewGame}
-                  className="py-4 bg-green-600 hover:bg-green-500 rounded-xl font-bold text-lg"
+                  className="py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 rounded-xl font-bold text-lg shadow-lg"
                 >
                   🎮 Play Another Game ({pass.games_remaining} left)
                 </button>
               )}
+
+              {/* End Party Button - with instructions */}
+              <div className="bg-gradient-to-r from-red-900/40 to-pink-900/40 rounded-xl p-4 border border-red-500/30">
+                <div className="text-center mb-3">
+                  <p className="text-sm text-gray-300 mb-2">
+                    🎁 <span className="text-yellow-400 font-bold">Special Thank You</span> — Press this button to send a special
+                    thank-you message to all players with their zodiac card download!
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    💡 <span className="text-blue-300">Tip:</span> Best used when you&apos;re done playing for the night.
+                    {(pass.games_remaining || 0) > 0
+                      ? ` You still have ${pass.games_remaining} game(s) left if you want to play more first!`
+                      : ' This is your last game — perfect time to thank everyone!'}
+                  </p>
+                </div>
+                <button
+                  onClick={endParty}
+                  className={`w-full py-4 rounded-xl font-bold text-lg shadow-lg transition-all ${
+                    (pass.games_remaining || 0) === 0
+                      ? 'bg-gradient-to-r from-red-600 via-orange-600 to-yellow-600 hover:from-red-500 hover:via-orange-500 hover:to-yellow-500 animate-pulse text-xl'
+                      : 'bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500'
+                  }`}
+                >
+                  🐴🔥 End Party & Thank Everyone 🔥🐴
+                </button>
+              </div>
 
               <Link
                 href="/party"
@@ -1235,6 +1344,14 @@ export default function HostConsolePage() {
               >
                 Back to Party Home
               </Link>
+            </div>
+
+            {/* Thank You Message */}
+            <div className="mt-8 text-gray-400">
+              <p>Thank you for hosting Fire Horse Trivia! 🐴🔥</p>
+              <p className="text-sm mt-2">
+                May the Year of the Fire Horse bring you fortune!
+              </p>
             </div>
           </div>
         )}

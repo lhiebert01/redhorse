@@ -11,6 +11,8 @@ import {
   calculatePoints,
   formatTimeRemaining,
 } from '@/types/party';
+import { Confetti } from '@/components/party/Celebration';
+import PartyEndScreen from '@/components/party/PartyEndScreen';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -88,6 +90,10 @@ export default function PlayerGamePage() {
   // Results
   const [finalRank, setFinalRank] = useState<number | null>(null);
   const [finalScores, setFinalScores] = useState<LeaderboardEntry[]>([]);
+
+  // Celebration state
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [showPartyEnd, setShowPartyEnd] = useState(false);
 
   // Load player state from session storage
   useEffect(() => {
@@ -202,6 +208,32 @@ export default function PlayerGamePage() {
           ...prev,
           status: 'finished',
         }));
+        // Show celebration!
+        setShowCelebration(true);
+        setTimeout(() => setShowCelebration(false), 6000);
+      })
+      .on('broadcast', { event: 'party_end' }, () => {
+        // Host ended the party - show thank you screen
+        setShowPartyEnd(true);
+      })
+      .on('broadcast', { event: 'new_game' }, () => {
+        // Reset for new game - redirect to lobby
+        setGameState((prev) => ({
+          ...prev,
+          status: 'lobby',
+          current_question_index: 0,
+        }));
+        setCurrentQuestion(null);
+        setSelectedAnswer(null);
+        setCorrectAnswer(null);
+        setIsCorrect(null);
+        setPointsEarned(0);
+        setTotalPoints(0);
+        setCurrentStreak(0);
+        setFinalRank(null);
+        setFinalScores([]);
+        setLeaderboard([]);
+        setShowCelebration(false);
       })
       .on('presence', { event: 'sync' }, () => {
         const state = channel.presenceState();
@@ -662,20 +694,38 @@ export default function PlayerGamePage() {
 
         {/* FINISHED */}
         {gameState.status === 'finished' && (
-          <div className="text-center">
-            <div className="text-6xl mb-4">
-              {finalRank === 1 ? '🏆' : finalRank === 2 ? '🥈' : finalRank === 3 ? '🥉' : '🎉'}
+          <div className="text-center relative">
+            {/* Celebration Animation */}
+            {showCelebration && <Confetti count={100} />}
+
+            {/* Victory Header */}
+            <div className="mb-4">
+              <div className="text-7xl mb-2 animate-bounce">
+                {finalRank === 1 ? '🏆' : finalRank === 2 ? '🥈' : finalRank === 3 ? '🥉' : '🎉'}
+              </div>
+              <h1 className="text-4xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-400 to-yellow-400">
+                {finalRank === 1 ? 'CHAMPION!' : finalRank && finalRank <= 3 ? 'PODIUM FINISH!' : 'Game Over!'}
+              </h1>
             </div>
-            <h1 className="text-3xl font-bold mb-2">Game Over!</h1>
 
             {finalRank && (
-              <div className="text-6xl font-bold text-yellow-400 mb-2">
+              <div className="text-7xl font-bold text-yellow-400 mb-2">
                 #{finalRank}
               </div>
             )}
 
             <div className="text-3xl mb-6">
               Final Score: <span className="text-yellow-400 font-bold">{totalPoints}</span>
+            </div>
+
+            {/* Congratulations Message */}
+            <div className="bg-gradient-to-r from-red-900/40 to-yellow-900/40 rounded-xl p-4 mb-6 border border-yellow-600/30">
+              <p className="text-lg text-yellow-300">
+                🔥 Great job, {playerState.nickname}! 🐴
+              </p>
+              <p className="text-sm text-gray-300 mt-1">
+                May the Fire Horse bring you fortune in 2026!
+              </p>
             </div>
 
             {/* Leaderboard */}
@@ -685,10 +735,10 @@ export default function PlayerGamePage() {
                 {finalScores.slice(0, 10).map((score, i) => (
                   <div
                     key={i}
-                    className={`p-3 rounded ${
+                    className={`p-3 rounded-xl ${
                       score.player_id === playerState.player_id
-                        ? 'bg-yellow-900/50 border-2 border-yellow-600'
-                        : 'bg-gray-800/50'
+                        ? 'bg-gradient-to-r from-yellow-900/50 to-orange-900/50 border-2 border-yellow-500'
+                        : i < 3 ? 'bg-gradient-to-r from-gray-800/80 to-gray-700/80' : 'bg-gray-800/50'
                     }`}
                   >
                     <div className="flex justify-between items-center">
@@ -696,7 +746,7 @@ export default function PlayerGamePage() {
                         <span className="font-bold text-xl w-8">
                           {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}.`}
                         </span>
-                        <span className={`text-lg ${score.player_id === playerState.player_id ? 'font-bold' : ''}`}>
+                        <span className={`text-lg ${score.player_id === playerState.player_id ? 'font-bold text-yellow-300' : ''}`}>
                           {score.nickname}
                         </span>
                       </div>
@@ -714,13 +764,32 @@ export default function PlayerGamePage() {
               </div>
             </div>
 
+            {/* Message about waiting */}
+            <div className="bg-blue-900/30 rounded-xl p-4 mb-6 border border-blue-500/30">
+              <p className="text-blue-300">
+                ⏳ Waiting for host to start another game or end the party...
+              </p>
+            </div>
+
             <Link
               href="/party"
-              className="inline-block bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded-xl font-bold text-lg"
+              className="inline-block bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-xl font-bold text-lg"
             >
               Back to Party Home
             </Link>
           </div>
+        )}
+
+        {/* PARTY END SCREEN - Shows when host ends the party */}
+        {showPartyEnd && playerState && (
+          <PartyEndScreen
+            nickname={playerState.nickname}
+            zodiacSign={playerState.zodiac_sign}
+            zodiacElement={playerState.zodiac_element}
+            partyCode={partyCode}
+            totalPoints={totalPoints}
+            rank={finalRank || undefined}
+          />
         )}
       </div>
     </main>

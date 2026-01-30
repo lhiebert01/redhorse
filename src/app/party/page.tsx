@@ -69,7 +69,7 @@ export default function PartyLandingPage() {
           </h1>
 
           <p className="text-lg text-gray-300">
-            Kahoot-style trivia for your CNY 2026 party!
+            Multiplayer online trivia for your CNY 2026 party!
           </p>
 
           <div className="flex justify-center gap-4 mt-4 text-sm">
