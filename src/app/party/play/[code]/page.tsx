@@ -438,7 +438,7 @@ export default function PlayerGamePage() {
             {/* Progress & Timer */}
             <div className="flex justify-between items-center mb-2">
               <div className="text-sm text-gray-400">
-                Q{gameState.current_question_index + 1} of{' '}
+                Question {gameState.current_question_index + 1} of{' '}
                 {gameState.total_questions}
               </div>
               {gameState.timer_seconds === 0 ? (
@@ -571,6 +571,13 @@ export default function PlayerGamePage() {
         {/* SHOWING ANSWER */}
         {gameState.status === 'showing_answer' && currentQuestion && (
           <div>
+            {/* Category Badge */}
+            <div className="text-center mb-3">
+              <span className="bg-gray-800 px-4 py-1 rounded-full text-sm text-gray-400">
+                {currentQuestion.category}
+              </span>
+            </div>
+
             {/* Question Recap */}
             <div className="bg-gradient-to-b from-gray-800 to-gray-900 rounded-xl p-4 mb-4 border border-gray-700">
               <div className="text-lg font-bold text-center mb-2">
@@ -578,7 +585,7 @@ export default function PlayerGamePage() {
               </div>
               <div className="text-center">
                 <span className="text-sm text-gray-400">
-                  Q{gameState.current_question_index + 1} of {gameState.total_questions}
+                  Question {gameState.current_question_index + 1} of {gameState.total_questions}
                 </span>
               </div>
             </div>
