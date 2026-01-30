@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback, use } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, useCallback } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@supabase/supabase-js';
 import { PARTY_QUESTIONS } from '@/constants/party-questions';
@@ -35,9 +35,9 @@ interface AnswerStats {
   distribution: Record<string, number>;
 }
 
-export default function HostConsolePage({ params }: { params: Promise<{ code: string }> }) {
-  const resolvedParams = use(params);
-  const partyCode = resolvedParams.code.toUpperCase();
+export default function HostConsolePage() {
+  const params = useParams();
+  const partyCode = (params.code as string || '').toUpperCase();
   const router = useRouter();
 
   // Pass & Game state

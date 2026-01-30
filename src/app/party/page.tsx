@@ -99,7 +99,13 @@ export default function PartyLandingPage() {
               </p>
             </div>
 
-            {/* Pass Selection */}
+            {/* Step 1: Pass Selection */}
+            <div className="mb-2">
+              <span className="text-xs font-bold text-yellow-400 bg-yellow-900/30 px-2 py-1 rounded">
+                STEP 1
+              </span>
+              <span className="text-xs text-gray-400 ml-2">Select your pass</span>
+            </div>
             <div className="space-y-3 mb-6">
               {(Object.keys(PASS_CONFIGS) as PassType[]).map((type) => {
                 const pass = PASS_CONFIGS[type];
@@ -110,15 +116,23 @@ export default function PartyLandingPage() {
                     onClick={() => setSelectedPass(type)}
                     className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                       isSelected
-                        ? 'border-yellow-400 bg-yellow-900/30'
+                        ? 'border-yellow-400 bg-yellow-900/30 ring-2 ring-yellow-400/50'
                         : 'border-gray-700 hover:border-gray-500 bg-black/50'
                     }`}
                   >
                     <div className="flex justify-between items-center">
-                      <div>
-                        <div className="font-bold text-lg">{pass.name}</div>
-                        <div className="text-sm text-gray-400">
-                          {pass.description}
+                      <div className="flex items-center gap-3">
+                        {/* Selection indicator */}
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                          isSelected ? 'border-yellow-400 bg-yellow-400' : 'border-gray-500'
+                        }`}>
+                          {isSelected && <span className="text-black text-xs">✓</span>}
+                        </div>
+                        <div>
+                          <div className="font-bold text-lg">{pass.name}</div>
+                          <div className="text-sm text-gray-400">
+                            {pass.description}
+                          </div>
                         </div>
                       </div>
                       <div
@@ -130,7 +144,7 @@ export default function PartyLandingPage() {
                       </div>
                     </div>
                     {type === 'weekend' && (
-                      <span className="inline-block mt-2 text-xs bg-green-600 px-2 py-0.5 rounded">
+                      <span className="inline-block mt-2 ml-8 text-xs bg-green-600 px-2 py-0.5 rounded">
                         MOST POPULAR
                       </span>
                     )}
@@ -139,6 +153,13 @@ export default function PartyLandingPage() {
               })}
             </div>
 
+            {/* Step 2: Purchase */}
+            <div className="mb-2">
+              <span className="text-xs font-bold text-yellow-400 bg-yellow-900/30 px-2 py-1 rounded">
+                STEP 2
+              </span>
+              <span className="text-xs text-gray-400 ml-2">Complete purchase</span>
+            </div>
             <button
               onClick={handleHostClick}
               disabled={isLoading}
@@ -148,7 +169,7 @@ export default function PartyLandingPage() {
                   : 'bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 shadow-lg hover:shadow-red-500/30'
               }`}
             >
-              {isLoading ? 'Starting checkout...' : 'HOST MY PARTY →'}
+              {isLoading ? 'Starting checkout...' : `HOST MY PARTY — ${PASS_CONFIGS[selectedPass].priceDisplay} →`}
             </button>
 
             <p className="text-center text-xs text-gray-500 mt-3">

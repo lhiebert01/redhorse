@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@supabase/supabase-js';
 import { PartyScore } from '@/types/party';
@@ -10,9 +11,9 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-export default function ResultsPage({ params }: { params: Promise<{ code: string }> }) {
-  const resolvedParams = use(params);
-  const partyCode = resolvedParams.code.toUpperCase();
+export default function ResultsPage() {
+  const params = useParams();
+  const partyCode = (params.code as string || '').toUpperCase();
 
   const [scores, setScores] = useState<PartyScore[]>([]);
   const [loading, setLoading] = useState(true);
