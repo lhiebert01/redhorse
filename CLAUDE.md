@@ -2788,4 +2788,192 @@ npm run dev
 
 ---
 
+## Session Update: January 30, 2026 - Party Game Bug Fixes & Player UI Improvements
+
+### Current Status: PRODUCTION READY - All Major Bugs Fixed
+
+### Issues Fixed This Session
+
+#### 1. "Question Has Already Ended" Error (FIXED)
+**Problem:** Players were receiving "This question has already ended" errors even when the timer was still running.
+**Root Cause:** The answer API was using strict question index comparison which failed due to timing issues.
+**Solution:** Changed answer API to check game status (`finished`/`abandoned`) instead of strict question index matching.
+**File Modified:** `src/app/api/party/answer/route.ts`
+
+```typescript
+// OLD - Too strict
+if (game.current_question_index !== questionIndexNum) {
+  return NextResponse.json({ error: 'This question has already ended' }, { status: 400 });
+}
+
+// NEW - More lenient, checks game status instead
+if (game.status === 'finished' || game.status === 'abandoned') {
+  return NextResponse.json({ error: 'This game has ended' }, { status: 400 });
+}
+```
+
+#### 2. Timer Not Showing on Player Screens (FIXED)
+**Problem:** Players saw no timer countdown on their screens during gameplay.
+**Root Cause:** `timer_seconds` wasn't being updated in the player's gameState when receiving broadcast events.
+**Solution:** Added `timer_seconds` to the gameState update when receiving new question broadcasts.
+**File Modified:** `src/app/party/play/[code]/page.tsx`
+
+```typescript
+setGameState((prev) => ({
+  ...prev,
+  status: 'playing',
+  current_question_index: data.question_index,
+  timer_seconds: data.timer_seconds,  // ADDED - was missing!
+}));
+```
+
+#### 3. Confusing Answer Feedback UI (FIXED)
+**Problem:** Players were seeing BOTH "✓ CORRECT ANSWER" and "✗ WRONG" boxes simultaneously, causing confusion.
+**Solution:** Combined into a single result box with clear conditional rendering:
+- Shows 🎉 "YOU GOT IT!" with points for correct answers
+- Shows 😔 "NOT QUITE" with correct answer for wrong answers
+- Shows ⏰ "TIME'S UP!" with correct answer if no answer submitted
+
+**File Modified:** `src/app/party/play/[code]/page.tsx`
+
+#### 4. Question Display Format (UPDATED)
+**Change:** Updated "Q1 of 20" to "Question 1 of 20" to match host screen format.
+**File Modified:** `src/app/party/play/[code]/page.tsx` (lines 441 and 588)
+
+#### 5. Category Display Added
+**Change:** Added category badges (e.g., "Grandmaster Zodiac & Math", "Fire Horse & Great Race") to both playing and showing_answer states.
+**File Modified:** `src/app/party/play/[code]/page.tsx`
+
+#### 6. Sidebar Leaderboard Layout (MAJOR UI UPDATE)
+**Problem:** Leaderboard was positioned below the answer buttons on player screens, inconsistent with host layout.
+**Solution:** Restructured player page to use flex layout with sidebar:
+- **Desktop (lg+):** Main content on left, sidebar leaderboard on right (64px wide)
+- **Mobile:** Leaderboard appears below main content
+- Sidebar is sticky and scrollable for many players
+- Current player's entry highlighted in yellow
+- Top 3 players show medal emojis (🥇🥈🥉)
+
+**File Modified:** `src/app/party/play/[code]/page.tsx`
+
+```jsx
+{/* PLAYING / SHOWING ANSWER - with Sidebar Layout */}
+{(gameState.status === 'playing' || gameState.status === 'showing_answer') && currentQuestion && (
+  <div className="flex gap-4 lg:gap-6">
+    {/* Main Content */}
+    <div className="flex-1">
+      {/* Playing or Showing Answer content */}
+    </div>
+
+    {/* Sidebar Leaderboard - visible on large screens */}
+    <div className="w-64 hidden lg:block">
+      {/* Leaderboard content */}
+    </div>
+  </div>
+)}
+```
+
+### Database Migration Required
+
+If not already run, execute this SQL in Supabase:
+
+```sql
+-- Add Solo Play Pass columns
+ALTER TABLE party_passes
+ADD COLUMN IF NOT EXISTS is_solo BOOLEAN DEFAULT false,
+ADD COLUMN IF NOT EXISTS games_played INTEGER DEFAULT 0,
+ADD COLUMN IF NOT EXISTS question_sets JSONB DEFAULT '[]'::jsonb;
+
+-- Add game number tracking
+ALTER TABLE party_games
+ADD COLUMN IF NOT EXISTS game_number INTEGER;
+```
+
+**Migration File:** `docs/migrations/003_party_solo_columns.sql`
+
+### Commits Made This Session
+
+1. **6a7cb16** - Update player screen: Question X of 20 format and category badges
+2. **d2514a8** - Add sidebar leaderboard layout to player screen
+
+### Files Modified
+
+| File | Changes |
+|------|---------|
+| `src/app/api/party/answer/route.ts` | Made answer API more lenient, checks game status instead of question index |
+| `src/app/party/play/[code]/page.tsx` | Timer sync fix, combined answer feedback UI, sidebar leaderboard, category badges, question format |
+
+### Testing Checklist
+
+- [x] Timer displays correctly on player screens
+- [x] Answer feedback shows single combined result box
+- [x] Category badges display during gameplay
+- [x] Question format shows "Question X of 20"
+- [x] Sidebar leaderboard visible on desktop
+- [x] Mobile leaderboard shows below content
+- [x] Current player highlighted in leaderboard
+- [x] Scoring works correctly (100 base + speed bonus + streak bonus)
+
+### Party Game Scoring System
+
+| Component | Points |
+|-----------|--------|
+| Base (correct answer) | 100 |
+| Speed Bonus (< 5s) | 50 |
+| Speed Bonus (5-10s) | 25 |
+| Streak Bonus (2 in a row) | 25 |
+| Streak Bonus (3 in a row) | 50 |
+| Streak Bonus (4+ in a row) | 100 |
+
+**Maximum points per question:** 250 (100 base + 50 speed + 100 streak)
+
+### Question Categories (16 total)
+
+1. Fire Horse & Great Race
+2. CNY Traditions & Food
+3. The Five Elements
+4. Grandmaster Zodiac & Math
+5. Historical War Horses
+6. Horse Equipment & Sports
+7. Horse Idioms & Phrases
+8. History, Art & Horse Lore
+9. Literature, Myth & Fantasy
+10. Modern Culture & Global Horses
+11. Pop Music & Sound
+12. Biological & Scientific Facts
+13. 2026 CNY Taboos & Superstitions
+14. 2026 Astronomy & Traditions
+15. Logic, Math & Zodiac Riddles
+16. Final Countdown & Future Lore
+
+### Quick Reference
+
+```bash
+# Test party game locally
+npm run dev
+# Visit http://localhost:3000/party
+
+# Check TypeScript errors
+npx tsc --noEmit
+
+# Build for production
+npm run build
+
+# Push to production
+git add -A && git commit -m "message" && git push origin main
+```
+
+### Party URLs
+
+| Page | URL |
+|------|-----|
+| Landing | https://redhorseoracle.com/party |
+| Join | https://redhorseoracle.com/party/join |
+| Host Console | https://redhorseoracle.com/party/host/[CODE] |
+| Player Screen | https://redhorseoracle.com/party/play/[CODE] |
+| Solo Play | https://redhorseoracle.com/party/solo/[CODE] |
+| Results | https://redhorseoracle.com/party/results/[CODE] |
+| Success | https://redhorseoracle.com/party/success |
+
+---
+
 *火马年 2026 - Year of the Fire Horse*
