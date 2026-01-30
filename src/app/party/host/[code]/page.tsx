@@ -137,10 +137,22 @@ export default function HostConsolePage() {
         if (gameData) {
           setGame(gameData);
 
-          // Track questions from this game as "used" to avoid repetition in subsequent games
-          if (gameData.question_ids && gameData.question_ids.length > 0) {
-            setUsedQuestionIds(gameData.question_ids);
+          // Fetch ALL previous games' question IDs from database to track usage
+          const { data: allGames } = await supabase
+            .from('party_games')
+            .select('question_ids')
+            .eq('party_pass_id', passData.id);
+
+          const allUsedIds: number[] = [];
+          if (allGames) {
+            allGames.forEach((g) => {
+              if (g.question_ids && Array.isArray(g.question_ids)) {
+                allUsedIds.push(...g.question_ids.map((id: unknown) => Number(id)));
+              }
+            });
           }
+          setUsedQuestionIds(allUsedIds);
+          console.log('[LOAD] Loaded', allUsedIds.length, 'used question IDs from', allGames?.length || 0, 'previous games');
 
           // Load current question if game is in progress
           if (gameData.status === 'playing' || gameData.status === 'showing_answer') {
@@ -151,12 +163,30 @@ export default function HostConsolePage() {
             }
           }
         } else {
-          // No existing game - create a new one with random questions
-          console.log('[LOAD] No existing game, creating new game with random questions');
-          const questionsPerGame = 20;
-          const newQuestionIds = generateRandomQuestionIds(questionsPerGame, []);
+          // No existing active game - need to create a new one
+          // CRITICAL: Fetch ALL previous games to exclude their questions
+          console.log('[LOAD] No active game, fetching previous games to exclude their questions...');
 
-          console.log('[LOAD] Generated random question IDs:', newQuestionIds.slice(0, 5), '...');
+          const { data: previousGames } = await supabase
+            .from('party_games')
+            .select('question_ids')
+            .eq('party_pass_id', passData.id);
+
+          const allUsedIds: number[] = [];
+          if (previousGames) {
+            previousGames.forEach((g) => {
+              if (g.question_ids && Array.isArray(g.question_ids)) {
+                allUsedIds.push(...g.question_ids.map((id: unknown) => Number(id)));
+              }
+            });
+          }
+
+          console.log('[LOAD] Found', allUsedIds.length, 'previously used questions from', previousGames?.length || 0, 'games');
+
+          const questionsPerGame = 20;
+          const newQuestionIds = generateRandomQuestionIds(questionsPerGame, allUsedIds);
+
+          console.log('[LOAD] Generated random question IDs (excluding used):', newQuestionIds.slice(0, 5), '...');
 
           const { data: newGame, error: createError } = await supabase
             .from('party_games')
@@ -173,8 +203,8 @@ export default function HostConsolePage() {
           if (!createError && newGame) {
             console.log('[LOAD] Created new game:', newGame.id);
             setGame(newGame);
-            // Track these questions as used
-            setUsedQuestionIds(newQuestionIds);
+            // Track all questions as used (previous + new)
+            setUsedQuestionIds([...allUsedIds, ...newQuestionIds]);
           } else {
             console.error('[LOAD] Failed to create game:', createError);
           }
@@ -741,19 +771,41 @@ export default function HostConsolePage() {
       return;
     }
 
-    // Compute the combined list of used IDs synchronously (state updates are async!)
-    const previouslyUsedIds = game?.question_ids
-      ? [...usedQuestionIds, ...game.question_ids]
-      : usedQuestionIds;
+    console.log('[NEW GAME] Starting new game for party pass:', pass.id);
+
+    // CRITICAL FIX: Fetch ALL question IDs from ALL previous games for this party pass from DATABASE
+    // (not from in-memory state which resets on browser refresh!)
+    const { data: previousGames, error: fetchGamesError } = await supabase
+      .from('party_games')
+      .select('question_ids')
+      .eq('party_pass_id', pass.id);
+
+    if (fetchGamesError) {
+      console.error('[NEW GAME] Failed to fetch previous games:', fetchGamesError);
+      alert('Failed to load game history. Please try again.');
+      return;
+    }
+
+    // Collect all used question IDs from ALL previous games
+    const allUsedQuestionIds: number[] = [];
+    if (previousGames) {
+      previousGames.forEach((g) => {
+        if (g.question_ids && Array.isArray(g.question_ids)) {
+          allUsedQuestionIds.push(...g.question_ids.map((id: unknown) => Number(id)));
+        }
+      });
+    }
+
+    console.log('[NEW GAME] Found', allUsedQuestionIds.length, 'previously used question IDs from', previousGames?.length || 0, 'games');
 
     // Generate new random questions, avoiding previously used ones
     const questionsPerGame = 20;
-    const newQuestionIds = generateRandomQuestionIds(questionsPerGame, previouslyUsedIds);
+    const newQuestionIds = generateRandomQuestionIds(questionsPerGame, allUsedQuestionIds);
 
-    // Update state for next game
-    setUsedQuestionIds(previouslyUsedIds);
+    console.log('[NEW GAME] Generated new question IDs:', newQuestionIds.slice(0, 5), '...');
 
-    console.log('[NEW GAME] Creating new game with question IDs:', newQuestionIds.slice(0, 5), '...');
+    // Update local state for tracking
+    setUsedQuestionIds([...allUsedQuestionIds, ...newQuestionIds]);
 
     // Create new game in database
     const { data: newGame, error: createError } = await supabase
@@ -776,9 +828,7 @@ export default function HostConsolePage() {
 
     console.log('[NEW GAME] New game created:', newGame.id);
 
-    // Update local pass with decremented games_remaining (will be decremented when game ends)
-    // Actually, games_remaining is decremented at end of game, not at start
-    // So we just need to refresh the pass data
+    // Refresh the pass data to get current games_remaining
     const { data: refreshedPass } = await supabase
       .from('party_passes')
       .select('*')
@@ -807,7 +857,7 @@ export default function HostConsolePage() {
         message: 'A new game is starting! Join the lobby.',
       },
     });
-  }, [pass, game, usedQuestionIds, selectedTimer, partyCode]);
+  }, [pass, selectedTimer, partyCode]);
 
   // Loading state for Start Fresh button
   const [isStartingFresh, setIsStartingFresh] = useState(false);
