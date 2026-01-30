@@ -288,12 +288,12 @@ export default function HostConsolePage() {
           current_question_index: questionIndex,
           status: 'playing',
           started_at: game.started_at || new Date().toISOString(),
-          timer_seconds: selectedTimer || 30, // Store selected timer
+          timer_seconds: selectedTimer, // 0 = manual mode
         })
         .eq('id', game.id);
 
       setGame((prev) =>
-        prev ? { ...prev, current_question_index: questionIndex, status: 'playing', timer_seconds: selectedTimer || 30 } : null
+        prev ? { ...prev, current_question_index: questionIndex, status: 'playing', timer_seconds: selectedTimer } : null
       );
 
       // Broadcast question to players
@@ -734,7 +734,7 @@ export default function HostConsolePage() {
       .from('party_games')
       .insert({
         party_pass_id: pass.id,
-        timer_seconds: selectedTimer || 30,
+        timer_seconds: selectedTimer, // 0 = manual mode
         questions_per_game: questionsPerGame,
         question_ids: newQuestionIds,
         status: 'lobby',

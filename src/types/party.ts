@@ -273,18 +273,21 @@ export const ANSWER_COLORS = [
 
 /**
  * Calculate speed bonus based on answer time
+ * For manual mode (timerSeconds = 0), uses 60 seconds as baseline for fair speed scoring
  */
 export function calculateSpeedBonus(
   answerTimeMs: number,
   timerSeconds: number
 ): number {
-  const timerMs = timerSeconds * 1000;
+  // Use 60 seconds as default for manual mode (0) to still reward fast answers
+  const effectiveTimer = timerSeconds > 0 ? timerSeconds : 60;
+  const timerMs = effectiveTimer * 1000;
   const percentOfTime = answerTimeMs / timerMs;
 
   if (percentOfTime <= 0.25) {
-    return SCORING.SPEED_BONUS_FAST;
+    return SCORING.SPEED_BONUS_FAST;  // Answer in first 25% of time (e.g., <15s for 60s timer)
   } else if (percentOfTime <= 0.5) {
-    return SCORING.SPEED_BONUS_MEDIUM;
+    return SCORING.SPEED_BONUS_MEDIUM;  // Answer in first 50% of time (e.g., <30s for 60s timer)
   }
   return 0;
 }
