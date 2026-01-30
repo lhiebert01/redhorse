@@ -19,6 +19,23 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
+// Generate random question IDs from the 400 question pool
+function generateRandomQuestionIds(count: number, excludeIds: number[] = []): number[] {
+  const totalQuestions = PARTY_QUESTIONS.length; // Should be 400
+  const excludeSet = new Set(excludeIds);
+  const availableIds = Array.from({ length: totalQuestions }, (_, i) => i + 1)
+    .filter(id => !excludeSet.has(id));
+
+  // Shuffle available IDs using Fisher-Yates
+  for (let i = availableIds.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [availableIds[i], availableIds[j]] = [availableIds[j], availableIds[i]];
+  }
+
+  // Return the first 'count' IDs
+  return availableIds.slice(0, Math.min(count, availableIds.length));
+}
+
 interface Question {
   id: number;
   question: string;
@@ -69,6 +86,9 @@ export default function HostConsolePage() {
   // Countdown before game
   const [countdown, setCountdown] = useState<number | null>(null);
 
+  // Track used question IDs across games in this session (to avoid repetition)
+  const [usedQuestionIds, setUsedQuestionIds] = useState<number[]>([]);
+
   // Leaderboard state (updated after each question)
   interface LeaderboardEntry {
     player_id: string;
@@ -112,6 +132,11 @@ export default function HostConsolePage() {
         if (gameData) {
           setGame(gameData);
 
+          // Track questions from this game as "used" to avoid repetition in subsequent games
+          if (gameData.question_ids && gameData.question_ids.length > 0) {
+            setUsedQuestionIds(gameData.question_ids);
+          }
+
           // Load current question if game is in progress
           if (gameData.status === 'playing' || gameData.status === 'showing_answer') {
             const questionId = gameData.question_ids[gameData.current_question_index];
@@ -119,6 +144,34 @@ export default function HostConsolePage() {
             if (question) {
               setCurrentQuestion(question as Question);
             }
+          }
+        } else {
+          // No existing game - create a new one with random questions
+          console.log('[LOAD] No existing game, creating new game with random questions');
+          const questionsPerGame = 20;
+          const newQuestionIds = generateRandomQuestionIds(questionsPerGame, []);
+
+          console.log('[LOAD] Generated random question IDs:', newQuestionIds.slice(0, 5), '...');
+
+          const { data: newGame, error: createError } = await supabase
+            .from('party_games')
+            .insert({
+              party_pass_id: passData.id,
+              timer_seconds: 30, // Default timer
+              questions_per_game: questionsPerGame,
+              question_ids: newQuestionIds,
+              status: 'lobby',
+            })
+            .select()
+            .single();
+
+          if (!createError && newGame) {
+            console.log('[LOAD] Created new game:', newGame.id);
+            setGame(newGame);
+            // Track these questions as used
+            setUsedQuestionIds(newQuestionIds);
+          } else {
+            console.error('[LOAD] Failed to create game:', createError);
           }
         }
 
@@ -626,6 +679,78 @@ export default function HostConsolePage() {
     });
   }, [game, pass, partyCode]);
 
+  // Start a new game with fresh random questions
+  const startNewGame = useCallback(async () => {
+    if (!pass || pass.games_remaining <= 0) {
+      alert('No games remaining on this pass!');
+      return;
+    }
+
+    // Track questions from previous game to avoid repeats
+    if (game?.question_ids) {
+      setUsedQuestionIds(prev => [...prev, ...game.question_ids]);
+    }
+
+    // Generate new random questions, avoiding previously used ones
+    const questionsPerGame = 20;
+    const newQuestionIds = generateRandomQuestionIds(questionsPerGame, usedQuestionIds);
+
+    console.log('[NEW GAME] Creating new game with question IDs:', newQuestionIds.slice(0, 5), '...');
+
+    // Create new game in database
+    const { data: newGame, error: createError } = await supabase
+      .from('party_games')
+      .insert({
+        party_pass_id: pass.id,
+        timer_seconds: selectedTimer || 30,
+        questions_per_game: questionsPerGame,
+        question_ids: newQuestionIds,
+        status: 'lobby',
+      })
+      .select()
+      .single();
+
+    if (createError) {
+      console.error('[NEW GAME] Failed to create new game:', createError);
+      alert('Failed to create new game. Please try again.');
+      return;
+    }
+
+    console.log('[NEW GAME] New game created:', newGame.id);
+
+    // Update local pass with decremented games_remaining (will be decremented when game ends)
+    // Actually, games_remaining is decremented at end of game, not at start
+    // So we just need to refresh the pass data
+    const { data: refreshedPass } = await supabase
+      .from('party_passes')
+      .select('*')
+      .eq('id', pass.id)
+      .single();
+
+    if (refreshedPass) {
+      setPass(refreshedPass);
+    }
+
+    // Reset all game state
+    setGame(newGame);
+    setCurrentQuestion(null);
+    setAnswerStats(null);
+    setShowingAnswer(false);
+    setLeaderboard([]);
+    setPlayers([]);
+
+    // Broadcast that a new game is starting
+    const channel = supabase.channel(`party:${partyCode}`);
+    await channel.send({
+      type: 'broadcast',
+      event: 'new_game',
+      payload: {
+        game_id: newGame.id,
+        message: 'A new game is starting! Join the lobby.',
+      },
+    });
+  }, [pass, game, usedQuestionIds, selectedTimer, partyCode]);
+
   // Loading state
   if (loading) {
     return (
@@ -680,9 +805,11 @@ export default function HostConsolePage() {
                 <span>{passTime.hours}h {passTime.minutes}m remaining</span>
               )}
             </div>
-            <div className="text-sm text-yellow-400">
-              {pass.games_remaining} games left
-            </div>
+          </div>
+          {/* Prominent Games Remaining Display */}
+          <div className="bg-gradient-to-r from-yellow-600 to-orange-600 px-4 py-2 rounded-xl text-center">
+            <div className="text-xs text-yellow-100">GAMES LEFT</div>
+            <div className="text-3xl font-bold">{pass.games_remaining}</div>
           </div>
         </div>
       </div>
@@ -788,6 +915,32 @@ export default function HostConsolePage() {
                   ? '📋 Manual Mode: You control when to reveal answers and move to next question'
                   : `⏰ Each question will auto-end after ${selectedTimer} seconds`}
               </p>
+            </div>
+
+            {/* Games Remaining Info */}
+            <div className="bg-gradient-to-r from-yellow-900/50 to-orange-900/50 rounded-xl p-4 mb-6 border border-yellow-600/50">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-sm text-yellow-300">🎮 Party Pass Status</div>
+                  <div className="text-gray-300 text-sm">
+                    {pass.pass_type.charAt(0).toUpperCase() + pass.pass_type.slice(1)} Pass •
+                    {passTime.expired ? (
+                      <span className="text-red-400"> Expired</span>
+                    ) : (
+                      <span> {passTime.hours}h {passTime.minutes}m remaining</span>
+                    )}
+                  </div>
+                </div>
+                <div className="text-center bg-yellow-600 px-6 py-3 rounded-xl">
+                  <div className="text-4xl font-bold">{pass.games_remaining}</div>
+                  <div className="text-xs text-yellow-100">GAMES LEFT</div>
+                </div>
+              </div>
+              {usedQuestionIds.length > 0 && (
+                <div className="mt-3 text-xs text-gray-400 border-t border-yellow-600/30 pt-2">
+                  📊 {usedQuestionIds.length} questions used this session • {PARTY_QUESTIONS.length - usedQuestionIds.length} remaining in pool
+                </div>
+              )}
             </div>
 
             {/* Start Button */}
@@ -1069,15 +1222,10 @@ export default function HostConsolePage() {
 
               {(pass.games_remaining || 0) > 0 && (
                 <button
-                  onClick={() => {
-                    setGame(null);
-                    setCurrentQuestion(null);
-                    setAnswerStats(null);
-                    setShowingAnswer(false);
-                  }}
+                  onClick={startNewGame}
                   className="py-4 bg-green-600 hover:bg-green-500 rounded-xl font-bold text-lg"
                 >
-                  Play Another Game ({pass.games_remaining} left)
+                  🎮 Play Another Game ({pass.games_remaining} left)
                 </button>
               )}
 
