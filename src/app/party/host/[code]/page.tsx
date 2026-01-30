@@ -263,30 +263,66 @@ export default function HostConsolePage() {
 
     setShowingAnswer(true);
 
-    // Get answer stats
-    const { data: answers } = await supabase
+    // Get answer stats for this question
+    const { data: questionAnswers } = await supabase
       .from('party_answers')
       .select('*')
       .eq('party_game_id', game.id)
       .eq('question_index', game.current_question_index);
 
-    if (answers) {
-      const distribution: Record<string, number> = {};
-      let correctCount = 0;
+    let distribution: Record<string, number> = {};
+    let correctCount = 0;
 
-      answers.forEach((ans) => {
+    if (questionAnswers) {
+      questionAnswers.forEach((ans) => {
         distribution[ans.answer_given] = (distribution[ans.answer_given] || 0) + 1;
         if (ans.is_correct) correctCount++;
       });
 
       setAnswerStats({
-        total: answers.length,
+        total: questionAnswers.length,
         correct: correctCount,
         distribution,
       });
     }
 
-    // Broadcast answer reveal
+    // Calculate leaderboard from ALL answers so far
+    const { data: allAnswers } = await supabase
+      .from('party_answers')
+      .select('player_id, total_points')
+      .eq('party_game_id', game.id);
+
+    const { data: gamePlayers } = await supabase
+      .from('party_players')
+      .select('id, nickname')
+      .eq('party_game_id', game.id);
+
+    let leaderboard: Array<{ player_id: string; nickname: string; total_points: number; rank: number }> = [];
+
+    if (allAnswers && gamePlayers) {
+      // Sum up points per player
+      const pointsMap = new Map<string, number>();
+      allAnswers.forEach((ans) => {
+        pointsMap.set(ans.player_id, (pointsMap.get(ans.player_id) || 0) + ans.total_points);
+      });
+
+      // Build leaderboard
+      leaderboard = gamePlayers
+        .map((p) => ({
+          player_id: p.id,
+          nickname: p.nickname,
+          total_points: pointsMap.get(p.id) || 0,
+          rank: 0,
+        }))
+        .sort((a, b) => b.total_points - a.total_points);
+
+      // Assign ranks
+      leaderboard.forEach((entry, i) => {
+        entry.rank = i + 1;
+      });
+    }
+
+    // Broadcast answer reveal WITH leaderboard
     const channel = supabase.channel(`party:${partyCode}`);
     await channel.send({
       type: 'broadcast',
@@ -295,10 +331,15 @@ export default function HostConsolePage() {
         question_index: game.current_question_index,
         correct_answer: currentQuestion.correctAnswer,
         explanation: currentQuestion.explanation,
-        stats: answerStats,
+        stats: {
+          total: questionAnswers?.length || 0,
+          correct: correctCount,
+          distribution,
+        },
+        leaderboard,
       },
     });
-  }, [game, currentQuestion, partyCode, answerStats]);
+  }, [game, currentQuestion, partyCode]);
 
   // Move to next question or end game
   const nextQuestion = useCallback(async () => {

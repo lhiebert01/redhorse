@@ -20,8 +20,11 @@ export async function POST(request: NextRequest) {
       answer_time_ms,
     } = body;
 
+    console.log('[ANSWER API] Received:', { game_id, player_id, question_index, question_id, answer_given });
+
     // Validate inputs
     if (!game_id || !player_id || question_index === undefined || !answer_given) {
+      console.log('[ANSWER API] Missing fields');
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -36,14 +39,18 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (gameError || !game) {
+      console.log('[ANSWER API] Game not found:', gameError);
       return NextResponse.json(
         { error: 'Game not found' },
         { status: 404 }
       );
     }
 
+    console.log('[ANSWER API] Game found, current_question_index:', game.current_question_index, 'submitted:', question_index);
+
     // Verify this is the current question
     if (game.current_question_index !== question_index) {
+      console.log('[ANSWER API] Question index mismatch');
       return NextResponse.json(
         { error: 'This question has already ended' },
         { status: 400 }
@@ -69,13 +76,16 @@ export async function POST(request: NextRequest) {
     // Get the correct answer from question bank
     const question = PARTY_QUESTIONS.find((q) => q.id === question_id);
     if (!question) {
+      console.log('[ANSWER API] Question not found in bank:', question_id);
       return NextResponse.json(
         { error: 'Question not found' },
         { status: 404 }
       );
     }
 
+    console.log('[ANSWER API] Question found:', { id: question.id, correctAnswer: question.correctAnswer, answer_given });
     const isCorrect = answer_given === question.correctAnswer;
+    console.log('[ANSWER API] Is correct:', isCorrect);
 
     // Get current streak (count previous correct answers in a row)
     const { data: previousAnswers } = await supabase
@@ -109,7 +119,17 @@ export async function POST(request: NextRequest) {
     const newStreak = isCorrect ? currentStreak + 1 : 0;
 
     // Insert answer
-    const { error: insertError } = await supabase
+    console.log('[ANSWER API] Inserting answer:', {
+      party_game_id: game_id,
+      player_id: player_id,
+      question_index,
+      question_id,
+      answer_given,
+      is_correct: isCorrect,
+      total_points: points.total,
+    });
+
+    const { data: insertedAnswer, error: insertError } = await supabase
       .from('party_answers')
       .insert({
         party_game_id: game_id,
@@ -124,15 +144,19 @@ export async function POST(request: NextRequest) {
         streak_bonus: points.streak,
         total_points: points.total,
         current_streak: newStreak,
-      });
+      })
+      .select()
+      .single();
 
     if (insertError) {
-      console.error('Failed to insert answer:', insertError);
+      console.error('[ANSWER API] Failed to insert answer:', insertError);
       return NextResponse.json(
-        { error: 'Failed to save answer' },
+        { error: 'Failed to save answer: ' + insertError.message },
         { status: 500 }
       );
     }
+
+    console.log('[ANSWER API] Answer inserted successfully:', insertedAnswer?.id);
 
     // Get count of answers for this question (for broadcast)
     const { count: answersReceived } = await supabase
