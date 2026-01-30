@@ -10,6 +10,7 @@ import { withRetry } from '@/lib/utils/retry';
 import { FocusMode } from '@/constants/modes';
 import { EDITION_CONFIG } from '@/constants/editions';
 import { ZodiacAnimal } from '@/constants/zodiac-data';
+import { PassType, generatePartyCode } from '@/types/party';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60; // Allow up to 60 seconds for AI generation
@@ -41,7 +42,12 @@ export async function POST(request: Request) {
   const session = event.data.object;
   const supabase = createAdminClient();
 
-  // Extract data from session
+  // Check if this is a party pass purchase
+  if (session.metadata?.product_type === 'party_pass') {
+    return handlePartyPassPurchase(session, supabase);
+  }
+
+  // Extract data from session (oracle purchase)
   const email = session.customer_details?.email || 'unknown@example.com';
   const { birthDate, focusMode: rawFocusMode } = extractCustomFields(session);
   const focusMode = validateFocusMode(rawFocusMode) as FocusMode;
@@ -341,4 +347,137 @@ export async function POST(request: Request) {
 
   // Always return 200 to Stripe to acknowledge receipt
   return NextResponse.json({ received: true });
+}
+
+// Handle party pass purchases
+async function handlePartyPassPurchase(session: any, supabase: any) {
+  try {
+    const passType = session.metadata.pass_type as PassType;
+    const durationHours = parseInt(session.metadata.duration_hours || '24');
+    const maxGames = parseInt(session.metadata.max_games || '5');
+    const email = session.customer_details?.email || '';
+
+    console.log(`Processing party pass purchase: ${passType} for ${email}`);
+
+    // Check for existing pass (idempotency)
+    const { data: existingPass } = await supabase
+      .from('party_passes')
+      .select('id, party_code')
+      .eq('stripe_session_id', session.id)
+      .single();
+
+    if (existingPass) {
+      console.log(`Party pass already exists for session ${session.id}: ${existingPass.party_code}`);
+      return NextResponse.json({
+        received: true,
+        skipped: true,
+        party_code: existingPass.party_code
+      });
+    }
+
+    // Generate unique party code
+    let partyCode = generatePartyCode();
+    let attempts = 0;
+    const maxAttempts = 10;
+
+    while (attempts < maxAttempts) {
+      const { data: existing } = await supabase
+        .from('party_passes')
+        .select('id')
+        .eq('party_code', partyCode)
+        .single();
+
+      if (!existing) break;
+      partyCode = generatePartyCode();
+      attempts++;
+    }
+
+    if (attempts >= maxAttempts) {
+      console.error('Failed to generate unique party code after max attempts');
+      return NextResponse.json(
+        { error: 'Failed to generate party code' },
+        { status: 500 }
+      );
+    }
+
+    // Calculate expiration
+    const expiresAt = new Date();
+    expiresAt.setHours(expiresAt.getHours() + durationHours);
+
+    // Create party pass record
+    const { data: pass, error: insertError } = await supabase
+      .from('party_passes')
+      .insert({
+        stripe_session_id: session.id,
+        stripe_payment_intent: session.payment_intent as string,
+        host_email: email,
+        party_code: partyCode,
+        pass_type: passType,
+        expires_at: expiresAt.toISOString(),
+        games_remaining: maxGames,
+        games_total: maxGames,
+        settings: {
+          timer_seconds: 30,
+          questions_per_game: 20,
+        },
+        is_active: true,
+      })
+      .select()
+      .single();
+
+    if (insertError) {
+      // Check for duplicate key (race condition)
+      if (insertError.code === '23505') {
+        console.log(`Duplicate party pass detected (race condition): ${session.id}`);
+        return NextResponse.json({ received: true, skipped: true, reason: 'duplicate_key' });
+      }
+      console.error('Failed to create party pass:', insertError);
+      return NextResponse.json({ error: 'Failed to create party pass' }, { status: 500 });
+    }
+
+    console.log(`Party pass created: ${partyCode} (${passType}) - expires ${expiresAt.toISOString()}`);
+
+    // Create initial game in lobby state
+    const questionIds = generateRandomQuestionIds(20);
+    const { error: gameError } = await supabase
+      .from('party_games')
+      .insert({
+        party_pass_id: pass.id,
+        timer_seconds: 30,
+        questions_per_game: 20,
+        question_ids: questionIds,
+        status: 'lobby',
+      });
+
+    if (gameError) {
+      console.error('Failed to create initial game:', gameError);
+      // Don't fail the webhook - pass is created, game can be created later
+    }
+
+    return NextResponse.json({
+      received: true,
+      party_code: partyCode,
+      pass_id: pass.id,
+    });
+  } catch (error) {
+    console.error('Party pass webhook error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
+// Generate random question IDs for party games
+function generateRandomQuestionIds(count: number): number[] {
+  const totalQuestions = 400;
+  const ids: number[] = [];
+  const used = new Set<number>();
+
+  while (ids.length < count && ids.length < totalQuestions) {
+    const id = Math.floor(Math.random() * totalQuestions) + 1;
+    if (!used.has(id)) {
+      used.add(id);
+      ids.push(id);
+    }
+  }
+
+  return ids;
 }
