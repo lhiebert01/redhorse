@@ -4,11 +4,16 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { PASS_CONFIGS, PassType } from '@/types/party';
 
+// Filter pass types for different sections
+const PARTY_PASS_TYPES: PassType[] = ['day', 'weekend', 'festival'];
+const SOLO_PASS = PASS_CONFIGS['solo'];
+
 export default function PartyLandingPage() {
   const [selectedPass, setSelectedPass] = useState<PassType>('weekend');
   const [partyCode, setPartyCode] = useState('');
   const [showJoinForm, setShowJoinForm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSoloLoading, setIsSoloLoading] = useState(false);
 
   const handleHostClick = async () => {
     setIsLoading(true);
@@ -31,6 +36,30 @@ export default function PartyLandingPage() {
       console.error('Checkout error:', error);
       alert('Failed to start checkout. Please try again.');
       setIsLoading(false);
+    }
+  };
+
+  const handleSoloClick = async () => {
+    setIsSoloLoading(true);
+    try {
+      const response = await fetch('/api/party/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pass_type: 'solo' }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create checkout');
+      }
+
+      // Redirect to Stripe Checkout
+      window.location.href = data.checkout_url;
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('Failed to start checkout. Please try again.');
+      setIsSoloLoading(false);
     }
   };
 
@@ -72,7 +101,7 @@ export default function PartyLandingPage() {
             Multiplayer online trivia for your Chinese New Year (CNY) 2026 Party!
           </p>
 
-          <div className="flex justify-center gap-4 mt-4 text-sm">
+          <div className="flex flex-wrap justify-center gap-3 mt-4 text-sm">
             <span className="bg-red-900/50 px-3 py-1 rounded-full">
               🔥 400 Questions
             </span>
@@ -82,7 +111,57 @@ export default function PartyLandingPage() {
             <span className="bg-blue-900/50 px-3 py-1 rounded-full">
               👥 Up to 20 Players
             </span>
+            <span className="bg-purple-900/50 px-3 py-1 rounded-full">
+              🎯 Solo Play
+            </span>
           </div>
+        </div>
+
+        {/* SOLO PLAY - Featured Option */}
+        <div className="mb-8 bg-gradient-to-r from-purple-900/40 to-pink-900/40 border-2 border-purple-500 rounded-2xl p-6">
+          <div className="flex flex-col md:flex-row items-center gap-6">
+            <div className="text-center md:text-left flex-1">
+              <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
+                <span className="text-4xl">🎯</span>
+                <h2 className="text-2xl font-bold text-purple-300">SOLO PLAY</h2>
+                <span className="bg-purple-600 text-white text-xs px-2 py-1 rounded-full">NEW!</span>
+              </div>
+              <p className="text-gray-300 mb-3">
+                Play Fire Horse Trivia by yourself! Test your knowledge of Chinese Zodiac,
+                CNY traditions, and Fire Horse lore.
+              </p>
+              <div className="flex flex-wrap gap-2 justify-center md:justify-start text-sm text-gray-400">
+                <span>✓ 5 Games</span>
+                <span>•</span>
+                <span>✓ 20 Questions Each</span>
+                <span>•</span>
+                <span>✓ Timed or Manual</span>
+                <span>•</span>
+                <span>✓ 24 Hours Access</span>
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-purple-300 mb-2">{SOLO_PASS.priceDisplay}</div>
+              <button
+                onClick={handleSoloClick}
+                disabled={isSoloLoading}
+                className={`px-8 py-4 rounded-xl font-bold text-lg transition-all ${
+                  isSoloLoading
+                    ? 'bg-gray-600 cursor-not-allowed'
+                    : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 shadow-lg hover:shadow-purple-500/30'
+                }`}
+              >
+                {isSoloLoading ? 'Starting...' : 'PLAY SOLO →'}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="flex items-center gap-4 mb-8">
+          <div className="flex-1 h-px bg-gray-700"></div>
+          <span className="text-gray-500 text-sm">OR PLAY WITH FRIENDS</span>
+          <div className="flex-1 h-px bg-gray-700"></div>
         </div>
 
         {/* Two Paths: Host or Join */}
@@ -109,7 +188,7 @@ export default function PartyLandingPage() {
               </div>
             </div>
             <div className="space-y-3 mb-6">
-              {(Object.keys(PASS_CONFIGS) as PassType[]).map((type) => {
+              {PARTY_PASS_TYPES.map((type) => {
                 const pass = PASS_CONFIGS[type];
                 const isSelected = selectedPass === type;
                 return (

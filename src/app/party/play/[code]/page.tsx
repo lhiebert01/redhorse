@@ -149,6 +149,7 @@ export default function PlayerGamePage() {
           ...prev,
           status: 'playing',
           current_question_index: data.question_index,
+          timer_seconds: data.timer_seconds, // IMPORTANT: Update timer setting
         }));
       })
       .on('broadcast', { event: 'question_end' }, () => {
@@ -306,8 +307,13 @@ export default function PlayerGamePage() {
         // Check if API returned an error
         if (!response.ok || data.error) {
           console.error('[PLAYER] API error:', data.error || response.statusText);
-          // Show error to user for debugging
-          alert(`Answer submission error: ${data.error || response.statusText}\n\nQuestion ID: ${currentQuestion.id}\nAnswer: ${answer}`);
+          // For "already answered" errors, just ignore silently - answer is already recorded
+          if (data.error?.includes('Already answered')) {
+            console.log('[PLAYER] Already answered - ignoring duplicate submission');
+            return;
+          }
+          // For other errors, log but don't disrupt the user
+          console.error('[PLAYER] Answer error:', data.error);
           return;
         }
 
@@ -325,7 +331,7 @@ export default function PlayerGamePage() {
         }
       } catch (error) {
         console.error('[PLAYER] Failed to submit answer:', error);
-        alert('Failed to submit answer: ' + (error instanceof Error ? error.message : 'Unknown error'));
+        // Don't disrupt user with alert - just log the error
       }
     },
     [selectedAnswer, currentQuestion, playerState, questionStartTime, gameState.current_question_index]
@@ -478,15 +484,6 @@ export default function PlayerGamePage() {
               </div>
             </div>
 
-            {/* DEBUG PANEL - Remove after debugging */}
-            <div className="bg-purple-900/50 border border-purple-500 rounded-lg p-2 mb-3 text-xs">
-              <div className="font-bold text-purple-300 mb-1">DEBUG INFO:</div>
-              <div>Question ID: <span className="text-yellow-400 font-mono">{currentQuestion.id}</span></div>
-              <div>Game ID: <span className="text-yellow-400 font-mono">{playerState?.game_id?.slice(0, 8)}...</span></div>
-              <div>Q Index: <span className="text-yellow-400 font-mono">{gameState.current_question_index}</span></div>
-              <div>Options: <span className="text-gray-400">{currentQuestion.options.join(' | ')}</span></div>
-            </div>
-
             {/* Answer Buttons */}
             <div className="grid grid-cols-2 gap-3 mb-4">
               {currentQuestion.options.map((option, index) => {
@@ -521,7 +518,7 @@ export default function PlayerGamePage() {
               })}
             </div>
 
-            {/* Feedback */}
+            {/* Feedback - shown immediately after answering */}
             {selectedAnswer && (
               <div
                 className={`p-4 rounded-xl text-center ${
@@ -534,35 +531,31 @@ export default function PlayerGamePage() {
               >
                 {isCorrect === true ? (
                   <>
-                    <div className="text-4xl mb-2">✅</div>
+                    <div className="text-4xl mb-2">🎉</div>
                     <div className="text-2xl font-bold text-green-400">
                       +{pointsEarned} points!
                     </div>
                     {currentStreak >= 3 && (
-                      <div className="text-xl text-yellow-400">
+                      <div className="text-lg text-yellow-400">
                         🔥 {currentStreak} streak!
                       </div>
                     )}
                   </>
                 ) : isCorrect === false ? (
                   <>
-                    <div className="text-4xl mb-2">❌</div>
-                    <div className="text-2xl font-bold text-red-400">
-                      Wrong answer
+                    <div className="text-4xl mb-2">😔</div>
+                    <div className="text-xl font-bold text-red-400">
+                      Waiting for answer reveal...
                     </div>
                   </>
                 ) : (
                   <>
                     <div className="text-4xl mb-2">⏳</div>
-                    <div className="text-2xl font-bold text-yellow-400">
-                      Waiting for response...
+                    <div className="text-xl font-bold text-yellow-400">
+                      Answer submitted...
                     </div>
                   </>
                 )}
-                {/* Debug: Show what was submitted */}
-                <div className="mt-2 text-xs text-gray-400 border-t border-gray-600 pt-2">
-                  Selected: &quot;{selectedAnswer}&quot; | isCorrect: {String(isCorrect)}
-                </div>
               </div>
             )}
 
@@ -628,51 +621,64 @@ export default function PlayerGamePage() {
               })}
             </div>
 
-            {/* Correct Answer Box */}
-            <div className="bg-gradient-to-r from-green-900/50 to-emerald-900/50 rounded-xl p-4 mb-4 border-2 border-green-500">
-              <div className="text-center">
-                <div className="text-sm text-green-300 font-bold mb-1">✅ CORRECT ANSWER</div>
-                <div className="text-2xl font-bold text-white mb-2">
-                  {correctAnswer}
-                </div>
-                {explanation && (
-                  <div className="bg-black/30 rounded-lg p-3 mt-2">
-                    <div className="text-sm text-gray-300">
-                      💡 <span className="text-yellow-300">Why?</span> {explanation}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Your Result */}
+            {/* YOUR RESULT - Single combined box for clarity */}
             <div
-              className={`p-4 rounded-xl text-center mb-4 ${
+              className={`p-5 rounded-xl text-center mb-4 ${
                 isCorrect
-                  ? 'bg-green-900/50 border-2 border-green-500'
+                  ? 'bg-gradient-to-b from-green-800/80 to-green-900/80 border-2 border-green-400'
                   : selectedAnswer
-                  ? 'bg-red-900/50 border-2 border-red-500'
-                  : 'bg-gray-900/50 border-2 border-gray-600'
+                  ? 'bg-gradient-to-b from-red-800/80 to-red-900/80 border-2 border-red-400'
+                  : 'bg-gradient-to-b from-gray-700/80 to-gray-800/80 border-2 border-gray-500'
               }`}
             >
+              {/* Result Icon & Text */}
               {isCorrect ? (
                 <>
-                  <div className="text-3xl font-bold text-green-400">
-                    ✅ CORRECT! +{pointsEarned}
+                  <div className="text-5xl mb-2">🎉</div>
+                  <div className="text-3xl font-bold text-green-400 mb-1">
+                    YOU GOT IT!
+                  </div>
+                  <div className="text-2xl font-bold text-yellow-400">
+                    +{pointsEarned} points
                   </div>
                 </>
               ) : selectedAnswer ? (
                 <>
-                  <div className="text-3xl font-bold text-red-400">
-                    ❌ WRONG
+                  <div className="text-5xl mb-2">😔</div>
+                  <div className="text-3xl font-bold text-red-400 mb-3">
+                    NOT QUITE
+                  </div>
+                  {/* Show what the correct answer was */}
+                  <div className="bg-black/40 rounded-lg p-3 mt-2">
+                    <div className="text-sm text-gray-400 mb-1">The answer was:</div>
+                    <div className="text-xl font-bold text-green-400">
+                      {correctAnswer}
+                    </div>
                   </div>
                 </>
               ) : (
                 <>
-                  <div className="text-2xl font-bold text-gray-400">
-                    ⏰ TIME'S UP!
+                  <div className="text-5xl mb-2">⏰</div>
+                  <div className="text-2xl font-bold text-gray-300 mb-3">
+                    TIME&apos;S UP!
+                  </div>
+                  {/* Show what the correct answer was */}
+                  <div className="bg-black/40 rounded-lg p-3 mt-2">
+                    <div className="text-sm text-gray-400 mb-1">The answer was:</div>
+                    <div className="text-xl font-bold text-green-400">
+                      {correctAnswer}
+                    </div>
                   </div>
                 </>
+              )}
+
+              {/* Explanation if available */}
+              {explanation && (
+                <div className="bg-black/30 rounded-lg p-3 mt-3 border-t border-gray-600">
+                  <div className="text-sm text-gray-300">
+                    💡 {explanation}
+                  </div>
+                </div>
               )}
             </div>
 

@@ -48,13 +48,14 @@ export async function POST(request: NextRequest) {
 
     // IMPORTANT: Convert question_index to number to handle type mismatches from JSON
     const questionIndexNum = Number(question_index);
-    console.log('[ANSWER API] Game found, current_question_index:', game.current_question_index, 'submitted:', questionIndexNum, 'types:', typeof game.current_question_index, typeof question_index);
+    console.log('[ANSWER API] Game found, current_question_index:', game.current_question_index, 'submitted:', questionIndexNum);
 
-    // Verify this is the current question (use number comparison)
-    if (game.current_question_index !== questionIndexNum) {
-      console.log('[ANSWER API] Question index mismatch:', game.current_question_index, '!==', questionIndexNum);
+    // Check game is still accepting answers (playing or showing_answer status)
+    // We're more lenient here - as long as game is active and player hasn't answered this question yet
+    if (game.status === 'finished' || game.status === 'abandoned') {
+      console.log('[ANSWER API] Game is not active:', game.status);
       return NextResponse.json(
-        { error: 'This question has already ended' },
+        { error: 'This game has ended' },
         { status: 400 }
       );
     }

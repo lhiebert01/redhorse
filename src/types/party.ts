@@ -1,6 +1,6 @@
 // Types for Fire Horse Trivia Party Game
 
-export type PassType = 'day' | 'weekend' | 'festival';
+export type PassType = 'solo' | 'day' | 'weekend' | 'festival';
 export type GameStatus = 'lobby' | 'countdown' | 'playing' | 'showing_answer' | 'finished' | 'abandoned';
 
 // ============================================================
@@ -14,10 +14,23 @@ export interface PassConfig {
   priceDisplay: string;
   durationHours: number;
   maxGames: number;
+  maxPlayers: number; // 1 for solo, 20 for party passes
+  isSolo: boolean; // true for solo play (no host needed)
   description: string;
 }
 
 export const PASS_CONFIGS: Record<PassType, PassConfig> = {
+  solo: {
+    type: 'solo',
+    name: 'Solo Play Pass',
+    price: 288,
+    priceDisplay: '$2.88',
+    durationHours: 24,
+    maxGames: 5,
+    maxPlayers: 1,
+    isSolo: true,
+    description: '24 hours • 5 games • Solo play',
+  },
   day: {
     type: 'day',
     name: 'Day Pass',
@@ -25,6 +38,8 @@ export const PASS_CONFIGS: Record<PassType, PassConfig> = {
     priceDisplay: '$4.88',
     durationHours: 24,
     maxGames: 5,
+    maxPlayers: 20,
+    isSolo: false,
     description: '24 hours • 5 games • Up to 20 players',
   },
   weekend: {
@@ -34,6 +49,8 @@ export const PASS_CONFIGS: Record<PassType, PassConfig> = {
     priceDisplay: '$8.88',
     durationHours: 48,
     maxGames: 10,
+    maxPlayers: 20,
+    isSolo: false,
     description: '48 hours • 10 games • Up to 20 players',
   },
   festival: {
@@ -43,6 +60,8 @@ export const PASS_CONFIGS: Record<PassType, PassConfig> = {
     priceDisplay: '$14.88',
     durationHours: 72,
     maxGames: 15,
+    maxPlayers: 20,
+    isSolo: false,
     description: '72 hours • 15 games • Up to 20 players',
   },
 };
@@ -66,6 +85,7 @@ export interface PartyPass {
   question_sets: number[][]; // Pre-generated question sets for ALL games
   settings: GameSettings;
   is_active: boolean;
+  is_solo: boolean; // true for solo play passes
 }
 
 export interface GameSettings {

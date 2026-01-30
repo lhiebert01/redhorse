@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import { stripe } from '@/lib/stripe/client';
-import { PassType, generatePartyCode } from '@/types/party';
+import { PassType, generatePartyCode, PASS_CONFIGS } from '@/types/party';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -40,8 +40,10 @@ export async function POST(request: NextRequest) {
 
     try {
       const passType = session.metadata.pass_type as PassType;
-      const durationHours = parseInt(session.metadata.duration_hours || '24');
-      const maxGames = parseInt(session.metadata.max_games || '5');
+      const passConfig = PASS_CONFIGS[passType];
+      const durationHours = parseInt(session.metadata.duration_hours || String(passConfig?.durationHours || 24));
+      const maxGames = parseInt(session.metadata.max_games || String(passConfig?.maxGames || 5));
+      const isSolo = passConfig?.isSolo ?? false;
 
       // Generate unique party code
       let partyCode = generatePartyCode();
@@ -100,6 +102,7 @@ export async function POST(request: NextRequest) {
             questions_per_game: questionsPerGame,
           },
           is_active: true,
+          is_solo: isSolo, // Solo play passes don't need a host
         })
         .select()
         .single();
@@ -112,22 +115,25 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      console.log(`Party pass created: ${partyCode} (${passType}) with ${maxGames} pre-generated question sets`);
+      console.log(`Party pass created: ${partyCode} (${passType}${isSolo ? ', solo' : ''}) with ${maxGames} pre-generated question sets`);
 
-      // Create initial game in lobby state using the FIRST pre-generated set
-      const { error: gameError } = await supabase
-        .from('party_games')
-        .insert({
-          party_pass_id: pass.id,
-          timer_seconds: 30,
-          questions_per_game: questionsPerGame,
-          question_ids: questionSets[0], // Use first pre-generated set
-          game_number: 1, // Track which game number this is
-          status: 'lobby',
-        });
+      // For party passes (not solo), create initial game in lobby state
+      // Solo players create the game when they start playing
+      if (!isSolo) {
+        const { error: gameError } = await supabase
+          .from('party_games')
+          .insert({
+            party_pass_id: pass.id,
+            timer_seconds: 30,
+            questions_per_game: questionsPerGame,
+            question_ids: questionSets[0], // Use first pre-generated set
+            game_number: 1, // Track which game number this is
+            status: 'lobby',
+          });
 
-      if (gameError) {
-        console.error('Failed to create initial game:', gameError);
+        if (gameError) {
+          console.error('Failed to create initial game:', gameError);
+        }
       }
 
       return NextResponse.json({
