@@ -495,39 +495,62 @@ export default function HostConsolePage() {
   const endGame = useCallback(async () => {
     if (!game) return;
 
+    console.log('[END GAME] Starting endGame for game:', game.id);
+
     // Calculate final scores
-    const { data: answers } = await supabase
+    const { data: answers, error: answersError } = await supabase
       .from('party_answers')
       .select('player_id, total_points, is_correct, current_streak')
       .eq('party_game_id', game.id);
 
-    const { data: gamePlayers } = await supabase
+    console.log('[END GAME] Fetched answers:', answers?.length || 0, 'error:', answersError);
+
+    const { data: gamePlayers, error: playersError } = await supabase
       .from('party_players')
       .select('*')
       .eq('party_game_id', game.id);
 
-    if (answers && gamePlayers) {
+    console.log('[END GAME] Fetched players:', gamePlayers?.length || 0, 'error:', playersError);
+
+    // Calculate scores if we have players
+    let scores: Array<{
+      party_game_id: string;
+      player_id: string;
+      nickname: string;
+      zodiac_sign?: string;
+      zodiac_element?: string;
+      total_points: number;
+      correct_answers: number;
+      total_questions: number;
+      accuracy_percent: number;
+      best_streak: number;
+      rank: number;
+    }> = [];
+
+    if (gamePlayers && gamePlayers.length > 0) {
       // Aggregate scores per player
       const scoreMap = new Map<
         string,
         { total: number; correct: number; streak: number }
       >();
 
-      answers.forEach((ans) => {
-        const current = scoreMap.get(ans.player_id) || {
-          total: 0,
-          correct: 0,
-          streak: 0,
-        };
-        scoreMap.set(ans.player_id, {
-          total: current.total + ans.total_points,
-          correct: current.correct + (ans.is_correct ? 1 : 0),
-          streak: Math.max(current.streak, ans.current_streak),
+      if (answers) {
+        answers.forEach((ans) => {
+          const current = scoreMap.get(ans.player_id) || {
+            total: 0,
+            correct: 0,
+            streak: 0,
+          };
+          scoreMap.set(ans.player_id, {
+            total: current.total + ans.total_points,
+            correct: current.correct + (ans.is_correct ? 1 : 0),
+            streak: Math.max(current.streak, ans.current_streak),
+          });
         });
-      });
+      }
 
       // Create score entries with rankings
-      const scores = gamePlayers
+      scores = gamePlayers
         .map((p) => {
           const stats = scoreMap.get(p.id) || { total: 0, correct: 0, streak: 0 };
           return {
@@ -552,40 +575,55 @@ export default function HostConsolePage() {
       });
 
       // Insert scores
-      await supabase.from('party_scores').insert(scores);
-
-      // Update game status
-      await supabase
-        .from('party_games')
-        .update({ status: 'finished', ended_at: new Date().toISOString() })
-        .eq('id', game.id);
-
-      // Decrement games remaining
-      await supabase
-        .from('party_passes')
-        .update({ games_remaining: (pass?.games_remaining || 1) - 1 })
-        .eq('id', pass?.id);
-
-      setGame((prev) => (prev ? { ...prev, status: 'finished' } : null));
-
-      // Broadcast game end with zodiac info
-      const channel = supabase.channel(`party:${partyCode}`);
-      await channel.send({
-        type: 'broadcast',
-        event: 'game_end',
-        payload: {
-          game_id: game.id,
-          scores: scores.map((s) => ({
-            nickname: s.nickname,
-            total_points: s.total_points,
-            rank: s.rank,
-            player_id: s.player_id,
-            zodiac_sign: s.zodiac_sign,
-            zodiac_element: s.zodiac_element,
-          })),
-        },
-      });
+      console.log('[END GAME] Inserting scores:', scores.length, 'entries');
+      const { error: scoresError } = await supabase.from('party_scores').insert(scores);
+      if (scoresError) {
+        console.error('[END GAME] Failed to insert scores:', scoresError);
+      } else {
+        console.log('[END GAME] Scores inserted successfully');
+      }
+    } else {
+      console.log('[END GAME] No players found, skipping scores insertion');
     }
+
+    // ALWAYS update game status to finished
+    console.log('[END GAME] Updating game status to finished for game:', game.id);
+    const { error: updateError } = await supabase
+      .from('party_games')
+      .update({ status: 'finished', ended_at: new Date().toISOString() })
+      .eq('id', game.id);
+
+    if (updateError) {
+      console.error('[END GAME] Failed to update game status:', updateError);
+    } else {
+      console.log('[END GAME] Game status updated to finished');
+    }
+
+    // Decrement games remaining
+    await supabase
+      .from('party_passes')
+      .update({ games_remaining: (pass?.games_remaining || 1) - 1 })
+      .eq('id', pass?.id);
+
+    setGame((prev) => (prev ? { ...prev, status: 'finished' } : null));
+
+    // Broadcast game end
+    const channel = supabase.channel(`party:${partyCode}`);
+    await channel.send({
+      type: 'broadcast',
+      event: 'game_end',
+      payload: {
+        game_id: game.id,
+        scores: scores.map((s) => ({
+          nickname: s.nickname,
+          total_points: s.total_points,
+          rank: s.rank,
+          player_id: s.player_id,
+          zodiac_sign: s.zodiac_sign,
+          zodiac_element: s.zodiac_element,
+        })),
+      },
+    });
   }, [game, pass, partyCode]);
 
   // Loading state
