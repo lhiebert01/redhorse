@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
-import { PassType, generatePartyCode, PASS_CONFIGS } from '@/types/party';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-01-27.acacia',
-});
+import { stripe } from '@/lib/stripe/client';
+import { PassType, generatePartyCode } from '@/types/party';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
