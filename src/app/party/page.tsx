@@ -184,8 +184,8 @@ export default function PartyLandingPage() {
               <h2 className="text-2xl font-bold mt-2 text-blue-400">
                 JOIN A PARTY
               </h2>
-              <p className="text-gray-400 text-sm mt-1">
-                Free to play! Just enter the party code
+              <p className="text-gray-300 text-sm mt-1">
+                Free to play! Just enter the party code that your HOST has sent to you or the Invite you received
               </p>
             </div>
 
