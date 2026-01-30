@@ -76,16 +76,36 @@ export async function POST(request: NextRequest) {
     // Get the correct answer from question bank
     const question = PARTY_QUESTIONS.find((q) => q.id === question_id);
     if (!question) {
-      console.log('[ANSWER API] Question not found in bank:', question_id);
+      console.log('[ANSWER API] Question not found in bank:', question_id, 'typeof:', typeof question_id);
+      console.log('[ANSWER API] Available question IDs (first 10):', PARTY_QUESTIONS.slice(0, 10).map(q => q.id));
       return NextResponse.json(
         { error: 'Question not found' },
         { status: 404 }
       );
     }
 
-    console.log('[ANSWER API] Question found:', { id: question.id, correctAnswer: question.correctAnswer, answer_given });
-    const isCorrect = answer_given === question.correctAnswer;
-    console.log('[ANSWER API] Is correct:', isCorrect);
+    // Detailed logging for debugging
+    console.log('[ANSWER API] Question found:', {
+      id: question.id,
+      questionText: question.question.substring(0, 50),
+      options: question.options,
+      correctAnswer: question.correctAnswer,
+      answer_given: answer_given,
+    });
+
+    // Trim whitespace and compare
+    const trimmedAnswer = String(answer_given).trim();
+    const trimmedCorrect = String(question.correctAnswer).trim();
+    const isCorrect = trimmedAnswer === trimmedCorrect;
+
+    console.log('[ANSWER API] Comparison:', {
+      trimmedAnswer,
+      trimmedCorrect,
+      isCorrect,
+      answerLength: trimmedAnswer.length,
+      correctLength: trimmedCorrect.length,
+      exactMatch: answer_given === question.correctAnswer,
+    });
 
     // Get current streak (count previous correct answers in a row)
     const { data: previousAnswers } = await supabase

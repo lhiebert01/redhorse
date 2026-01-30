@@ -259,7 +259,7 @@ export default function HostConsolePage() {
     [game, partyCode, selectedTimer]
   );
 
-  // Handle question end (timer expired or manual)
+  // Handle question end (timer expired) - just stops accepting answers
   const handleQuestionEnd = useCallback(async () => {
     if (!game || !currentQuestion) return;
 
@@ -279,6 +279,112 @@ export default function HostConsolePage() {
       type: 'broadcast',
       event: 'question_end',
       payload: { question_index: game.current_question_index },
+    });
+  }, [game, currentQuestion, partyCode]);
+
+  // Handle manual mode: end question AND immediately show answer
+  const handleEndAndShowAnswer = useCallback(async () => {
+    if (!game || !currentQuestion) return;
+
+    setTimerActive(false);
+
+    // Update game status
+    await supabase
+      .from('party_games')
+      .update({ status: 'showing_answer' })
+      .eq('id', game.id);
+
+    setGame((prev) => (prev ? { ...prev, status: 'showing_answer' } : null));
+
+    // Broadcast question end
+    const channel = supabase.channel(`party:${partyCode}`);
+    await channel.send({
+      type: 'broadcast',
+      event: 'question_end',
+      payload: { question_index: game.current_question_index },
+    });
+
+    // Small delay to ensure question_end is processed
+    await new Promise((r) => setTimeout(r, 100));
+
+    // Now show the answer
+    setShowingAnswer(true);
+
+    // Get answer stats for this question
+    const { data: questionAnswers } = await supabase
+      .from('party_answers')
+      .select('*')
+      .eq('party_game_id', game.id)
+      .eq('question_index', game.current_question_index);
+
+    let distribution: Record<string, number> = {};
+    let correctCount = 0;
+
+    if (questionAnswers) {
+      questionAnswers.forEach((ans) => {
+        distribution[ans.answer_given] = (distribution[ans.answer_given] || 0) + 1;
+        if (ans.is_correct) correctCount++;
+      });
+
+      setAnswerStats({
+        total: questionAnswers.length,
+        correct: correctCount,
+        distribution,
+      });
+    }
+
+    // Calculate leaderboard from ALL answers so far
+    const { data: allAnswers } = await supabase
+      .from('party_answers')
+      .select('player_id, total_points')
+      .eq('party_game_id', game.id);
+
+    const { data: gamePlayers } = await supabase
+      .from('party_players')
+      .select('id, nickname, zodiac_sign, zodiac_element')
+      .eq('party_game_id', game.id);
+
+    let leaderboardData: LeaderboardEntry[] = [];
+
+    if (allAnswers && gamePlayers) {
+      const pointsMap = new Map<string, number>();
+      allAnswers.forEach((ans) => {
+        pointsMap.set(ans.player_id, (pointsMap.get(ans.player_id) || 0) + ans.total_points);
+      });
+
+      leaderboardData = gamePlayers
+        .map((p) => ({
+          player_id: p.id,
+          nickname: p.nickname,
+          total_points: pointsMap.get(p.id) || 0,
+          zodiac_sign: p.zodiac_sign || undefined,
+          zodiac_element: p.zodiac_element || undefined,
+          rank: 0,
+        }))
+        .sort((a, b) => b.total_points - a.total_points);
+
+      leaderboardData.forEach((entry, i) => {
+        entry.rank = i + 1;
+      });
+
+      setLeaderboard(leaderboardData);
+    }
+
+    // Broadcast answer reveal WITH leaderboard
+    await channel.send({
+      type: 'broadcast',
+      event: 'show_answer',
+      payload: {
+        question_index: game.current_question_index,
+        correct_answer: currentQuestion.correctAnswer,
+        explanation: currentQuestion.explanation,
+        stats: {
+          total: questionAnswers?.length || 0,
+          correct: correctCount,
+          distribution,
+        },
+        leaderboard: leaderboardData,
+      },
     });
   }, [game, currentQuestion, partyCode]);
 
@@ -789,17 +895,27 @@ export default function HostConsolePage() {
 
               {/* Control Buttons */}
               <div className="flex gap-4">
-                {/* Show End Question button in timed mode with active timer OR in manual mode */}
-                {!showingAnswer && (timerActive || selectedTimer === 0) && (
+                {/* Manual mode: End Question & Show Answer in one step */}
+                {!showingAnswer && selectedTimer === 0 && (
+                  <button
+                    onClick={handleEndAndShowAnswer}
+                    className="flex-1 py-4 bg-green-600 hover:bg-green-500 rounded-xl font-bold text-lg"
+                  >
+                    End Question & Show Answer
+                  </button>
+                )}
+
+                {/* Timed mode with active timer: End Question Early */}
+                {!showingAnswer && timerActive && selectedTimer > 0 && (
                   <button
                     onClick={handleQuestionEnd}
                     className="flex-1 py-4 bg-orange-600 hover:bg-orange-500 rounded-xl font-bold text-lg"
                   >
-                    {selectedTimer === 0 ? 'End Question & Show Answer' : 'End Question Early'}
+                    End Question Early
                   </button>
                 )}
 
-                {/* Show Answer button after timer ends (timed mode only) */}
+                {/* Timed mode after timer ends: Show Answer */}
                 {!showingAnswer && !timerActive && selectedTimer > 0 && (
                   <button
                     onClick={showAnswer}
