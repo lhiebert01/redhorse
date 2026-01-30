@@ -809,66 +809,120 @@ export default function HostConsolePage() {
     });
   }, [pass, game, usedQuestionIds, selectedTimer, partyCode]);
 
+  // Loading state for Start Fresh button
+  const [isStartingFresh, setIsStartingFresh] = useState(false);
+
   // Abandon current game and start fresh with new random questions
   // This does NOT count against games_remaining (it's a reset, not a completed game)
+  // Questions are unique - excludes all questions used in previous games for this party
   const abandonAndStartFresh = useCallback(async () => {
-    if (!pass || !game) return;
-
-    console.log('[ABANDON] Abandoning current game and starting fresh');
-
-    // Mark current game as abandoned (not finished - doesn't count against games_remaining)
-    await supabase
-      .from('party_games')
-      .update({ status: 'abandoned' })
-      .eq('id', game.id);
-
-    // Generate completely new random questions (don't exclude old ones since we're starting fresh)
-    const questionsPerGame = 20;
-    const newQuestionIds = generateRandomQuestionIds(questionsPerGame, []);
-
-    console.log('[ABANDON] New random question IDs:', newQuestionIds.slice(0, 5), '...');
-
-    // Create new game in database
-    const { data: newGame, error: createError } = await supabase
-      .from('party_games')
-      .insert({
-        party_pass_id: pass.id,
-        timer_seconds: selectedTimer,
-        questions_per_game: questionsPerGame,
-        question_ids: newQuestionIds,
-        status: 'lobby',
-      })
-      .select()
-      .single();
-
-    if (createError) {
-      console.error('[ABANDON] Failed to create new game:', createError);
-      alert('Failed to create new game. Please try again.');
+    if (!pass) {
+      alert('Error: No party pass found. Please refresh the page.');
       return;
     }
 
-    console.log('[ABANDON] New game created:', newGame.id);
+    setIsStartingFresh(true);
 
-    // Reset all game state
-    setGame(newGame);
-    setUsedQuestionIds(newQuestionIds);
-    setCurrentQuestion(null);
-    setAnswerStats(null);
-    setShowingAnswer(false);
-    setLeaderboard([]);
-    setTimeRemaining(selectedTimer || 30);
-    setTimerActive(false);
+    try {
+      console.log('[START FRESH] Starting fresh game for party:', partyCode);
 
-    // Broadcast that a new game is starting
-    const channel = supabase.channel(`party:${partyCode}`);
-    await channel.send({
-      type: 'broadcast',
-      event: 'new_game',
-      payload: {
-        game_id: newGame.id,
-        message: 'Host started a fresh game with new questions!',
-      },
-    });
+      // Step 1: Mark current game as abandoned (if exists)
+      if (game?.id) {
+        const { error: abandonError } = await supabase
+          .from('party_games')
+          .update({ status: 'abandoned' })
+          .eq('id', game.id);
+
+        if (abandonError) {
+          console.error('[START FRESH] Failed to abandon old game:', abandonError);
+        } else {
+          console.log('[START FRESH] Old game marked as abandoned:', game.id);
+        }
+      }
+
+      // Step 2: Get ALL question IDs from ALL previous games for this party pass
+      // This ensures we don't repeat questions across games
+      const { data: previousGames, error: fetchGamesError } = await supabase
+        .from('party_games')
+        .select('question_ids')
+        .eq('party_pass_id', pass.id);
+
+      if (fetchGamesError) {
+        console.error('[START FRESH] Failed to fetch previous games:', fetchGamesError);
+      }
+
+      // Collect all used question IDs
+      const allUsedQuestionIds: number[] = [];
+      if (previousGames) {
+        previousGames.forEach((g) => {
+          if (g.question_ids && Array.isArray(g.question_ids)) {
+            allUsedQuestionIds.push(...g.question_ids);
+          }
+        });
+      }
+
+      console.log('[START FRESH] Total questions used in previous games:', allUsedQuestionIds.length);
+
+      // Step 3: Generate NEW random questions, excluding previously used ones
+      const questionsPerGame = 20;
+      const newQuestionIds = generateRandomQuestionIds(questionsPerGame, allUsedQuestionIds);
+
+      console.log('[START FRESH] New question IDs:', newQuestionIds);
+
+      // Step 4: Create new game in database
+      const { data: newGameData, error: createError } = await supabase
+        .from('party_games')
+        .insert({
+          party_pass_id: pass.id,
+          timer_seconds: selectedTimer,
+          questions_per_game: questionsPerGame,
+          question_ids: newQuestionIds,
+          current_question_index: 0,
+          status: 'lobby',
+        })
+        .select()
+        .single();
+
+      if (createError || !newGameData) {
+        console.error('[START FRESH] Failed to create new game:', createError);
+        alert('Failed to create new game: ' + (createError?.message || 'Unknown error'));
+        setIsStartingFresh(false);
+        return;
+      }
+
+      console.log('[START FRESH] New game created:', newGameData.id);
+      console.log('[START FRESH] First 5 question IDs:', newGameData.question_ids?.slice(0, 5));
+
+      // Step 5: Update all local state
+      setGame(newGameData);
+      setUsedQuestionIds([...allUsedQuestionIds, ...newQuestionIds]);
+      setCurrentQuestion(null);
+      setAnswerStats(null);
+      setShowingAnswer(false);
+      setLeaderboard([]);
+      setTimeRemaining(selectedTimer || 30);
+      setTimerActive(false);
+      setCountdown(null);
+
+      // Step 6: Broadcast to players
+      const channel = supabase.channel(`party:${partyCode}`);
+      await channel.send({
+        type: 'broadcast',
+        event: 'new_game',
+        payload: {
+          game_id: newGameData.id,
+          message: 'Host started a fresh game with new questions!',
+        },
+      });
+
+      alert(`✅ New game created with ${questionsPerGame} fresh random questions!\n\nQuestion IDs: ${newQuestionIds.slice(0, 5).join(', ')}...`);
+
+    } catch (err) {
+      console.error('[START FRESH] Unexpected error:', err);
+      alert('An unexpected error occurred. Please try refreshing the page.');
+    } finally {
+      setIsStartingFresh(false);
+    }
   }, [pass, game, selectedTimer, partyCode]);
 
   // Loading state
@@ -1081,12 +1135,17 @@ export default function HostConsolePage() {
             {/* Start Fresh Button - Get new random questions */}
             <button
               onClick={abandonAndStartFresh}
-              className="w-full mt-4 py-3 bg-gradient-to-r from-purple-700 to-purple-600 hover:from-purple-600 hover:to-purple-500 rounded-xl font-bold text-lg transition-all"
+              disabled={isStartingFresh}
+              className={`w-full mt-4 py-4 rounded-xl font-bold text-xl transition-all ${
+                isStartingFresh
+                  ? 'bg-gray-600 cursor-wait'
+                  : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 shadow-lg hover:shadow-purple-500/30'
+              }`}
             >
-              🔄 START FRESH — Get New Random Questions
+              {isStartingFresh ? '⏳ Creating New Game...' : '🔄 START FRESH — New Random Questions'}
             </button>
-            <p className="text-center text-xs text-gray-500 mt-2">
-              Don&apos;t like these questions? Click above to get a completely new set.
+            <p className="text-center text-sm text-yellow-400 mt-2 font-medium">
+              ⬆️ Click above to get 20 NEW random questions (excludes previously used)
             </p>
 
             {/* Debug: Show current question IDs */}
@@ -1290,9 +1349,14 @@ export default function HostConsolePage() {
               <div className="mt-6 pt-4 border-t border-gray-700">
                 <button
                   onClick={abandonAndStartFresh}
-                  className="w-full py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm text-gray-300"
+                  disabled={isStartingFresh}
+                  className={`w-full py-3 rounded-lg font-bold transition-all ${
+                    isStartingFresh
+                      ? 'bg-gray-600 cursor-wait text-gray-400'
+                      : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white'
+                  }`}
                 >
-                  🔄 Abandon This Game & Start Fresh with New Questions
+                  {isStartingFresh ? '⏳ Creating New Game...' : '🔄 END THIS GAME — Start Fresh with New Questions'}
                 </button>
               </div>
             </div>
