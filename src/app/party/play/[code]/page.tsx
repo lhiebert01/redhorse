@@ -282,42 +282,50 @@ export default function PlayerGamePage() {
       const answerTimeMs = Date.now() - questionStartTime;
       setSelectedAnswer(answer);
 
+      // Debug: Log what we're sending
+      const requestData = {
+        game_id: playerState.game_id,
+        player_id: playerState.player_id,
+        question_index: gameState.current_question_index,
+        question_id: currentQuestion.id,
+        answer_given: answer,
+        answer_time_ms: answerTimeMs,
+      };
+      console.log('[PLAYER] Submitting answer:', requestData);
+
       try {
         const response = await fetch('/api/party/answer', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            game_id: playerState.game_id,
-            player_id: playerState.player_id,
-            question_index: gameState.current_question_index,
-            question_id: currentQuestion.id,
-            answer_given: answer,
-            answer_time_ms: answerTimeMs,
-          }),
+          body: JSON.stringify(requestData),
         });
 
         const data = await response.json();
+        console.log('[PLAYER] API response:', { status: response.status, data });
 
         // Check if API returned an error
         if (!response.ok || data.error) {
-          console.error('[ANSWER] API error:', data.error || response.statusText);
-          // Don't mark as wrong for API errors - leave isCorrect as null
-          // The correct answer will be shown when host reveals
+          console.error('[PLAYER] API error:', data.error || response.statusText);
+          // Show error to user for debugging
+          alert(`Answer submission error: ${data.error || response.statusText}\n\nQuestion ID: ${currentQuestion.id}\nAnswer: ${answer}`);
           return;
         }
 
         // Only process if we got a valid response with is_correct field
         if (data.is_correct === true) {
+          console.log('[PLAYER] Correct! Points:', data.total_points);
           setIsCorrect(true);
           setPointsEarned(data.total_points);
           setCurrentStreak(data.current_streak);
           setTotalPoints((prev) => prev + data.total_points);
         } else if (data.is_correct === false) {
+          console.log('[PLAYER] Wrong! Correct answer was:', data.correct_answer);
           setIsCorrect(false);
           setCurrentStreak(0);
         }
       } catch (error) {
-        console.error('Failed to submit answer:', error);
+        console.error('[PLAYER] Failed to submit answer:', error);
+        alert('Failed to submit answer: ' + (error instanceof Error ? error.message : 'Unknown error'));
       }
     },
     [selectedAnswer, currentQuestion, playerState, questionStartTime, gameState.current_question_index]
@@ -470,6 +478,15 @@ export default function PlayerGamePage() {
               </div>
             </div>
 
+            {/* DEBUG PANEL - Remove after debugging */}
+            <div className="bg-purple-900/50 border border-purple-500 rounded-lg p-2 mb-3 text-xs">
+              <div className="font-bold text-purple-300 mb-1">DEBUG INFO:</div>
+              <div>Question ID: <span className="text-yellow-400 font-mono">{currentQuestion.id}</span></div>
+              <div>Game ID: <span className="text-yellow-400 font-mono">{playerState?.game_id?.slice(0, 8)}...</span></div>
+              <div>Q Index: <span className="text-yellow-400 font-mono">{gameState.current_question_index}</span></div>
+              <div>Options: <span className="text-gray-400">{currentQuestion.options.join(' | ')}</span></div>
+            </div>
+
             {/* Answer Buttons */}
             <div className="grid grid-cols-2 gap-3 mb-4">
               {currentQuestion.options.map((option, index) => {
@@ -508,12 +525,14 @@ export default function PlayerGamePage() {
             {selectedAnswer && (
               <div
                 className={`p-4 rounded-xl text-center ${
-                  isCorrect
+                  isCorrect === true
                     ? 'bg-green-900/50 border-2 border-green-500'
-                    : 'bg-red-900/50 border-2 border-red-500'
+                    : isCorrect === false
+                    ? 'bg-red-900/50 border-2 border-red-500'
+                    : 'bg-yellow-900/50 border-2 border-yellow-500'
                 }`}
               >
-                {isCorrect ? (
+                {isCorrect === true ? (
                   <>
                     <div className="text-4xl mb-2">✅</div>
                     <div className="text-2xl font-bold text-green-400">
@@ -525,14 +544,25 @@ export default function PlayerGamePage() {
                       </div>
                     )}
                   </>
-                ) : (
+                ) : isCorrect === false ? (
                   <>
                     <div className="text-4xl mb-2">❌</div>
                     <div className="text-2xl font-bold text-red-400">
                       Wrong answer
                     </div>
                   </>
+                ) : (
+                  <>
+                    <div className="text-4xl mb-2">⏳</div>
+                    <div className="text-2xl font-bold text-yellow-400">
+                      Waiting for response...
+                    </div>
+                  </>
                 )}
+                {/* Debug: Show what was submitted */}
+                <div className="mt-2 text-xs text-gray-400 border-t border-gray-600 pt-2">
+                  Selected: &quot;{selectedAnswer}&quot; | isCorrect: {String(isCorrect)}
+                </div>
               </div>
             )}
 

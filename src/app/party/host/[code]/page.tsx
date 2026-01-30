@@ -1202,6 +1202,15 @@ export default function HostConsolePage() {
                 </div>
               )}
 
+              {/* DEBUG PANEL - Remove after debugging */}
+              <div className="bg-purple-900/50 border border-purple-500 rounded-lg p-2 mb-4 text-xs">
+                <div className="font-bold text-purple-300 mb-1">HOST DEBUG INFO:</div>
+                <div>Question ID: <span className="text-yellow-400 font-mono">{currentQuestion.id}</span></div>
+                <div>Correct Answer: <span className="text-green-400 font-mono">{currentQuestion.correctAnswer}</span></div>
+                <div>Q Index: <span className="text-yellow-400 font-mono">{game.current_question_index}</span></div>
+                <div>Game ID: <span className="text-yellow-400 font-mono">{game.id.slice(0, 8)}...</span></div>
+              </div>
+
               {/* Category Badge */}
               <div className="text-center mb-4">
                 <span className="bg-gray-800 px-4 py-1 rounded-full text-sm text-gray-400">
