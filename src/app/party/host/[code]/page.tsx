@@ -5,7 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@supabase/supabase-js';
 import { PARTY_QUESTIONS } from '@/constants/party-questions';
-import { Confetti, Fireworks } from '@/components/party/Celebration';
+import { Confetti, Fireworks, BouncingHorse } from '@/components/party/Celebration';
 import {
   PartyPass,
   PartyGame,
@@ -1490,22 +1490,29 @@ export default function HostConsolePage() {
 
         {/* FINISHED */}
         {game?.status === 'finished' && (
-          <div className="text-center relative">
-            {/* Celebration Animation */}
-            {showCelebration && (
-              celebrationType === 'confetti' ? <Confetti count={150} /> : <Fireworks />
-            )}
+          <div className="flex gap-6">
+            {/* Main Content */}
+            <div className="flex-1 text-center relative">
+              {/* Celebration Animation - 2.5x longer */}
+              {showCelebration && (
+                celebrationType === 'confetti' ? <Confetti count={200} durationMultiplier={2.5} /> : <Fireworks />
+              )}
 
-            {/* Celebration Header */}
-            <div className="mb-6">
-              <div className="text-7xl mb-4 animate-bounce">🎉🐴🎉</div>
-              <h2 className="text-4xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-400 to-yellow-400">
-                Game Complete!
-              </h2>
-              <p className="text-xl text-yellow-300">
-                Great job, everyone! 🔥
-              </p>
-            </div>
+              {/* Celebration Header with Bouncing Fire Horse + Rotating Messages */}
+              <div className="mb-6">
+                <BouncingHorse
+                  size="large"
+                  showRotatingMessages={true}
+                  showShareButton={true}
+                  partyCode={partyCode}
+                />
+                <h2 className="text-4xl font-bold mb-2 mt-4 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-400 to-yellow-400">
+                  Game Complete!
+                </h2>
+                <p className="text-xl text-yellow-300">
+                  Great job, everyone! 🔥
+                </p>
+              </div>
 
             {/* Final Leaderboard */}
             {leaderboard.length > 0 && (
@@ -1597,14 +1604,73 @@ export default function HostConsolePage() {
               >
                 Back to Party Home
               </Link>
-            </div>
 
-            {/* Thank You Message */}
-            <div className="mt-8 text-gray-400">
-              <p>Thank you for hosting Fire Horse Trivia! 🐴🔥</p>
-              <p className="text-sm mt-2">
-                May the Year of the Fire Horse bring you fortune!
-              </p>
+              {/* Cross-Promotion: Red Horse Oracle */}
+              <div className="mt-6 bg-gradient-to-r from-purple-900/40 to-red-900/40 rounded-xl p-4 border border-purple-500/30">
+                <div className="text-center">
+                  <p className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-red-400">
+                    🔮 Get Your 2026 Fire Horse Oracle
+                  </p>
+                  <p className="text-sm text-gray-300 mt-2">
+                    Only 888 Limited Edition prophecies per zodiac sign!
+                  </p>
+                  <Link
+                    href="/"
+                    className="inline-block mt-3 px-6 py-2 bg-gradient-to-r from-purple-600 to-red-600 hover:from-purple-500 hover:to-red-500 rounded-lg font-bold text-sm"
+                  >
+                    Discover Your Prophecy → $8.88
+                  </Link>
+                </div>
+              </div>
+
+              {/* Thank You Message */}
+              <div className="mt-6 text-gray-400">
+                <p>Thank you for hosting Fire Horse Trivia! 🐴🔥</p>
+                <p className="text-sm mt-2">
+                  May the Year of the Fire Horse bring you fortune!
+                </p>
+              </div>
+            </div>
+          </div>
+
+            {/* Sidebar Leaderboard - visible on large screens */}
+            <div className="w-64 hidden lg:block shrink-0">
+              <div className="bg-gray-900/70 rounded-xl p-4 sticky top-4">
+                <h3 className="text-lg font-bold mb-3 text-center text-yellow-400">🏆 Final Standings</h3>
+                <div className="space-y-2 max-h-[70vh] overflow-y-auto">
+                  {leaderboard.length > 0 ? (
+                    leaderboard.map((entry) => (
+                      <div
+                        key={entry.player_id}
+                        className={`p-2 rounded ${
+                          entry.rank === 1
+                            ? 'bg-gradient-to-r from-yellow-600/50 to-yellow-700/50 ring-2 ring-yellow-400'
+                            : entry.rank <= 3
+                            ? 'bg-yellow-900/30'
+                            : 'bg-gray-800/50'
+                        }`}
+                      >
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-gray-400 w-6">
+                              {entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : `${entry.rank}.`}
+                            </span>
+                            <span className="truncate max-w-[100px] font-medium">{entry.nickname}</span>
+                          </div>
+                          <span className="font-bold text-yellow-400 text-lg">{entry.total_points}</span>
+                        </div>
+                        {entry.zodiac_sign && (
+                          <div className="text-xs text-gray-400 ml-8">
+                            {entry.zodiac_element} {entry.zodiac_sign}
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-gray-500 text-center text-sm">No scores yet</p>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         )}

@@ -27,7 +27,7 @@ const CONFETTI_COLORS = [
   '#FF61A6', // Pink
 ];
 
-export function Confetti({ count = 100 }: { count?: number }) {
+export function Confetti({ count = 100, durationMultiplier = 1 }: { count?: number; durationMultiplier?: number }) {
   const [pieces, setPieces] = useState<ConfettiPiece[]>([]);
 
   useEffect(() => {
@@ -37,13 +37,13 @@ export function Confetti({ count = 100 }: { count?: number }) {
         id: i,
         x: Math.random() * 100,
         color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
-        delay: Math.random() * 3,
-        duration: 3 + Math.random() * 2,
+        delay: Math.random() * 5 * durationMultiplier, // Spread out start times more
+        duration: (6 + Math.random() * 4) * durationMultiplier, // 6-10s base, multiplied
         size: 8 + Math.random() * 8,
       });
     }
     setPieces(newPieces);
-  }, [count]);
+  }, [count, durationMultiplier]);
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden z-50">
@@ -83,51 +83,159 @@ export function Confetti({ count = 100 }: { count?: number }) {
   );
 }
 
-export function BouncingHorse({ message }: { message?: string }) {
+// Rotating messages for party game completion
+const PARTY_COMPLETE_MESSAGES = [
+  '🔥 Thank you for riding with the Fire Horse! 🐴',
+  '✨ May the Fire Horse bring you fortune in 2026!',
+  '🎉 Great game! Share with friends to spread the luck!',
+  '🐴 The Fire Horse galloped through your trivia battle!',
+  '🔥 You have embraced the spirit of the Fire Horse!',
+  '⭐ 2026 is YOUR year — the Fire Horse believes in you!',
+  '🎊 Amazing! Tell your friends about Fire Horse Trivia!',
+  '🌟 The Fire Horse thanks you for playing together!',
+];
+
+interface BouncingHorseProps {
+  message?: string;
+  size?: 'small' | 'medium' | 'large';
+  showRotatingMessages?: boolean;
+  showShareButton?: boolean;
+  shareText?: string;
+  partyCode?: string;
+}
+
+export function BouncingHorse({
+  message,
+  size = 'large',
+  showRotatingMessages = false,
+  showShareButton = false,
+  shareText,
+  partyCode,
+}: BouncingHorseProps) {
+  const [messageIndex, setMessageIndex] = useState(0);
+  const [copied, setCopied] = useState(false);
+
+  const sizeClasses = {
+    small: 'w-24 h-24',
+    medium: 'w-36 h-36',
+    large: 'w-48 h-48',
+  };
+
+  const glowSizes = {
+    small: 'w-32 h-32',
+    medium: 'w-44 h-44',
+    large: 'w-56 h-56',
+  };
+
+  // Rotate messages every 2.5 seconds
+  useEffect(() => {
+    if (!showRotatingMessages) return;
+
+    const interval = setInterval(() => {
+      setMessageIndex((prev) => (prev + 1) % PARTY_COMPLETE_MESSAGES.length);
+    }, 2500);
+
+    return () => clearInterval(interval);
+  }, [showRotatingMessages]);
+
+  // Default share text
+  const defaultShareText = `🔥🐴 Just played Fire Horse Trivia! Join the fun at redhorseoracle.com/party ${partyCode ? `\n\nParty Code: ${partyCode}` : ''}\n\n2026 is the Year of the Fire Horse — only happens every 60 years! 🔥`;
+  const textToShare = shareText || defaultShareText;
+
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(textToShare);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center">
       {/* Bouncing Horse Animation */}
       <div className="relative">
         {/* Fire glow effect */}
-        <div className="absolute inset-0 animate-pulse">
-          <div className="w-48 h-48 rounded-full bg-gradient-to-r from-red-500/30 via-orange-500/30 to-yellow-500/30 blur-2xl" />
+        <div className="absolute inset-0 flex items-center justify-center animate-pulse">
+          <div className={`${glowSizes[size]} rounded-full bg-gradient-to-r from-red-500/40 via-orange-500/40 to-yellow-500/40 blur-2xl`} />
         </div>
 
-        {/* Horse emoji with bounce */}
-        <div className="text-[120px] animate-bounce-slow relative z-10">
-          🐴
+        {/* Fire Horse Image with bounce */}
+        <div className="animate-bounce-slow relative z-10">
+          <img
+            src="/assets/loading/fire-horse-bouncing-3.png"
+            alt="Fire Horse"
+            className={`${sizeClasses[size]} object-contain drop-shadow-[0_0_25px_rgba(255,100,0,0.6)]`}
+          />
         </div>
 
         {/* Fire effects around horse */}
-        <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-4xl animate-flicker">
+        <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 text-3xl animate-flicker">
           🔥🔥🔥
         </div>
       </div>
 
-      {message && (
+      {/* Static message */}
+      {message && !showRotatingMessages && (
         <p className="mt-6 text-xl text-center text-yellow-300 font-bold max-w-md animate-fade-in">
           {message}
         </p>
       )}
 
+      {/* Rotating messages */}
+      {showRotatingMessages && (
+        <p
+          className="mt-6 text-xl text-center font-bold max-w-md animate-message-change"
+          style={{
+            background: 'linear-gradient(to right, #FFD700, #FF6B00, #FFD700)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            textShadow: '0 0 20px rgba(255, 165, 0, 0.4)',
+          }}
+        >
+          {PARTY_COMPLETE_MESSAGES[messageIndex]}
+        </p>
+      )}
+
+      {/* Share Button */}
+      {showShareButton && (
+        <div className="mt-6">
+          <button
+            onClick={handleShare}
+            className={`px-6 py-3 rounded-xl font-bold text-lg shadow-lg transition-all ${
+              copied
+                ? 'bg-green-600 text-white'
+                : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white'
+            }`}
+          >
+            {copied ? '✓ Copied! Share with Friends!' : '📤 Share with Friends'}
+          </button>
+          <p className="text-xs text-gray-400 mt-2 text-center">
+            Copy invite text to share on social media
+          </p>
+        </div>
+      )}
+
       <style jsx>{`
         @keyframes bounce-slow {
           0%, 100% {
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
           }
           50% {
-            transform: translateY(-30px);
+            transform: translateY(-25px) scale(1.05);
           }
         }
         .animate-bounce-slow {
-          animation: bounce-slow 1.5s ease-in-out infinite;
+          animation: bounce-slow 1.2s ease-in-out infinite;
         }
         @keyframes flicker {
           0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
-          50% { opacity: 0.8; transform: translateX(-50%) scale(1.1); }
+          50% { opacity: 0.7; transform: translateX(-50%) scale(1.15); }
         }
         .animate-flicker {
-          animation: flicker 0.5s ease-in-out infinite;
+          animation: flicker 0.4s ease-in-out infinite;
         }
         @keyframes fade-in {
           from { opacity: 0; transform: translateY(20px); }
@@ -135,6 +243,15 @@ export function BouncingHorse({ message }: { message?: string }) {
         }
         .animate-fade-in {
           animation: fade-in 1s ease-out forwards;
+        }
+        @keyframes message-change {
+          0% { opacity: 0; transform: translateY(10px); }
+          10% { opacity: 1; transform: translateY(0); }
+          90% { opacity: 1; transform: translateY(0); }
+          100% { opacity: 0; transform: translateY(-10px); }
+        }
+        .animate-message-change {
+          animation: message-change 2.5s ease-in-out infinite;
         }
       `}</style>
     </div>

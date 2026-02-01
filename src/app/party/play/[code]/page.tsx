@@ -11,7 +11,7 @@ import {
   calculatePoints,
   formatTimeRemaining,
 } from '@/types/party';
-import { Confetti } from '@/components/party/Celebration';
+import { Confetti, BouncingHorse } from '@/components/party/Celebration';
 import PartyEndScreen from '@/components/party/PartyEndScreen';
 
 const supabase = createClient(
@@ -799,89 +799,173 @@ export default function PlayerGamePage() {
 
         {/* FINISHED */}
         {gameState.status === 'finished' && (
-          <div className="text-center relative">
-            {/* Celebration Animation */}
-            {showCelebration && <Confetti count={100} />}
+          <div className="flex gap-4 xl:gap-6">
+            {/* Main Content */}
+            <div className="flex-1 text-center relative">
+              {/* Celebration Animation - 2.5x longer */}
+              {showCelebration && <Confetti count={150} durationMultiplier={2.5} />}
 
-            {/* Victory Header */}
-            <div className="mb-4">
-              <div className="text-7xl mb-2 animate-bounce">
-                {finalRank === 1 ? '🏆' : finalRank === 2 ? '🥈' : finalRank === 3 ? '🥉' : '🎉'}
-              </div>
-              <h1 className="text-4xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-400 to-yellow-400">
-                {finalRank === 1 ? 'CHAMPION!' : finalRank && finalRank <= 3 ? 'PODIUM FINISH!' : 'Game Over!'}
-              </h1>
-            </div>
-
-            {finalRank && (
-              <div className="text-7xl font-bold text-yellow-400 mb-2">
-                #{finalRank}
-              </div>
-            )}
-
-            <div className="text-3xl mb-6">
-              Final Score: <span className="text-yellow-400 font-bold">{totalPoints}</span>
-            </div>
-
-            {/* Congratulations Message */}
-            <div className="bg-gradient-to-r from-red-900/40 to-yellow-900/40 rounded-xl p-4 mb-6 border border-yellow-600/30">
-              <p className="text-lg text-yellow-300">
-                🔥 Great job, {playerState.nickname}! 🐴
-              </p>
-              <p className="text-sm text-gray-300 mt-1">
-                May the Fire Horse bring you fortune in 2026!
-              </p>
-            </div>
-
-            {/* Leaderboard */}
-            <div className="bg-gray-900/50 rounded-xl p-4 mb-6">
-              <h2 className="text-xl font-bold mb-4">🏆 Final Leaderboard</h2>
-              <div className="space-y-2">
-                {finalScores.slice(0, 10).map((score, i) => (
-                  <div
-                    key={i}
-                    className={`p-3 rounded-xl ${
-                      score.player_id === playerState.player_id
-                        ? 'bg-gradient-to-r from-yellow-900/50 to-orange-900/50 border-2 border-yellow-500'
-                        : i < 3 ? 'bg-gradient-to-r from-gray-800/80 to-gray-700/80' : 'bg-gray-800/50'
-                    }`}
-                  >
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center gap-3">
-                        <span className="font-bold text-xl w-8">
-                          {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}.`}
-                        </span>
-                        <span className={`text-lg ${score.player_id === playerState.player_id ? 'font-bold text-yellow-300' : ''}`}>
-                          {score.nickname}
-                        </span>
-                      </div>
-                      <span className="font-bold text-2xl text-yellow-400">
-                        {score.total_points}
-                      </span>
-                    </div>
-                    {score.zodiac_sign && (
-                      <div className="text-xs text-gray-400 ml-11">
-                        {score.zodiac_element} {score.zodiac_sign}
-                      </div>
-                    )}
+              {/* Victory Header with Bouncing Fire Horse + Rotating Messages */}
+              <div className="mb-4">
+                {finalRank === 1 ? (
+                  <BouncingHorse
+                    size="medium"
+                    showRotatingMessages={true}
+                    showShareButton={true}
+                    partyCode={partyCode}
+                  />
+                ) : (
+                  <div className="text-7xl mb-2 animate-bounce">
+                    {finalRank === 2 ? '🥈' : finalRank === 3 ? '🥉' : '🎉'}
                   </div>
-                ))}
+                )}
+                <h1 className="text-4xl font-bold mb-2 mt-4 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-400 to-yellow-400">
+                  {finalRank === 1 ? 'CHAMPION!' : finalRank && finalRank <= 3 ? 'PODIUM FINISH!' : 'Game Over!'}
+                </h1>
+              </div>
+
+              {/* Rotating Messages & Share for all players */}
+              {finalRank !== 1 && (
+                <div className="mb-4">
+                  <BouncingHorse
+                    size="small"
+                    showRotatingMessages={true}
+                    showShareButton={true}
+                    partyCode={partyCode}
+                  />
+                </div>
+              )}
+
+              {finalRank && (
+                <div className="text-7xl font-bold text-yellow-400 mb-2">
+                  #{finalRank}
+                </div>
+              )}
+
+              <div className="text-3xl mb-6">
+                Final Score: <span className="text-yellow-400 font-bold">{totalPoints}</span>
+              </div>
+
+              {/* Congratulations Message */}
+              <div className="bg-gradient-to-r from-red-900/40 to-yellow-900/40 rounded-xl p-4 mb-6 border border-yellow-600/30">
+                <p className="text-lg text-yellow-300">
+                  🔥 Great job, {playerState.nickname}! 🐴
+                </p>
+                <p className="text-sm text-gray-300 mt-1">
+                  May the Fire Horse bring you fortune in 2026!
+                </p>
+              </div>
+
+              {/* Mobile Leaderboard - shown below xl */}
+              <div className="xl:hidden bg-gray-900/50 rounded-xl p-4 mb-6">
+                <h2 className="text-xl font-bold mb-4">🏆 Final Leaderboard</h2>
+                <div className="space-y-2">
+                  {finalScores.slice(0, 10).map((score, i) => (
+                    <div
+                      key={i}
+                      className={`p-3 rounded-xl ${
+                        score.player_id === playerState.player_id
+                          ? 'bg-gradient-to-r from-yellow-900/50 to-orange-900/50 border-2 border-yellow-500'
+                          : i < 3 ? 'bg-gradient-to-r from-gray-800/80 to-gray-700/80' : 'bg-gray-800/50'
+                      }`}
+                    >
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-3">
+                          <span className="font-bold text-xl w-8">
+                            {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}.`}
+                          </span>
+                          <span className={`text-lg ${score.player_id === playerState.player_id ? 'font-bold text-yellow-300' : ''}`}>
+                            {score.nickname}
+                          </span>
+                        </div>
+                        <span className="font-bold text-2xl text-yellow-400">
+                          {score.total_points}
+                        </span>
+                      </div>
+                      {score.zodiac_sign && (
+                        <div className="text-xs text-gray-400 ml-11">
+                          {score.zodiac_element} {score.zodiac_sign}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Message about waiting */}
+              <div className="bg-blue-900/30 rounded-xl p-4 mb-6 border border-blue-500/30">
+                <p className="text-blue-300">
+                  ⏳ Waiting for host to start another game or end the party...
+                </p>
+              </div>
+
+              {/* Cross-Promotion: Red Horse Oracle */}
+              <div className="bg-gradient-to-r from-purple-900/40 to-red-900/40 rounded-xl p-4 mb-6 border border-purple-500/30">
+                <div className="text-center">
+                  <p className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-red-400">
+                    🔮 Get Your 2026 Fire Horse Oracle
+                  </p>
+                  <p className="text-sm text-gray-300 mt-2">
+                    Only 888 Limited Edition prophecies per zodiac sign!
+                  </p>
+                  <Link
+                    href="/"
+                    className="inline-block mt-3 px-6 py-2 bg-gradient-to-r from-purple-600 to-red-600 hover:from-purple-500 hover:to-red-500 rounded-lg font-bold text-sm"
+                  >
+                    Discover Your Prophecy → $8.88
+                  </Link>
+                </div>
+              </div>
+
+              <Link
+                href="/party"
+                className="inline-block bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-xl font-bold text-lg"
+              >
+                Back to Party Home
+              </Link>
+            </div>
+
+            {/* Sidebar Leaderboard - visible on xl screens */}
+            <div className="w-56 hidden xl:block shrink-0">
+              <div className="bg-gray-900/70 rounded-xl p-4 sticky top-4">
+                <h3 className="text-lg font-bold mb-3 text-center text-yellow-400">🏆 Final Standings</h3>
+                <div className="space-y-2 max-h-[70vh] overflow-y-auto">
+                  {finalScores.length > 0 ? (
+                    finalScores.map((score, i) => (
+                      <div
+                        key={score.player_id}
+                        className={`p-2 rounded ${
+                          score.player_id === playerState?.player_id
+                            ? 'bg-yellow-900/50 border border-yellow-600'
+                            : i < 3
+                            ? 'bg-yellow-900/30'
+                            : 'bg-gray-800/50'
+                        }`}
+                      >
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-gray-400 w-6">
+                              {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}.`}
+                            </span>
+                            <span className={`truncate max-w-[80px] ${score.player_id === playerState?.player_id ? 'font-bold text-yellow-300' : 'font-medium'}`}>
+                              {score.nickname}
+                            </span>
+                          </div>
+                          <span className="font-bold text-yellow-400">{score.total_points}</span>
+                        </div>
+                        {score.zodiac_sign && (
+                          <div className="text-xs text-gray-400 ml-8">
+                            {score.zodiac_element} {score.zodiac_sign}
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-gray-500 text-center text-sm">No scores yet</p>
+                  )}
+                </div>
               </div>
             </div>
-
-            {/* Message about waiting */}
-            <div className="bg-blue-900/30 rounded-xl p-4 mb-6 border border-blue-500/30">
-              <p className="text-blue-300">
-                ⏳ Waiting for host to start another game or end the party...
-              </p>
-            </div>
-
-            <Link
-              href="/party"
-              className="inline-block bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-xl font-bold text-lg"
-            >
-              Back to Party Home
-            </Link>
           </div>
         )}
 
