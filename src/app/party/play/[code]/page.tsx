@@ -354,7 +354,7 @@ export default function PlayerGamePage() {
     <main className="min-h-screen bg-black text-white">
       {/* Header with Score */}
       <div className="bg-gradient-to-r from-red-900 to-yellow-900 p-3">
-        <div className="max-w-md mx-auto flex justify-between items-center">
+        <div className="max-w-2xl mx-auto flex justify-between items-center">
           <div>
             <span className="text-sm text-gray-300">Party: </span>
             <span className="font-mono font-bold">{partyCode}</span>
@@ -375,7 +375,7 @@ export default function PlayerGamePage() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-md mx-auto px-4 py-4">
+      <div className="max-w-2xl mx-auto px-4 py-4">
         {/* LOBBY */}
         {gameState.status === 'lobby' && (
           <div className="text-center">
