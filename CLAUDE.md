@@ -2974,6 +2974,16 @@ git add -A && git commit -m "message" && git push origin main
 | Results | https://redhorseoracle.com/party/results/[CODE] |
 | Success | https://redhorseoracle.com/party/success |
 
+### Active Test Pass
+
+| Pass Type | Code | Valid |
+|-----------|------|-------|
+| **Weekend 2-Day Pass** | **8478JL** | Jan 31 - Feb 2, 2026 |
+
+**Test URLs:**
+- Host: https://redhorseoracle.com/party/host/8478JL
+- Players join: https://redhorseoracle.com/party/join → Enter code `8478JL`
+
 ---
 
 *火马年 2026 - Year of the Fire Horse*
