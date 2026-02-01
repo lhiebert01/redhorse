@@ -76,17 +76,30 @@ export async function POST(request: NextRequest) {
 
     // Get question IDs from pre-generated sets (created at purchase time)
     const questionSets = pass.question_sets;
+    let questionIds: number[];
 
-    if (!questionSets || !Array.isArray(questionSets) || questionSets.length <= setIndex) {
-      console.error('[GAME API] No pre-generated question set found for index:', setIndex);
-      return NextResponse.json(
-        { error: 'No question set available. Please contact support.' },
-        { status: 500 }
-      );
+    if (questionSets && Array.isArray(questionSets) && questionSets.length > setIndex) {
+      // Use pre-generated question set
+      questionIds = questionSets[setIndex];
+      console.log(`[GAME API] Using pre-generated set #${setIndex}: [${questionIds.slice(0, 5).join(', ')}...]`);
+    } else {
+      // LEGACY: Generate fresh unique questions for old passes without pre-generated sets
+      console.log(`[GAME API] Legacy pass - generating fresh unique questions for set #${setIndex}`);
+      const totalQuestions = 400;
+      const questionsPerGame = 20;
+      const ids: number[] = [];
+      const used = new Set<number>();
+
+      // Use Fisher-Yates shuffle for randomness
+      const available = Array.from({ length: totalQuestions }, (_, i) => i + 1);
+      for (let i = available.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [available[i], available[j]] = [available[j], available[i]];
+      }
+
+      questionIds = available.slice(0, questionsPerGame);
+      console.log(`[GAME API] Generated ${questionIds.length} unique questions: [${questionIds.slice(0, 5).join(', ')}...]`);
     }
-
-    const questionIds = questionSets[setIndex];
-    console.log(`[GAME API] Using pre-generated set #${setIndex}: [${questionIds.slice(0, 5).join(', ')}...]`);
 
     // If restarting, mark the old game as abandoned
     if (action === 'restart') {
