@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { PARTY_QUESTIONS } from '@/constants/party-questions';
 import { calculatePoints } from '@/types/party';
 
 const supabase = createClient(
@@ -76,20 +75,33 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get the correct answer from question bank
+    // Get the correct answer from database
     // IMPORTANT: Convert question_id to number to handle type mismatches from JSON
     const questionIdNum = Number(question_id);
     console.log('[ANSWER API] Looking for question:', { question_id, questionIdNum, typeofOriginal: typeof question_id });
 
-    const question = PARTY_QUESTIONS.find((q) => q.id === questionIdNum);
-    if (!question) {
-      console.log('[ANSWER API] Question not found in bank:', questionIdNum);
-      console.log('[ANSWER API] Available question IDs (first 10):', PARTY_QUESTIONS.slice(0, 10).map(q => q.id));
+    const { data: questionData, error: questionError } = await supabase
+      .from('party_questions')
+      .select('*')
+      .eq('id', questionIdNum)
+      .single();
+
+    if (questionError || !questionData) {
+      console.log('[ANSWER API] Question not found in database:', questionIdNum, questionError);
       return NextResponse.json(
         { error: 'Question not found' },
         { status: 404 }
       );
     }
+
+    // Transform database format to expected format
+    const question = {
+      id: questionData.id,
+      question: questionData.question,
+      options: [questionData.option_a, questionData.option_b, questionData.option_c, questionData.option_d],
+      correctAnswer: questionData.correct_answer,
+      explanation: questionData.explanation,
+    };
 
     // Detailed logging for debugging
     console.log('[ANSWER API] Question found:', {
