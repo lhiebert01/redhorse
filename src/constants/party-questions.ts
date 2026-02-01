@@ -1643,9 +1643,10 @@ export const PARTY_QUESTIONS: Question[] = [
     id: 200,
     category: 'Historical War Horses',
     difficulty: 'easy',
-    question: 'You are 50% through the database! How many animals are in the full Zodiac cycle?',
-    options: ['10', '12', '60', '100'],
-    correctAnswer: '12',
+    question: 'Which famous Mongol leader was known for his skilled cavalry and horses that conquered much of Asia?',
+    options: ['Kublai Khan', 'Genghis Khan', 'Attila the Hun', 'Alexander the Great'],
+    correctAnswer: 'Genghis Khan',
+    explanation: 'Genghis Khan built the largest contiguous land empire in history, largely due to his legendary Mongol cavalry and horses.',
   },
 
   // ===== SET 9: Horse Equipment & Equestrian Sports (Questions 201-225) =====
@@ -2857,9 +2858,10 @@ export const PARTY_QUESTIONS: Question[] = [
     id: 350,
     category: '2026 CNY Taboos & Superstitions',
     difficulty: 'easy',
-    question: 'You are at 350 questions! How many questions are left in your 400-question goal?',
-    options: ['25', '50', '75', '100'],
-    correctAnswer: '50',
+    question: 'Why is it considered bad luck to sweep the floor on Chinese New Year Day?',
+    options: ['It wakes the ancestors', 'You sweep away good fortune', 'It angers the Kitchen God', 'Dust attracts evil spirits'],
+    correctAnswer: 'You sweep away good fortune',
+    explanation: 'Sweeping on CNY is taboo because you might accidentally sweep away the good luck and fortune that arrives with the new year.',
   },
 
   // ===== SET 15: The "Grandmaster" Zodiac & Math Round (Questions 351-375) =====
