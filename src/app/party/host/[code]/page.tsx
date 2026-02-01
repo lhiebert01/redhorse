@@ -1296,8 +1296,31 @@ export default function HostConsolePage() {
                 <h2 className="text-4xl font-bold mb-2 mt-4 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-400 to-yellow-400">
                   Game Complete!
                 </h2>
-                <p className="text-xl text-yellow-300">
+                <p className="text-xl text-yellow-300 mb-4">
                   Great job, everyone! 🔥
+                </p>
+              </div>
+
+              {/* Host Appreciation Message */}
+              <div className="bg-gradient-to-r from-purple-900/50 via-blue-900/50 to-purple-900/50 rounded-2xl p-5 mb-4 border border-purple-500/30 max-w-lg mx-auto">
+                <p className="text-xl font-bold text-purple-300">
+                  🎉 You are an AMAZING Host! 🎉
+                </p>
+                <p className="text-sm text-gray-300 mt-2">
+                  Thank you for bringing people together with Fire Horse Trivia!
+                </p>
+              </div>
+
+              {/* Fire Horse Blessing Message */}
+              <div className="bg-gradient-to-r from-red-900/50 via-orange-900/50 to-yellow-900/50 rounded-2xl p-6 mb-6 border border-yellow-600/30 max-w-lg mx-auto">
+                <p className="text-xl text-white mb-3">
+                  We wish you <span className="text-yellow-400 font-bold">Luck</span>,{' '}
+                  <span className="text-red-400 font-bold">Power</span>,{' '}
+                  <span className="text-pink-400 font-bold">Love</span>, and{' '}
+                  <span className="text-blue-400 font-bold">Protection</span>
+                </p>
+                <p className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400">
+                  in the Year of the Fire Horse 2026! 🐴🔥
                 </p>
               </div>
 
