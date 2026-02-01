@@ -259,6 +259,7 @@ export default function HostConsolePage() {
       type: 'broadcast',
       event: 'game_start',
       payload: {
+        game_id: game.id,  // Include game_id so players sync to correct game
         total_questions: game.questions_per_game,
         timer_seconds: game.timer_seconds,
       },

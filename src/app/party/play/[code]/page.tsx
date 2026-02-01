@@ -121,9 +121,17 @@ export default function PlayerGamePage() {
     const channel = supabase.channel(`party:${partyCode}`)
       .on('broadcast', { event: 'game_start' }, (payload) => {
         const data = payload.payload as {
+          game_id?: string;
           total_questions: number;
           timer_seconds: number;
         };
+        // Sync game_id from host to ensure we're in the same game
+        if (data.game_id && playerState) {
+          const updatedState = { ...playerState, game_id: data.game_id };
+          setPlayerState(updatedState);
+          sessionStorage.setItem('party_player', JSON.stringify(updatedState));
+          console.log('[PLAYER] Synced game_id from host:', data.game_id);
+        }
         // Reset scores for new game
         setLeaderboard([]);
         setTotalPoints(0);
