@@ -1310,7 +1310,7 @@ export default function HostConsolePage() {
                 {/* Tagline - slim green tile */}
                 <div className="bg-gradient-to-r from-green-800/80 to-emerald-800/80 rounded-full px-4 py-1.5 mb-4 inline-block border border-green-500/50">
                   <p className="text-xs text-green-100">
-                    ✨ World's First AI CNY Oracle • Privacy By Design • Powered by Google Gemini
+                    ✨ World's First, Only, Best AI CNY Oracle & Party Game • Privacy By Design
                   </p>
                 </div>
 
