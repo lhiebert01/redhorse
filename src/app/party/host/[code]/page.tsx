@@ -136,69 +136,37 @@ export default function HostConsolePage() {
             }
           }
         } else {
-          // No existing active game - create a new one using PRE-GENERATED question set
-          const gamesPlayed = passData.games_played || 0;
-          const questionSets = passData.question_sets;
+          // No existing active game - create one via API (uses service role key)
+          console.log('[LOAD] No active game, creating via API...');
 
-          // Check if we have pre-generated sets (new passes) or need to handle legacy passes
-          if (questionSets && Array.isArray(questionSets) && questionSets.length > gamesPlayed) {
-            // Use the next pre-generated question set
-            const nextSetIndex = gamesPlayed;
-            const questionIds = questionSets[nextSetIndex];
-            const gameNumber = gamesPlayed + 1;
+          const response = await fetch('/api/party/game', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              party_pass_id: passData.id,
+              party_code: partyCode,
+              timer_seconds: 30,
+              action: 'create',
+            }),
+          });
 
-            console.log('[LOAD] Creating game #', gameNumber, 'using pre-generated set', nextSetIndex);
-            console.log('[LOAD] Question IDs preview:', questionIds.slice(0, 5), '...');
+          const result = await response.json();
 
-            const { data: newGame, error: createError } = await supabase
-              .from('party_games')
-              .insert({
-                party_pass_id: passData.id,
-                timer_seconds: 30,
-                questions_per_game: questionIds.length,
-                question_ids: questionIds,
-                game_number: gameNumber,
-                status: 'lobby',
-              })
-              .select()
+          if (response.ok && result.game) {
+            console.log('[LOAD] Created game #', result.game_number, ':', result.game.id);
+            setGame(result.game);
+            // Refresh pass data to get updated counters
+            const { data: refreshedPass } = await supabase
+              .from('party_passes')
+              .select('*')
+              .eq('id', passData.id)
               .single();
-
-            if (!createError && newGame) {
-              console.log('[LOAD] Created new game:', newGame.id);
-              setGame(newGame);
-            } else {
-              console.error('[LOAD] Failed to create game:', createError);
+            if (refreshedPass) {
+              setPass(refreshedPass);
             }
           } else {
-            // LEGACY: Old pass without pre-generated sets - generate on the fly
-            console.log('[LOAD] Legacy pass - generating random questions...');
-            const questionsPerGame = 20;
-            const totalQuestions = 400;
-            const ids: number[] = [];
-            const used = new Set<number>();
-            while (ids.length < questionsPerGame && ids.length < totalQuestions) {
-              const id = Math.floor(Math.random() * totalQuestions) + 1;
-              if (!used.has(id)) {
-                used.add(id);
-                ids.push(id);
-              }
-            }
-
-            const { data: newGame, error: createError } = await supabase
-              .from('party_games')
-              .insert({
-                party_pass_id: passData.id,
-                timer_seconds: 30,
-                questions_per_game: questionsPerGame,
-                question_ids: ids,
-                status: 'lobby',
-              })
-              .select()
-              .single();
-
-            if (!createError && newGame) {
-              setGame(newGame);
-            }
+            console.error('[LOAD] Failed to create game:', result.error);
+            setError('Failed to create game: ' + result.error);
           }
         }
 
@@ -756,87 +724,37 @@ export default function HostConsolePage() {
     setShowCelebration(true);
   }, [game, pass, partyCode]);
 
-  // Start a new game using the NEXT pre-generated question set
+  // Start a new game using the NEXT pre-generated question set via API
   const startNewGame = useCallback(async () => {
     if (!pass || pass.games_remaining <= 0) {
       alert('No games remaining on this pass!');
       return;
     }
 
-    // Refresh pass data to get current games_played
-    const { data: freshPass, error: passError } = await supabase
-      .from('party_passes')
-      .select('*')
-      .eq('id', pass.id)
-      .single();
+    console.log('[NEW GAME] Starting new game via API for party:', partyCode);
 
-    if (passError || !freshPass) {
-      alert('Failed to load pass data. Please refresh the page.');
-      return;
-    }
-
-    const gamesPlayed = freshPass.games_played || 0;
-    const questionSets = freshPass.question_sets;
-    const gameNumber = gamesPlayed + 1;
-
-    console.log('[NEW GAME] Starting game #', gameNumber, 'for party pass:', pass.id);
-
-    // Get the next pre-generated question set
-    let questionIds: number[];
-
-    if (questionSets && Array.isArray(questionSets) && questionSets.length > gamesPlayed) {
-      // Use pre-generated set
-      questionIds = questionSets[gamesPlayed];
-      console.log('[NEW GAME] Using pre-generated set #', gamesPlayed, ':', questionIds.slice(0, 5), '...');
-    } else {
-      // LEGACY: Generate random questions for old passes
-      console.log('[NEW GAME] Legacy pass - generating random questions...');
-      const totalQuestions = 400;
-      const ids: number[] = [];
-      const used = new Set<number>();
-      while (ids.length < 20 && ids.length < totalQuestions) {
-        const id = Math.floor(Math.random() * totalQuestions) + 1;
-        if (!used.has(id)) {
-          used.add(id);
-          ids.push(id);
-        }
-      }
-      questionIds = ids;
-    }
-
-    // Create new game in database
-    const { data: newGame, error: createError } = await supabase
-      .from('party_games')
-      .insert({
+    const response = await fetch('/api/party/game', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         party_pass_id: pass.id,
-        timer_seconds: selectedTimer, // 0 = manual mode
-        questions_per_game: questionIds.length,
-        question_ids: questionIds,
-        game_number: gameNumber,
-        status: 'lobby',
-      })
-      .select()
-      .single();
+        party_code: partyCode,
+        timer_seconds: selectedTimer,
+        action: 'create',
+      }),
+    });
 
-    if (createError) {
-      console.error('[NEW GAME] Failed to create new game:', createError);
-      alert('Failed to create new game. Please try again.');
+    const result = await response.json();
+
+    if (!response.ok || !result.game) {
+      console.error('[NEW GAME] Failed to create new game:', result.error);
+      alert('Failed to create new game: ' + (result.error || 'Unknown error'));
       return;
     }
 
-    console.log('[NEW GAME] Game #', gameNumber, 'created:', newGame.id);
+    console.log('[NEW GAME] Game #', result.game_number, 'created:', result.game.id);
 
-    // Increment games_played counter on the pass
-    const { error: updateError } = await supabase
-      .from('party_passes')
-      .update({ games_played: gameNumber })
-      .eq('id', pass.id);
-
-    if (updateError) {
-      console.error('[NEW GAME] Failed to update games_played:', updateError);
-    }
-
-    // Refresh the pass data
+    // Refresh the pass data to get updated counters
     const { data: refreshedPass } = await supabase
       .from('party_passes')
       .select('*')
@@ -848,7 +766,7 @@ export default function HostConsolePage() {
     }
 
     // Reset all game state
-    setGame(newGame);
+    setGame(result.game);
     setCurrentQuestion(null);
     setAnswerStats(null);
     setShowingAnswer(false);
@@ -861,7 +779,7 @@ export default function HostConsolePage() {
       type: 'broadcast',
       event: 'new_game',
       payload: {
-        game_id: newGame.id,
+        game_id: result.game.id,
         message: 'A new game is starting! Join the lobby.',
       },
     });
@@ -870,7 +788,7 @@ export default function HostConsolePage() {
   // Loading state for Start Fresh button
   const [isStartingFresh, setIsStartingFresh] = useState(false);
 
-  // Abandon current game and start fresh with the SAME pre-generated question set
+  // Abandon current game and start fresh with the SAME pre-generated question set via API
   // This does NOT count against games_remaining - it's a restart of the same game slot
   const abandonAndStartFresh = useCallback(async () => {
     if (!pass) {
@@ -881,75 +799,34 @@ export default function HostConsolePage() {
     setIsStartingFresh(true);
 
     try {
-      console.log('[START FRESH] Restarting game for party:', partyCode);
+      const currentGameNumber = game?.game_number || pass.games_played || 1;
+      console.log('[START FRESH] Restarting game #', currentGameNumber, 'via API for party:', partyCode);
 
-      // Step 1: Mark current game as abandoned (if exists)
-      if (game?.id) {
-        const { error: abandonError } = await supabase
-          .from('party_games')
-          .update({ status: 'abandoned' })
-          .eq('id', game.id);
-
-        if (abandonError) {
-          console.error('[START FRESH] Failed to abandon old game:', abandonError);
-        } else {
-          console.log('[START FRESH] Old game marked as abandoned:', game.id);
-        }
-      }
-
-      // Get current game number to reuse the same question set
-      const currentGameNumber = game?.game_number || (pass.games_played || 0);
-      const setIndex = Math.max(0, currentGameNumber - 1);
-
-      // Get question IDs from the pre-generated set (same as current game)
-      let questionIds: number[];
-      const questionSets = pass.question_sets;
-
-      if (questionSets && Array.isArray(questionSets) && questionSets.length > setIndex) {
-        questionIds = questionSets[setIndex];
-        console.log('[START FRESH] Reusing pre-generated set #', setIndex, ':', questionIds.slice(0, 5), '...');
-      } else {
-        // LEGACY: Generate random questions for old passes
-        console.log('[START FRESH] Legacy pass - generating random questions...');
-        const totalQuestions = 400;
-        const ids: number[] = [];
-        const used = new Set<number>();
-        while (ids.length < 20 && ids.length < totalQuestions) {
-          const id = Math.floor(Math.random() * totalQuestions) + 1;
-          if (!used.has(id)) {
-            used.add(id);
-            ids.push(id);
-          }
-        }
-        questionIds = ids;
-      }
-
-      // Create new game in database with SAME game_number (restart, not new game)
-      const { data: newGameData, error: createError } = await supabase
-        .from('party_games')
-        .insert({
+      const response = await fetch('/api/party/game', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           party_pass_id: pass.id,
+          party_code: partyCode,
           timer_seconds: selectedTimer,
-          questions_per_game: questionIds.length,
-          question_ids: questionIds,
           game_number: currentGameNumber,
-          current_question_index: 0,
-          status: 'lobby',
-        })
-        .select()
-        .single();
+          action: 'restart',
+        }),
+      });
 
-      if (createError || !newGameData) {
-        console.error('[START FRESH] Failed to create new game:', createError);
-        alert('Failed to create new game: ' + (createError?.message || 'Unknown error'));
+      const result = await response.json();
+
+      if (!response.ok || !result.game) {
+        console.error('[START FRESH] Failed to restart game:', result.error);
+        alert('Failed to restart game: ' + (result.error || 'Unknown error'));
         setIsStartingFresh(false);
         return;
       }
 
-      console.log('[START FRESH] Game restarted:', newGameData.id, '(Game #', currentGameNumber, ')');
+      console.log('[START FRESH] Game restarted:', result.game.id, '(Game #', currentGameNumber, ')');
 
       // Update all local state
-      setGame(newGameData);
+      setGame(result.game);
       setCurrentQuestion(null);
       setAnswerStats(null);
       setShowingAnswer(false);
@@ -964,7 +841,7 @@ export default function HostConsolePage() {
         type: 'broadcast',
         event: 'new_game',
         payload: {
-          game_id: newGameData.id,
+          game_id: result.game.id,
           message: 'Host restarted the game!',
         },
       });
