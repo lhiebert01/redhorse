@@ -1077,10 +1077,10 @@ export default function HostConsolePage() {
                   : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 shadow-lg hover:shadow-purple-500/30'
               }`}
             >
-              {isStartingFresh ? '⏳ Creating New Game...' : '🔄 START FRESH — New Random Questions'}
+              {isStartingFresh ? '⏳ Restarting Game...' : '🔄 RESTART GAME — Same Questions'}
             </button>
-            <p className="text-center text-sm text-yellow-400 mt-2 font-medium">
-              ⬆️ Click above to get 20 NEW random questions (excludes previously used)
+            <p className="text-center text-sm text-gray-400 mt-2">
+              ⬆️ Restart with the same questions (doesn't count against games remaining)
             </p>
 
             {/* Debug: Show current question IDs */}
