@@ -1502,6 +1502,7 @@ export default function HostConsolePage() {
               <div className="mb-6">
                 <BouncingHorse
                   size="large"
+                  showFrame={true}
                   showRotatingMessages={true}
                   showShareButton={true}
                   partyCode={partyCode}

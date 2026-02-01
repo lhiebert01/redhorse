@@ -810,31 +810,30 @@ export default function PlayerGamePage() {
                 {finalRank === 1 ? (
                   <BouncingHorse
                     size="medium"
+                    showFrame={true}
                     showRotatingMessages={true}
                     showShareButton={true}
                     partyCode={partyCode}
                   />
                 ) : (
-                  <div className="text-7xl mb-2 animate-bounce">
-                    {finalRank === 2 ? '🥈' : finalRank === 3 ? '🥉' : '🎉'}
-                  </div>
+                  <>
+                    <div className="text-7xl mb-2 animate-bounce">
+                      {finalRank === 2 ? '🥈' : finalRank === 3 ? '🥉' : '🎉'}
+                    </div>
+                    {/* Small horse with frame for non-champions */}
+                    <BouncingHorse
+                      size="small"
+                      showFrame={true}
+                      showRotatingMessages={true}
+                      showShareButton={true}
+                      partyCode={partyCode}
+                    />
+                  </>
                 )}
                 <h1 className="text-4xl font-bold mb-2 mt-4 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-400 to-yellow-400">
                   {finalRank === 1 ? 'CHAMPION!' : finalRank && finalRank <= 3 ? 'PODIUM FINISH!' : 'Game Over!'}
                 </h1>
               </div>
-
-              {/* Rotating Messages & Share for all players */}
-              {finalRank !== 1 && (
-                <div className="mb-4">
-                  <BouncingHorse
-                    size="small"
-                    showRotatingMessages={true}
-                    showShareButton={true}
-                    partyCode={partyCode}
-                  />
-                </div>
-              )}
 
               {finalRank && (
                 <div className="text-7xl font-bold text-yellow-400 mb-2">

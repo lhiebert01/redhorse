@@ -102,6 +102,7 @@ interface BouncingHorseProps {
   showShareButton?: boolean;
   shareText?: string;
   partyCode?: string;
+  showFrame?: boolean; // Show golden ring frame like payment processing
 }
 
 export function BouncingHorse({
@@ -111,14 +112,23 @@ export function BouncingHorse({
   showShareButton = false,
   shareText,
   partyCode,
+  showFrame = false,
 }: BouncingHorseProps) {
   const [messageIndex, setMessageIndex] = useState(0);
   const [copied, setCopied] = useState(false);
 
+  // Size classes for simple mode
   const sizeClasses = {
     small: 'w-24 h-24',
     medium: 'w-36 h-36',
     large: 'w-48 h-48',
+  };
+
+  // Size classes for frame mode
+  const frameSizeClasses = {
+    small: 'w-32 h-32',
+    medium: 'w-48 h-48',
+    large: 'w-64 h-64',
   };
 
   const glowSizes = {
@@ -155,26 +165,65 @@ export function BouncingHorse({
   return (
     <div className="flex flex-col items-center justify-center">
       {/* Bouncing Horse Animation */}
-      <div className="relative">
-        {/* Fire glow effect */}
-        <div className="absolute inset-0 flex items-center justify-center animate-pulse">
-          <div className={`${glowSizes[size]} rounded-full bg-gradient-to-r from-red-500/40 via-orange-500/40 to-yellow-500/40 blur-2xl`} />
-        </div>
-
-        {/* Fire Horse Image with bounce */}
-        <div className="animate-bounce-slow relative z-10">
-          <img
-            src="/assets/loading/fire-horse-bouncing-3.png"
-            alt="Fire Horse"
-            className={`${sizeClasses[size]} object-contain drop-shadow-[0_0_25px_rgba(255,100,0,0.6)]`}
+      {showFrame ? (
+        // Version with golden ring frame (like payment processing)
+        <div className={`relative ${frameSizeClasses[size]}`}>
+          {/* Glow effect behind everything */}
+          <div
+            className="absolute inset-2 rounded-full animate-pulse"
+            style={{
+              background: 'radial-gradient(circle, rgba(255, 165, 0, 0.5) 0%, rgba(255, 69, 0, 0.3) 50%, transparent 70%)',
+              filter: 'blur(20px)',
+            }}
           />
-        </div>
 
-        {/* Fire effects around horse */}
-        <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 text-3xl animate-flicker">
-          🔥🔥🔥
+          {/* Fire Frame - slowly rotating */}
+          <div className="absolute inset-0 animate-spin-slow">
+            <img
+              src="/assets/loading/fire-frame.png"
+              alt=""
+              className="w-full h-full object-contain"
+              style={{
+                filter: 'drop-shadow(0 0 10px rgba(255, 165, 0, 0.6))',
+              }}
+            />
+          </div>
+
+          {/* Bouncing Fire Horse - centered inside frame */}
+          <div className="absolute inset-6 animate-bounce-slow">
+            <img
+              src="/assets/loading/fire-horse-bouncing-3.png"
+              alt="Fire Horse"
+              className="w-full h-full object-contain"
+              style={{
+                filter: 'drop-shadow(0 0 25px rgba(255, 165, 0, 0.9)) drop-shadow(0 0 50px rgba(255, 69, 0, 0.6))',
+              }}
+            />
+          </div>
         </div>
-      </div>
+      ) : (
+        // Simple version without frame
+        <div className="relative">
+          {/* Fire glow effect */}
+          <div className="absolute inset-0 flex items-center justify-center animate-pulse">
+            <div className={`${glowSizes[size]} rounded-full bg-gradient-to-r from-red-500/40 via-orange-500/40 to-yellow-500/40 blur-2xl`} />
+          </div>
+
+          {/* Fire Horse Image with bounce */}
+          <div className="animate-bounce-slow relative z-10">
+            <img
+              src="/assets/loading/fire-horse-bouncing-3.png"
+              alt="Fire Horse"
+              className={`${sizeClasses[size]} object-contain drop-shadow-[0_0_25px_rgba(255,100,0,0.6)]`}
+            />
+          </div>
+
+          {/* Fire effects around horse */}
+          <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 text-3xl animate-flicker">
+            🔥🔥🔥
+          </div>
+        </div>
+      )}
 
       {/* Static message */}
       {message && !showRotatingMessages && (
@@ -224,11 +273,22 @@ export function BouncingHorse({
             transform: translateY(0) scale(1);
           }
           50% {
-            transform: translateY(-25px) scale(1.05);
+            transform: translateY(-15px) scale(1.05);
           }
         }
         .animate-bounce-slow {
           animation: bounce-slow 1.2s ease-in-out infinite;
+        }
+        @keyframes spin-slow {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        .animate-spin-slow {
+          animation: spin-slow 60s linear infinite;
         }
         @keyframes flicker {
           0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }

@@ -52,13 +52,13 @@ ${zodiacSign ? `\n✨ I'm a ${zodiacElement} ${zodiacSign}!` : ''}
     : null;
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-b from-black via-red-950/50 to-black z-50 overflow-y-auto">
+    <div className="fixed inset-0 bg-gradient-to-b from-black via-red-950 to-black z-50 overflow-y-auto">
       {/* Confetti Animation */}
       {showConfetti && <Confetti count={150} />}
 
       <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8">
-        {/* Bouncing Horse */}
-        <BouncingHorse />
+        {/* Bouncing Horse with Golden Ring Frame */}
+        <BouncingHorse size="large" showFrame={true} />
 
         {/* Thank You Message */}
         <div className="text-center mt-6 max-w-2xl">
