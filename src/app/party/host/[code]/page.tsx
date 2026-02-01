@@ -678,6 +678,16 @@ export default function HostConsolePage() {
     setPass((prev) => prev ? { ...prev, games_remaining: newGamesRemaining } : null);
     setGame((prev) => (prev ? { ...prev, status: 'finished' } : null));
 
+    // Update leaderboard state with final scores for display
+    setLeaderboard(scores.map((s) => ({
+      player_id: s.player_id,
+      nickname: s.nickname,
+      total_points: s.total_points,
+      zodiac_sign: s.zodiac_sign,
+      zodiac_element: s.zodiac_element,
+      rank: s.rank,
+    })));
+
     // Show celebration! (25 seconds for bouncing horse + confetti)
     setCelebrationType(Math.random() > 0.5 ? 'confetti' : 'fireworks');
     setShowCelebration(true);
