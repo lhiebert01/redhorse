@@ -2047,9 +2047,10 @@ export const PARTY_QUESTIONS: Question[] = [
     id: 250,
     category: 'The Five Elements',
     difficulty: 'easy',
-    question: 'Congratulations! You are 62.5% done. How many sets are left to reach 400?',
-    options: ['2', '4', '6', '8'],
-    correctAnswer: '6',
+    question: 'In the Five Elements cycle, which element is said to "control" or overcome Fire?',
+    options: ['Wood', 'Earth', 'Metal', 'Water'],
+    correctAnswer: 'Water',
+    explanation: 'Water extinguishes Fire in the controlling/overcoming cycle of the Five Elements.',
   },
 
   // ===== SET 11: Horse Idioms & Global Phrases (Questions 251-275) =====
@@ -2451,9 +2452,10 @@ export const PARTY_QUESTIONS: Question[] = [
     id: 300,
     category: 'Literature, Myth & Fantasy',
     difficulty: 'easy',
-    question: 'Congratulations! You\'ve reached 300 questions. What percentage of the goal is this?',
-    options: ['50%', '60%', '75%', '80%'],
-    correctAnswer: '75%',
+    question: 'In Chinese mythology, which celestial animal is often depicted as a guardian of treasure and wisdom?',
+    options: ['Phoenix', 'Dragon', 'Qilin', 'Tortoise'],
+    correctAnswer: 'Dragon',
+    explanation: 'In Chinese mythology, the Dragon is the guardian of treasure, wisdom, and celestial power, often depicted protecting pearls and sacred objects.',
   },
 
   // ===== SET 13: Pop Music, Songs & Sound (Questions 301-325) =====
