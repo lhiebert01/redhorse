@@ -785,77 +785,6 @@ export default function HostConsolePage() {
     });
   }, [pass, selectedTimer, partyCode]);
 
-  // Loading state for Start Fresh button
-  const [isStartingFresh, setIsStartingFresh] = useState(false);
-
-  // Abandon current game and start fresh with the SAME pre-generated question set via API
-  // This does NOT count against games_remaining - it's a restart of the same game slot
-  const abandonAndStartFresh = useCallback(async () => {
-    if (!pass) {
-      alert('Error: No party pass found. Please refresh the page.');
-      return;
-    }
-
-    setIsStartingFresh(true);
-
-    try {
-      const currentGameNumber = game?.game_number || pass.games_played || 1;
-      console.log('[START FRESH] Restarting game #', currentGameNumber, 'via API for party:', partyCode);
-
-      const response = await fetch('/api/party/game', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          party_pass_id: pass.id,
-          party_code: partyCode,
-          timer_seconds: selectedTimer,
-          game_number: currentGameNumber,
-          action: 'restart',
-        }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok || !result.game) {
-        console.error('[START FRESH] Failed to restart game:', result.error);
-        alert('Failed to restart game: ' + (result.error || 'Unknown error'));
-        setIsStartingFresh(false);
-        return;
-      }
-
-      console.log('[START FRESH] Game restarted:', result.game.id, '(Game #', currentGameNumber, ')');
-
-      // Update all local state
-      setGame(result.game);
-      setCurrentQuestion(null);
-      setAnswerStats(null);
-      setShowingAnswer(false);
-      setLeaderboard([]);
-      setTimeRemaining(selectedTimer || 30);
-      setTimerActive(false);
-      setCountdown(null);
-
-      // Broadcast to players
-      const channel = supabase.channel(`party:${partyCode}`);
-      await channel.send({
-        type: 'broadcast',
-        event: 'new_game',
-        payload: {
-          game_id: result.game.id,
-          message: 'Host restarted the game!',
-        },
-      });
-
-      alert(`✅ Game restarted!\n\nThis is Game #${currentGameNumber} with the same question set.\nUse "Play Another Game" after finishing to get a new set of questions.`);
-
-    } catch (err) {
-      console.error('[START FRESH] Unexpected error:', err);
-      alert('An unexpected error occurred. Please try refreshing the page.');
-    } finally {
-      setIsStartingFresh(false);
-    }
-  }, [pass, game, selectedTimer, partyCode]);
-
   // Loading state
   if (loading) {
     return (
@@ -1067,22 +996,6 @@ export default function HostConsolePage() {
                 : 'Waiting for players...'}
             </button>
 
-            {/* Start Fresh Button - Get new random questions */}
-            <button
-              onClick={abandonAndStartFresh}
-              disabled={isStartingFresh}
-              className={`w-full mt-4 py-4 rounded-xl font-bold text-xl transition-all ${
-                isStartingFresh
-                  ? 'bg-gray-600 cursor-wait'
-                  : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 shadow-lg hover:shadow-purple-500/30'
-              }`}
-            >
-              {isStartingFresh ? '⏳ Restarting Game...' : '🔄 RESTART GAME — Same Questions'}
-            </button>
-            <p className="text-center text-sm text-gray-400 mt-2">
-              ⬆️ Restart with the same questions (doesn't count against games remaining)
-            </p>
-
             {/* Debug: Show current question IDs */}
             {game?.question_ids && (
               <div className="mt-4 p-3 bg-gray-900/50 rounded-lg text-xs text-gray-500">
@@ -1289,20 +1202,6 @@ export default function HostConsolePage() {
                 )}
               </div>
 
-              {/* Abandon Game Button */}
-              <div className="mt-6 pt-4 border-t border-gray-700">
-                <button
-                  onClick={abandonAndStartFresh}
-                  disabled={isStartingFresh}
-                  className={`w-full py-3 rounded-lg font-bold transition-all ${
-                    isStartingFresh
-                      ? 'bg-gray-600 cursor-wait text-gray-400'
-                      : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white'
-                  }`}
-                >
-                  {isStartingFresh ? '⏳ Creating New Game...' : '🔄 END THIS GAME — Start Fresh with New Questions'}
-                </button>
-              </div>
             </div>
 
             {/* Sidebar Leaderboard */}
