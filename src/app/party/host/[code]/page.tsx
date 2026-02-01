@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@supabase/supabase-js';
-import { PARTY_QUESTIONS } from '@/constants/party-questions';
 import { Confetti, Fireworks, BouncingHorse } from '@/components/party/Celebration';
 import {
   PartyPass,
@@ -55,6 +54,35 @@ export default function HostConsolePage() {
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [answerStats, setAnswerStats] = useState<AnswerStats | null>(null);
   const [showingAnswer, setShowingAnswer] = useState(false);
+
+  // Questions cache - fetched from database
+  const [questionsCache, setQuestionsCache] = useState<Map<number, Question>>(new Map());
+
+  // Fetch questions from database by IDs
+  const fetchQuestions = useCallback(async (ids: number[]): Promise<Map<number, Question>> => {
+    if (ids.length === 0) return new Map();
+
+    try {
+      const response = await fetch(`/api/party/questions?ids=${ids.join(',')}`);
+      if (!response.ok) {
+        console.error('[QUESTIONS] Failed to fetch questions');
+        return new Map();
+      }
+
+      const data = await response.json();
+      const cache = new Map<number, Question>();
+
+      for (const q of data.questions || []) {
+        cache.set(q.id, q);
+      }
+
+      console.log(`[QUESTIONS] Fetched ${cache.size} questions from database`);
+      return cache;
+    } catch (error) {
+      console.error('[QUESTIONS] Error fetching questions:', error);
+      return new Map();
+    }
+  }, []);
 
   // Timer
   const [timeRemaining, setTimeRemaining] = useState(30);
@@ -127,12 +155,16 @@ export default function HostConsolePage() {
           setGame(gameData);
           console.log('[LOAD] Resuming existing game:', gameData.id, '| Game #', gameData.game_number || '?');
 
+          // Fetch all questions for this game from database
+          const cache = await fetchQuestions(gameData.question_ids);
+          setQuestionsCache(cache);
+
           // Load current question if game is in progress
           if (gameData.status === 'playing' || gameData.status === 'showing_answer') {
             const questionId = gameData.question_ids[gameData.current_question_index];
-            const question = PARTY_QUESTIONS.find((q) => q.id === questionId);
+            const question = cache.get(questionId);
             if (question) {
-              setCurrentQuestion(question as Question);
+              setCurrentQuestion(question);
             }
           }
         } else {
@@ -155,6 +187,11 @@ export default function HostConsolePage() {
           if (response.ok && result.game) {
             console.log('[LOAD] Created game #', result.game_number, ':', result.game.id);
             setGame(result.game);
+
+            // Fetch all questions for this game from database
+            const cache = await fetchQuestions(result.game.question_ids);
+            setQuestionsCache(cache);
+
             // Refresh pass data to get updated counters
             const { data: refreshedPass } = await supabase
               .from('party_passes')
@@ -179,7 +216,7 @@ export default function HostConsolePage() {
     }
 
     loadData();
-  }, [partyCode]);
+  }, [partyCode, fetchQuestions]);
 
   // Subscribe to player presence
   useEffect(() => {
@@ -282,14 +319,14 @@ export default function HostConsolePage() {
       if (!game) return;
 
       const questionId = game.question_ids[questionIndex];
-      const question = PARTY_QUESTIONS.find((q) => q.id === questionId);
+      const question = questionsCache.get(questionId);
 
       if (!question) {
-        console.error('Question not found:', questionId);
+        console.error('Question not found in cache:', questionId);
         return;
       }
 
-      setCurrentQuestion(question as Question);
+      setCurrentQuestion(question);
       setShowingAnswer(false);
       setAnswerStats({ total: 0, correct: 0, distribution: {} });
 
@@ -331,7 +368,7 @@ export default function HostConsolePage() {
         },
       });
     },
-    [game, partyCode, selectedTimer]
+    [game, partyCode, selectedTimer, questionsCache]
   );
 
   // Handle question end (timer expired) - just stops accepting answers
