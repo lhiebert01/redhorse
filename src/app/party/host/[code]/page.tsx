@@ -1293,7 +1293,28 @@ export default function HostConsolePage() {
                   <div className="text-7xl mb-2">🏆</div>
                 )}
 
-                <h2 className="text-4xl font-bold mb-2 mt-4 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-400 to-yellow-400">
+                {/* RedHorseOracle.com Branding */}
+                <div className="flex items-center justify-center gap-2 mt-4 mb-2">
+                  <span className="text-3xl">🔥</span>
+                  <a
+                    href="https://redhorseoracle.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 hover:from-yellow-400 hover:via-orange-400 hover:to-red-400 transition-all"
+                  >
+                    RedHorseOracle.com
+                  </a>
+                  <span className="text-3xl">🐴</span>
+                </div>
+
+                {/* Tagline - slim green tile */}
+                <div className="bg-gradient-to-r from-green-800/80 to-emerald-800/80 rounded-full px-4 py-1.5 mb-4 inline-block border border-green-500/50">
+                  <p className="text-xs text-green-100">
+                    ✨ World's First AI CNY Oracle • Privacy By Design • Powered by Google Gemini
+                  </p>
+                </div>
+
+                <h2 className="text-4xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-400 to-yellow-400">
                   Game Complete!
                 </h2>
                 <p className="text-xl text-yellow-300 mb-4">
