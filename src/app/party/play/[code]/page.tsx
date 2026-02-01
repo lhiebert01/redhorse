@@ -452,6 +452,13 @@ export default function PlayerGamePage() {
               {/* PLAYING STATE */}
               {gameState.status === 'playing' && (
                 <div>
+                  {/* Player Name Banner */}
+                  <div className="text-center mb-3 py-2 bg-gradient-to-r from-blue-900/50 to-purple-900/50 rounded-xl border border-blue-500/30">
+                    <div className="text-2xl font-bold text-yellow-400">
+                      🎮 {playerState.nickname}
+                    </div>
+                  </div>
+
                   {/* Progress & Timer */}
             <div className="flex justify-between items-center mb-2">
               <div className="text-sm text-gray-400">
@@ -588,6 +595,13 @@ export default function PlayerGamePage() {
               {/* SHOWING ANSWER STATE */}
               {gameState.status === 'showing_answer' && (
                 <div>
+                  {/* Player Name Banner */}
+                  <div className="text-center mb-3 py-2 bg-gradient-to-r from-blue-900/50 to-purple-900/50 rounded-xl border border-blue-500/30">
+                    <div className="text-2xl font-bold text-yellow-400">
+                      🎮 {playerState.nickname}
+                    </div>
+                  </div>
+
                   {/* Category Badge */}
             <div className="text-center mb-3">
               <span className="bg-gray-800 px-4 py-1 rounded-full text-sm text-gray-400">
