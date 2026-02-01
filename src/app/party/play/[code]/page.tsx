@@ -434,9 +434,9 @@ export default function PlayerGamePage() {
 
         {/* PLAYING / SHOWING ANSWER - with Sidebar Layout */}
         {(gameState.status === 'playing' || gameState.status === 'showing_answer') && currentQuestion && (
-          <div className="flex gap-4 lg:gap-6">
+          <div className="flex gap-4 xl:gap-6">
             {/* Main Content */}
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               {/* PLAYING STATE */}
               {gameState.status === 'playing' && (
                 <div>
@@ -489,8 +489,8 @@ export default function PlayerGamePage() {
               </div>
             </div>
 
-            {/* Answer Buttons */}
-            <div className="grid grid-cols-2 gap-3 mb-4">
+            {/* Answer Buttons - Full width on mobile, 2 cols on larger screens */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
               {currentQuestion.options.map((option, index) => {
                 const color = ANSWER_COLORS[index];
                 const isSelected = selectedAnswer === option;
@@ -501,14 +501,14 @@ export default function PlayerGamePage() {
                     key={index}
                     onClick={() => handleAnswer(option)}
                     disabled={!!selectedAnswer || timeRemaining === 0}
-                    className={`p-4 rounded-xl font-bold text-base transition-all min-h-[80px] ${
+                    className={`p-4 rounded-xl font-bold text-base transition-all min-h-[70px] text-center break-words leading-tight ${
                       showResult && isSelected
                         ? isCorrect
                           ? 'ring-4 ring-green-400 bg-green-600'
                           : 'ring-4 ring-red-400 bg-red-600'
                         : showResult
                         ? 'opacity-50'
-                        : 'hover:scale-105'
+                        : 'hover:scale-105 active:scale-95'
                     }`}
                     style={{
                       backgroundColor: showResult && isSelected
@@ -710,8 +710,8 @@ export default function PlayerGamePage() {
                     <div className="animate-pulse">Waiting for next question...</div>
                   </div>
 
-                  {/* Mobile Leaderboard - shown on small screens only */}
-                  <div className="lg:hidden mt-4">
+                  {/* Mobile Leaderboard - shown on screens below xl (1280px) */}
+                  <div className="xl:hidden mt-4">
                     {leaderboard.length > 0 && (
                       <div className="bg-gray-900/50 rounded-xl p-4">
                         <h3 className="text-lg font-bold mb-3 text-center text-yellow-400">🏆 Leaderboard</h3>
@@ -753,8 +753,8 @@ export default function PlayerGamePage() {
               )}
             </div>
 
-            {/* Sidebar Leaderboard - visible on large screens */}
-            <div className="w-64 hidden lg:block">
+            {/* Sidebar Leaderboard - visible on extra-large screens only */}
+            <div className="w-56 hidden xl:block shrink-0">
               <div className="bg-gray-900/70 rounded-xl p-4 sticky top-4">
                 <h3 className="text-lg font-bold mb-3 text-center text-yellow-400">🏆 Leaderboard</h3>
                 <div className="space-y-2 max-h-[60vh] overflow-y-auto">
