@@ -209,9 +209,9 @@ export default function PlayerGamePage() {
           ...prev,
           status: 'finished',
         }));
-        // Show celebration! (10 seconds for bouncing horse + confetti)
+        // Show celebration! (25 seconds for bouncing horse + confetti)
         setShowCelebration(true);
-        setTimeout(() => setShowCelebration(false), 10000);
+        setTimeout(() => setShowCelebration(false), 25000);
       })
       .on('broadcast', { event: 'party_end' }, () => {
         // Host ended the party - show thank you screen

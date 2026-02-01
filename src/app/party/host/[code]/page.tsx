@@ -678,10 +678,10 @@ export default function HostConsolePage() {
     setPass((prev) => prev ? { ...prev, games_remaining: newGamesRemaining } : null);
     setGame((prev) => (prev ? { ...prev, status: 'finished' } : null));
 
-    // Show celebration! (10 seconds for bouncing horse + confetti)
+    // Show celebration! (25 seconds for bouncing horse + confetti)
     setCelebrationType(Math.random() > 0.5 ? 'confetti' : 'fireworks');
     setShowCelebration(true);
-    setTimeout(() => setShowCelebration(false), 10000); // Hide after 10 seconds
+    setTimeout(() => setShowCelebration(false), 25000); // Hide after 25 seconds
 
     // Broadcast game end
     const channel = supabase.channel(`party:${partyCode}`);
