@@ -124,6 +124,11 @@ export default function PlayerGamePage() {
           total_questions: number;
           timer_seconds: number;
         };
+        // Reset scores for new game
+        setLeaderboard([]);
+        setTotalPoints(0);
+        setMyRank(null);
+        setCurrentStreak(0);
         setGameState((prev) => ({
           ...prev,
           status: 'countdown',

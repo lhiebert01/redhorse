@@ -225,6 +225,9 @@ export default function HostConsolePage() {
   const startGame = useCallback(async () => {
     if (!game || !pass) return;
 
+    // Reset leaderboard for fresh start
+    setLeaderboard([]);
+
     // Start 3-2-1 countdown
     setCountdown(3);
 
