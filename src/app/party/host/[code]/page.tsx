@@ -408,19 +408,25 @@ export default function HostConsolePage() {
     }
 
     // Calculate leaderboard from ALL answers so far
-    const { data: allAnswers } = await supabase
+    console.log('[REVEAL TIMER] Querying answers for game:', game.id);
+    const { data: allAnswers, error: answersErr } = await supabase
       .from('party_answers')
       .select('player_id, total_points')
       .eq('party_game_id', game.id);
 
-    const { data: gamePlayers } = await supabase
+    console.log('[REVEAL TIMER] Answers found:', allAnswers?.length || 0, 'error:', answersErr);
+
+    const { data: gamePlayers, error: playersErr } = await supabase
       .from('party_players')
       .select('id, nickname, zodiac_sign, zodiac_element')
       .eq('party_game_id', game.id);
 
+    console.log('[REVEAL TIMER] Players found:', gamePlayers?.length || 0, 'error:', playersErr);
+
     let leaderboardData: LeaderboardEntry[] = [];
 
     if (allAnswers && gamePlayers) {
+      console.log('[REVEAL TIMER] Building leaderboard...');
       const pointsMap = new Map<string, number>();
       allAnswers.forEach((ans) => {
         pointsMap.set(ans.player_id, (pointsMap.get(ans.player_id) || 0) + ans.total_points);
@@ -492,19 +498,25 @@ export default function HostConsolePage() {
     }
 
     // Calculate leaderboard from ALL answers so far
-    const { data: allAnswers } = await supabase
+    console.log('[SHOW ANSWER] Querying answers for game:', game.id);
+    const { data: allAnswers, error: allAnswersErr } = await supabase
       .from('party_answers')
       .select('player_id, total_points')
       .eq('party_game_id', game.id);
 
-    const { data: gamePlayers } = await supabase
+    console.log('[SHOW ANSWER] Answers found:', allAnswers?.length || 0, 'error:', allAnswersErr);
+
+    const { data: gamePlayers, error: gamePlayersErr } = await supabase
       .from('party_players')
       .select('id, nickname, zodiac_sign, zodiac_element')
       .eq('party_game_id', game.id);
 
+    console.log('[SHOW ANSWER] Players found:', gamePlayers?.length || 0, 'error:', gamePlayersErr);
+
     let leaderboardData: LeaderboardEntry[] = [];
 
     if (allAnswers && gamePlayers) {
+      console.log('[SHOW ANSWER] Building leaderboard with', allAnswers.length, 'answers');
       // Sum up points per player
       const pointsMap = new Map<string, number>();
       allAnswers.forEach((ans) => {
@@ -530,9 +542,13 @@ export default function HostConsolePage() {
 
       // Update the leaderboard state
       setLeaderboard(leaderboardData);
+      console.log('[SHOW ANSWER] Leaderboard built:', leaderboardData.map(e => `${e.nickname}:${e.total_points}`));
+    } else {
+      console.log('[SHOW ANSWER] No leaderboard data - allAnswers:', !!allAnswers, 'gamePlayers:', !!gamePlayers);
     }
 
     // Broadcast answer reveal WITH leaderboard
+    console.log('[SHOW ANSWER] Broadcasting leaderboard with', leaderboardData.length, 'entries');
     const channel = supabase.channel(`party:${partyCode}`);
     await channel.send({
       type: 'broadcast',
