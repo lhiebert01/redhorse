@@ -2986,4 +2986,207 @@ git add -A && git commit -m "message" && git push origin main
 
 ---
 
+## Party Trivia Architecture & Lessons Learned
+
+### Multi-Tenant Architecture
+
+**CRITICAL:** The Party Trivia game supports MULTIPLE HOSTS running SIMULTANEOUS games worldwide. At any given moment (e.g., 1 PM on a Saturday), there could be:
+- Host A in New York with 15 players
+- Host B in London with 8 players
+- Host C in Tokyo with 20 players
+
+Each host has their OWN UNIQUE game, but all games run on the same infrastructure concurrently.
+
+### Data Isolation Model
+
+```
+party_passes (unique per purchase)
+    └── party_games (multiple per pass, one active at a time)
+            └── party_players (belong to ONE specific game)
+            └── party_answers (belong to ONE specific game + player)
+```
+
+**Key Relationships:**
+- `party_passes.party_code` → Unique 6-character code (e.g., "8478JL")
+- `party_games.party_pass_id` → Links game to specific pass
+- `party_players.party_game_id` → Links player to specific game
+- `party_answers.party_game_id` + `party_answers.player_id` → Links answer to specific game + player
+
+### Game ID is the Source of Truth
+
+**ALWAYS use `game.id` (UUID) to:**
+- Query players: `WHERE party_game_id = game.id`
+- Query answers: `WHERE party_game_id = game.id`
+- Broadcast events: Use channel name `party:${partyCode}` but include `game.id` in payloads
+- Calculate leaderboards: Sum points `WHERE party_game_id = game.id`
+
+### Question Pre-Generation Architecture
+
+**At Purchase Time (Webhook):**
+1. Generate ALL question sets for all games upfront
+2. Store as `question_sets` JSONB array in `party_passes`
+3. Use Fisher-Yates shuffle for true randomness
+4. Each set is UNIQUE and NON-REDUNDANT
+
+```typescript
+// Example: Weekend Pass (10 games × 20 questions = 200 unique questions)
+question_sets: [
+  [14, 87, 203, 45, ...],  // Game 1 questions
+  [312, 56, 178, 92, ...], // Game 2 questions
+  // ... 10 sets total
+]
+```
+
+**At Game Start:**
+- Use `question_sets[games_played]` for current game
+- NO runtime question generation needed
+- Every game is guaranteed unique questions
+
+### Lessons Learned (January 2026)
+
+#### 1. Game ID Mismatch Bug (CRITICAL)
+
+**Problem:** Scoring broke because players were in a DIFFERENT game than the host.
+
+**Root Cause:** The Join API was creating NEW games if it couldn't find one:
+```typescript
+// BAD - Creates duplicate games!
+if (!game) {
+  const newGame = await createGame();
+  game = newGame;
+}
+```
+
+**Result:**
+- Host creates Game A
+- Player join API creates Game B
+- Player answers go to Game B
+- Host queries Game A → finds nothing → 0% correct!
+
+**Fix:** Join API should ONLY find existing games, never create:
+```typescript
+// GOOD - Only find, never create
+const game = await findActiveGame(pass.id);
+if (!game) {
+  return { error: 'No active game. Wait for host.' };
+}
+```
+
+**Rule:** Only the HOST creates games (via `/api/party/game`). Players only JOIN.
+
+#### 2. RLS (Row Level Security) Blocking Inserts
+
+**Problem:** Client-side Supabase couldn't insert into `party_games` table.
+
+**Root Cause:** RLS policies blocked inserts from anon key.
+
+**Fix:** Create server-side API route with service role key:
+```typescript
+// /api/party/game/route.ts
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!  // Service role bypasses RLS
+);
+```
+
+**Rule:** For tables with RLS, use API routes with service role key.
+
+#### 3. Legacy Pass Compatibility
+
+**Problem:** Old passes don't have pre-generated `question_sets`.
+
+**Solution:** API falls back to Fisher-Yates shuffle if no pre-generated sets:
+```typescript
+if (questionSets && questionSets.length > setIndex) {
+  questionIds = questionSets[setIndex];
+} else {
+  // Legacy fallback - generate on the fly
+  questionIds = generateRandomQuestions(20);
+}
+```
+
+#### 4. No "Restart" Button Needed
+
+**Old Design:** Had "RESTART GAME — Same Questions" button.
+
+**Why Removed:**
+- Pre-generated sets mean every START GAME uses NEXT unique set
+- No need to "refresh" questions - they're already unique
+- Simpler UX: Just "START GAME" and "PLAY ANOTHER GAME"
+
+### API Routes Summary
+
+| Route | Purpose | Auth |
+|-------|---------|------|
+| `/api/party/create` | Create Stripe checkout for pass purchase | None |
+| `/api/party/webhook` | Handle Stripe payment, create pass + first game | Stripe signature |
+| `/api/party/game` | Create new game (host only) | Service role |
+| `/api/party/join` | Player joins existing game | Service role |
+| `/api/party/answer` | Submit player answer | Service role |
+
+### Real-Time Event Flow
+
+```
+Host Page                    Player Pages
+    │                             │
+    ├── startGame() ──────────────┤
+    │   broadcast: game_start     │
+    │                             │
+    ├── showNextQuestion() ───────┤
+    │   broadcast: next_question  │
+    │   payload: { question, timer_seconds }
+    │                             │
+    │                             ├── handleAnswer()
+    │                             │   POST /api/party/answer
+    │                             │
+    ├── handleQuestionEnd() ──────┤
+    │   broadcast: question_end   │
+    │                             │
+    ├── showAnswer() ─────────────┤
+    │   broadcast: show_answer    │
+    │   payload: { correct_answer, stats, leaderboard }
+    │                             │
+    ├── endParty() ───────────────┤
+    │   broadcast: party_end      │
+```
+
+### Debugging Checklist
+
+When scoring isn't working:
+
+1. **Check Game IDs Match**
+   - Host debug shows: `Game: XXXXXXXX-...`
+   - Player should be in SAME game ID
+   - Query: `SELECT * FROM party_players WHERE party_game_id = 'XXX'`
+
+2. **Check Answer Table**
+   - `SELECT * FROM party_answers WHERE party_game_id = 'XXX'`
+   - Verify `is_correct` column is TRUE for correct answers
+
+3. **Check Question ID**
+   - Compare `question_id` in answer with actual question shown
+   - Mismatch means wrong question was sent
+
+4. **Check Leaderboard Query**
+   - Should sum `total_points` grouped by `player_id`
+   - WHERE clause must include correct `party_game_id`
+
+### Testing Multiple Concurrent Games
+
+To simulate multiple hosts:
+
+1. **Open multiple browser windows** (or use different browsers)
+2. **Each purchases a different pass** (or use test passes)
+3. **Each has unique party code**
+4. **Players join their respective games**
+5. **All games run simultaneously without interference**
+
+**Verification:**
+- Each host sees ONLY their players
+- Each player sees ONLY their game
+- Scores don't mix between games
+- Leaderboards are independent
+
+---
+
 *火马年 2026 - Year of the Fire Horse*
