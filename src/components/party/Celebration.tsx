@@ -95,6 +95,20 @@ const PARTY_COMPLETE_MESSAGES = [
   '✨ Fortune favors the brave trivia player!',
   '🌟 The Fire Horse gallops with joy for YOU!',
   '🎊 RedHorseOracle.com appreciates you!',
+  '🐴 Neigh! That means "well done" in horse!',
+  '🔥 Your trivia skills are on FIRE!',
+  '✨ The Oracle is impressed by your wisdom!',
+  '🎉 Every answer brings more luck your way!',
+  '⭐ 2026 fortune loading... 100% complete!',
+  '🐴 The pony does a happy dance for you!',
+  '🔥 You have the spirit of a Fire Horse!',
+  '✨ May your year gallop with success!',
+  '🌟 The Fire Horse chose YOU to celebrate!',
+  '🎊 Trivia champion vibes detected!',
+  '🐴 Hooves up for an amazing player!',
+  '🔥 Your luck meter just went UP!',
+  '✨ The Oracle smiles upon you!',
+  '🎉 Fire Horse energy: ACTIVATED!',
 ];
 
 // Rotating messages for HOSTS - appreciation and encouragement!
@@ -109,6 +123,20 @@ const HOST_COMPLETE_MESSAGES = [
   '✨ RedHorseOracle.com appreciates YOU!',
   '🔥 Hosting is a gift — thank you!',
   '🌟 The Oracle sees a legendary host!',
+  '🎉 Your party brings joy to everyone!',
+  '🐴 The Fire Horse bows to the host!',
+  '✨ Best. Host. Ever. Says the Oracle!',
+  '🔥 You make trivia nights unforgettable!',
+  '⭐ Hosts like you are rare treasures!',
+  '🎊 The pony gives you a gold star! ⭐',
+  '🐴 Neigh-mazing hosting skills detected!',
+  '✨ Your guests are having a blast!',
+  '🔥 Fire Horse approved party host!',
+  '🌟 May fortune reward your generosity!',
+  '🎉 The Oracle celebrates YOUR leadership!',
+  '🐴 Every guest remembers a great host!',
+  '✨ You spread joy like confetti!',
+  '🔥 Legendary host status: UNLOCKED!',
 ];
 
 interface BouncingHorseProps {
