@@ -158,12 +158,23 @@ export function BouncingHorse({
   // Select message array based on isHost
   const messages = isHost ? HOST_COMPLETE_MESSAGES : PARTY_COMPLETE_MESSAGES;
 
-  // Rotate messages every 2.5 seconds
+  // Randomly rotate messages every 2.5 seconds for variety
   useEffect(() => {
     if (!showRotatingMessages) return;
 
+    // Start with a random message
+    setMessageIndex(Math.floor(Math.random() * messages.length));
+
     const interval = setInterval(() => {
-      setMessageIndex((prev) => (prev + 1) % messages.length);
+      // Pick a random message (different from current)
+      setMessageIndex((prev) => {
+        let next = Math.floor(Math.random() * messages.length);
+        // Ensure we don't show the same message twice in a row
+        while (next === prev && messages.length > 1) {
+          next = Math.floor(Math.random() * messages.length);
+        }
+        return next;
+      });
     }, 2500);
 
     return () => clearInterval(interval);
