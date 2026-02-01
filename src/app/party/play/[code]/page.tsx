@@ -351,9 +351,21 @@ export default function PlayerGamePage() {
 
   // Render based on game status
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-black text-white relative overflow-hidden">
+      {/* Fire Horse Background with Transparency */}
+      <div
+        className="fixed inset-0 z-0 pointer-events-none"
+        style={{
+          backgroundImage: `url(/assets/Fire-Horse-2026-Chart-v2.jpeg)`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          opacity: 0.15,
+        }}
+      />
+
       {/* Header with Score */}
-      <div className="bg-gradient-to-r from-red-900 to-yellow-900 p-3">
+      <div className="bg-gradient-to-r from-red-900 to-yellow-900 p-3 relative z-10">
         <div className="max-w-2xl mx-auto flex justify-between items-center">
           <div>
             <span className="text-sm text-gray-300">Party: </span>
@@ -375,7 +387,7 @@ export default function PlayerGamePage() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-2xl mx-auto px-4 py-4">
+      <div className="max-w-2xl mx-auto px-4 py-4 relative z-10">
         {/* LOBBY */}
         {gameState.status === 'lobby' && (
           <div className="text-center">

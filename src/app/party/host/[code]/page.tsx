@@ -818,9 +818,21 @@ export default function HostConsolePage() {
   const passTime = getPassTimeRemaining(pass);
 
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-black text-white relative overflow-hidden">
+      {/* Fire Horse Background with Transparency */}
+      <div
+        className="fixed inset-0 z-0 pointer-events-none"
+        style={{
+          backgroundImage: `url(/assets/Fire-Horse-2026-Chart-v2.jpeg)`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          opacity: 0.15,
+        }}
+      />
+
       {/* Header */}
-      <div className="bg-gradient-to-r from-red-900 to-yellow-900 p-4">
+      <div className="bg-gradient-to-r from-red-900 to-yellow-900 p-4 relative z-10">
         <div className="max-w-4xl mx-auto flex justify-between items-center">
           <div>
             <div className="text-sm text-gray-300">Party Code:</div>
@@ -853,7 +865,7 @@ export default function HostConsolePage() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 py-6">
+      <div className="max-w-4xl mx-auto px-4 py-6 relative z-10">
         {/* COUNTDOWN */}
         {countdown !== null && (
           <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center">
