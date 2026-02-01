@@ -228,6 +228,29 @@ export default function HostConsolePage() {
     // Reset leaderboard for fresh start
     setLeaderboard([]);
 
+    // Clear any existing answers from previous plays of this game
+    console.log('[START GAME] Clearing old answers for game:', game.id);
+    const { error: clearError } = await supabase
+      .from('party_answers')
+      .delete()
+      .eq('party_game_id', game.id);
+
+    if (clearError) {
+      console.error('[START GAME] Failed to clear old answers:', clearError);
+    } else {
+      console.log('[START GAME] Old answers cleared successfully');
+    }
+
+    // Reset game state in database
+    await supabase
+      .from('party_games')
+      .update({
+        current_question_index: 0,
+        status: 'lobby',
+        started_at: null
+      })
+      .eq('id', game.id);
+
     // Start 3-2-1 countdown
     setCountdown(3);
 
