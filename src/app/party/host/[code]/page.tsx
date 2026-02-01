@@ -1508,6 +1508,7 @@ export default function HostConsolePage() {
                     showRotatingMessages={true}
                     showShareButton={true}
                     partyCode={partyCode}
+                    isHost={true}
                   />
                 )}
 

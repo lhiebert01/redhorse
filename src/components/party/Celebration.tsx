@@ -83,7 +83,7 @@ export function Confetti({ count = 100, durationMultiplier = 1 }: { count?: numb
   );
 }
 
-// Rotating messages for party game completion - cute and fun!
+// Rotating messages for PLAYERS - cute and fun!
 const PARTY_COMPLETE_MESSAGES = [
   '🐴 When the pony dances, luck follows!',
   '✨ The Fire Horse winks at you! 😉',
@@ -97,6 +97,20 @@ const PARTY_COMPLETE_MESSAGES = [
   '🎊 RedHorseOracle.com appreciates you!',
 ];
 
+// Rotating messages for HOSTS - appreciation and encouragement!
+const HOST_COMPLETE_MESSAGES = [
+  '🎉 You are doing a GREAT job hosting!',
+  '✨ RedHorseOracle.com celebrates with you!',
+  '🐴 The Fire Horse thanks you for hosting!',
+  '🔥 Great party! Your guests love it!',
+  '⭐ As a host, you bring people together!',
+  '🎊 Share this party with more friends!',
+  '🐴 Clip-clop! The pony salutes YOU, host!',
+  '✨ RedHorseOracle.com appreciates YOU!',
+  '🔥 Hosting is a gift — thank you!',
+  '🌟 The Oracle sees a legendary host!',
+];
+
 interface BouncingHorseProps {
   message?: string;
   size?: 'small' | 'medium' | 'large';
@@ -105,6 +119,7 @@ interface BouncingHorseProps {
   shareText?: string;
   partyCode?: string;
   showFrame?: boolean; // Show golden ring frame like payment processing
+  isHost?: boolean; // Use host-specific messages
 }
 
 export function BouncingHorse({
@@ -115,6 +130,7 @@ export function BouncingHorse({
   shareText,
   partyCode,
   showFrame = false,
+  isHost = false,
 }: BouncingHorseProps) {
   const [messageIndex, setMessageIndex] = useState(0);
   const [copied, setCopied] = useState(false);
@@ -139,16 +155,19 @@ export function BouncingHorse({
     large: 'w-56 h-56',
   };
 
+  // Select message array based on isHost
+  const messages = isHost ? HOST_COMPLETE_MESSAGES : PARTY_COMPLETE_MESSAGES;
+
   // Rotate messages every 2.5 seconds
   useEffect(() => {
     if (!showRotatingMessages) return;
 
     const interval = setInterval(() => {
-      setMessageIndex((prev) => (prev + 1) % PARTY_COMPLETE_MESSAGES.length);
+      setMessageIndex((prev) => (prev + 1) % messages.length);
     }, 2500);
 
     return () => clearInterval(interval);
-  }, [showRotatingMessages]);
+  }, [showRotatingMessages, messages.length]);
 
   // Default share text
   const defaultShareText = `🔥🐴 Just played Fire Horse Trivia! Join the fun at redhorseoracle.com/party ${partyCode ? `\n\nParty Code: ${partyCode}` : ''}\n\n2026 is the Year of the Fire Horse — only happens every 60 years! 🔥`;
@@ -246,7 +265,7 @@ export function BouncingHorse({
             textShadow: '0 0 20px rgba(255, 165, 0, 0.4)',
           }}
         >
-          {PARTY_COMPLETE_MESSAGES[messageIndex]}
+          {messages[messageIndex]}
         </p>
       )}
 
