@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Confetti, BouncingHorse } from './Celebration';
 
@@ -24,7 +24,14 @@ export default function PartyEndScreen({
   isHost = false,
 }: PartyEndScreenProps) {
   const [showConfetti, setShowConfetti] = useState(true);
+  const [showHorse, setShowHorse] = useState(true);
   const [copied, setCopied] = useState(false);
+
+  // Hide bouncing horse after 10 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => setShowHorse(false), 10000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Generate social share text
   const shareText = `🔥🐴 I just played Fire Horse Trivia at party ${partyCode}!
@@ -57,8 +64,11 @@ ${zodiacSign ? `\n✨ I'm a ${zodiacElement} ${zodiacSign}!` : ''}
       {showConfetti && <Confetti count={150} />}
 
       <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8">
-        {/* Bouncing Horse with Golden Ring Frame */}
-        <BouncingHorse size="large" showFrame={true} />
+        {/* Bouncing Horse with Golden Ring Frame - shows for 10 seconds */}
+        {showHorse && <BouncingHorse size="large" showFrame={true} />}
+
+        {/* Trophy after horse animation ends */}
+        {!showHorse && <div className="text-7xl mb-4">🏆🔥🐴</div>}
 
         {/* Thank You Message */}
         <div className="text-center mt-6 max-w-2xl">

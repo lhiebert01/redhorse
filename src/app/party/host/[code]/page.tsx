@@ -710,10 +710,10 @@ export default function HostConsolePage() {
     setPass((prev) => prev ? { ...prev, games_remaining: newGamesRemaining } : null);
     setGame((prev) => (prev ? { ...prev, status: 'finished' } : null));
 
-    // Show celebration!
+    // Show celebration! (10 seconds for bouncing horse + confetti)
     setCelebrationType(Math.random() > 0.5 ? 'confetti' : 'fireworks');
     setShowCelebration(true);
-    setTimeout(() => setShowCelebration(false), 6000); // Hide after 6 seconds
+    setTimeout(() => setShowCelebration(false), 10000); // Hide after 10 seconds
 
     // Broadcast game end
     const channel = supabase.channel(`party:${partyCode}`);
@@ -1498,15 +1498,24 @@ export default function HostConsolePage() {
                 celebrationType === 'confetti' ? <Confetti count={200} durationMultiplier={2.5} /> : <Fireworks />
               )}
 
-              {/* Celebration Header with Bouncing Fire Horse + Rotating Messages */}
+              {/* Celebration Header */}
               <div className="mb-6">
-                <BouncingHorse
-                  size="large"
-                  showFrame={true}
-                  showRotatingMessages={true}
-                  showShareButton={true}
-                  partyCode={partyCode}
-                />
+                {/* Bouncing Horse - only shows during celebration (10 seconds) */}
+                {showCelebration && (
+                  <BouncingHorse
+                    size="large"
+                    showFrame={true}
+                    showRotatingMessages={true}
+                    showShareButton={true}
+                    partyCode={partyCode}
+                  />
+                )}
+
+                {/* Trophy after celebration ends */}
+                {!showCelebration && (
+                  <div className="text-7xl mb-2">🏆</div>
+                )}
+
                 <h2 className="text-4xl font-bold mb-2 mt-4 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-400 to-yellow-400">
                   Game Complete!
                 </h2>

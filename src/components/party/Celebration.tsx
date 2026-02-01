@@ -83,16 +83,18 @@ export function Confetti({ count = 100, durationMultiplier = 1 }: { count?: numb
   );
 }
 
-// Rotating messages for party game completion
+// Rotating messages for party game completion - cute and fun!
 const PARTY_COMPLETE_MESSAGES = [
-  '🔥 Thank you for riding with the Fire Horse! 🐴',
-  '✨ May the Fire Horse bring you fortune in 2026!',
-  '🎉 Great game! Share with friends to spread the luck!',
-  '🐴 The Fire Horse galloped through your trivia battle!',
-  '🔥 You have embraced the spirit of the Fire Horse!',
-  '⭐ 2026 is YOUR year — the Fire Horse believes in you!',
-  '🎊 Amazing! Tell your friends about Fire Horse Trivia!',
-  '🌟 The Fire Horse thanks you for playing together!',
+  '🐴 When the pony dances, luck follows!',
+  '✨ The Fire Horse winks at you! 😉',
+  '🔥 RedHorseOracle.com celebrates with you!',
+  '🎉 You made the Fire Horse proud!',
+  '⭐ The Oracle whispers: "You are amazing!"',
+  '🐴 Clip-clop! The pony stamps approval!',
+  '🔥 Share the magic with your friends!',
+  '✨ Fortune favors the brave trivia player!',
+  '🌟 The Fire Horse gallops with joy for YOU!',
+  '🎊 RedHorseOracle.com appreciates you!',
 ];
 
 interface BouncingHorseProps {

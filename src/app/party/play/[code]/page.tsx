@@ -209,9 +209,9 @@ export default function PlayerGamePage() {
           ...prev,
           status: 'finished',
         }));
-        // Show celebration!
+        // Show celebration! (10 seconds for bouncing horse + confetti)
         setShowCelebration(true);
-        setTimeout(() => setShowCelebration(false), 6000);
+        setTimeout(() => setShowCelebration(false), 10000);
       })
       .on('broadcast', { event: 'party_end' }, () => {
         // Host ended the party - show thank you screen
@@ -805,31 +805,31 @@ export default function PlayerGamePage() {
               {/* Celebration Animation - 2.5x longer */}
               {showCelebration && <Confetti count={150} durationMultiplier={2.5} />}
 
-              {/* Victory Header with Bouncing Fire Horse + Rotating Messages */}
+              {/* Victory Header */}
               <div className="mb-4">
-                {finalRank === 1 ? (
+                {/* Bouncing Horse - only shows during celebration (10 seconds) */}
+                {showCelebration && (
                   <BouncingHorse
-                    size="medium"
+                    size={finalRank === 1 ? 'medium' : 'small'}
                     showFrame={true}
                     showRotatingMessages={true}
                     showShareButton={true}
                     partyCode={partyCode}
                   />
-                ) : (
-                  <>
-                    <div className="text-7xl mb-2 animate-bounce">
-                      {finalRank === 2 ? '🥈' : finalRank === 3 ? '🥉' : '🎉'}
-                    </div>
-                    {/* Small horse with frame for non-champions */}
-                    <BouncingHorse
-                      size="small"
-                      showFrame={true}
-                      showRotatingMessages={true}
-                      showShareButton={true}
-                      partyCode={partyCode}
-                    />
-                  </>
                 )}
+
+                {/* Medal emoji for non-champions (shows always) */}
+                {!showCelebration && finalRank !== 1 && (
+                  <div className="text-7xl mb-2">
+                    {finalRank === 2 ? '🥈' : finalRank === 3 ? '🥉' : '🎉'}
+                  </div>
+                )}
+
+                {/* Trophy for champion after celebration ends */}
+                {!showCelebration && finalRank === 1 && (
+                  <div className="text-7xl mb-2">🏆</div>
+                )}
+
                 <h1 className="text-4xl font-bold mb-2 mt-4 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-400 to-yellow-400">
                   {finalRank === 1 ? 'CHAMPION!' : finalRank && finalRank <= 3 ? 'PODIUM FINISH!' : 'Game Over!'}
                 </h1>
