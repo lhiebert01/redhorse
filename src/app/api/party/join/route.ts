@@ -50,8 +50,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Find or create an active game for this party
-    let { data: game, error: gameError } = await supabase
+    // Find an active game for this party (host creates the game, players just join)
+    const { data: game, error: gameError } = await supabase
       .from('party_games')
       .select('*')
       .eq('party_pass_id', pass.id)
@@ -60,41 +60,12 @@ export async function POST(request: NextRequest) {
       .limit(1)
       .single();
 
-    // If no active game, create one in lobby status
+    // If no active game, tell player to wait for host
     if (gameError || !game) {
-      // Check if there are games remaining
-      if (pass.games_remaining <= 0) {
-        return NextResponse.json(
-          { error: 'This party has used all its games.' },
-          { status: 400 }
-        );
-      }
-
-      // Generate random question IDs
-      const questionsPerGame = pass.settings?.questions_per_game || 20;
-      const questionIds = generateRandomQuestionIds(questionsPerGame);
-
-      const { data: newGame, error: createError } = await supabase
-        .from('party_games')
-        .insert({
-          party_pass_id: pass.id,
-          timer_seconds: pass.settings?.timer_seconds || 30,
-          questions_per_game: questionsPerGame,
-          question_ids: questionIds,
-          status: 'lobby',
-        })
-        .select()
-        .single();
-
-      if (createError || !newGame) {
-        console.error('Failed to create game:', createError);
-        return NextResponse.json(
-          { error: 'Failed to create game. Please try again.' },
-          { status: 500 }
-        );
-      }
-
-      game = newGame;
+      return NextResponse.json(
+        { error: 'No active game found. Please wait for the host to start a game.' },
+        { status: 400 }
+      );
     }
 
     // Check player count
@@ -196,19 +167,3 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Generate random question IDs from the question bank
-function generateRandomQuestionIds(count: number): number[] {
-  const totalQuestions = 400; // We have 400 questions
-  const ids: number[] = [];
-  const used = new Set<number>();
-
-  while (ids.length < count && ids.length < totalQuestions) {
-    const id = Math.floor(Math.random() * totalQuestions) + 1;
-    if (!used.has(id)) {
-      used.add(id);
-      ids.push(id);
-    }
-  }
-
-  return ids;
-}
