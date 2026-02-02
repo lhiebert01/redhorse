@@ -650,6 +650,26 @@ export default function SoloPlayPage() {
               </div>
             </div>
 
+            {/* Solo Leaderboard / Your Stats */}
+            <div className="bg-gray-900/70 rounded-xl p-3 mb-4 border border-yellow-500/30">
+              <h3 className="text-sm font-bold mb-2 text-center text-yellow-400">🏆 Your Stats</h3>
+              <div className="bg-yellow-900/30 p-2 rounded-lg border border-yellow-600">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">🥇</span>
+                    <div>
+                      <div className="font-bold text-yellow-300">{nickname}</div>
+                      <div className="text-xs text-gray-400">{zodiacInfo?.element} {zodiacInfo?.sign}</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-yellow-400">{gameStats.totalPoints}</div>
+                    <div className="text-xs text-gray-400">{gameStats.correctAnswers}/{currentQuestionIndex} correct</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Timer Bar */}
             {timerSetting > 0 && (
               <div className="h-2 bg-gray-800 rounded-full mb-4 overflow-hidden">
@@ -802,19 +822,35 @@ export default function SoloPlayPage() {
               </div>
             </div>
 
-            {/* Score Summary */}
-            <div className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-xl p-4 mb-4">
-              <div className="flex justify-between items-center">
-                <div>
-                  <div className="text-sm text-gray-400">Total Score</div>
-                  <div className="text-3xl font-bold text-yellow-400">{gameStats.totalPoints}</div>
-                </div>
-                <div className="text-right">
-                  <div className="text-sm text-gray-400">Correct</div>
-                  <div className="text-xl font-bold">
-                    {gameStats.correctAnswers}/{currentQuestionIndex + 1}
+            {/* Solo Leaderboard / Your Stats */}
+            <div className="bg-gray-900/70 rounded-xl p-3 mb-4 border border-yellow-500/30">
+              <h3 className="text-sm font-bold mb-2 text-center text-yellow-400">🏆 Your Stats</h3>
+              <div className="bg-yellow-900/30 p-3 rounded-lg border border-yellow-600">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">🥇</span>
+                    <div>
+                      <div className="font-bold text-yellow-300 text-lg">{nickname}</div>
+                      <div className="text-xs text-gray-400">{zodiacInfo?.element} {zodiacInfo?.sign}</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-3xl font-bold text-yellow-400">{gameStats.totalPoints}</div>
+                    <div className="text-sm text-gray-300">{gameStats.correctAnswers}/{currentQuestionIndex + 1} correct</div>
                   </div>
                 </div>
+                {currentStreak >= 2 && (
+                  <div className="mt-2 text-center">
+                    <span className="bg-orange-600/50 px-3 py-1 rounded-full text-sm font-bold text-orange-200">
+                      🔥 {currentStreak} streak!
+                    </span>
+                  </div>
+                )}
+                {gameStats.bestStreak >= 3 && (
+                  <div className="mt-2 text-center text-xs text-gray-400">
+                    Best streak: {gameStats.bestStreak}
+                  </div>
+                )}
               </div>
             </div>
 
