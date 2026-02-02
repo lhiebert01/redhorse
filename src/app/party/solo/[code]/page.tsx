@@ -24,7 +24,7 @@ const supabase = createClient(
 interface Question {
   id: number;
   question: string;
-  answer: string;
+  correctAnswer: string;
   options: string[];
   category: string;
   difficulty: string;
@@ -308,7 +308,7 @@ export default function SoloPlayPage() {
     const answerTimeMs = Date.now() - questionStartTime;
     setSelectedAnswer(answer);
 
-    const correct = answer === currentQuestion.answer;
+    const correct = answer === currentQuestion.correctAnswer;
     setIsCorrect(correct);
 
     if (correct) {
@@ -720,7 +720,7 @@ export default function SoloPlayPage() {
             <div className="grid grid-cols-2 gap-3 mb-4">
               {currentQuestion.options.map((option, index) => {
                 const color = ANSWER_COLORS[index];
-                const isCorrectAnswer = currentQuestion.answer === option;
+                const isCorrectAnswer = currentQuestion.correctAnswer === option;
                 const wasSelected = selectedAnswer === option;
 
                 return (
@@ -790,7 +790,7 @@ export default function SoloPlayPage() {
               <div className="text-center">
                 <div className="text-sm text-green-300 font-bold mb-1">✅ CORRECT ANSWER</div>
                 <div className="text-xl font-bold text-white">
-                  {currentQuestion.answer}
+                  {currentQuestion.correctAnswer}
                 </div>
                 {currentQuestion.explanation && (
                   <div className="bg-black/30 rounded-lg p-3 mt-3">
