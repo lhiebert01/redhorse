@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@supabase/supabase-js';
@@ -56,6 +56,8 @@ export default function HostConsolePage() {
   const [showingAnswer, setShowingAnswer] = useState(false);
 
   // Questions cache - fetched from database
+  // Using ref to avoid stale closure issues in callbacks
+  const questionsCacheRef = useRef<Map<number, Question>>(new Map());
   const [questionsCache, setQuestionsCache] = useState<Map<number, Question>>(new Map());
 
   // Fetch questions from database by IDs
@@ -76,7 +78,9 @@ export default function HostConsolePage() {
         cache.set(q.id, q);
       }
 
-      console.log(`[QUESTIONS] Fetched ${cache.size} questions from database`);
+      // CRITICAL: Update ref immediately so callbacks have current data
+      questionsCacheRef.current = cache;
+      console.log(`[QUESTIONS] Fetched ${cache.size} questions from database, ref updated`);
       return cache;
     } catch (error) {
       console.error('[QUESTIONS] Error fetching questions:', error);
@@ -319,10 +323,11 @@ export default function HostConsolePage() {
       if (!game) return;
 
       const questionId = game.question_ids[questionIndex];
-      const question = questionsCache.get(questionId);
+      // CRITICAL: Use ref instead of state to avoid stale closure issue
+      const question = questionsCacheRef.current.get(questionId);
 
       if (!question) {
-        console.error('Question not found in cache:', questionId);
+        console.error('Question not found in cache:', questionId, '| Cache size:', questionsCacheRef.current.size);
         return;
       }
 
@@ -368,7 +373,7 @@ export default function HostConsolePage() {
         },
       });
     },
-    [game, partyCode, selectedTimer, questionsCache]
+    [game, partyCode, selectedTimer] // questionsCache removed - using ref instead
   );
 
   // Handle question end (timer expired) - just stops accepting answers
