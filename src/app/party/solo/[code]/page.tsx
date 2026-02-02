@@ -472,14 +472,14 @@ export default function SoloPlayPage() {
               {/* Get New Pass CTA */}
               <div className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-xl p-4 mb-4 border border-purple-500/30">
                 <p className="text-lg font-bold text-purple-300 mb-2">
-                  Want to play more?
+                  😊 Want to play more?
                 </p>
                 <p className="text-sm text-gray-300 mb-3">
-                  Get another Solo Pass for 5 more games!
+                  You can purchase another Party Pass at:
                 </p>
                 <Link
                   href="/party"
-                  className="inline-block bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 px-6 py-3 rounded-xl font-bold"
+                  className="inline-block bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 px-6 py-3 rounded-xl font-bold text-lg"
                 >
                   🎮 Get New Pass — $2.88
                 </Link>
@@ -487,8 +487,11 @@ export default function SoloPlayPage() {
 
               {/* Share Section */}
               <div className="bg-gradient-to-r from-green-900/40 to-teal-900/40 rounded-xl p-4 mb-4 border border-green-500/30">
-                <p className="text-sm font-bold text-green-300 mb-2">
-                  ✨ Share with Friends ✨
+                <p className="text-base font-bold text-green-300 mb-2">
+                  ✨ Don't Forget to Share! ✨
+                </p>
+                <p className="text-sm text-gray-300 mb-3">
+                  Share with your friends to boost your <span className="text-green-400">wealth</span>, <span className="text-red-400">power</span>, <span className="text-pink-400">love</span>, <span className="text-blue-400">protection</span> and build your karma!
                 </p>
                 <div className="flex justify-center gap-2 flex-wrap">
                   <a
