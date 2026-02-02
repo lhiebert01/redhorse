@@ -482,6 +482,17 @@ export default function SoloPlayPage() {
               <span className="text-lg font-bold text-purple-200">Solo Play</span>
               <div className="font-mono text-2xl font-black text-yellow-400 tracking-wider">{partyCode}</div>
             </div>
+            {/* Question Counter - during gameplay */}
+            {(gamePhase === 'playing' || gamePhase === 'showing_answer') && (
+              <div className="text-center">
+                <div className="text-2xl font-black text-white">
+                  Q{currentQuestionIndex + 1}/{gameStats.totalQuestions}
+                </div>
+                <div className="text-sm font-bold text-yellow-300">
+                  {gameStats.totalQuestions - currentQuestionIndex - 1} left
+                </div>
+              </div>
+            )}
             {pass && (
               <div className="text-right">
                 <div className="text-sm text-gray-300">Games Left</div>
@@ -491,12 +502,14 @@ export default function SoloPlayPage() {
               </div>
             )}
           </div>
-          {/* Bookmark Note */}
-          <div className="mt-3 pt-3 border-t border-purple-500/30">
-            <p className="text-xs text-purple-200/80 text-center">
-              📌 <span className="font-semibold">Bookmark this page</span> to return anytime for your remaining games!
-            </p>
-          </div>
+          {/* Bookmark Note - only show when not playing */}
+          {gamePhase === 'setup' && (
+            <div className="mt-3 pt-3 border-t border-purple-500/30">
+              <p className="text-xs text-purple-200/80 text-center">
+                📌 <span className="font-semibold">Bookmark this page</span> to return anytime for your remaining games!
+              </p>
+            </div>
+          )}
         </div>
 
         {/* SETUP PHASE */}
