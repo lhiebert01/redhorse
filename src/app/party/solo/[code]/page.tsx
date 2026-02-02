@@ -763,7 +763,9 @@ export default function SoloPlayPage() {
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold text-yellow-400">{gameStats.totalPoints}</div>
-                    <div className="text-lg font-bold text-green-400">{gameStats.correctAnswers}/{currentQuestionIndex} correct</div>
+                    <div className="text-xl font-black text-green-400 drop-shadow-lg">
+                      {gameStats.correctAnswers}/{currentQuestionIndex} correct
+                    </div>
                   </div>
                 </div>
               </div>
@@ -996,7 +998,9 @@ export default function SoloPlayPage() {
                   </div>
                   <div className="text-right">
                     <div className="text-3xl font-bold text-yellow-400">{gameStats.totalPoints}</div>
-                    <div className="text-xl font-bold text-green-400">{gameStats.correctAnswers}/{currentQuestionIndex + 1} correct</div>
+                    <div className="text-2xl font-black text-green-400 drop-shadow-lg">
+                      {gameStats.correctAnswers}/{currentQuestionIndex + 1} correct
+                    </div>
                   </div>
                 </div>
                 {currentStreak >= 2 && (
@@ -1088,6 +1092,109 @@ export default function SoloPlayPage() {
                     : 'N/A'}
                 </div>
                 <div className="text-sm text-gray-400">Fastest Answer</div>
+              </div>
+            </div>
+
+            {/* Digital Card Download */}
+            <div className="bg-gradient-to-r from-indigo-900/50 to-purple-900/50 rounded-xl p-4 mb-4 border border-indigo-500/30">
+              <div className="text-center">
+                <div className="text-lg font-bold text-purple-300 mb-3">
+                  🎴 Your Digital Card
+                </div>
+                {zodiacInfo ? (
+                  <>
+                    <div className="relative inline-block mb-3">
+                      <img
+                        src={`/assets/zodiac-badges/${zodiacInfo.element.toLowerCase()}-${zodiacInfo.sign.toLowerCase()}.jpeg`}
+                        alt={`${zodiacInfo.element} ${zodiacInfo.sign}`}
+                        className="w-40 h-auto rounded-lg border-2 border-purple-400 shadow-lg"
+                      />
+                    </div>
+                    <p className="text-sm text-gray-300 mb-2">
+                      {zodiacInfo.element} {zodiacInfo.sign} • 2026 Fire Horse Year
+                    </p>
+                    <a
+                      href={`/assets/zodiac-badges/${zodiacInfo.element.toLowerCase()}-${zodiacInfo.sign.toLowerCase()}.jpeg`}
+                      download={`${zodiacInfo.element}-${zodiacInfo.sign}-2026.jpeg`}
+                      className="inline-block px-4 py-2 bg-purple-600 hover:bg-purple-500 rounded-lg font-bold text-sm"
+                    >
+                      📥 Download Your Card
+                    </a>
+                  </>
+                ) : (
+                  <>
+                    <div className="relative inline-block mb-3">
+                      <img
+                        src="/assets/zodiac-badges/fire-horse.jpeg"
+                        alt="Fire Horse 2026"
+                        className="w-40 h-auto rounded-lg border-2 border-red-400 shadow-lg"
+                      />
+                    </div>
+                    <p className="text-sm text-gray-300 mb-2">
+                      Year of the Fire Horse 2026 • 火马年
+                    </p>
+                    <a
+                      href="/assets/zodiac-badges/fire-horse.jpeg"
+                      download="Fire-Horse-2026.jpeg"
+                      className="inline-block px-4 py-2 bg-red-600 hover:bg-red-500 rounded-lg font-bold text-sm"
+                    >
+                      📥 Download Fire Horse Card
+                    </a>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* Share & Karma */}
+            <div className="bg-gradient-to-r from-green-900/40 to-teal-900/40 rounded-xl p-4 mb-4 border border-green-500/30">
+              <div className="text-center">
+                <p className="text-lg font-bold text-green-300 mb-1">
+                  ✨ Share & Boost Your Karma ✨
+                </p>
+                <p className="text-sm text-gray-300 mb-3">
+                  Sharing Fire Horse blessings brings good fortune back to you!
+                </p>
+                <div className="flex justify-center gap-3 flex-wrap">
+                  <a
+                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                      `🔥 I just played Fire Horse Trivia and scored ${gameStats.totalPoints} points! (${gameStats.correctAnswers}/${gameStats.totalQuestions} correct)\n\n${zodiacInfo ? `I'm a ${zodiacInfo.element} ${zodiacInfo.sign} 🐴` : ''}\n\nTest your Chinese zodiac knowledge:\nredhorseoracle.com/party\n\n#FireHorse2026 #ChineseNewYear`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 bg-black hover:bg-gray-800 rounded-lg font-bold text-sm border border-gray-600"
+                  >
+                    𝕏 Share
+                  </a>
+                  <a
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://redhorseoracle.com/party')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg font-bold text-sm"
+                  >
+                    Facebook
+                  </a>
+                  <a
+                    href={`https://wa.me/?text=${encodeURIComponent(
+                      `🔥 I just played Fire Horse Trivia and scored ${gameStats.totalPoints} points! Test your Chinese zodiac knowledge: https://redhorseoracle.com/party`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 bg-green-600 hover:bg-green-500 rounded-lg font-bold text-sm"
+                  >
+                    WhatsApp
+                  </a>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(
+                        `🔥 I just played Fire Horse Trivia and scored ${gameStats.totalPoints} points! (${gameStats.correctAnswers}/${gameStats.totalQuestions} correct)\n\nTest your Chinese zodiac knowledge: https://redhorseoracle.com/party`
+                      );
+                      alert('Copied to clipboard!');
+                    }}
+                    className="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-lg font-bold text-sm"
+                  >
+                    📋 Copy
+                  </button>
+                </div>
               </div>
             </div>
 
