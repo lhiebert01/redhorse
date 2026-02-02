@@ -743,7 +743,7 @@ export default function SoloPlayPage() {
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold text-yellow-400">{gameStats.totalPoints}</div>
-                    <div className="text-xs text-gray-400">{gameStats.correctAnswers}/{currentQuestionIndex} correct</div>
+                    <div className="text-lg font-bold text-green-400">{gameStats.correctAnswers}/{currentQuestionIndex} correct</div>
                   </div>
                 </div>
               </div>
@@ -963,7 +963,7 @@ export default function SoloPlayPage() {
                   </div>
                   <div className="text-right">
                     <div className="text-3xl font-bold text-yellow-400">{gameStats.totalPoints}</div>
-                    <div className="text-sm text-gray-300">{gameStats.correctAnswers}/{currentQuestionIndex + 1} correct</div>
+                    <div className="text-xl font-bold text-green-400">{gameStats.correctAnswers}/{currentQuestionIndex + 1} correct</div>
                   </div>
                 </div>
                 {currentStreak >= 2 && (
