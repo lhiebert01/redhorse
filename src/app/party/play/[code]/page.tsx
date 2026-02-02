@@ -934,8 +934,13 @@ export default function PlayerGamePage() {
               </div>
 
               {finalRank && (
-                <div className="text-7xl font-bold text-yellow-400 mb-2">
-                  #{finalRank}
+                <div className="mb-2">
+                  <div className="text-7xl font-bold text-yellow-400">
+                    #{finalRank}
+                  </div>
+                  <div className="text-xl text-gray-300">
+                    out of <span className="text-yellow-400 font-bold">{finalScores.length}</span> players
+                  </div>
                 </div>
               )}
 
@@ -943,12 +948,12 @@ export default function PlayerGamePage() {
                 Final Score: <span className="text-yellow-400 font-bold">{totalPoints}</span>
               </div>
 
-              {/* Congratulations Message */}
-              <div className="bg-gradient-to-r from-red-900/40 to-yellow-900/40 rounded-xl p-4 mb-6 border border-yellow-600/30">
-                <p className="text-lg text-yellow-300">
-                  🔥 Great job, {playerState.nickname}! 🐴
+              {/* Congratulations Message - BIG and COLORFUL */}
+              <div className="bg-gradient-to-br from-red-800/60 via-orange-700/50 to-yellow-600/40 rounded-2xl p-6 mb-6 border-2 border-yellow-500/50 shadow-lg shadow-yellow-500/20">
+                <p className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-300 to-red-300 mb-2">
+                  🔥 GREAT JOB, {playerState.nickname.toUpperCase()}! 🐴
                 </p>
-                <p className="text-sm text-gray-300 mt-1">
+                <p className="text-lg text-yellow-200">
                   May the Fire Horse bring you fortune in 2026!
                 </p>
               </div>
