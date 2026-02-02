@@ -135,6 +135,9 @@ export default function HostConsolePage() {
   const [showCelebration, setShowCelebration] = useState(false);
   const [celebrationType, setCelebrationType] = useState<'confetti' | 'fireworks'>('confetti');
 
+  // End game early confirmation
+  const [showEndGameEarlyConfirm, setShowEndGameEarlyConfirm] = useState(false);
+
   // Load party pass and game data
   // Question sets are PRE-GENERATED at purchase time - no complex tracking needed!
   useEffect(() => {
@@ -1296,6 +1299,21 @@ export default function HostConsolePage() {
           <div className="flex gap-6">
             {/* Main Content */}
             <div className="flex-1">
+              {/* HOST BANNER - Distinct styling to differentiate from player screens */}
+              <div className="bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-900 border-2 border-purple-500 rounded-xl p-4 mb-4">
+                <div className="text-center">
+                  <div className="text-xs uppercase tracking-widest text-purple-300 mb-1">
+                    🎛️ HOST SCREEN 🎛️
+                  </div>
+                  <div className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-purple-300 to-yellow-400">
+                    👑 YOU ARE THE HOST 👑
+                  </div>
+                  <div className="text-sm text-purple-200 mt-1">
+                    You control the game — you are NOT playing. Advance questions with the buttons below.
+                  </div>
+                </div>
+              </div>
+
               {/* Progress & Timer */}
               <div className="flex justify-between items-center mb-4">
                 <div className="text-lg">
@@ -1494,6 +1512,59 @@ export default function HostConsolePage() {
                   </button>
                 )}
               </div>
+
+              {/* END GAME EARLY Button - Always visible during gameplay */}
+              {game.current_question_index < game.questions_per_game - 1 && (
+                <div className="mt-4 pt-4 border-t border-gray-700">
+                  <button
+                    onClick={() => setShowEndGameEarlyConfirm(true)}
+                    className="w-full py-3 bg-gray-800 hover:bg-red-900 border border-gray-600 hover:border-red-500 rounded-xl font-bold text-gray-400 hover:text-red-300 transition-colors"
+                  >
+                    ⏭️ End This Game Early
+                  </button>
+                </div>
+              )}
+
+              {/* END GAME EARLY Confirmation Modal */}
+              {showEndGameEarlyConfirm && (
+                <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+                  <div className="bg-gray-900 border-2 border-red-500 rounded-2xl p-6 max-w-md w-full">
+                    <div className="text-center">
+                      <div className="text-4xl mb-4">⚠️</div>
+                      <h3 className="text-2xl font-bold text-red-400 mb-4">End Game Early?</h3>
+
+                      <div className="bg-gray-800 rounded-xl p-4 mb-4 text-left">
+                        <div className="text-sm text-gray-300 space-y-2">
+                          <p>• <strong className="text-yellow-400">Skips remaining questions</strong> ({game.questions_per_game - game.current_question_index - 1} left)</p>
+                          <p>• <strong className="text-yellow-400">Shows final results</strong> to all players</p>
+                          <p>• <strong className="text-red-400">Uses 1 game</strong> from your pass ({pass?.games_remaining} remaining)</p>
+                          {game.current_question_index === 0 && (
+                            <p className="text-red-300 mt-2">⚠️ No questions answered yet — players will see empty results!</p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex gap-4">
+                        <button
+                          onClick={() => setShowEndGameEarlyConfirm(false)}
+                          className="flex-1 py-3 bg-gray-700 hover:bg-gray-600 rounded-xl font-bold"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={() => {
+                            setShowEndGameEarlyConfirm(false);
+                            endGame();
+                          }}
+                          className="flex-1 py-3 bg-red-600 hover:bg-red-500 rounded-xl font-bold"
+                        >
+                          End Game Now
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
             </div>
 
