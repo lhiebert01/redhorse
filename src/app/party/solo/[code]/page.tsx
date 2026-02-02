@@ -476,20 +476,26 @@ export default function SoloPlayPage() {
       {/* Content */}
       <div className="relative z-10 max-w-lg mx-auto px-4 py-4">
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-900 to-pink-900 rounded-xl p-3 mb-4">
+        <div className="bg-gradient-to-r from-purple-900 to-pink-900 rounded-xl p-4 mb-4 border border-purple-500/50">
           <div className="flex justify-between items-center">
             <div>
-              <span className="text-sm text-gray-300">Solo Play</span>
-              <div className="font-mono font-bold text-purple-300">{partyCode}</div>
+              <span className="text-lg font-bold text-purple-200">Solo Play</span>
+              <div className="font-mono text-2xl font-black text-yellow-400 tracking-wider">{partyCode}</div>
             </div>
             {pass && (
               <div className="text-right">
                 <div className="text-sm text-gray-300">Games Left</div>
-                <div className="text-2xl font-bold text-yellow-400">
+                <div className="text-3xl font-black text-yellow-400">
                   {pass.games_remaining}
                 </div>
               </div>
             )}
+          </div>
+          {/* Bookmark Note */}
+          <div className="mt-3 pt-3 border-t border-purple-500/30">
+            <p className="text-xs text-purple-200/80 text-center">
+              📌 <span className="font-semibold">Bookmark this page</span> to return anytime for your remaining games!
+            </p>
           </div>
         </div>
 
