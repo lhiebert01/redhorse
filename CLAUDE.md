@@ -12,13 +12,22 @@ Red Horse Oracle is a viral SaaS application that generates personalized AI tali
 
 ## 🚨🚨🚨 CRITICAL: READ BEFORE TOUCHING PARTY GAME CODE 🚨🚨🚨
 
-**The party game has been broken 10+ times by the same bugs. DO NOT REPEAT THEM.**
+**The party game has been broken 30-40+ times by the same bugs over 3 days. DO NOT REPEAT THEM.**
 
 ### MANDATORY: Before ANY Party Game Changes
 
-1. **READ:** `docs/PARTY-GAME-TESTING-CHECKLIST.md` - Full testing procedures
-2. **UNDERSTAND:** The stale closure bug (useCallback captures old state)
-3. **TEST:** Run ALL 5 tests in the checklist after EVERY change
+1. **READ FIRST:** `docs/PARTY-GAME-MULTIPLAYER-STATUS.md` - Full status report (Feb 1, 2026)
+2. **READ:** `docs/PARTY-GAME-TESTING-CHECKLIST.md` - Full testing procedures
+3. **UNDERSTAND:** The stale closure bug (useCallback captures old state)
+4. **TEST:** Run ALL 5 tests in the checklist after EVERY change
+
+### Current Status (Feb 1, 2026)
+
+**SCORING AND LEADERBOARD STILL NOT WORKING RELIABLY**
+- Test Party Code: **8478JL**
+- Users should NEVER need to refresh their browsers
+- Sync should ALWAYS be in sync
+- Scores and leaderboards must be accurate from START to END
 
 ### The Three Bugs That Keep Breaking Things
 
