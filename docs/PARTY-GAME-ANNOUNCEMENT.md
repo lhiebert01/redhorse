@@ -23,7 +23,7 @@ We just launched **Fire Horse Trivia**, a multiplayer party game with 400 expert
 
 **How It Works:**
 1. Purchase a Party Pass (6 games, 15 questions each)
-2. Share your code with up to 25 players
+2. Share your code with up to 20 players
 3. Host from any device — players join on their phones
 4. Real-time scoring with speed bonuses & streaks
 
@@ -50,7 +50,7 @@ Last time: 1966. Next time: 2086.
 This is YOUR moment to gather your team, your family, your friends — and challenge them with 400 trivia questions about Chinese culture, zodiac legends, and Fire Horse lore.
 
 **Fire Horse Trivia** is live:
-✅ Up to 25 players per game
+✅ Up to 20 players per game
 ✅ Real-time leaderboards
 ✅ 6 games per Party Pass
 ✅ Mobile-friendly — works on any device
@@ -100,7 +100,7 @@ We've got 400 trivia questions waiting to test you:
 ❓ What food is NEVER served at CNY dinner?
 ❓ Which element controls the Horse in 2026?
 
-**Fire Horse Trivia** is a multiplayer party game for up to 25 players.
+**Fire Horse Trivia** is a multiplayer party game for up to 20 players.
 
 ✅ Real-time scoring
 ✅ Speed bonuses
@@ -244,7 +244,7 @@ Ready to host your Fire Horse party?
 
 - Purchase a Party Pass
 - Get your game code
-- Invite up to 25 players
+- Invite up to 20 players
 - Let the games begin
 
 **The Fire Horse demands action. Don't be passive in 2026. Be the host.**
@@ -262,7 +262,7 @@ Ready to host your Fire Horse party?
 
 The ultimate party game for Chinese New Year 2026.
 
-400 questions. 25 players. Real-time scoring.
+400 questions. 20 players. Real-time scoring.
 
 Year of the Fire Horse only comes once every 60 years.
 
@@ -307,7 +307,7 @@ Perfect for:
 ✅ School celebrations
 ✅ Friend group game nights
 
-Up to 25 players per game.
+Up to 20 players per game.
 
 ---
 
@@ -366,7 +366,7 @@ Next: 2086
 
 I just found this multiplayer trivia game for Chinese New Year — 400 questions about zodiac, traditions, and Fire Horse lore!
 
-✨ Up to 25 players
+✨ Up to 20 players
 ✨ Play on your phone
 ✨ Real-time leaderboard
 ✨ Speed bonuses!
@@ -384,7 +384,7 @@ Let's play at our next gathering!
 **Subject Lines (A/B test):**
 - 🔥 New: Fire Horse Trivia — Host Your CNY 2026 Party
 - The ultimate party game for Year of the Fire Horse
-- 400 trivia questions. 25 players. One epic night.
+- 400 trivia questions. 20 players. One epic night.
 - Don't just celebrate CNY — HOST THE PARTY 🐴
 
 **Body:**
@@ -433,7 +433,7 @@ The Fire Horse demands action. Will you answer the call?
 
 **Features:**
 - 400 questions (no repeats guaranteed)
-- Up to 25 players
+- Up to 20 players
 - 6 games per Party Pass
 - Real-time leaderboard
 - Speed bonuses + streak multipliers
