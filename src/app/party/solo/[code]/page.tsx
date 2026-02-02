@@ -414,7 +414,7 @@ export default function SoloPlayPage() {
 
       setGamePhase('finished');
       setShowCelebration(true);
-      setTimeout(() => setShowCelebration(false), 10000); // Increased celebration time
+      setTimeout(() => setShowCelebration(false), 13000); // 13 seconds celebration
     } catch (err) {
       console.error('Error finishing game:', err);
     }
