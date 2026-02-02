@@ -92,27 +92,35 @@ export default function PartyLandingPage() {
             </span>
           </Link>
 
-          <h1 className="text-4xl md:text-5xl font-bold mb-2">
+          <div className="inline-block bg-red-600 text-white text-sm font-bold px-4 py-1.5 rounded-full mb-3 animate-pulse">
+            🔥 2026 IS THE YEAR TO CELEBRATE! 🔥
+          </div>
+
+          <h1 className="text-4xl md:text-6xl font-bold mb-3">
             <span className="text-red-500">Fire Horse</span>{' '}
-            <span className="text-yellow-400">Trivia</span>
+            <span className="text-yellow-400">TRIVIA!</span>
           </h1>
 
-          <p className="text-lg text-gray-300">
-            Multiplayer online trivia for your Chinese New Year (CNY) 2026 Party!
+          <p className="text-xl md:text-2xl text-white font-bold mb-2">
+            DON&apos;T JUST WATCH — BE THE PARTY HOST! 🎉
           </p>
 
-          <div className="flex flex-wrap justify-center gap-3 mt-4 text-sm">
-            <span className="bg-red-900/50 px-3 py-1 rounded-full">
-              🔥 400 Questions
+          <p className="text-lg text-fire-gold font-semibold">
+            The Fire Horse demands ACTION. This is YOUR moment!
+          </p>
+
+          <div className="flex flex-wrap justify-center gap-3 mt-4 text-sm font-bold">
+            <span className="bg-red-600/80 px-4 py-1.5 rounded-full text-white">
+              🔥 400 Epic Questions
             </span>
-            <span className="bg-yellow-900/50 px-3 py-1 rounded-full">
-              🐴 Zodiac Lore
+            <span className="bg-yellow-600/80 px-4 py-1.5 rounded-full text-black">
+              🐴 Zodiac Battles
             </span>
-            <span className="bg-blue-900/50 px-3 py-1 rounded-full">
-              👥 Up to 20 Players
+            <span className="bg-blue-600/80 px-4 py-1.5 rounded-full text-white">
+              👥 2-20 Players
             </span>
-            <span className="bg-purple-900/50 px-3 py-1 rounded-full">
-              🎯 Solo Play
+            <span className="bg-purple-600/80 px-4 py-1.5 rounded-full text-white">
+              🎯 Solo Mode
             </span>
           </div>
         </div>

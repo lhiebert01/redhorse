@@ -257,14 +257,14 @@ export default function Home() {
       <div className="sticky top-0 z-50 bg-gradient-to-r from-red-900 via-red-800 to-red-900 border-b-2 border-fire-gold/50 py-2 px-4">
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 text-center">
           <span className="text-fire-gold font-bold text-sm sm:text-base animate-pulse">
-            🎊 CNY 2026 — Year of the Fire Horse! 🐴
+            🔥 2026 IS HERE — TAKE ACTION! 🐴
           </span>
           <div className="flex gap-3">
-            <a href="/party" className="bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-bold px-3 py-1 rounded-full transition-colors">
-              🎉 Party Trivia
+            <a href="/party" className="bg-red-600 hover:bg-red-500 text-white text-xs sm:text-sm font-bold px-3 py-1 rounded-full transition-colors animate-bounce">
+              🎉 HOST A PARTY!
             </a>
             <a href="/free" className="bg-green-600 hover:bg-green-500 text-white text-xs sm:text-sm font-bold px-3 py-1 rounded-full transition-colors">
-              🔮 Free Oracle
+              🔮 GET YOUR ORACLE
             </a>
           </div>
         </div>
@@ -455,28 +455,32 @@ export default function Home() {
 
           <div className="relative z-10">
             <div className="text-center mb-4">
-              <div className="inline-block bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full mb-2 animate-bounce">
-                🔥 CNY 2026 SPECIAL 🔥
+              <div className="inline-block bg-red-600 text-white text-sm font-bold px-4 py-1.5 rounded-full mb-3 animate-bounce">
+                🔥 DON&apos;T BE PASSIVE IN 2026! 🔥
               </div>
               <h3 className="text-fire-gold text-3xl font-bold">
-                BE THE ULTIMATE PARTY HOST!
+                COME ON PEOPLE — LET&apos;S GO!
               </h3>
-              <p className="text-white text-xl font-bold mt-1">
-                🎉 Fire Horse Trivia Night 🐴
+              <p className="text-white text-2xl font-bold mt-2">
+                🎉 Fire Horse Trivia Night! 🐴
+              </p>
+              <p className="text-red-400 text-lg font-semibold mt-1 italic">
+                The Fire Horse demands ACTION — not watching from the sidelines!
               </p>
             </div>
 
             <div className="bg-black/60 rounded-xl p-4 mb-4 border border-fire-gold/30">
-              <p className="text-white text-base text-center leading-relaxed mb-3">
-                <span className="text-fire-gold font-bold text-lg">ROCK your Chinese New Year party!</span>
+              <p className="text-white text-lg text-center leading-relaxed mb-3">
+                <span className="text-fire-gold font-bold text-xl">BE THE HOST EVERYONE REMEMBERS!</span>
                 <br/>
-                Host an epic trivia battle with <span className="text-yellow-400 font-bold">400 mind-blowing questions</span> about
-                the Fire Horse, Chinese Zodiac, CNY traditions & legends!
+                <span className="text-yellow-400">400 epic questions</span> • Chinese Zodiac • Fire Horse legends • CNY traditions
+                <br/>
+                <span className="text-red-300 font-semibold">This is YOUR year to CELEBRATE!</span>
               </p>
               <div className="flex flex-wrap justify-center gap-2 text-sm font-bold">
-                <span className="bg-blue-600/80 text-white px-3 py-1.5 rounded-lg">🎮 2-20 Players</span>
-                <span className="bg-purple-600/80 text-white px-3 py-1.5 rounded-lg">⚡ Live Scoring</span>
-                <span className="bg-green-600/80 text-white px-3 py-1.5 rounded-lg">🏆 Leaderboards</span>
+                <span className="bg-red-600/80 text-white px-3 py-1.5 rounded-lg">🔥 2-20 Players</span>
+                <span className="bg-yellow-600/80 text-black px-3 py-1.5 rounded-lg">⚡ Live Battles</span>
+                <span className="bg-green-600/80 text-white px-3 py-1.5 rounded-lg">🏆 Glory & Bragging Rights</span>
               </div>
             </div>
 
@@ -487,11 +491,11 @@ export default function Home() {
                          hover:scale-105 active:scale-95 transition-all duration-200
                          shadow-xl shadow-fire-gold/40 border-2 border-yellow-400 animate-pulse"
             >
-              🎊 HOST YOUR CNY PARTY NOW! 🎊
+              🔥 YES! I&apos;M READY TO HOST! 🔥
             </a>
 
-            <p className="text-fire-gold text-sm text-center mt-3 font-semibold">
-              Perfect for family gatherings, office parties, or Zoom events!
+            <p className="text-white text-base text-center mt-3 font-bold">
+              Family • Friends • Office • Zoom — BRING THE FIRE! 🐴
             </p>
 
             {/* Social Share Ask */}
