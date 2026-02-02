@@ -123,6 +123,14 @@ export default function PartyLandingPage() {
               🎯 Solo Mode
             </span>
           </div>
+
+          {/* Privacy by Design - Subtle Tagline */}
+          <div className="mt-4 text-center">
+            <span className="inline-flex items-center gap-2 text-xs text-green-400/80">
+              <span>🔒</span>
+              <span className="font-medium">FIRST | ONLY | BEST — Privacy by Design Chinese Zodiac Trivia</span>
+            </span>
+          </div>
         </div>
 
         {/* SOLO PLAY - Featured Option */}
@@ -434,7 +442,7 @@ export default function PartyLandingPage() {
         </div>
 
         {/* Features */}
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
+        <div className="grid md:grid-cols-4 gap-6 mb-12">
           <div className="bg-red-900/20 border border-red-800 rounded-xl p-4 text-center">
             <div className="text-3xl mb-2">⚡</div>
             <div className="font-bold">Real-Time Sync</div>
@@ -456,6 +464,14 @@ export default function PartyLandingPage() {
             <div className="font-bold">Zodiac Leaderboards</div>
             <div className="text-sm text-gray-400">
               See how your sign ranks!
+            </div>
+          </div>
+
+          <div className="bg-green-900/20 border border-green-800 rounded-xl p-4 text-center">
+            <div className="text-3xl mb-2">🔒</div>
+            <div className="font-bold">Privacy by Design</div>
+            <div className="text-sm text-gray-400">
+              Zero data stored or retained
             </div>
           </div>
         </div>
@@ -542,6 +558,14 @@ export default function PartyLandingPage() {
 
         {/* Footer */}
         <footer className="text-center text-gray-500 text-sm pb-8 mt-8">
+          <div className="mb-4 py-3 px-4 bg-green-900/20 border border-green-700/50 rounded-xl inline-block">
+            <p className="text-green-400 font-semibold mb-1">
+              🔒 PRIVACY BY DESIGN — FIRST | ONLY | BEST
+            </p>
+            <p className="text-xs text-gray-400">
+              No accounts, no emails, no data stored. Your birth year is never linked to you.
+            </p>
+          </div>
           <p className="mb-2">
             Part of{' '}
             <Link href="/" className="text-red-400 hover:underline">
