@@ -268,17 +268,19 @@ export default function HostConsolePage() {
 
   // Start game countdown
   const startGame = useCallback(async () => {
-    if (!game || !pass) return;
+    // CRITICAL: Use ref to avoid stale closure
+    const currentGame = gameRef.current;
+    if (!currentGame || !pass) return;
 
     // Reset leaderboard for fresh start
     setLeaderboard([]);
 
     // Clear any existing answers from previous plays of this game
-    console.log('[START GAME] Clearing old answers for game:', game.id);
+    console.log('[START GAME] Clearing old answers for game:', currentGame.id);
     const { error: clearError } = await supabase
       .from('party_answers')
       .delete()
-      .eq('party_game_id', game.id);
+      .eq('party_game_id', currentGame.id);
 
     if (clearError) {
       console.error('[START GAME] Failed to clear old answers:', clearError);
@@ -294,7 +296,7 @@ export default function HostConsolePage() {
         status: 'lobby',
         started_at: null
       })
-      .eq('id', game.id);
+      .eq('id', currentGame.id);
 
     // Start 3-2-1 countdown
     setCountdown(3);
@@ -304,9 +306,9 @@ export default function HostConsolePage() {
       type: 'broadcast',
       event: 'game_start',
       payload: {
-        game_id: game.id,  // Include game_id so players sync to correct game
-        total_questions: game.questions_per_game,
-        timer_seconds: game.timer_seconds,
+        game_id: currentGame.id,  // Include game_id so players sync to correct game
+        total_questions: currentGame.questions_per_game,
+        timer_seconds: currentGame.timer_seconds,
       },
     });
 
@@ -317,16 +319,19 @@ export default function HostConsolePage() {
     }
     setCountdown(null);
 
-    // Start first question
-    showNextQuestion(0);
-  }, [game, pass, partyCode]);
+    // Start first question - use setTimeout to allow showNextQuestion to be defined
+    setTimeout(() => showNextQuestion(0), 0);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pass, partyCode]);
 
   // Show next question
   const showNextQuestion = useCallback(
     async (questionIndex: number) => {
-      if (!game) return;
+      // CRITICAL: Use ref to avoid stale closure
+      const currentGame = gameRef.current;
+      if (!currentGame) return;
 
-      const questionId = game.question_ids[questionIndex];
+      const questionId = currentGame.question_ids[questionIndex];
       // CRITICAL: Use ref instead of state to avoid stale closure issue
       const question = questionsCacheRef.current.get(questionId);
 
@@ -350,14 +355,15 @@ export default function HostConsolePage() {
         .update({
           current_question_index: questionIndex,
           status: 'playing',
-          started_at: game.started_at || new Date().toISOString(),
+          started_at: currentGame.started_at || new Date().toISOString(),
           timer_seconds: selectedTimer, // 0 = manual mode
         })
-        .eq('id', game.id);
+        .eq('id', currentGame.id);
 
-      setGame((prev) =>
-        prev ? { ...prev, current_question_index: questionIndex, status: 'playing', timer_seconds: selectedTimer } : null
-      );
+      // Update both state AND ref
+      const updatedGame = { ...currentGame, current_question_index: questionIndex, status: 'playing' as const, timer_seconds: selectedTimer };
+      setGame(updatedGame);
+      gameRef.current = updatedGame;
 
       // Broadcast question to players
       const channel = supabase.channel(`party:${partyCode}`);
@@ -377,12 +383,14 @@ export default function HostConsolePage() {
         },
       });
     },
-    [game, partyCode, selectedTimer] // questionsCache removed - using ref instead
+    [partyCode, selectedTimer] // removed game - using ref instead
   );
 
   // Handle question end (timer expired) - just stops accepting answers
   const handleQuestionEnd = useCallback(async () => {
-    if (!game || !currentQuestion) return;
+    // CRITICAL: Use ref to avoid stale closure
+    const currentGame = gameRef.current;
+    if (!currentGame || !currentQuestion) return;
 
     setTimerActive(false);
 
@@ -390,22 +398,25 @@ export default function HostConsolePage() {
     await supabase
       .from('party_games')
       .update({ status: 'showing_answer' })
-      .eq('id', game.id);
+      .eq('id', currentGame.id);
 
     setGame((prev) => (prev ? { ...prev, status: 'showing_answer' } : null));
+    gameRef.current = gameRef.current ? { ...gameRef.current, status: 'showing_answer' } : null;
 
     // Broadcast question end
     const channel = supabase.channel(`party:${partyCode}`);
     await channel.send({
       type: 'broadcast',
       event: 'question_end',
-      payload: { question_index: game.current_question_index },
+      payload: { question_index: currentGame.current_question_index },
     });
-  }, [game, currentQuestion, partyCode]);
+  }, [currentQuestion, partyCode]);
 
   // Handle manual mode: end question AND immediately show answer
   const handleEndAndShowAnswer = useCallback(async () => {
-    if (!game || !currentQuestion) return;
+    // CRITICAL: Use ref to avoid stale closure
+    const currentGame = gameRef.current;
+    if (!currentGame || !currentQuestion) return;
 
     setTimerActive(false);
 
@@ -413,16 +424,17 @@ export default function HostConsolePage() {
     await supabase
       .from('party_games')
       .update({ status: 'showing_answer' })
-      .eq('id', game.id);
+      .eq('id', currentGame.id);
 
     setGame((prev) => (prev ? { ...prev, status: 'showing_answer' } : null));
+    gameRef.current = gameRef.current ? { ...gameRef.current, status: 'showing_answer' } : null;
 
     // Broadcast question end
     const channel = supabase.channel(`party:${partyCode}`);
     await channel.send({
       type: 'broadcast',
       event: 'question_end',
-      payload: { question_index: game.current_question_index },
+      payload: { question_index: currentGame.current_question_index },
     });
 
     // Small delay to ensure question_end is processed
@@ -435,8 +447,8 @@ export default function HostConsolePage() {
     const { data: questionAnswers } = await supabase
       .from('party_answers')
       .select('*')
-      .eq('party_game_id', game.id)
-      .eq('question_index', game.current_question_index);
+      .eq('party_game_id', currentGame.id)
+      .eq('question_index', currentGame.current_question_index);
 
     let distribution: Record<string, number> = {};
     let correctCount = 0;
@@ -455,18 +467,18 @@ export default function HostConsolePage() {
     }
 
     // Calculate leaderboard from ALL answers so far
-    console.log('[REVEAL TIMER] Querying answers for game:', game.id);
+    console.log('[REVEAL TIMER] Querying answers for game:', currentGame.id);
     const { data: allAnswers, error: answersErr } = await supabase
       .from('party_answers')
       .select('player_id, total_points')
-      .eq('party_game_id', game.id);
+      .eq('party_game_id', currentGame.id);
 
     console.log('[REVEAL TIMER] Answers found:', allAnswers?.length || 0, 'error:', answersErr);
 
     const { data: gamePlayers, error: playersErr } = await supabase
       .from('party_players')
       .select('id, nickname, zodiac_sign, zodiac_element')
-      .eq('party_game_id', game.id);
+      .eq('party_game_id', currentGame.id);
 
     console.log('[REVEAL TIMER] Players found:', gamePlayers?.length || 0, 'error:', playersErr);
 
@@ -502,7 +514,7 @@ export default function HostConsolePage() {
       type: 'broadcast',
       event: 'show_answer',
       payload: {
-        question_index: game.current_question_index,
+        question_index: currentGame.current_question_index,
         correct_answer: currentQuestion.correctAnswer,
         explanation: currentQuestion.explanation,
         stats: {
@@ -513,11 +525,13 @@ export default function HostConsolePage() {
         leaderboard: leaderboardData,
       },
     });
-  }, [game, currentQuestion, partyCode]);
+  }, [currentQuestion, partyCode]);
 
   // Show answer reveal
   const showAnswer = useCallback(async () => {
-    if (!game || !currentQuestion) return;
+    // CRITICAL: Use ref to avoid stale closure
+    const currentGame = gameRef.current;
+    if (!currentGame || !currentQuestion) return;
 
     setShowingAnswer(true);
 
@@ -525,8 +539,8 @@ export default function HostConsolePage() {
     const { data: questionAnswers } = await supabase
       .from('party_answers')
       .select('*')
-      .eq('party_game_id', game.id)
-      .eq('question_index', game.current_question_index);
+      .eq('party_game_id', currentGame.id)
+      .eq('question_index', currentGame.current_question_index);
 
     let distribution: Record<string, number> = {};
     let correctCount = 0;
@@ -545,18 +559,18 @@ export default function HostConsolePage() {
     }
 
     // Calculate leaderboard from ALL answers so far
-    console.log('[SHOW ANSWER] Querying answers for game:', game.id);
+    console.log('[SHOW ANSWER] Querying answers for game:', currentGame.id);
     const { data: allAnswers, error: allAnswersErr } = await supabase
       .from('party_answers')
       .select('player_id, total_points')
-      .eq('party_game_id', game.id);
+      .eq('party_game_id', currentGame.id);
 
     console.log('[SHOW ANSWER] Answers found:', allAnswers?.length || 0, 'error:', allAnswersErr);
 
     const { data: gamePlayers, error: gamePlayersErr } = await supabase
       .from('party_players')
       .select('id, nickname, zodiac_sign, zodiac_element')
-      .eq('party_game_id', game.id);
+      .eq('party_game_id', currentGame.id);
 
     console.log('[SHOW ANSWER] Players found:', gamePlayers?.length || 0, 'error:', gamePlayersErr);
 
@@ -601,7 +615,7 @@ export default function HostConsolePage() {
       type: 'broadcast',
       event: 'show_answer',
       payload: {
-        question_index: game.current_question_index,
+        question_index: currentGame.current_question_index,
         correct_answer: currentQuestion.correctAnswer,
         explanation: currentQuestion.explanation,
         stats: {
@@ -612,40 +626,45 @@ export default function HostConsolePage() {
         leaderboard: leaderboardData,
       },
     });
-  }, [game, currentQuestion, partyCode]);
+  }, [currentQuestion, partyCode]);
 
   // Move to next question or end game
   const nextQuestion = useCallback(async () => {
-    if (!game) return;
+    // CRITICAL: Use ref to avoid stale closure
+    const currentGame = gameRef.current;
+    if (!currentGame) return;
 
-    const nextIndex = game.current_question_index + 1;
+    const nextIndex = currentGame.current_question_index + 1;
 
-    if (nextIndex >= game.questions_per_game) {
-      // Game over
-      await endGame();
+    if (nextIndex >= currentGame.questions_per_game) {
+      // Game over - use setTimeout to allow endGame to be defined
+      setTimeout(() => endGame(), 0);
     } else {
       showNextQuestion(nextIndex);
     }
-  }, [game, showNextQuestion]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showNextQuestion]);
 
   // End the game
   const endGame = useCallback(async () => {
-    if (!game) return;
+    // CRITICAL: Use ref to avoid stale closure
+    const currentGame = gameRef.current;
+    if (!currentGame) return;
 
-    console.log('[END GAME] Starting endGame for game:', game.id);
+    console.log('[END GAME] Starting endGame for game:', currentGame.id);
 
     // Calculate final scores
     const { data: answers, error: answersError } = await supabase
       .from('party_answers')
       .select('player_id, total_points, is_correct, current_streak')
-      .eq('party_game_id', game.id);
+      .eq('party_game_id', currentGame.id);
 
     console.log('[END GAME] Fetched answers:', answers?.length || 0, 'error:', answersError);
 
     const { data: gamePlayers, error: playersError } = await supabase
       .from('party_players')
       .select('*')
-      .eq('party_game_id', game.id);
+      .eq('party_game_id', currentGame.id);
 
     console.log('[END GAME] Fetched players:', gamePlayers?.length || 0, 'error:', playersError);
 
@@ -691,15 +710,15 @@ export default function HostConsolePage() {
         .map((p) => {
           const stats = scoreMap.get(p.id) || { total: 0, correct: 0, streak: 0 };
           return {
-            party_game_id: game.id,
+            party_game_id: currentGame.id,
             player_id: p.id,
             nickname: p.nickname,
             zodiac_sign: p.zodiac_sign,
             zodiac_element: p.zodiac_element,
             total_points: stats.total,
             correct_answers: stats.correct,
-            total_questions: game.questions_per_game,
-            accuracy_percent: (stats.correct / game.questions_per_game) * 100,
+            total_questions: currentGame.questions_per_game,
+            accuracy_percent: (stats.correct / currentGame.questions_per_game) * 100,
             best_streak: stats.streak,
             rank: 0,
           };
@@ -724,11 +743,11 @@ export default function HostConsolePage() {
     }
 
     // ALWAYS update game status to finished
-    console.log('[END GAME] Updating game status to finished for game:', game.id);
+    console.log('[END GAME] Updating game status to finished for game:', currentGame.id);
     const { error: updateError } = await supabase
       .from('party_games')
       .update({ status: 'finished', ended_at: new Date().toISOString() })
-      .eq('id', game.id);
+      .eq('id', currentGame.id);
 
     if (updateError) {
       console.error('[END GAME] Failed to update game status:', updateError);
@@ -766,6 +785,7 @@ export default function HostConsolePage() {
     // Update local pass state to reflect the decrement
     setPass((prev) => prev ? { ...prev, games_remaining: newGamesRemaining } : null);
     setGame((prev) => (prev ? { ...prev, status: 'finished' } : null));
+    gameRef.current = gameRef.current ? { ...gameRef.current, status: 'finished' } : null;
 
     // Update leaderboard state with final scores for display
     setLeaderboard(scores.map((s) => ({
@@ -788,7 +808,7 @@ export default function HostConsolePage() {
       type: 'broadcast',
       event: 'game_end',
       payload: {
-        game_id: game.id,
+        game_id: currentGame.id,
         scores: scores.map((s) => ({
           nickname: s.nickname,
           total_points: s.total_points,
@@ -799,11 +819,13 @@ export default function HostConsolePage() {
         })),
       },
     });
-  }, [game, pass, partyCode]);
+  }, [pass, partyCode]);
 
   // End the entire party (host's choice)
   const endParty = useCallback(async () => {
-    if (!game || !pass) return;
+    // CRITICAL: Use ref to avoid stale closure
+    const currentGame = gameRef.current;
+    if (!currentGame || !pass) return;
 
     console.log('[END PARTY] Host ending the party');
 
@@ -821,7 +843,7 @@ export default function HostConsolePage() {
     // Show fireworks for host
     setCelebrationType('fireworks');
     setShowCelebration(true);
-  }, [game, pass, partyCode]);
+  }, [pass, partyCode]);
 
   // Start a new game using the NEXT pre-generated question set via API
   const startNewGame = useCallback(async () => {
@@ -864,13 +886,18 @@ export default function HostConsolePage() {
       setPass(refreshedPass);
     }
 
-    // Reset all game state
+    // Reset all game state - CRITICAL: Update both state AND ref
     setGame(result.game);
+    gameRef.current = result.game;
     setCurrentQuestion(null);
     setAnswerStats(null);
     setShowingAnswer(false);
     setLeaderboard([]);
     setPlayers([]);
+
+    // Fetch questions for the new game
+    const cache = await fetchQuestions(result.game.question_ids);
+    setQuestionsCache(cache);
 
     // Broadcast that a new game is starting
     const channel = supabase.channel(`party:${partyCode}`);
@@ -882,7 +909,7 @@ export default function HostConsolePage() {
         message: 'A new game is starting! Join the lobby.',
       },
     });
-  }, [pass, selectedTimer, partyCode]);
+  }, [pass, selectedTimer, partyCode, fetchQuestions]);
 
   // Loading state
   if (loading) {
