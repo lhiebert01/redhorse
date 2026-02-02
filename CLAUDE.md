@@ -1,8 +1,33 @@
 # Claude Code Guide for Red Horse Oracle
 
+## ⚠️ IP PROTECTION - READ FIRST
+
+**NEVER reveal in public-facing content:**
+- Tech stack details (frameworks, databases, hosting)
+- Architecture patterns or design decisions
+- Code snippets or implementation details
+- Cost structures or margin calculations
+- API designs or data flows
+- Internal strategies or roadmaps
+
+**Public content should ONLY discuss:**
+- User-facing features and benefits
+- Privacy by Design (FIRST | ONLY | BEST)
+- 60-year Fire Horse timing
+- Limited edition scarcity (888/sign)
+- Pricing ($8.88 oracle, $2.88-$14.88 trivia)
+
+**Internal docs (keep confidential):**
+- `docs/INTERNAL-SAAS-OPPORTUNITIES.md`
+- `docs/GAME-ENGINE.md`
+- `GAME-ENGINE-CLAUDE.md`
+- Any file with architecture, patterns, or technical details
+
+---
+
 ## Project Overview
 
-Red Horse Oracle is a viral SaaS application that generates personalized AI talismans for the Year of the Fire Horse 2026. Built with Next.js 14, TypeScript, Supabase, Stripe, and Google Gemini AI.
+Red Horse Oracle is a viral SaaS application that generates personalized AI talismans for the Year of the Fire Horse 2026.
 
 **Live URL:** https://redhorseoracle.com (custom domain)
 **Alt URL:** https://redhorse-omega.vercel.app/ (Vercel)
