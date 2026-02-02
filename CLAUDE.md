@@ -2,26 +2,32 @@
 
 ## ⚠️ IP PROTECTION - READ FIRST
 
-**NEVER reveal in public-facing content:**
-- Tech stack details (frameworks, databases, hosting)
-- Architecture patterns or design decisions
-- Code snippets or implementation details
-- Cost structures or margin calculations
-- API designs or data flows
-- Internal strategies or roadmaps
-
-**Public content should ONLY discuss:**
+**OK to share publicly:**
+- Privacy by Design philosophy and conceptual architecture
+- How privacy works: "birth date calculates zodiac, then immediately discarded"
+- Google Gemini 3 Pro as the AI (state-of-the-art, museum-quality)
+- Traditional Chinese art styles (Dunhuang, Song, Tang, Ink Wash)
+- Authenticated limited edition system (888/sign, numbered, certified)
+- Maker's Mark seal and Certificate of Authenticity
+- Social-sharing versions designed for 100% privacy
 - User-facing features and benefits
-- Privacy by Design (FIRST | ONLY | BEST)
 - 60-year Fire Horse timing
-- Limited edition scarcity (888/sign)
 - Pricing ($8.88 oracle, $2.88-$14.88 trivia)
+
+**NEVER reveal in public-facing content:**
+- Specific tech stack (frameworks, databases, hosting providers)
+- Code patterns or implementation details (useRef, RLS, etc.)
+- Code snippets or file structures
+- Cost structures or margin calculations
+- API designs or internal data flows
+- Business strategies or roadmaps
+- How the game engine works internally
 
 **Internal docs (keep confidential):**
 - `docs/INTERNAL-SAAS-OPPORTUNITIES.md`
 - `docs/GAME-ENGINE.md`
 - `GAME-ENGINE-CLAUDE.md`
-- Any file with architecture, patterns, or technical details
+- Any file with code patterns or technical implementation details
 
 ---
 

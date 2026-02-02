@@ -57,15 +57,73 @@ The Year of the Fire Horse (丙午年) occurs only once every 60 years. The last
 
 That's a once-in-a-lifetime window — and I wanted to create something truly special for it.
 
+---
+
+#### Privacy by Design: The Philosophy
+
+Most apps collect your data first, then figure out what to do with it later. Red Horse Oracle takes the opposite approach: **Privacy by Design**.
+
+**The Architecture:**
+Your birth date enters the system for ONE purpose only — to calculate your Chinese zodiac sign. The moment that calculation completes, your birth date is immediately and permanently discarded. It's never stored, never logged, never transmitted.
+
+**What this means:**
+- No accounts required
+- No emails collected
+- No personal data retained
+- No cookies tracking you
+- Your oracle contains ZERO personally identifiable information
+
+**Why it matters:**
+Your oracle is 100% safe to share on social media. There's nothing to leak because we never had it in the first place. We designed special social-sharing versions that are completely privacy-clean — share your talisman proudly without exposing anything personal.
+
+In an age of endless data harvesting, we prove you can create something deeply personalized while respecting privacy completely.
+
+---
+
+#### State-of-the-Art AI Art: Google Gemini 3 Pro
+
+Each oracle features museum-quality artwork created by **Google Gemini 3 Pro** — the most advanced multimodal AI available.
+
+**Traditional Chinese Art Styles:**
+- **Dunhuang** — Inspired by the Mogao Cave murals with celestial Apsaras and floating silk ribbons
+- **Song Dynasty** — Meticulous gongbi brushwork, elegant and refined
+- **Tang Dynasty** — Opulent imperial style, bold and ornamental
+- **Ink Wash** — Traditional shuimo with ethereal brush strokes
+
+Every talisman features your zodiac animal alongside the Fire Horse, rendered in authentic traditional styles. No two are identical — each is a unique AI-generated masterpiece.
+
+---
+
+#### Authenticated Limited Edition Digital Art
+
+Red Horse Oracle treats digital art like fine art lithographs:
+
+**Limited to 888 Per Zodiac Sign**
+Only 888 oracles will EVER be created for each of the 12 zodiac signs. Once they're gone, they're gone forever.
+
+**Numbered Editions**
+Each oracle displays its edition number: "Limited Edition #127 of 888"
+
+**Maker's Mark Seal**
+Every talisman bears our authentication seal: "RED HORSE 馬 2026"
+
+**Certificate of Authenticity**
+Unique certificate ID on each oracle, verifiable and permanent.
+
+This isn't a screenshot you can copy — it's a numbered, authenticated, certified piece of digital art.
+
+---
+
 #### What I Created
 
 **1. The AI Oracle ($8.88)**
 
 Enter your birth date, choose your path (Wealth, Power, Love, or Shield), and receive:
-- A personalized prophecy crafted by advanced AI
+- A personalized prophecy crafted by Google Gemini 3 Pro
 - A unique talisman artwork in traditional Chinese styles
 - Limited edition numbering (only 888 per zodiac sign)
 - Maker's Mark and Certificate of Authenticity
+- Social-sharing versions designed for 100% privacy
 
 Each oracle is a collectible — numbered like fine art lithographs.
 
@@ -78,19 +136,9 @@ Host unforgettable CNY celebrations with real-time trivia:
 - Streak bonuses for consecutive correct answers
 - Live leaderboards after every question
 - Host controls the pace (perfect for dinner parties)
+- Privacy by Design — no player data stored
 
-#### The Privacy Promise
-
-Here's what makes Red Horse Oracle different: **Privacy by Design**.
-
-Your birth date is used ONLY to calculate your Chinese zodiac sign. Then it's immediately discarded. Forever.
-
-- No accounts required
-- No emails stored
-- No personal data retained
-- Your oracle is safe to share publicly
-
-In an age of endless data collection, we prove you can create something deeply personalized while respecting privacy completely.
+---
 
 #### Try It
 
