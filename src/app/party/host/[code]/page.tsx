@@ -880,13 +880,29 @@ export default function HostConsolePage() {
       console.error('[END GAME] Failed to update pass counters:', updatePassError);
     } else {
       console.log('[END GAME] Pass counters updated successfully');
-    }
 
-    // Update local pass state and ref to reflect the changes
-    if (passRef.current) {
-      passRef.current = { ...passRef.current, games_remaining: newGamesRemaining, games_played: newGamesPlayed };
+      // Refetch the pass to confirm the update worked and get the actual values
+      const { data: confirmedPass } = await supabase
+        .from('party_passes')
+        .select('*')
+        .eq('id', currentPass.id)
+        .single();
+
+      if (confirmedPass) {
+        console.log('[END GAME] Confirmed pass values:', {
+          games_remaining: confirmedPass.games_remaining,
+          games_played: confirmedPass.games_played,
+        });
+        passRef.current = confirmedPass;
+        setPass(confirmedPass);
+      } else {
+        // Fallback to computed values
+        if (passRef.current) {
+          passRef.current = { ...passRef.current, games_remaining: newGamesRemaining, games_played: newGamesPlayed };
+        }
+        setPass((prev) => prev ? { ...prev, games_remaining: newGamesRemaining, games_played: newGamesPlayed } : null);
+      }
     }
-    setPass((prev) => prev ? { ...prev, games_remaining: newGamesRemaining, games_played: newGamesPlayed } : null);
     setGame((prev) => (prev ? { ...prev, status: 'finished' } : null));
     gameRef.current = gameRef.current ? { ...gameRef.current, status: 'finished' } : null;
 
