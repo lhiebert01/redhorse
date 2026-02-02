@@ -714,14 +714,10 @@ export default function SoloPlayPage() {
                   <div className="text-2xl font-bold text-yellow-400">{gameStats.totalPoints}</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-black text-white drop-shadow-lg">
-                    Question {currentQuestionIndex + 1} of {gameStats.totalQuestions}
-                  </div>
-                  <div className="text-base font-bold text-yellow-300">
-                    {gameStats.totalQuestions - currentQuestionIndex - 1} remaining
-                  </div>
-                  {currentStreak >= 3 && (
-                    <div className="text-yellow-400 font-bold mt-1">🔥 {currentStreak} streak!</div>
+                  {currentStreak >= 2 ? (
+                    <div className="text-2xl font-black text-orange-400">🔥 {currentStreak} streak!</div>
+                  ) : (
+                    <div className="text-lg font-bold text-gray-400">Keep going!</div>
                   )}
                 </div>
                 <div className="text-right">
@@ -773,6 +769,16 @@ export default function SoloPlayPage() {
                 />
               </div>
             )}
+
+            {/* Question Progress Banner - PROMINENT */}
+            <div className="bg-gradient-to-r from-indigo-900 to-purple-900 rounded-xl p-4 mb-4 border-2 border-indigo-400/50 text-center">
+              <div className="text-3xl font-black text-white tracking-wide">
+                Question {currentQuestionIndex + 1} of {gameStats.totalQuestions}
+              </div>
+              <div className="text-lg font-bold text-yellow-300 mt-1">
+                {gameStats.totalQuestions - currentQuestionIndex - 1} questions remaining
+              </div>
+            </div>
 
             {/* Category Badge */}
             <div className="text-center mb-3">
