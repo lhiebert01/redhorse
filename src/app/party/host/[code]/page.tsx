@@ -1419,15 +1419,28 @@ export default function HostConsolePage() {
               {/* Answer Stats */}
               {showingAnswer && answerStats && (
                 <div className="bg-gray-900/50 rounded-xl p-4 mb-6 text-center">
+                  {/* Main stat: X of TOTAL players got it right */}
                   <div className="text-lg">
                     <span className="text-green-400 font-bold">
                       {answerStats.correct}
                     </span>
                     {' of '}
-                    <span className="font-bold">{answerStats.total}</span>
+                    <span className="font-bold">{players.length}</span>
                     {' players got it right '}
-                    ({Math.round((answerStats.correct / Math.max(1, answerStats.total)) * 100)}%)
+                    ({Math.round((answerStats.correct / Math.max(1, players.length)) * 100)}%)
                   </div>
+
+                  {/* Show if not all players answered */}
+                  {answerStats.total < players.length && (
+                    <div className="mt-2 text-sm">
+                      <span className="text-yellow-400">
+                        ⚠️ Only {answerStats.total} of {players.length} players answered
+                      </span>
+                      <span className="text-gray-400 ml-2">
+                        ({players.length - answerStats.total} missed this question)
+                      </span>
+                    </div>
+                  )}
                 </div>
               )}
 
