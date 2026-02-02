@@ -714,10 +714,10 @@ export default function SoloPlayPage() {
                   <div className="text-2xl font-bold text-yellow-400">{gameStats.totalPoints}</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-xl font-black text-white">
+                  <div className="text-2xl font-black text-white drop-shadow-lg">
                     Question {currentQuestionIndex + 1} of {gameStats.totalQuestions}
                   </div>
-                  <div className="text-sm font-semibold text-purple-300">
+                  <div className="text-base font-bold text-yellow-300">
                     {gameStats.totalQuestions - currentQuestionIndex - 1} remaining
                   </div>
                   {currentStreak >= 3 && (
@@ -866,10 +866,10 @@ export default function SoloPlayPage() {
                 {currentQuestion.question}
               </div>
               <div className="text-center mt-2">
-                <span className="text-lg font-bold text-purple-300">
+                <span className="text-xl font-black text-white">
                   Question {currentQuestionIndex + 1} of {gameStats.totalQuestions}
                 </span>
-                <span className="text-sm text-gray-400 ml-2">
+                <span className="text-base font-bold text-yellow-300 ml-2">
                   ({gameStats.totalQuestions - currentQuestionIndex - 1} remaining)
                 </span>
               </div>
