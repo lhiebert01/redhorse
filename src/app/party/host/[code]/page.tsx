@@ -184,6 +184,13 @@ export default function HostConsolePage() {
             const question = cache.get(questionId);
             if (question) {
               setCurrentQuestion(question);
+              console.log('[LOAD] Resuming at question', gameData.current_question_index + 1, 'of', gameData.questions_per_game);
+            }
+
+            // Restore the showing answer state if applicable
+            if (gameData.status === 'showing_answer') {
+              setShowingAnswer(true);
+              console.log('[LOAD] Game was showing answer - restoring that state');
             }
           }
         } else {
