@@ -32,7 +32,7 @@ I created Red Horse Oracle to celebrate this rare cosmic event with two unique e
 
 🎨 **Museum-Quality AI Art** — Each oracle features stunning talisman artwork in traditional Chinese styles — Dunhuang, Song Dynasty, Tang Dynasty, and Ink Wash. Every piece is numbered like fine art lithographs (only 888 per zodiac sign).
 
-🎮 **Real-Time Party Game** — 400 trivia questions across 16 categories. Host live competitions with 2-20 players. Speed bonuses, streak bonuses, live leaderboards. Perfect for CNY celebrations.
+🎮 **Ultimate Party Hosting** — 400 trivia questions across 16 categories. Host in-person gatherings (project on big screen, guests answer on phones) or remote multiplayer (share party code, compete globally). 2-20 players, live leaderboards, host-controlled pacing. The ultimate CNY celebration experience.
 
 🐴 **60-Year Timing** — The Fire Horse demands action. This cosmic window won't open again until 2086.
 
@@ -129,14 +129,33 @@ Each oracle is a collectible — numbered like fine art lithographs.
 
 **2. Fire Horse Trivia Party Game ($2.88-$14.88)**
 
-Host unforgettable CNY celebrations with real-time trivia:
-- 400 questions across 16 categories
-- 2-20 players competing simultaneously
-- Speed bonuses for quick answers
-- Streak bonuses for consecutive correct answers
-- Live leaderboards after every question
-- Host controls the pace (perfect for dinner parties)
-- Privacy by Design — no player data stored
+The ultimate CNY party hosting experience — designed for both in-person gatherings and remote multiplayer.
+
+**For In-Person Groups:**
+Host projects questions on a big screen while guests answer on their phones. Perfect for:
+- Family reunion dinners
+- Office CNY celebrations
+- Friend group gatherings
+- Multi-generational parties (grandparents to kids!)
+
+**For Remote Multiplayer:**
+Share your party code and compete with friends and family across the globe. Perfect for:
+- Zoom CNY celebrations
+- Distant relatives who can't travel
+- International friend groups
+- Virtual team building
+
+**The Experience:**
+- 400 handcrafted questions across 16 categories
+- 2-20 players competing simultaneously in real-time
+- Speed bonuses reward quick thinking
+- Streak bonuses reward consistency
+- Live leaderboards after every question create excitement
+- Host controls the pace — pause between courses, take breaks, go at YOUR speed
+- Questions cover Chinese Zodiac, CNY traditions, Fire Horse lore, and more
+
+**Privacy by Design:**
+No player accounts. No emails collected. No data retained. Just pure trivia fun.
 
 ---
 
