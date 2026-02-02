@@ -3189,4 +3189,152 @@ To simulate multiple hosts:
 
 ---
 
+## 🚨 CRITICAL: Party Trivia Troubleshooting Guide
+
+### Error: "Question not found in cache" - Game Won't Start
+
+**Symptoms:**
+- Host clicks "Start Game" but nothing happens
+- Console shows: `Question not found in cache: [ID]`
+- Players stuck on "Waiting for Host" screen
+
+**Root Cause:**
+This happens when a game's `question_ids` array contains IDs that can't be loaded from the database. Common causes:
+
+1. **Legacy Pass Issue** - Pass was created BEFORE `question_sets` were pre-generated at purchase time
+   - Console shows: `[LOAD] Pre-generated question sets: 0`
+   - Game has random question IDs generated at game creation, not purchase
+
+2. **Database Migration Issue** - Question IDs reference questions that were modified/replaced
+   - Placeholder questions (like "Congratulations! You've reached X questions...") were replaced
+   - IDs 200, 250, 300, 350 were previously placeholder questions
+
+3. **Cache Timing Issue** - Questions fetched but cache not populated before game starts
+
+**Diagnosis Steps:**
+```
+1. Open browser console (F12) on host page
+2. Look for these log messages:
+   - "[LOAD] Pre-generated question sets: X" → If 0, it's a legacy pass
+   - "[QUESTIONS] Fetched X questions from database" → Should be 20
+   - "Question not found in cache: Y" → The problematic question ID
+
+3. Test the question ID directly:
+   curl "https://redhorseoracle.com/api/party/questions?ids=250"
+```
+
+**Immediate Fix - Restart Game with Fresh Questions:**
+```bash
+curl -X POST "https://redhorseoracle.com/api/party/game" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "party_pass_id": "[PASS_ID_FROM_CONSOLE]",
+    "party_code": "[CODE]",
+    "timer_seconds": 30,
+    "game_number": [CURRENT_GAME_NUMBER],
+    "action": "restart"
+  }'
+```
+
+Then refresh the host page - game will have fresh question IDs.
+
+**Prevention - ALWAYS Do These:**
+
+1. **Pre-generate question sets at purchase time** (already implemented in webhook)
+   ```typescript
+   // In /api/party/webhook - generate 6 sets of 20 unique questions
+   const questionSets = generateQuestionSets(6, 20, 400);
+   // Store in party_passes.question_sets
+   ```
+
+2. **Never modify question IDs in the database** without:
+   - Checking if any active games reference those IDs
+   - Regenerating question_sets for affected passes
+
+3. **When replacing/deleting questions:**
+   - Use UPDATE to modify content, not DELETE + INSERT
+   - Keep IDs stable (1-400)
+   - If adding new questions, use IDs 401+
+
+4. **Validate question IDs exist before game creation:**
+   ```typescript
+   // In /api/party/game - verify all IDs exist in DB
+   const { count } = await supabase
+     .from('party_questions')
+     .select('id', { count: 'exact', head: true })
+     .in('id', questionIds);
+
+   if (count !== questionIds.length) {
+     // Regenerate question set
+   }
+   ```
+
+### Error: Players Can't Join Game
+
+**Symptoms:**
+- Player enters code but gets error
+- Player joins but doesn't appear in host's player list
+
+**Common Causes:**
+1. **Wrong game_id** - Player registered to old/abandoned game
+2. **Presence channel not subscribed** - Supabase realtime issue
+3. **RLS policy blocking** - Service role key not used
+
+**Fix:**
+```bash
+# Check if game exists and is in lobby status
+SELECT id, status, party_pass_id FROM party_games
+WHERE party_pass_id = (SELECT id FROM party_passes WHERE party_code = 'XXXX')
+ORDER BY created_at DESC LIMIT 1;
+
+# Verify players are linked to correct game
+SELECT * FROM party_players WHERE party_game_id = '[GAME_ID]';
+```
+
+### Error: Answers Not Recording / Leaderboard Empty
+
+**Symptoms:**
+- Players answer but host shows 0 answers
+- Leaderboard shows all zeros
+- Console: "Failed to submit answer"
+
+**Common Causes:**
+1. **game_id mismatch** - Player has old game_id in session storage
+2. **question_index mismatch** - Type coercion issue (string vs number)
+3. **RLS policy** - party_answers insert blocked
+
+**Fix:**
+```javascript
+// In answer API - always convert to numbers
+const questionIndexNum = Number(question_index);
+const questionIdNum = Number(question_id);
+```
+
+### Quick Reference: Party Trivia API Endpoints
+
+| Endpoint | Purpose | Auth |
+|----------|---------|------|
+| `POST /api/party/game` | Create/restart game | Service role |
+| `GET /api/party/questions?ids=1,2,3` | Fetch questions by ID | Service role |
+| `POST /api/party/answer` | Submit player answer | Service role |
+| `POST /api/party/join` | Player joins game | Service role |
+
+### Quick Reference: Database Tables
+
+| Table | Key Columns |
+|-------|-------------|
+| `party_passes` | id, party_code, question_sets (JSONB), games_remaining |
+| `party_games` | id, party_pass_id, question_ids (JSONB), status, game_number |
+| `party_players` | id, party_game_id, nickname, zodiac_sign |
+| `party_answers` | id, party_game_id, player_id, question_id, is_correct, total_points |
+| `party_questions` | id (1-400), question, option_a-d, correct_answer |
+
+### Test Pass for Development
+
+**Code:** `8478JL`
+**Pass ID:** `1e4baa7b-5e64-4aed-ac0e-90c2e2ba5c7f`
+**Note:** This is a legacy pass (no pre-generated question_sets). Use restart API if games fail.
+
+---
+
 *火马年 2026 - Year of the Fire Horse*
