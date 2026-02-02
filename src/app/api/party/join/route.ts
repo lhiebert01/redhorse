@@ -83,8 +83,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check for duplicate nickname among CONNECTED players in this game
-    // This allows reuse of nicknames from disconnected players
+    // Check for duplicate nickname in this game
     const { data: existingPlayer } = await supabase
       .from('party_players')
       .select('*')
@@ -93,19 +92,31 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (existingPlayer) {
-      // If player exists but disconnected, allow them to reconnect OR
-      // allow a new player to take over the nickname
-      if (!existingPlayer.is_connected) {
-        // Delete the old disconnected record and create fresh
+      // Check if player is actually disconnected:
+      // 1. is_connected is false, OR
+      // 2. last_seen_at is older than 60 seconds (stale connection)
+      const lastSeen = existingPlayer.last_seen_at ? new Date(existingPlayer.last_seen_at) : null;
+      const sixtySecondsAgo = new Date(Date.now() - 60 * 1000);
+      const isStaleConnection = lastSeen && lastSeen < sixtySecondsAgo;
+      const isDisconnected = !existingPlayer.is_connected || isStaleConnection;
+
+      if (isDisconnected) {
+        // Player is disconnected or stale - delete old record and allow rejoin
         await supabase
           .from('party_players')
           .delete()
           .eq('id', existingPlayer.id);
 
-        console.log('Deleted disconnected player record:', existingPlayer.id, 'nickname:', nickname);
+        console.log('[JOIN] Deleted stale/disconnected player:', existingPlayer.id,
+          'nickname:', nickname,
+          'is_connected:', existingPlayer.is_connected,
+          'last_seen:', lastSeen,
+          'stale:', isStaleConnection);
         // Continue to create new player below
       } else {
-        // Player is connected - nickname truly taken
+        // Player is actively connected (seen within last 60 seconds)
+        console.log('[JOIN] Nickname taken by active player:', existingPlayer.id,
+          'last_seen:', lastSeen);
         return NextResponse.json(
           { error: 'Nickname already taken in this party' },
           { status: 400 }
