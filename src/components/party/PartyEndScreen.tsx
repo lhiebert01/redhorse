@@ -123,12 +123,18 @@ ${zodiacSign ? `\n✨ I'm a ${zodiacElement} ${zodiacSign}!` : ''}
               <div className="text-center">
                 <div className="text-3xl mb-2">🐴🔥</div>
                 <p className="text-lg text-yellow-300 font-bold mb-2">
-                  Since you did not enter the Year of Your Animal Zodiac...
+                  Since you did not enter Your Birth Year...
+                </p>
+                <p className="text-sm text-gray-300 mb-3">
+                  We couldn&apos;t determine your personal Chinese Zodiac animal, so instead...
                 </p>
                 <p className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400">
                   We Present to You the Year of the Fire Horse!
                 </p>
                 <p className="text-yellow-200 mt-2 text-lg">🎉 Enjoy! 🎉</p>
+                <p className="text-xs text-gray-400 mt-2">
+                  (Next time, enter your birth year to get YOUR personal zodiac card!)
+                </p>
               </div>
             </div>
           )}
