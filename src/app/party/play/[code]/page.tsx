@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@supabase/supabase-js';
@@ -58,6 +58,8 @@ export default function PlayerGamePage() {
   const router = useRouter();
 
   // Player state
+  // Using ref to avoid stale closure issues in callbacks (especially handleAnswer)
+  const playerStateRef = useRef<PlayerState | null>(null);
   const [playerState, setPlayerState] = useState<PlayerState | null>(null);
   const [players, setPlayers] = useState<PartyPlayer[]>([]);
 
@@ -103,6 +105,7 @@ export default function PlayerGamePage() {
         const player = JSON.parse(stored) as PlayerState;
         if (player.party_code === partyCode) {
           setPlayerState(player);
+          playerStateRef.current = player; // CRITICAL: Update ref immediately
         } else {
           router.push(`/party/join?code=${partyCode}`);
         }
@@ -129,6 +132,7 @@ export default function PlayerGamePage() {
         if (data.game_id && playerState) {
           const updatedState = { ...playerState, game_id: data.game_id };
           setPlayerState(updatedState);
+          playerStateRef.current = updatedState; // CRITICAL: Update ref immediately for handleAnswer
           sessionStorage.setItem('party_player', JSON.stringify(updatedState));
           console.log('[PLAYER] Synced game_id from host:', data.game_id);
         }
@@ -290,7 +294,9 @@ export default function PlayerGamePage() {
   // Handle answer selection
   const handleAnswer = useCallback(
     async (answer: string) => {
-      if (selectedAnswer || !currentQuestion || !playerState || !questionStartTime)
+      // CRITICAL: Use ref instead of state to avoid stale closure
+      const currentPlayerState = playerStateRef.current;
+      if (selectedAnswer || !currentQuestion || !currentPlayerState || !questionStartTime)
         return;
 
       const answerTimeMs = Date.now() - questionStartTime;
@@ -298,8 +304,8 @@ export default function PlayerGamePage() {
 
       // Debug: Log what we're sending
       const requestData = {
-        game_id: playerState.game_id,
-        player_id: playerState.player_id,
+        game_id: currentPlayerState.game_id,
+        player_id: currentPlayerState.player_id,
         question_index: gameState.current_question_index,
         question_id: currentQuestion.id,
         answer_given: answer,
@@ -347,7 +353,7 @@ export default function PlayerGamePage() {
         // Don't disrupt user with alert - just log the error
       }
     },
-    [selectedAnswer, currentQuestion, playerState, questionStartTime, gameState.current_question_index]
+    [selectedAnswer, currentQuestion, questionStartTime, gameState.current_question_index] // playerState removed - using ref
   );
 
   // Loading state
