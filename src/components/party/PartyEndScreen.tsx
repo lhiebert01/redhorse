@@ -117,6 +117,22 @@ ${zodiacSign ? `\n✨ I'm a ${zodiacElement} ${zodiacSign}!` : ''}
             </div>
           )}
 
+          {/* Special Message for Players Who Skipped Birth Year */}
+          {!hasPersonalZodiac && (
+            <div className="bg-gradient-to-r from-yellow-900/40 via-orange-900/40 to-red-900/40 rounded-2xl p-5 mb-4 border-2 border-yellow-500/50">
+              <div className="text-center">
+                <div className="text-3xl mb-2">🐴🔥</div>
+                <p className="text-lg text-yellow-300 font-bold mb-2">
+                  Since you did not enter the Year of Your Animal Zodiac...
+                </p>
+                <p className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400">
+                  We Present to You the Year of the Fire Horse!
+                </p>
+                <p className="text-yellow-200 mt-2 text-lg">🎉 Enjoy! 🎉</p>
+              </div>
+            </div>
+          )}
+
           {/* Zodiac Card Section - Always shows (Fire Horse fallback if no zodiac) */}
           <div className={`rounded-2xl p-6 mb-6 border ${
             hasPersonalZodiac
@@ -153,9 +169,8 @@ ${zodiacSign ? `\n✨ I'm a ${zodiacElement} ${zodiacSign}!` : ''}
                     </>
                   ) : (
                     <>
-                      As a thank you for playing, download the{' '}
-                      <span className="text-yellow-400 font-bold">Fire Horse 2026</span> digital card!{' '}
-                      <span className="text-gray-400 text-sm">(Enter your birth year next time to get your personal zodiac card!)</span>
+                      Download your{' '}
+                      <span className="text-yellow-400 font-bold">Fire Horse 2026</span> digital card — it&apos;s yours to keep!
                     </>
                   )}
                 </p>
