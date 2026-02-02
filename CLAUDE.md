@@ -10,26 +10,38 @@ Red Horse Oracle is a viral SaaS application that generates personalized AI tali
 
 ---
 
-## 🚨🚨🚨 CRITICAL: READ BEFORE TOUCHING PARTY GAME CODE 🚨🚨🚨
+## 🎉 PARTY GAME: STABLE RELEASE v1.0.0 (Feb 1, 2026) 🎉
 
-**The party game has been broken 30-40+ times by the same bugs over 3 days. DO NOT REPEAT THEM.**
+**Status:** ✅ ALL FEATURES WORKING - Scoring, Leaderboard, Sync, Reconnection
+**Commit:** ad37f76
+**Test Party Code:** 8478JL
 
 ### MANDATORY: Before ANY Party Game Changes
 
-1. **READ FIRST:** `docs/PARTY-GAME-MULTIPLAYER-STATUS.md` - Full status report (Feb 1, 2026)
+1. **READ FIRST:** `docs/PARTY-GAME-STABLE-RELEASE-v1.0.md` - The patterns that work
 2. **READ:** `docs/PARTY-GAME-TESTING-CHECKLIST.md` - Full testing procedures
-3. **UNDERSTAND:** The stale closure bug (useCallback captures old state)
-4. **TEST:** Run ALL 5 tests in the checklist after EVERY change
+3. **FOLLOW:** The ref pattern (below) - DO NOT DEVIATE
+4. **TEST:** Run ALL tests with 2+ players after EVERY change
 
-### Current Status (Feb 1, 2026)
+### The Pattern That Works (DO NOT BREAK)
 
-**SCORING AND LEADERBOARD STILL NOT WORKING RELIABLY**
-- Test Party Code: **8478JL**
-- Users should NEVER need to refresh their browsers
-- Sync should ALWAYS be in sync
-- Scores and leaderboards must be accurate from START to END
+```typescript
+// 1. ALWAYS use ref + state together
+const gameRef = useRef<PartyGame | null>(null);
+const [game, setGame] = useState<PartyGame | null>(null);
 
-### The Three Bugs That Keep Breaking Things
+// 2. ALWAYS update ref FIRST, then state
+gameRef.current = newGame;
+setGame(newGame);
+
+// 3. ALWAYS use ref.current in callbacks, NEVER raw state
+const callback = useCallback(() => {
+  const currentGame = gameRef.current;  // ✅ CORRECT
+  // const currentGame = game;          // ❌ WRONG - STALE!
+}, []);
+```
+
+### The Three Bugs That Were Fixed (Don't Re-introduce)
 
 | Bug | Symptom | Cause | Prevention |
 |-----|---------|-------|------------|
