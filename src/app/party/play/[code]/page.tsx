@@ -1001,6 +1001,25 @@ export default function PlayerGamePage() {
                 </p>
               </div>
 
+              {/* Fire Horse Intro - Once in 60 Years */}
+              <div className="bg-gradient-to-b from-red-900/30 to-orange-900/20 rounded-xl p-4 mb-4 border border-red-500/30">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 mb-2">
+                    🔥 Fire Horse 火马年 🔥
+                  </div>
+                  <div className="text-sm font-semibold text-yellow-400 mb-2">
+                    A Once-in-60-Year Opportunity
+                  </div>
+                  <p className="text-sm text-gray-300">
+                    The Fire Horse returns only once every 60 years. Its blazing energy can{' '}
+                    <span className="text-green-400">ignite your wealth</span>,{' '}
+                    <span className="text-red-400">amplify your power</span>,{' '}
+                    <span className="text-pink-400">transform your love life</span>, or{' '}
+                    <span className="text-blue-400">strengthen your protection</span>.
+                  </p>
+                </div>
+              </div>
+
               {/* Cross-Promotion: Red Horse Oracle */}
               <div className="bg-gradient-to-r from-purple-900/40 to-red-900/40 rounded-xl p-4 mb-6 border border-purple-500/30">
                 <div className="text-center">
