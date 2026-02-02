@@ -10,6 +10,55 @@ Red Horse Oracle is a viral SaaS application that generates personalized AI tali
 
 ---
 
+## 🚨🚨🚨 CRITICAL: READ BEFORE TOUCHING PARTY GAME CODE 🚨🚨🚨
+
+**The party game has been broken 10+ times by the same bugs. DO NOT REPEAT THEM.**
+
+### MANDATORY: Before ANY Party Game Changes
+
+1. **READ:** `docs/PARTY-GAME-TESTING-CHECKLIST.md` - Full testing procedures
+2. **UNDERSTAND:** The stale closure bug (useCallback captures old state)
+3. **TEST:** Run ALL 5 tests in the checklist after EVERY change
+
+### The Three Bugs That Keep Breaking Things
+
+| Bug | Symptom | Cause | Prevention |
+|-----|---------|-------|------------|
+| **Stale Closure** | "Question not found", scoring fails | useCallback captures old state | Use `useRef` for data read in callbacks |
+| **Game ID Mismatch** | Leaderboard shows 0 players | Players have old game_id | Call `/api/party/sync-game` on restart |
+| **Query Wrong ID** | Empty results | Using stale `game.id` | Use `gameRef.current.id` |
+
+### The Golden Rule
+
+```
+IF YOU TOUCH PARTY GAME CODE:
+  1. Join as player
+  2. Start game as host
+  3. Answer a question
+  4. Verify leaderboard shows scores
+  5. Restart game and repeat ALL steps
+
+NO EXCEPTIONS. TEST BEFORE COMMITTING.
+```
+
+### Files That Break Everything
+
+- `src/app/party/host/[code]/page.tsx` - Uses refs: `questionsCacheRef`, `gameRef`
+- `src/app/party/play/[code]/page.tsx` - Uses ref: `playerStateRef`
+- `src/app/api/party/answer/route.ts` - Validates game_id, records scores
+- `src/app/api/party/sync-game/route.ts` - Updates player's game_id on restart
+
+### Quick Fix Commands
+
+```bash
+# Restart game if broken
+curl -X POST "https://redhorseoracle.com/api/party/game" \
+  -H "Content-Type: application/json" \
+  -d '{"party_pass_id":"1e4baa7b-5e64-4aed-ac0e-90c2e2ba5c7f","party_code":"8478JL","action":"restart","game_number":2}'
+```
+
+---
+
 ## Quick Reference
 
 ### Tech Stack & Resource Costs
