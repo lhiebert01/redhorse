@@ -1559,13 +1559,6 @@ export default function HostConsolePage() {
 
             {/* Action Buttons */}
             <div className="flex flex-col gap-4 max-w-md mx-auto">
-              <Link
-                href={`/party/results/${partyCode}`}
-                className="py-4 bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-500 hover:to-orange-500 rounded-xl font-bold text-lg shadow-lg"
-              >
-                📊 View Full Results
-              </Link>
-
               {(pass.games_remaining || 0) > 0 && (
                 <button
                   onClick={startNewGame}
