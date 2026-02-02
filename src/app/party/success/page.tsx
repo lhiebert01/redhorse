@@ -95,7 +95,8 @@ function SuccessContent() {
   const timeRemaining = getPassTimeRemaining(pass);
   const isSolo = pass.is_solo ?? passConfig?.isSolo ?? false;
 
-  const shareMessage = `🎉 Join my Fire Horse Trivia party!\n\n🔥 Go to: redhorseoracle.com/party\n📱 Enter code: ${pass.party_code}\n\n#FireHorse2026 #CNY2026`;
+  const joinLink = `https://redhorseoracle.com/party/join?code=${pass.party_code}`;
+  const shareMessage = `🎉 Join my Fire Horse Trivia party!\n\n🔥 Direct Link: ${joinLink}\n\nOr go to: redhorseoracle.com/party\n📱 Enter code: ${pass.party_code}\n\n#FireHorse2026 #CNY2026`;
 
   // Solo pass - different UI
   if (isSolo) {
@@ -183,18 +184,33 @@ function SuccessContent() {
         <div className="text-5xl font-mono font-bold tracking-widest text-yellow-400 mb-4">
           {pass.party_code}
         </div>
-        <div className="flex justify-center gap-4">
+        <div className="flex justify-center gap-3 flex-wrap">
           <button
-            onClick={() => navigator.clipboard.writeText(pass.party_code)}
-            className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-sm"
+            onClick={() => {
+              navigator.clipboard.writeText(pass.party_code);
+              alert('Code copied!');
+            }}
+            className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-sm font-bold"
           >
-            Copy Code
+            📋 Copy Code
           </button>
           <button
-            onClick={() => navigator.clipboard.writeText(shareMessage)}
-            className="bg-purple-600 hover:bg-purple-500 px-4 py-2 rounded-lg text-sm"
+            onClick={() => {
+              navigator.clipboard.writeText(joinLink);
+              alert('Link copied!');
+            }}
+            className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded-lg text-sm font-bold"
           >
-            Copy Invite
+            🔗 Copy Link
+          </button>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(shareMessage);
+              alert('Invite copied!');
+            }}
+            className="bg-purple-600 hover:bg-purple-500 px-4 py-2 rounded-lg text-sm font-bold"
+          >
+            📨 Copy Invite
           </button>
         </div>
       </div>
@@ -227,9 +243,17 @@ function SuccessContent() {
       {/* How to Share */}
       <div className="bg-blue-900/30 rounded-xl p-6 mb-8 max-w-md mx-auto text-left">
         <h3 className="font-bold text-lg mb-3">📱 Share with your guests:</h3>
-        <ol className="space-y-2 text-gray-300">
+
+        {/* Direct Link - Easiest */}
+        <div className="bg-green-900/30 rounded-lg p-3 mb-4 border border-green-500/30">
+          <div className="text-sm font-bold text-green-400 mb-1">🔗 Easiest - Direct Link:</div>
+          <div className="text-xs text-gray-300 font-mono break-all">{joinLink}</div>
+        </div>
+
+        <div className="text-sm text-gray-400 mb-2">Or manually:</div>
+        <ol className="space-y-2 text-gray-300 text-sm">
           <li>
-            1. Tell them to go to{' '}
+            1. Go to{' '}
             <span className="text-blue-400 font-mono">redhorseoracle.com/party</span>
           </li>
           <li>
