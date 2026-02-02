@@ -577,118 +577,188 @@ export default function SuperAdminPage() {
                 </div>
               ) : partyStats ? (
                 <div className="space-y-6">
-                  {/* Summary Cards */}
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="bg-orange-900/30 border border-orange-700 rounded-xl p-4 text-center">
-                      <div className="text-3xl font-bold text-orange-400">{partyStats.passes.total}</div>
-                      <div className="text-sm text-gray-400">Passes Purchased</div>
-                    </div>
-                    <div className="bg-blue-900/30 border border-blue-700 rounded-xl p-4 text-center">
-                      <div className="text-3xl font-bold text-blue-400">{partyStats.games.total}</div>
-                      <div className="text-sm text-gray-400">Games Created</div>
-                    </div>
-                    <div className="bg-green-900/30 border border-green-700 rounded-xl p-4 text-center">
-                      <div className="text-3xl font-bold text-green-400">{partyStats.games.completed}</div>
-                      <div className="text-sm text-gray-400">Games Completed</div>
-                    </div>
-                    <div className="bg-purple-900/30 border border-purple-700 rounded-xl p-4 text-center">
-                      <div className="text-3xl font-bold text-purple-400">{partyStats.players.total}</div>
-                      <div className="text-sm text-gray-400">Total Players</div>
-                    </div>
-                  </div>
+                  {/* ============ PARTY PASSES SECTION ============ */}
+                  <div className="border-2 border-orange-600 rounded-xl p-4">
+                    <h3 className="text-xl font-bold text-orange-400 mb-4">🎉 Party Passes (Multiplayer)</h3>
 
-                  {/* Pass Type Breakdown */}
-                  <div className="bg-gray-800 rounded-xl p-4">
-                    <h3 className="text-lg font-bold text-white mb-3">📊 Passes by Type</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                      {Object.entries(partyStats.passes.byType).map(([type, count]) => (
-                        <div key={type} className="bg-gray-900 rounded-lg p-3 text-center">
-                          <div className="text-xl font-bold text-yellow-400">{count}</div>
-                          <div className="text-xs text-gray-400 capitalize">{type} Pass</div>
-                        </div>
-                      ))}
+                    {/* Party Summary Cards */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                      <div className="bg-orange-900/30 border border-orange-700 rounded-lg p-3 text-center">
+                        <div className="text-2xl font-bold text-orange-400">{partyStats.partyPasses?.total || 0}</div>
+                        <div className="text-xs text-gray-400">Passes</div>
+                      </div>
+                      <div className="bg-blue-900/30 border border-blue-700 rounded-lg p-3 text-center">
+                        <div className="text-2xl font-bold text-blue-400">{partyStats.partyGames?.total || 0}</div>
+                        <div className="text-xs text-gray-400">Games</div>
+                      </div>
+                      <div className="bg-green-900/30 border border-green-700 rounded-lg p-3 text-center">
+                        <div className="text-2xl font-bold text-green-400">{partyStats.partyGames?.completed || 0}</div>
+                        <div className="text-xs text-gray-400">Completed</div>
+                      </div>
+                      <div className="bg-purple-900/30 border border-purple-700 rounded-lg p-3 text-center">
+                        <div className="text-2xl font-bold text-purple-400">{partyStats.partyPlayers?.total || 0}</div>
+                        <div className="text-xs text-gray-400">Players</div>
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Games Usage */}
-                  <div className="bg-gray-800 rounded-xl p-4">
-                    <h3 className="text-lg font-bold text-white mb-3">🎯 Games Usage</h3>
-                    <div className="grid grid-cols-3 gap-4 text-center">
-                      <div>
-                        <div className="text-2xl font-bold text-green-400">{partyStats.passes.totalGamesAllowed}</div>
-                        <div className="text-xs text-gray-400">Games Allowed</div>
-                      </div>
-                      <div>
-                        <div className="text-2xl font-bold text-blue-400">{partyStats.passes.totalGamesPlayed}</div>
-                        <div className="text-xs text-gray-400">Games Played</div>
-                      </div>
-                      <div>
-                        <div className="text-2xl font-bold text-orange-400">{partyStats.passes.totalGamesRemaining}</div>
-                        <div className="text-xs text-gray-400">Games Remaining</div>
+                    {/* Party Pass Type Breakdown */}
+                    <div className="bg-gray-800 rounded-lg p-3 mb-4">
+                      <div className="text-sm font-bold text-white mb-2">Pass Types</div>
+                      <div className="flex flex-wrap gap-2">
+                        {Object.entries(partyStats.partyPasses?.byType || {}).map(([type, count]) => (
+                          <div key={type} className="bg-gray-900 rounded px-3 py-1">
+                            <span className="text-yellow-400 font-bold">{count as number}</span>
+                            <span className="text-gray-400 text-xs ml-1 capitalize">{type}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                    <div className="mt-3">
-                      <div className="h-3 bg-gray-700 rounded-full overflow-hidden">
+
+                    {/* Party Games Usage Bar */}
+                    <div className="bg-gray-800 rounded-lg p-3 mb-4">
+                      <div className="flex justify-between text-xs text-gray-400 mb-1">
+                        <span>Games: {partyStats.partyPasses?.gamesPlayed || 0} played / {partyStats.partyPasses?.gamesAllowed || 0} allowed</span>
+                        <span>{partyStats.partyPasses?.gamesRemaining || 0} remaining</span>
+                      </div>
+                      <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-green-500 to-blue-500"
                           style={{
-                            width: `${partyStats.passes.totalGamesAllowed > 0
-                              ? (partyStats.passes.totalGamesPlayed / partyStats.passes.totalGamesAllowed) * 100
+                            width: `${(partyStats.partyPasses?.gamesAllowed || 0) > 0
+                              ? ((partyStats.partyPasses?.gamesPlayed || 0) / (partyStats.partyPasses?.gamesAllowed || 0)) * 100
                               : 0}%`
                           }}
                         />
                       </div>
-                      <div className="text-xs text-gray-500 mt-1 text-center">
-                        {partyStats.passes.totalGamesAllowed > 0
-                          ? Math.round((partyStats.passes.totalGamesPlayed / partyStats.passes.totalGamesAllowed) * 100)
-                          : 0}% games used
+                      <div className="text-xs text-gray-500 mt-1">
+                        Avg {partyStats.partyPlayers?.avgPerGame || 0} players/game
                       </div>
                     </div>
+
+                    {/* Party Pass List Table */}
+                    {(partyStats.partyPassList || []).length > 0 && (
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-xs">
+                          <thead>
+                            <tr className="text-gray-400 border-b border-gray-700">
+                              <th className="text-left py-1 px-1">Code</th>
+                              <th className="text-left py-1 px-1">Type</th>
+                              <th className="text-center py-1 px-1">Games</th>
+                              <th className="text-center py-1 px-1">Players</th>
+                              <th className="text-center py-1 px-1">Status</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {(partyStats.partyPassList || []).map((pass: { party_code: string; pass_type: string; games_played: number; games_allowed: number; total_players: number; is_expired: boolean; games_remaining: number }) => (
+                              <tr key={pass.party_code} className="border-b border-gray-700/50">
+                                <td className="py-1 px-1 font-mono text-yellow-400">{pass.party_code}</td>
+                                <td className="py-1 px-1 capitalize">{pass.pass_type}</td>
+                                <td className="py-1 px-1 text-center">
+                                  <span className="text-green-400">{pass.games_played}</span>
+                                  <span className="text-gray-500">/</span>
+                                  <span className="text-gray-300">{pass.games_allowed}</span>
+                                </td>
+                                <td className="py-1 px-1 text-center text-purple-400">{pass.total_players}</td>
+                                <td className="py-1 px-1 text-center">
+                                  {pass.is_expired ? (
+                                    <span className="text-red-400">Expired</span>
+                                  ) : pass.games_remaining === 0 ? (
+                                    <span className="text-orange-400">Used</span>
+                                  ) : (
+                                    <span className="text-green-400">Active</span>
+                                  )}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Pass List Table */}
-                  <div className="bg-gray-800 rounded-xl p-4">
-                    <h3 className="text-lg font-bold text-white mb-3">📋 Pass Details</h3>
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-sm">
-                        <thead>
-                          <tr className="text-gray-400 border-b border-gray-700">
-                            <th className="text-left py-2 px-2">Code</th>
-                            <th className="text-left py-2 px-2">Type</th>
-                            <th className="text-center py-2 px-2">Games</th>
-                            <th className="text-center py-2 px-2">Players</th>
-                            <th className="text-center py-2 px-2">Status</th>
-                            <th className="text-left py-2 px-2">Created</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {partyStats.passList.map((pass) => (
-                            <tr key={pass.party_code} className="border-b border-gray-700/50 hover:bg-gray-700/30">
-                              <td className="py-2 px-2 font-mono text-yellow-400">{pass.party_code}</td>
-                              <td className="py-2 px-2 capitalize">{pass.pass_type}</td>
-                              <td className="py-2 px-2 text-center">
-                                <span className="text-green-400">{pass.games_played}</span>
-                                <span className="text-gray-500"> / </span>
-                                <span className="text-gray-300">{pass.games_allowed}</span>
-                              </td>
-                              <td className="py-2 px-2 text-center text-purple-400">{pass.total_players}</td>
-                              <td className="py-2 px-2 text-center">
-                                {pass.is_expired ? (
-                                  <span className="text-red-400 text-xs">Expired</span>
-                                ) : pass.games_remaining === 0 ? (
-                                  <span className="text-orange-400 text-xs">Used Up</span>
-                                ) : (
-                                  <span className="text-green-400 text-xs">Active</span>
-                                )}
-                              </td>
-                              <td className="py-2 px-2 text-gray-400 text-xs">
-                                {new Date(pass.created_at).toLocaleDateString()}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                  {/* ============ SOLO PASSES SECTION ============ */}
+                  <div className="border-2 border-purple-600 rounded-xl p-4">
+                    <h3 className="text-xl font-bold text-purple-400 mb-4">🎯 Solo Passes (Single Player)</h3>
+
+                    {/* Solo Summary Cards */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                      <div className="bg-purple-900/30 border border-purple-700 rounded-lg p-3 text-center">
+                        <div className="text-2xl font-bold text-purple-400">{partyStats.soloPasses?.total || 0}</div>
+                        <div className="text-xs text-gray-400">Passes</div>
+                      </div>
+                      <div className="bg-green-900/30 border border-green-700 rounded-lg p-3 text-center">
+                        <div className="text-2xl font-bold text-green-400">{partyStats.soloPasses?.active || 0}</div>
+                        <div className="text-xs text-gray-400">Active</div>
+                      </div>
+                      <div className="bg-red-900/30 border border-red-700 rounded-lg p-3 text-center">
+                        <div className="text-2xl font-bold text-red-400">{partyStats.soloPasses?.expired || 0}</div>
+                        <div className="text-xs text-gray-400">Expired</div>
+                      </div>
+                      <div className="bg-blue-900/30 border border-blue-700 rounded-lg p-3 text-center">
+                        <div className="text-2xl font-bold text-blue-400">{partyStats.soloGames?.completed || 0}</div>
+                        <div className="text-xs text-gray-400">Games Done</div>
+                      </div>
                     </div>
+
+                    {/* Solo Games Usage Bar */}
+                    <div className="bg-gray-800 rounded-lg p-3 mb-4">
+                      <div className="flex justify-between text-xs text-gray-400 mb-1">
+                        <span>Games: {partyStats.soloPasses?.gamesPlayed || 0} played / {partyStats.soloPasses?.gamesAllowed || 0} allowed</span>
+                        <span>{partyStats.soloPasses?.gamesRemaining || 0} remaining</span>
+                      </div>
+                      <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-purple-500 to-pink-500"
+                          style={{
+                            width: `${(partyStats.soloPasses?.gamesAllowed || 0) > 0
+                              ? ((partyStats.soloPasses?.gamesPlayed || 0) / (partyStats.soloPasses?.gamesAllowed || 0)) * 100
+                              : 0}%`
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Solo Pass List Table */}
+                    {(partyStats.soloPassList || []).length > 0 ? (
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-xs">
+                          <thead>
+                            <tr className="text-gray-400 border-b border-gray-700">
+                              <th className="text-left py-1 px-1">Code</th>
+                              <th className="text-center py-1 px-1">Games</th>
+                              <th className="text-center py-1 px-1">Status</th>
+                              <th className="text-left py-1 px-1">Created</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {(partyStats.soloPassList || []).map((pass: { party_code: string; games_played: number; games_allowed: number; is_expired: boolean; games_remaining: number; created_at: string }) => (
+                              <tr key={pass.party_code} className="border-b border-gray-700/50">
+                                <td className="py-1 px-1 font-mono text-purple-400">{pass.party_code}</td>
+                                <td className="py-1 px-1 text-center">
+                                  <span className="text-green-400">{pass.games_played}</span>
+                                  <span className="text-gray-500">/</span>
+                                  <span className="text-gray-300">{pass.games_allowed}</span>
+                                </td>
+                                <td className="py-1 px-1 text-center">
+                                  {pass.is_expired ? (
+                                    <span className="text-red-400">Expired</span>
+                                  ) : pass.games_remaining === 0 ? (
+                                    <span className="text-orange-400">Used</span>
+                                  ) : (
+                                    <span className="text-green-400">Active</span>
+                                  )}
+                                </td>
+                                <td className="py-1 px-1 text-gray-400">
+                                  {new Date(pass.created_at).toLocaleDateString()}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    ) : (
+                      <div className="text-center text-gray-500 py-4">No solo passes yet</div>
+                    )}
                   </div>
 
                   {/* Refresh Button */}
