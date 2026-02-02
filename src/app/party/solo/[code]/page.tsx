@@ -168,16 +168,17 @@ export default function SoloPlayPage() {
 
   // Handle nickname and birth year submission
   const handleJoin = useCallback(() => {
-    if (!nickname.trim() || birthYear === '') return;
+    if (!nickname.trim()) return;
 
-    const year = typeof birthYear === 'number' ? birthYear : parseInt(birthYear);
-    if (isNaN(year) || year < 1900 || year > new Date().getFullYear()) {
-      alert('Please enter a valid birth year');
-      return;
+    // Birth year is optional - if provided, calculate zodiac
+    if (birthYear !== '') {
+      const year = typeof birthYear === 'number' ? birthYear : parseInt(String(birthYear));
+      if (!isNaN(year) && year >= 1900 && year <= new Date().getFullYear()) {
+        const zodiac = getZodiacFromYear(year);
+        setZodiacInfo(zodiac);
+      }
     }
 
-    const zodiac = getZodiacFromYear(year);
-    setZodiacInfo(zodiac);
     setHasJoined(true);
   }, [nickname, birthYear]);
 
@@ -550,15 +551,20 @@ export default function SoloPlayPage() {
 
               <button
                 onClick={handleJoin}
-                disabled={!nickname.trim() || !birthYear}
+                disabled={!nickname.trim()}
                 className={`w-full py-4 rounded-xl font-bold text-xl transition-all ${
-                  nickname.trim() && birthYear
+                  nickname.trim()
                     ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500'
                     : 'bg-gray-700 text-gray-400 cursor-not-allowed'
                 }`}
               >
                 Continue →
               </button>
+
+              {/* Privacy note */}
+              <p className="text-xs text-gray-500 text-center mt-3">
+                🔒 Privacy by Design — No data stored or linked to you
+              </p>
             </div>
           </div>
         )}
@@ -645,41 +651,53 @@ export default function SoloPlayPage() {
         )}
 
         {/* PLAYING PHASE */}
-        {gamePhase === 'playing' && currentQuestion && zodiacInfo && (
+        {gamePhase === 'playing' && currentQuestion && (
           <div>
             {/* Welcome Card with Zodiac Info */}
             <div className="bg-gradient-to-r from-purple-900/60 to-red-900/60 rounded-xl p-3 mb-4 border border-purple-500/50">
-              <div className="flex items-center justify-between">
+              {zodiacInfo ? (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="text-3xl">
+                      {ZODIAC_DATA[zodiacInfo.sign]?.emoji || '🐴'}
+                    </div>
+                    <div>
+                      <div className="text-lg font-bold text-white">
+                        Welcome, {nickname}!
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className={`font-bold ${ELEMENT_DATA[zodiacInfo.element]?.color || 'text-yellow-400'}`}>
+                          {zodiacInfo.element}
+                        </span>
+                        <span className="text-white font-bold">{zodiacInfo.sign}</span>
+                        <span className="text-gray-400 text-sm">
+                          {ELEMENT_DATA[zodiacInfo.element]?.chinese}{ZODIAC_DATA[zodiacInfo.sign]?.chinese}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-right hidden sm:block">
+                    <div className="text-xs text-gray-400">Your Traits</div>
+                    <div className="flex gap-1 flex-wrap justify-end">
+                      {ZODIAC_DATA[zodiacInfo.sign]?.traits.slice(0, 2).map((trait, i) => (
+                        <span key={i} className="text-xs bg-purple-800/50 px-2 py-0.5 rounded-full text-purple-200">
+                          {trait}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
                 <div className="flex items-center gap-3">
-                  <div className="text-3xl">
-                    {ZODIAC_DATA[zodiacInfo.sign]?.emoji || '🐴'}
-                  </div>
+                  <div className="text-3xl">🐴</div>
                   <div>
-                    <div className="text-lg font-bold text-white">
-                      Welcome, {nickname}!
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className={`font-bold ${ELEMENT_DATA[zodiacInfo.element]?.color || 'text-yellow-400'}`}>
-                        {zodiacInfo.element}
-                      </span>
-                      <span className="text-white font-bold">{zodiacInfo.sign}</span>
-                      <span className="text-gray-400 text-sm">
-                        {ELEMENT_DATA[zodiacInfo.element]?.chinese}{ZODIAC_DATA[zodiacInfo.sign]?.chinese}
-                      </span>
+                    <div className="text-lg font-bold text-white">Welcome, {nickname}!</div>
+                    <div className="text-xs text-gray-400">
+                      Enter birth year next game to see your zodiac! 🔒 No data stored.
                     </div>
                   </div>
                 </div>
-                <div className="text-right hidden sm:block">
-                  <div className="text-xs text-gray-400">Your Traits</div>
-                  <div className="flex gap-1 flex-wrap justify-end">
-                    {ZODIAC_DATA[zodiacInfo.sign]?.traits.slice(0, 2).map((trait, i) => (
-                      <span key={i} className="text-xs bg-purple-800/50 px-2 py-0.5 rounded-full text-purple-200">
-                        {trait}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
 
             {/* Score Bar */}
@@ -718,7 +736,9 @@ export default function SoloPlayPage() {
                     <span className="text-xl">🥇</span>
                     <div>
                       <div className="font-bold text-yellow-300">{nickname}</div>
-                      <div className="text-xs text-gray-400">{zodiacInfo?.element} {zodiacInfo?.sign}</div>
+                      {zodiacInfo && (
+                        <div className="text-xs text-gray-400">{zodiacInfo.element} {zodiacInfo.sign}</div>
+                      )}
                     </div>
                   </div>
                   <div className="text-right">
@@ -781,40 +801,52 @@ export default function SoloPlayPage() {
         )}
 
         {/* SHOWING ANSWER PHASE */}
-        {gamePhase === 'showing_answer' && currentQuestion && zodiacInfo && (
+        {gamePhase === 'showing_answer' && currentQuestion && (
           <div>
             {/* Welcome Card with Zodiac Info */}
             <div className="bg-gradient-to-r from-purple-900/60 to-red-900/60 rounded-xl p-3 mb-4 border border-purple-500/50">
-              <div className="flex items-center justify-between">
+              {zodiacInfo ? (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="text-3xl">
+                      {ZODIAC_DATA[zodiacInfo.sign]?.emoji || '🐴'}
+                    </div>
+                    <div>
+                      <div className="text-lg font-bold text-white">
+                        {nickname}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className={`font-bold ${ELEMENT_DATA[zodiacInfo.element]?.color || 'text-yellow-400'}`}>
+                          {zodiacInfo.element}
+                        </span>
+                        <span className="text-white font-bold">{zodiacInfo.sign}</span>
+                        <span className="text-gray-400 text-sm">
+                          {ELEMENT_DATA[zodiacInfo.element]?.chinese}{ZODIAC_DATA[zodiacInfo.sign]?.chinese}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="flex gap-1 flex-wrap justify-end">
+                      {ZODIAC_DATA[zodiacInfo.sign]?.traits.slice(0, 2).map((trait, i) => (
+                        <span key={i} className="text-xs bg-purple-800/50 px-2 py-0.5 rounded-full text-purple-200">
+                          {trait}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
                 <div className="flex items-center gap-3">
-                  <div className="text-3xl">
-                    {ZODIAC_DATA[zodiacInfo.sign]?.emoji || '🐴'}
-                  </div>
+                  <div className="text-3xl">🐴</div>
                   <div>
-                    <div className="text-lg font-bold text-white">
-                      {nickname}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className={`font-bold ${ELEMENT_DATA[zodiacInfo.element]?.color || 'text-yellow-400'}`}>
-                        {zodiacInfo.element}
-                      </span>
-                      <span className="text-white font-bold">{zodiacInfo.sign}</span>
-                      <span className="text-gray-400 text-sm">
-                        {ELEMENT_DATA[zodiacInfo.element]?.chinese}{ZODIAC_DATA[zodiacInfo.sign]?.chinese}
-                      </span>
+                    <div className="text-lg font-bold text-white">{nickname}</div>
+                    <div className="text-xs text-gray-400">
+                      🔒 Privacy by Design — No data stored
                     </div>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="flex gap-1 flex-wrap justify-end">
-                    {ZODIAC_DATA[zodiacInfo.sign]?.traits.slice(0, 2).map((trait, i) => (
-                      <span key={i} className="text-xs bg-purple-800/50 px-2 py-0.5 rounded-full text-purple-200">
-                        {trait}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
 
             {/* Question Recap */}
@@ -924,7 +956,9 @@ export default function SoloPlayPage() {
                     <span className="text-2xl">🥇</span>
                     <div>
                       <div className="font-bold text-yellow-300 text-lg">{nickname}</div>
-                      <div className="text-xs text-gray-400">{zodiacInfo?.element} {zodiacInfo?.sign}</div>
+                      {zodiacInfo && (
+                        <div className="text-xs text-gray-400">{zodiacInfo.element} {zodiacInfo.sign}</div>
+                      )}
                     </div>
                   </div>
                   <div className="text-right">
