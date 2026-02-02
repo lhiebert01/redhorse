@@ -83,7 +83,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check for duplicate nickname in this game
+    // Check for duplicate nickname among CONNECTED players in this game
+    // This allows reuse of nicknames from disconnected players
     const { data: existingPlayer } = await supabase
       .from('party_players')
       .select('*')
@@ -92,33 +93,41 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (existingPlayer) {
-      // If player exists but disconnected, reconnect them
+      // If player exists but disconnected, allow them to reconnect OR
+      // allow a new player to take over the nickname
       if (!existingPlayer.is_connected) {
-        const { error: reconnectError } = await supabase
+        // Delete the old disconnected record and create fresh
+        await supabase
           .from('party_players')
-          .update({
-            is_connected: true,
-            last_seen_at: new Date().toISOString(),
-          })
+          .delete()
           .eq('id', existingPlayer.id);
 
-        if (reconnectError) {
-          console.error('Failed to reconnect player:', reconnectError);
-        }
-
-        return NextResponse.json({
-          success: true,
-          player_id: existingPlayer.id,
-          game_id: game.id,
-          game_status: game.status,
-          reconnected: true,
-        });
+        console.log('Deleted disconnected player record:', existingPlayer.id, 'nickname:', nickname);
+        // Continue to create new player below
+      } else {
+        // Player is connected - nickname truly taken
+        return NextResponse.json(
+          { error: 'Nickname already taken in this party' },
+          { status: 400 }
+        );
       }
+    }
 
-      return NextResponse.json(
-        { error: 'Nickname already taken in this party' },
-        { status: 400 }
-      );
+    // Also check for nickname in OTHER games of this pass (prevents stale records)
+    const { data: stalePlayer } = await supabase
+      .from('party_players')
+      .select('id, party_game_id')
+      .neq('party_game_id', game.id)
+      .eq('nickname', nickname.trim())
+      .single();
+
+    if (stalePlayer) {
+      // Delete the stale record from old game
+      await supabase
+        .from('party_players')
+        .delete()
+        .eq('id', stalePlayer.id);
+      console.log('Deleted stale player from old game:', stalePlayer.id);
     }
 
     // Calculate zodiac if birth year provided

@@ -288,26 +288,38 @@ export default function HostConsolePage() {
       console.log('[START GAME] Old answers cleared successfully');
     }
 
-    // CRITICAL: Force-sync ALL players in this party to the current game
-    // This fixes the issue where players have stale party_game_id from old games
-    console.log('[START GAME] Force-syncing all party players to game:', currentGame.id);
+    // First, mark all players from OLD games as disconnected
+    // This prevents stale "connected" players from blocking nicknames
+    console.log('[START GAME] Marking old game players as disconnected');
     const { data: allPassGames } = await supabase
       .from('party_games')
       .select('id')
       .eq('party_pass_id', pass.id);
 
     if (allPassGames && allPassGames.length > 0) {
-      const allGameIds = allPassGames.map(g => g.id);
-      const { error: syncError, count: syncCount } = await supabase
-        .from('party_players')
-        .update({ party_game_id: currentGame.id })
-        .in('party_game_id', allGameIds);
-
-      if (syncError) {
-        console.error('[START GAME] Failed to sync players:', syncError);
-      } else {
-        console.log('[START GAME] Synced players to current game. Updated count:', syncCount);
+      const oldGameIds = allPassGames.map(g => g.id).filter(id => id !== currentGame.id);
+      if (oldGameIds.length > 0) {
+        await supabase
+          .from('party_players')
+          .update({ is_connected: false })
+          .in('party_game_id', oldGameIds);
+        console.log('[START GAME] Marked players in', oldGameIds.length, 'old games as disconnected');
       }
+    }
+
+    // CRITICAL: Force-sync only CONNECTED players in the CURRENT game
+    // This ensures all current players have the correct party_game_id
+    console.log('[START GAME] Ensuring current game players have correct game_id:', currentGame.id);
+    const { error: syncError, count: syncCount } = await supabase
+      .from('party_players')
+      .update({ party_game_id: currentGame.id })
+      .eq('party_game_id', currentGame.id)
+      .eq('is_connected', true);
+
+    if (syncError) {
+      console.error('[START GAME] Failed to sync players:', syncError);
+    } else {
+      console.log('[START GAME] Verified connected players. Count:', syncCount);
     }
 
     // Reset game state in database
