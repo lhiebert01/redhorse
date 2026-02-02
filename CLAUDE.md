@@ -3337,4 +3337,66 @@ const questionIdNum = Number(question_id);
 
 ---
 
+## 🚨 React useCallback Stale Closure Bug (CRITICAL)
+
+### The Problem
+
+When using `useCallback`, the callback captures state values at the time of creation. If state updates later, the callback still uses the OLD values.
+
+**BAD Example (Party Host Page Bug):**
+```typescript
+const [questionsCache, setQuestionsCache] = useState<Map>(new Map());
+
+// This captures questionsCache at creation time (empty Map)
+const showNextQuestion = useCallback((index) => {
+  const question = questionsCache.get(id); // ALWAYS EMPTY!
+}, [questionsCache]); // Even with dependency, still stale on first call
+
+// Later: cache is populated...
+setQuestionsCache(newCache);
+
+// But when startGame calls showNextQuestion, it uses the OLD empty cache!
+```
+
+### The Fix: Use useRef for Mutable Data
+
+```typescript
+// Ref always has current value - no stale closure
+const questionsCacheRef = useRef<Map>(new Map());
+
+const fetchQuestions = useCallback(async (ids) => {
+  const cache = new Map();
+  // ... populate cache
+
+  // CRITICAL: Update ref immediately
+  questionsCacheRef.current = cache;
+  return cache;
+}, []);
+
+const showNextQuestion = useCallback((index) => {
+  // Use ref instead of state - always current!
+  const question = questionsCacheRef.current.get(id);
+}, []); // No dependency needed - ref is mutable
+```
+
+### When to Use Ref vs State
+
+| Use Case | Use Ref | Use State |
+|----------|---------|-----------|
+| Data read in callbacks | ✅ | ❌ |
+| Data that triggers re-render | ❌ | ✅ |
+| Mutable values (counters, flags) | ✅ | ❌ |
+| UI display values | ❌ | ✅ |
+| Cache/lookup tables | ✅ | ❌ |
+
+### Rule: If callback reads data that changes, use useRef
+
+This is especially important for:
+- Game state machines
+- Real-time data (subscriptions)
+- Caches populated asynchronously
+- Counters/accumulators
+
+---
+
 *火马年 2026 - Year of the Fire Horse*
