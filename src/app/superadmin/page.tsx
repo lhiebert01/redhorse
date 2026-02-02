@@ -45,6 +45,62 @@ export default function SuperAdminPage() {
   const [showPartyStats, setShowPartyStats] = useState(false);
   const [partyStatsLoading, setPartyStatsLoading] = useState(false);
   const [partyStats, setPartyStats] = useState<{
+    // Party passes (multiplayer)
+    partyPasses?: {
+      total: number;
+      byType: Record<string, number>;
+      gamesAllowed: number;
+      gamesPlayed: number;
+      gamesRemaining: number;
+    };
+    partyGames?: {
+      total: number;
+      completed: number;
+      inProgress: number;
+    };
+    partyPlayers?: {
+      total: number;
+      avgPerGame: number;
+    };
+    partyPassList?: Array<{
+      party_code: string;
+      pass_type: string;
+      is_solo: boolean;
+      games_allowed: number;
+      games_played: number;
+      games_remaining: number;
+      total_players: number;
+      created_at: string;
+      expires_at: string;
+      is_expired: boolean;
+    }>;
+    // Solo passes
+    soloPasses?: {
+      total: number;
+      active: number;
+      expired: number;
+      gamesAllowed: number;
+      gamesPlayed: number;
+      gamesRemaining: number;
+    };
+    soloGames?: {
+      total: number;
+      completed: number;
+      inProgress: number;
+    };
+    soloPassList?: Array<{
+      party_code: string;
+      pass_type: string;
+      is_solo: boolean;
+      games_allowed: number;
+      games_played: number;
+      games_remaining: number;
+      total_players: number;
+      created_at: string;
+      expires_at: string;
+      is_expired: boolean;
+    }>;
+    // Legacy fields
     passes: {
       total: number;
       byType: Record<string, number>;
@@ -64,6 +120,7 @@ export default function SuperAdminPage() {
     passList: Array<{
       party_code: string;
       pass_type: string;
+      is_solo?: boolean;
       games_allowed: number;
       games_played: number;
       games_remaining: number;
