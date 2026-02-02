@@ -442,19 +442,105 @@ export default function SoloPlayPage() {
     );
   }
 
-  // Error state
+  // Error state - enhanced for expired/exhausted passes
   if (error) {
+    const isNoGamesRemaining = error.includes('no games remaining');
+    const isExpired = error.includes('expired');
+
     return (
       <main className="min-h-screen bg-black text-white flex items-center justify-center p-4">
         <div className="text-center max-w-md">
-          <div className="text-6xl mb-4">😢</div>
-          <h1 className="text-2xl font-bold mb-4 text-red-400">{error}</h1>
-          <Link
-            href="/party"
-            className="inline-block bg-red-600 hover:bg-red-500 px-6 py-3 rounded-xl font-bold"
-          >
-            Back to Party Home
-          </Link>
+          {isNoGamesRemaining || isExpired ? (
+            <>
+              <div className="text-6xl mb-4">🎉</div>
+              <h1 className="text-2xl font-bold mb-2 text-yellow-400">
+                {isNoGamesRemaining ? 'All Games Played!' : 'Pass Expired'}
+              </h1>
+              <p className="text-gray-300 mb-6">
+                {isNoGamesRemaining
+                  ? 'You\'ve completed all 5 games on this pass. Great job!'
+                  : 'This pass has expired, but you can get a new one!'}
+              </p>
+
+              {/* Stats reminder */}
+              <div className="bg-gray-900/50 rounded-xl p-4 mb-6 border border-gray-700">
+                <p className="text-sm text-gray-400">
+                  Thanks for playing Fire Horse Trivia! 🐴🔥
+                </p>
+              </div>
+
+              {/* Get New Pass CTA */}
+              <div className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-xl p-4 mb-4 border border-purple-500/30">
+                <p className="text-lg font-bold text-purple-300 mb-2">
+                  Want to play more?
+                </p>
+                <p className="text-sm text-gray-300 mb-3">
+                  Get another Solo Pass for 5 more games!
+                </p>
+                <Link
+                  href="/party"
+                  className="inline-block bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 px-6 py-3 rounded-xl font-bold"
+                >
+                  🎮 Get New Pass — $2.88
+                </Link>
+              </div>
+
+              {/* Share Section */}
+              <div className="bg-gradient-to-r from-green-900/40 to-teal-900/40 rounded-xl p-4 mb-4 border border-green-500/30">
+                <p className="text-sm font-bold text-green-300 mb-2">
+                  ✨ Share with Friends ✨
+                </p>
+                <div className="flex justify-center gap-2 flex-wrap">
+                  <a
+                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                      '🔥 I just played Fire Horse Trivia! Test your Chinese zodiac knowledge:\nredhorseoracle.com/party\n\n#FireHorse2026 #ChineseNewYear'
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3 py-2 bg-black hover:bg-gray-800 rounded-lg font-bold text-sm border border-gray-600"
+                  >
+                    𝕏
+                  </a>
+                  <a
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://redhorseoracle.com/party')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg font-bold text-sm"
+                  >
+                    Facebook
+                  </a>
+                  <a
+                    href={`https://wa.me/?text=${encodeURIComponent(
+                      '🔥 Play Fire Horse Trivia! https://redhorseoracle.com/party'
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3 py-2 bg-green-600 hover:bg-green-500 rounded-lg font-bold text-sm"
+                  >
+                    WhatsApp
+                  </a>
+                </div>
+              </div>
+
+              <Link
+                href="/party"
+                className="inline-block text-gray-400 hover:text-white text-sm underline"
+              >
+                ← Back to Party Home
+              </Link>
+            </>
+          ) : (
+            <>
+              <div className="text-6xl mb-4">😢</div>
+              <h1 className="text-2xl font-bold mb-4 text-red-400">{error}</h1>
+              <Link
+                href="/party"
+                className="inline-block bg-red-600 hover:bg-red-500 px-6 py-3 rounded-xl font-bold"
+              >
+                Back to Party Home
+              </Link>
+            </>
+          )}
         </div>
       </main>
     );
