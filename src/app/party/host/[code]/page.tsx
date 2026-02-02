@@ -839,12 +839,13 @@ export default function HostConsolePage() {
       console.log('[END GAME] Game status updated to finished');
     }
 
-    // Decrement games remaining - use passRef to avoid stale closure
-    const currentPass = passRef.current;
+    // Decrement games remaining - use passRef with fallback to pass state
+    const currentPass = passRef.current || pass;
     if (!currentPass) {
-      console.error('[END GAME] No pass ref available');
-      return;
-    }
+      console.error('[END GAME] No pass available (ref or state) - cannot update counters');
+      // Still continue to update UI state
+    } else {
+      console.log('[END GAME] Using pass:', currentPass.id, 'games_remaining:', currentPass.games_remaining);
 
     // Fetch fresh values from DB first to avoid stale state issues
     const { data: freshPass, error: fetchError } = await supabase
@@ -903,6 +904,8 @@ export default function HostConsolePage() {
         setPass((prev) => prev ? { ...prev, games_remaining: newGamesRemaining, games_played: newGamesPlayed } : null);
       }
     }
+    } // Close the else block for currentPass check
+
     setGame((prev) => (prev ? { ...prev, status: 'finished' } : null));
     gameRef.current = gameRef.current ? { ...gameRef.current, status: 'finished' } : null;
 
