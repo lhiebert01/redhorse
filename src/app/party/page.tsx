@@ -496,8 +496,44 @@ export default function PartyLandingPage() {
           </p>
         </div>
 
+        {/* Social Share Section */}
+        <div className="mt-8 bg-gradient-to-r from-red-900/50 via-purple-900/50 to-red-900/50 border border-fire-gold/50 rounded-xl p-5 text-center">
+          <p className="text-fire-gold text-lg font-bold mb-2">
+            📣 Share the Fun with Friends!
+          </p>
+          <p className="text-gray-300 text-sm mb-4">
+            Know someone who&apos;d love to host a Fire Horse Trivia party?
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <a
+              href="https://twitter.com/intent/tweet?text=🐴%20Host%20your%20own%20Fire%20Horse%20Trivia%20Party%20for%20CNY%202026!%20400%20questions,%20live%20scoring,%20leaderboards!%20🎉&url=https://redhorseoracle.com/party"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-black hover:bg-gray-800 text-white font-bold px-5 py-2 rounded-lg transition-colors"
+            >
+              𝕏 Share on X
+            </a>
+            <a
+              href="https://www.facebook.com/sharer/sharer.php?u=https://redhorseoracle.com/party"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-2 rounded-lg transition-colors"
+            >
+              Share on Facebook
+            </a>
+            <a
+              href="https://api.whatsapp.com/send?text=🐴%20Check%20out%20Fire%20Horse%20Trivia%20for%20CNY%202026!%20Host%20your%20own%20party%20with%20400%20questions!%20https://redhorseoracle.com/party"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-green-600 hover:bg-green-500 text-white font-bold px-5 py-2 rounded-lg transition-colors"
+            >
+              WhatsApp
+            </a>
+          </div>
+        </div>
+
         {/* Footer */}
-        <footer className="text-center text-gray-500 text-sm pb-8">
+        <footer className="text-center text-gray-500 text-sm pb-8 mt-8">
           <p className="mb-2">
             Part of{' '}
             <Link href="/" className="text-red-400 hover:underline">

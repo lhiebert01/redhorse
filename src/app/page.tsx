@@ -253,6 +253,23 @@ export default function Home() {
         </div>
       )}
 
+      {/* CNY 2026 Promo Banner - Sticky */}
+      <div className="sticky top-0 z-50 bg-gradient-to-r from-red-900 via-red-800 to-red-900 border-b-2 border-fire-gold/50 py-2 px-4">
+        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 text-center">
+          <span className="text-fire-gold font-bold text-sm sm:text-base animate-pulse">
+            🎊 CNY 2026 — Year of the Fire Horse! 🐴
+          </span>
+          <div className="flex gap-3">
+            <a href="/party" className="bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-bold px-3 py-1 rounded-full transition-colors">
+              🎉 Party Trivia
+            </a>
+            <a href="/free" className="bg-green-600 hover:bg-green-500 text-white text-xs sm:text-sm font-bold px-3 py-1 rounded-full transition-colors">
+              🔮 Free Oracle
+            </a>
+          </div>
+        </div>
+      </div>
+
       {/* Added pb-12 to ensure footer isn't covered by fixed ticker */}
       <div className="max-w-lg mx-auto px-4 py-8 pb-12 flex flex-col items-center min-h-screen relative z-10">
         {/* Hero Title */}
@@ -427,43 +444,89 @@ export default function Home() {
           </a>
         </div>
 
-        {/* Party Trivia Game Promo */}
-        <div className="w-full bg-gradient-to-br from-blue-950/60 via-purple-950/60 to-blue-950/60 backdrop-blur-sm border-2 border-blue-500/50 rounded-2xl p-5 mb-6">
-          <div className="text-center mb-4">
-            <span className="text-4xl">🎉</span>
-            <h3 className="text-blue-300 text-2xl font-bold mt-2">
-              Fire Horse Trivia
-            </h3>
-            <p className="text-white text-lg font-semibold">
-              Party Game for Groups!
-            </p>
+        {/* Party Trivia Game Promo - CNY 2026 */}
+        <div className="w-full bg-gradient-to-br from-red-950/80 via-purple-950/80 to-blue-950/80 backdrop-blur-sm border-2 border-fire-gold rounded-2xl p-5 mb-6 relative overflow-hidden">
+          {/* Animated sparkles background */}
+          <div className="absolute inset-0 opacity-20">
+            <div className="absolute top-2 left-4 text-2xl animate-pulse">✨</div>
+            <div className="absolute top-8 right-6 text-xl animate-pulse" style={{animationDelay: '0.5s'}}>🎆</div>
+            <div className="absolute bottom-4 left-8 text-xl animate-pulse" style={{animationDelay: '1s'}}>🎇</div>
           </div>
 
-          <div className="bg-black/40 rounded-xl p-4 mb-4">
-            <p className="text-gray-200 text-sm text-center leading-relaxed mb-3">
-              Host a trivia night with <span className="text-fire-gold font-bold">400 questions</span> about the Chinese Zodiac,
-              Fire Horse legends, CNY traditions, and more!
+          <div className="relative z-10">
+            <div className="text-center mb-4">
+              <div className="inline-block bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full mb-2 animate-bounce">
+                🔥 CNY 2026 SPECIAL 🔥
+              </div>
+              <h3 className="text-fire-gold text-3xl font-bold">
+                BE THE ULTIMATE PARTY HOST!
+              </h3>
+              <p className="text-white text-xl font-bold mt-1">
+                🎉 Fire Horse Trivia Night 🐴
+              </p>
+            </div>
+
+            <div className="bg-black/60 rounded-xl p-4 mb-4 border border-fire-gold/30">
+              <p className="text-white text-base text-center leading-relaxed mb-3">
+                <span className="text-fire-gold font-bold text-lg">ROCK your Chinese New Year party!</span>
+                <br/>
+                Host an epic trivia battle with <span className="text-yellow-400 font-bold">400 mind-blowing questions</span> about
+                the Fire Horse, Chinese Zodiac, CNY traditions & legends!
+              </p>
+              <div className="flex flex-wrap justify-center gap-2 text-sm font-bold">
+                <span className="bg-blue-600/80 text-white px-3 py-1.5 rounded-lg">🎮 2-20 Players</span>
+                <span className="bg-purple-600/80 text-white px-3 py-1.5 rounded-lg">⚡ Live Scoring</span>
+                <span className="bg-green-600/80 text-white px-3 py-1.5 rounded-lg">🏆 Leaderboards</span>
+              </div>
+            </div>
+
+            <a
+              href="/party"
+              className="block w-full bg-gradient-to-r from-red-600 via-fire-gold to-red-600
+                         text-black font-bold text-xl py-4 rounded-xl text-center
+                         hover:scale-105 active:scale-95 transition-all duration-200
+                         shadow-xl shadow-fire-gold/40 border-2 border-yellow-400 animate-pulse"
+            >
+              🎊 HOST YOUR CNY PARTY NOW! 🎊
+            </a>
+
+            <p className="text-fire-gold text-sm text-center mt-3 font-semibold">
+              Perfect for family gatherings, office parties, or Zoom events!
             </p>
-            <div className="flex flex-wrap justify-center gap-2 text-xs">
-              <span className="bg-blue-900/50 text-blue-300 px-2 py-1 rounded">🎮 2-20 Players</span>
-              <span className="bg-purple-900/50 text-purple-300 px-2 py-1 rounded">⏱️ Real-time Scoring</span>
-              <span className="bg-green-900/50 text-green-300 px-2 py-1 rounded">🏆 Leaderboards</span>
+
+            {/* Social Share Ask */}
+            <div className="mt-4 pt-4 border-t border-fire-gold/30 text-center">
+              <p className="text-white text-sm font-bold mb-2">
+                📣 Know someone who&apos;d love this? Share it!
+              </p>
+              <div className="flex justify-center gap-3">
+                <a
+                  href="https://twitter.com/intent/tweet?text=🐴%20Host%20your%20own%20Fire%20Horse%20Trivia%20Party%20for%20CNY%202026!%20400%20questions%20about%20Chinese%20Zodiac%20%26%20Fire%20Horse%20legends!%20🎉&url=https://redhorseoracle.com/party"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-black hover:bg-gray-800 text-white text-sm font-bold px-4 py-2 rounded-lg transition-colors"
+                >
+                  𝕏 Share
+                </a>
+                <a
+                  href="https://www.facebook.com/sharer/sharer.php?u=https://redhorseoracle.com/party"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold px-4 py-2 rounded-lg transition-colors"
+                >
+                  Facebook
+                </a>
+                <a
+                  href="https://www.linkedin.com/shareArticle?mini=true&url=https://redhorseoracle.com/party&title=Fire%20Horse%20Trivia%20Party%20Game"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-blue-700 hover:bg-blue-600 text-white text-sm font-bold px-4 py-2 rounded-lg transition-colors"
+                >
+                  LinkedIn
+                </a>
+              </div>
             </div>
           </div>
-
-          <a
-            href="/party"
-            className="block w-full bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600
-                       text-white font-bold text-lg py-3 rounded-xl text-center
-                       hover:scale-105 active:scale-95 transition-all duration-200
-                       shadow-xl shadow-blue-500/30 border-2 border-blue-400"
-          >
-            🎊 EXPLORE PARTY TRIVIA
-          </a>
-
-          <p className="text-gray-400 text-xs text-center mt-2">
-            Perfect for CNY parties, family gatherings, or team events!
-          </p>
         </div>
 
         {/* Privacy by Design Notice - KEY DIFFERENTIATOR */}
