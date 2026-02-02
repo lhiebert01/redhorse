@@ -452,6 +452,50 @@ export default function PartyLandingPage() {
           </div>
         </div>
 
+        {/* Personal Oracle Promo */}
+        <div className="mt-12 bg-gradient-to-br from-red-950/60 via-black/80 to-yellow-950/60 border-2 border-fire-gold/50 rounded-2xl p-6">
+          <div className="text-center mb-4">
+            <span className="text-4xl">🔮</span>
+            <h3 className="text-fire-gold text-2xl font-bold mt-2">
+              Want Your Personal Fire Horse Oracle?
+            </h3>
+          </div>
+
+          <div className="bg-black/40 rounded-xl p-4 mb-4">
+            <p className="text-gray-200 text-sm text-center leading-relaxed mb-3">
+              Get a <span className="text-fire-gold font-bold">one-of-a-kind AI-generated talisman</span> personalized for your Chinese Zodiac sign.
+              Each oracle is a <span className="text-yellow-400 font-bold">limited edition masterpiece</span> — only 888 per zodiac!
+            </p>
+            <div className="flex flex-wrap justify-center gap-2 text-xs">
+              <span className="bg-yellow-900/50 text-yellow-300 px-2 py-1 rounded">🎲 Lucky Numbers</span>
+              <span className="bg-red-900/50 text-red-300 px-2 py-1 rounded">⚔️ Power Mottos</span>
+              <span className="bg-pink-900/50 text-pink-300 px-2 py-1 rounded">❤️ Love Decrees</span>
+              <span className="bg-blue-900/50 text-blue-300 px-2 py-1 rounded">🛡️ Protection</span>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link
+              href="/free"
+              className="bg-gradient-to-r from-green-600 to-green-500 text-white font-bold py-3 px-6 rounded-xl text-center
+                         hover:scale-105 transition-all shadow-lg"
+            >
+              🔮 FREE Reading First
+            </Link>
+            <Link
+              href="/"
+              className="bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-bold py-3 px-6 rounded-xl text-center
+                         hover:scale-105 transition-all shadow-lg"
+            >
+              ✨ Get Full Oracle — $8.88
+            </Link>
+          </div>
+
+          <p className="text-gray-500 text-xs text-center mt-3">
+            Fire Horse returns only once every 60 years • Next: 2086
+          </p>
+        </div>
+
         {/* Footer */}
         <footer className="text-center text-gray-500 text-sm pb-8">
           <p className="mb-2">

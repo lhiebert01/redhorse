@@ -427,6 +427,45 @@ export default function Home() {
           </a>
         </div>
 
+        {/* Party Trivia Game Promo */}
+        <div className="w-full bg-gradient-to-br from-blue-950/60 via-purple-950/60 to-blue-950/60 backdrop-blur-sm border-2 border-blue-500/50 rounded-2xl p-5 mb-6">
+          <div className="text-center mb-4">
+            <span className="text-4xl">🎉</span>
+            <h3 className="text-blue-300 text-2xl font-bold mt-2">
+              Fire Horse Trivia
+            </h3>
+            <p className="text-white text-lg font-semibold">
+              Party Game for Groups!
+            </p>
+          </div>
+
+          <div className="bg-black/40 rounded-xl p-4 mb-4">
+            <p className="text-gray-200 text-sm text-center leading-relaxed mb-3">
+              Host a trivia night with <span className="text-fire-gold font-bold">400 questions</span> about the Chinese Zodiac,
+              Fire Horse legends, CNY traditions, and more!
+            </p>
+            <div className="flex flex-wrap justify-center gap-2 text-xs">
+              <span className="bg-blue-900/50 text-blue-300 px-2 py-1 rounded">🎮 2-20 Players</span>
+              <span className="bg-purple-900/50 text-purple-300 px-2 py-1 rounded">⏱️ Real-time Scoring</span>
+              <span className="bg-green-900/50 text-green-300 px-2 py-1 rounded">🏆 Leaderboards</span>
+            </div>
+          </div>
+
+          <a
+            href="/party"
+            className="block w-full bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600
+                       text-white font-bold text-lg py-3 rounded-xl text-center
+                       hover:scale-105 active:scale-95 transition-all duration-200
+                       shadow-xl shadow-blue-500/30 border-2 border-blue-400"
+          >
+            🎊 EXPLORE PARTY TRIVIA
+          </a>
+
+          <p className="text-gray-400 text-xs text-center mt-2">
+            Perfect for CNY parties, family gatherings, or team events!
+          </p>
+        </div>
+
         {/* Privacy by Design Notice - KEY DIFFERENTIATOR */}
         <div className="w-full bg-green-900/30 border border-green-500/50 rounded-xl p-4 mb-6">
           <div className="flex items-start gap-3">
