@@ -45,6 +45,7 @@ export default function HostConsolePage() {
 
   // Pass & Game state
   // Using refs to avoid stale closure issues in callbacks
+  const passRef = useRef<PartyPass | null>(null);
   const gameRef = useRef<PartyGame | null>(null);
   const [pass, setPass] = useState<PartyPass | null>(null);
   const [game, setGame] = useState<PartyGame | null>(null);
@@ -142,8 +143,9 @@ export default function HostConsolePage() {
           return;
         }
 
+        passRef.current = passData;
         setPass(passData);
-        console.log('[LOAD] Pass loaded:', passData.id, '| Games played:', passData.games_played || 0, '/', passData.games_total);
+        console.log('[LOAD] Pass loaded:', passData.id, '| Games remaining:', passData.games_remaining, '/', passData.games_total);
         console.log('[LOAD] Pre-generated question sets:', passData.question_sets?.length || 0);
 
         // Get existing active game
@@ -207,6 +209,7 @@ export default function HostConsolePage() {
               .eq('id', passData.id)
               .single();
             if (refreshedPass) {
+              passRef.current = refreshedPass;
               setPass(refreshedPass);
             }
           } else {
@@ -789,26 +792,33 @@ export default function HostConsolePage() {
       console.log('[END GAME] Game status updated to finished');
     }
 
-    // Decrement games remaining - fetch fresh value from DB first to avoid stale state issues
+    // Decrement games remaining - use passRef to avoid stale closure
+    const currentPass = passRef.current;
+    if (!currentPass) {
+      console.error('[END GAME] No pass ref available');
+      return;
+    }
+
+    // Fetch fresh value from DB first to avoid stale state issues
     const { data: freshPass, error: fetchError } = await supabase
       .from('party_passes')
       .select('games_remaining')
-      .eq('id', pass?.id)
+      .eq('id', currentPass.id)
       .single();
 
     if (fetchError) {
       console.error('[END GAME] Failed to fetch pass:', fetchError);
     }
 
-    const currentGamesRemaining = freshPass?.games_remaining ?? pass?.games_remaining ?? 1;
+    const currentGamesRemaining = freshPass?.games_remaining ?? currentPass.games_remaining ?? 1;
     const newGamesRemaining = Math.max(0, currentGamesRemaining - 1);
 
-    console.log('[END GAME] Decrementing games_remaining:', currentGamesRemaining, '->', newGamesRemaining);
+    console.log('[END GAME] Decrementing games_remaining:', currentGamesRemaining, '->', newGamesRemaining, 'for pass:', currentPass.id);
 
     const { error: updatePassError } = await supabase
       .from('party_passes')
       .update({ games_remaining: newGamesRemaining })
-      .eq('id', pass?.id);
+      .eq('id', currentPass.id);
 
     if (updatePassError) {
       console.error('[END GAME] Failed to update games_remaining:', updatePassError);
@@ -816,7 +826,10 @@ export default function HostConsolePage() {
       console.log('[END GAME] games_remaining updated to:', newGamesRemaining);
     }
 
-    // Update local pass state to reflect the decrement
+    // Update local pass state and ref to reflect the decrement
+    if (passRef.current) {
+      passRef.current = { ...passRef.current, games_remaining: newGamesRemaining };
+    }
     setPass((prev) => prev ? { ...prev, games_remaining: newGamesRemaining } : null);
     setGame((prev) => (prev ? { ...prev, status: 'finished' } : null));
     gameRef.current = gameRef.current ? { ...gameRef.current, status: 'finished' } : null;
@@ -909,15 +922,19 @@ export default function HostConsolePage() {
 
     console.log('[NEW GAME] Game #', result.game_number, 'created:', result.game.id);
 
-    // Refresh the pass data to get updated counters
-    const { data: refreshedPass } = await supabase
-      .from('party_passes')
-      .select('*')
-      .eq('id', pass.id)
-      .single();
+    // Refresh the pass data to get updated counters - use passRef to avoid stale closure
+    const currentPassForRefresh = passRef.current;
+    if (currentPassForRefresh) {
+      const { data: refreshedPass } = await supabase
+        .from('party_passes')
+        .select('*')
+        .eq('id', currentPassForRefresh.id)
+        .single();
 
-    if (refreshedPass) {
-      setPass(refreshedPass);
+      if (refreshedPass) {
+        passRef.current = refreshedPass;
+        setPass(refreshedPass);
+      }
     }
 
     // Reset all game state - CRITICAL: Update both state AND ref
