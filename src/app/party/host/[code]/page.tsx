@@ -1151,6 +1151,21 @@ export default function HostConsolePage() {
         {/* LOBBY */}
         {(!game || game.status === 'lobby') && (
           <div>
+            {/* HOST BANNER - Show in lobby too */}
+            <div className="bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-900 border-2 border-purple-500 rounded-xl p-4 mb-4">
+              <div className="text-center">
+                <div className="text-xs uppercase tracking-widest text-purple-300 mb-1">
+                  🎛️ HOST SCREEN 🎛️
+                </div>
+                <div className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-purple-300 to-yellow-400">
+                  👑 YOU ARE THE HOST 👑
+                </div>
+                <div className="text-sm text-purple-200 mt-1">
+                  You control the game — you are NOT playing. Share the code below and start when ready!
+                </div>
+              </div>
+            </div>
+
             <h2 className="text-2xl font-bold mb-4 text-center">🎮 Party Lobby</h2>
 
             {/* Share Code */}
