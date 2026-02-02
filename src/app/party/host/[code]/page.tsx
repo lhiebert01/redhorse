@@ -847,63 +847,48 @@ export default function HostConsolePage() {
     } else {
       console.log('[END GAME] Using pass:', currentPass.id, 'games_remaining:', currentPass.games_remaining);
 
-    // Fetch fresh values from DB first to avoid stale state issues
-    const { data: freshPass, error: fetchError } = await supabase
-      .from('party_passes')
-      .select('games_remaining, games_played')
-      .eq('id', currentPass.id)
-      .single();
+      // CRITICAL: Use API endpoint with service role key to bypass RLS
+      // The client-side anon key cannot update party_passes due to RLS policies
+      console.log('[END GAME] Calling /api/party/end-game to update counters...');
 
-    if (fetchError) {
-      console.error('[END GAME] Failed to fetch pass:', fetchError);
-    }
-
-    const currentGamesRemaining = freshPass?.games_remaining ?? currentPass.games_remaining ?? 1;
-    const currentGamesPlayed = freshPass?.games_played ?? 0;
-    const newGamesRemaining = Math.max(0, currentGamesRemaining - 1);
-    const newGamesPlayed = currentGamesPlayed + 1;
-
-    console.log('[END GAME] Updating pass counters:', {
-      games_remaining: `${currentGamesRemaining} -> ${newGamesRemaining}`,
-      games_played: `${currentGamesPlayed} -> ${newGamesPlayed}`,
-      pass_id: currentPass.id
-    });
-
-    const { error: updatePassError } = await supabase
-      .from('party_passes')
-      .update({
-        games_remaining: newGamesRemaining,
-        games_played: newGamesPlayed,
-      })
-      .eq('id', currentPass.id);
-
-    if (updatePassError) {
-      console.error('[END GAME] Failed to update pass counters:', updatePassError);
-    } else {
-      console.log('[END GAME] Pass counters updated successfully');
-
-      // Refetch the pass to confirm the update worked and get the actual values
-      const { data: confirmedPass } = await supabase
-        .from('party_passes')
-        .select('*')
-        .eq('id', currentPass.id)
-        .single();
-
-      if (confirmedPass) {
-        console.log('[END GAME] Confirmed pass values:', {
-          games_remaining: confirmedPass.games_remaining,
-          games_played: confirmedPass.games_played,
+      try {
+        const response = await fetch('/api/party/end-game', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            party_pass_id: currentPass.id,
+            game_id: currentGame.id,
+          }),
         });
-        passRef.current = confirmedPass;
-        setPass(confirmedPass);
-      } else {
-        // Fallback to computed values
-        if (passRef.current) {
-          passRef.current = { ...passRef.current, games_remaining: newGamesRemaining, games_played: newGamesPlayed };
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          console.error('[END GAME] API failed to update pass counters:', result.error);
+        } else {
+          console.log('[END GAME] API updated pass counters successfully:', {
+            games_remaining: result.games_remaining,
+            games_played: result.games_played,
+          });
+
+          // Update local state with confirmed values from API
+          if (result.pass) {
+            passRef.current = result.pass;
+            setPass(result.pass);
+          } else {
+            // Fallback: update with returned values
+            const updatedPass = {
+              ...currentPass,
+              games_remaining: result.games_remaining,
+              games_played: result.games_played,
+            };
+            passRef.current = updatedPass;
+            setPass(updatedPass);
+          }
         }
-        setPass((prev) => prev ? { ...prev, games_remaining: newGamesRemaining, games_played: newGamesPlayed } : null);
+      } catch (apiError) {
+        console.error('[END GAME] API call failed:', apiError);
       }
-    }
     } // Close the else block for currentPass check
 
     setGame((prev) => (prev ? { ...prev, status: 'finished' } : null));
