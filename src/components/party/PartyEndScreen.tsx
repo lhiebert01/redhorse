@@ -132,9 +132,21 @@ ${zodiacSign ? `\n✨ I'm a ${zodiacElement} ${zodiacSign}!` : ''}
                   We Present to You the Year of the Fire Horse!
                 </p>
                 <p className="text-yellow-200 mt-2 text-lg">🎉 Enjoy! 🎉</p>
-                <p className="text-xs text-gray-400 mt-2">
+                <p className="text-xs text-gray-400 mt-3">
                   (Next time, enter your birth year to get YOUR personal zodiac card!)
                 </p>
+
+                {/* Privacy Message */}
+                <div className="mt-4 pt-4 border-t border-yellow-600/30">
+                  <p className="text-xs text-green-400 font-semibold mb-1">
+                    🔒 PRIVACY BY DESIGN
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    Red Horse Oracle is the world&apos;s only Privacy by Design zodiac experience.
+                    No email, no name, no data stored or retained — ever.
+                    Your birth year is never linked to you because we don&apos;t know who you are!
+                  </p>
+                </div>
               </div>
             </div>
           )}
