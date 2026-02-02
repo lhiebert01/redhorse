@@ -250,8 +250,46 @@ export default function PlayerGamePage() {
         // Host ended the party - show thank you screen
         setShowPartyEnd(true);
       })
-      .on('broadcast', { event: 'new_game' }, () => {
-        // Reset for new game - redirect to lobby
+      .on('broadcast', { event: 'new_game' }, async (payload) => {
+        const data = payload.payload as { game_id?: string; message?: string };
+        console.log('[PLAYER] Received new_game event:', data);
+
+        // CRITICAL: Reset party end screen and celebration
+        setShowPartyEnd(false);
+        setShowCelebration(false);
+
+        // Extract new game_id from payload and sync
+        if (data.game_id && playerStateRef.current) {
+          const newGameId = data.game_id;
+          console.log('[PLAYER] Syncing to new game:', newGameId);
+
+          // Update local state with new game_id
+          const updatedState = { ...playerStateRef.current, game_id: newGameId };
+          setPlayerState(updatedState);
+          playerStateRef.current = updatedState;
+
+          // Update sessionStorage
+          sessionStorage.setItem('party_player', JSON.stringify(updatedState));
+
+          // Sync with database
+          try {
+            const response = await fetch('/api/party/sync-game', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                player_id: playerStateRef.current.player_id,
+                old_game_id: playerStateRef.current.game_id,
+                new_game_id: newGameId,
+              }),
+            });
+            const result = await response.json();
+            console.log('[PLAYER] Synced to new game in database:', result);
+          } catch (err) {
+            console.error('[PLAYER] Failed to sync new game:', err);
+          }
+        }
+
+        // Reset all game state for new game
         setGameState((prev) => ({
           ...prev,
           status: 'lobby',
@@ -267,7 +305,6 @@ export default function PlayerGamePage() {
         setFinalRank(null);
         setFinalScores([]);
         setLeaderboard([]);
-        setShowCelebration(false);
       })
       .on('presence', { event: 'sync' }, () => {
         const state = channel.presenceState();
