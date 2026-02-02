@@ -1166,6 +1166,31 @@ export default function HostConsolePage() {
               </div>
             </div>
 
+            {/* Bookmark Reminder */}
+            <div className="bg-yellow-900/30 border border-yellow-500/30 rounded-xl p-3 mb-4">
+              <div className="flex items-start gap-2">
+                <span className="text-xl">📌</span>
+                <div className="text-sm">
+                  <p className="text-yellow-300 font-bold mb-1">Bookmark This Page!</p>
+                  <p className="text-gray-300 text-xs">
+                    Save or bookmark this URL to return to your host console anytime:
+                  </p>
+                  <p className="text-yellow-400 font-mono text-xs mt-1 break-all">
+                    redhorseoracle.com/party/host/{partyCode}
+                  </p>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(`https://redhorseoracle.com/party/host/${partyCode}`);
+                      alert('Host URL copied!');
+                    }}
+                    className="mt-2 bg-yellow-600 hover:bg-yellow-500 px-3 py-1 rounded text-xs font-bold"
+                  >
+                    📋 Copy Host URL
+                  </button>
+                </div>
+              </div>
+            </div>
+
             <h2 className="text-2xl font-bold mb-4 text-center">🎮 Party Lobby</h2>
 
             {/* Share Code */}
