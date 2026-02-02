@@ -21,6 +21,30 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
+// Zodiac data with Chinese characters and traits
+const ZODIAC_DATA: Record<string, { chinese: string; emoji: string; traits: string[] }> = {
+  Rat: { chinese: '鼠', emoji: '🐀', traits: ['Clever', 'Quick-witted', 'Resourceful'] },
+  Ox: { chinese: '牛', emoji: '🐂', traits: ['Diligent', 'Dependable', 'Strong'] },
+  Tiger: { chinese: '虎', emoji: '🐅', traits: ['Brave', 'Competitive', 'Confident'] },
+  Rabbit: { chinese: '兔', emoji: '🐇', traits: ['Gentle', 'Elegant', 'Compassionate'] },
+  Dragon: { chinese: '龙', emoji: '🐉', traits: ['Ambitious', 'Energetic', 'Charismatic'] },
+  Snake: { chinese: '蛇', emoji: '🐍', traits: ['Wise', 'Mysterious', 'Intuitive'] },
+  Horse: { chinese: '马', emoji: '🐴', traits: ['Free-spirited', 'Energetic', 'Adventurous'] },
+  Goat: { chinese: '羊', emoji: '🐐', traits: ['Gentle', 'Creative', 'Empathetic'] },
+  Monkey: { chinese: '猴', emoji: '🐵', traits: ['Witty', 'Intelligent', 'Curious'] },
+  Rooster: { chinese: '鸡', emoji: '🐓', traits: ['Observant', 'Hardworking', 'Confident'] },
+  Dog: { chinese: '狗', emoji: '🐕', traits: ['Loyal', 'Honest', 'Friendly'] },
+  Pig: { chinese: '猪', emoji: '🐷', traits: ['Generous', 'Compassionate', 'Diligent'] },
+};
+
+const ELEMENT_DATA: Record<string, { chinese: string; color: string }> = {
+  Wood: { chinese: '木', color: 'text-green-400' },
+  Fire: { chinese: '火', color: 'text-red-400' },
+  Earth: { chinese: '土', color: 'text-yellow-400' },
+  Metal: { chinese: '金', color: 'text-gray-300' },
+  Water: { chinese: '水', color: 'text-blue-400' },
+};
+
 interface Question {
   id: number;
   question: string;
@@ -621,8 +645,43 @@ export default function SoloPlayPage() {
         )}
 
         {/* PLAYING PHASE */}
-        {gamePhase === 'playing' && currentQuestion && (
+        {gamePhase === 'playing' && currentQuestion && zodiacInfo && (
           <div>
+            {/* Welcome Card with Zodiac Info */}
+            <div className="bg-gradient-to-r from-purple-900/60 to-red-900/60 rounded-xl p-3 mb-4 border border-purple-500/50">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="text-3xl">
+                    {ZODIAC_DATA[zodiacInfo.sign]?.emoji || '🐴'}
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold text-white">
+                      Welcome, {nickname}!
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className={`font-bold ${ELEMENT_DATA[zodiacInfo.element]?.color || 'text-yellow-400'}`}>
+                        {zodiacInfo.element}
+                      </span>
+                      <span className="text-white font-bold">{zodiacInfo.sign}</span>
+                      <span className="text-gray-400 text-sm">
+                        {ELEMENT_DATA[zodiacInfo.element]?.chinese}{ZODIAC_DATA[zodiacInfo.sign]?.chinese}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-right hidden sm:block">
+                  <div className="text-xs text-gray-400">Your Traits</div>
+                  <div className="flex gap-1 flex-wrap justify-end">
+                    {ZODIAC_DATA[zodiacInfo.sign]?.traits.slice(0, 2).map((trait, i) => (
+                      <span key={i} className="text-xs bg-purple-800/50 px-2 py-0.5 rounded-full text-purple-200">
+                        {trait}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Score Bar */}
             <div className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-xl p-3 mb-4">
               <div className="flex justify-between items-center">
@@ -722,8 +781,42 @@ export default function SoloPlayPage() {
         )}
 
         {/* SHOWING ANSWER PHASE */}
-        {gamePhase === 'showing_answer' && currentQuestion && (
+        {gamePhase === 'showing_answer' && currentQuestion && zodiacInfo && (
           <div>
+            {/* Welcome Card with Zodiac Info */}
+            <div className="bg-gradient-to-r from-purple-900/60 to-red-900/60 rounded-xl p-3 mb-4 border border-purple-500/50">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="text-3xl">
+                    {ZODIAC_DATA[zodiacInfo.sign]?.emoji || '🐴'}
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold text-white">
+                      {nickname}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className={`font-bold ${ELEMENT_DATA[zodiacInfo.element]?.color || 'text-yellow-400'}`}>
+                        {zodiacInfo.element}
+                      </span>
+                      <span className="text-white font-bold">{zodiacInfo.sign}</span>
+                      <span className="text-gray-400 text-sm">
+                        {ELEMENT_DATA[zodiacInfo.element]?.chinese}{ZODIAC_DATA[zodiacInfo.sign]?.chinese}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="flex gap-1 flex-wrap justify-end">
+                    {ZODIAC_DATA[zodiacInfo.sign]?.traits.slice(0, 2).map((trait, i) => (
+                      <span key={i} className="text-xs bg-purple-800/50 px-2 py-0.5 rounded-full text-purple-200">
+                        {trait}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Question Recap */}
             <div className="bg-gradient-to-b from-gray-800 to-gray-900 rounded-xl p-4 mb-4 border border-gray-700">
               <div className="text-lg font-bold text-center mb-2">
