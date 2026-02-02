@@ -138,20 +138,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // For new games (not restarts), update the pass counters
-    if (action === 'create') {
-      const { error: updateError } = await supabase
-        .from('party_passes')
-        .update({
-          games_played: actualGameNumber,
-          games_remaining: (pass.games_remaining || 1) - 1,
-        })
-        .eq('id', party_pass_id);
-
-      if (updateError) {
-        console.error('[GAME API] Failed to update pass counters:', updateError);
-      }
-    }
+    // NOTE: We do NOT update games_played or games_remaining here.
+    // Those counters should only be updated when a game is COMPLETED (in endGame on host).
+    // This allows games to be started but not "consumed" until they're actually played.
+    console.log('[GAME API] Game created. Counters will update when game completes.');
 
     console.log(`[GAME API] Game #${actualGameNumber} created:`, newGame.id);
 

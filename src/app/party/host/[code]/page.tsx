@@ -839,10 +839,10 @@ export default function HostConsolePage() {
       return;
     }
 
-    // Fetch fresh value from DB first to avoid stale state issues
+    // Fetch fresh values from DB first to avoid stale state issues
     const { data: freshPass, error: fetchError } = await supabase
       .from('party_passes')
-      .select('games_remaining')
+      .select('games_remaining, games_played')
       .eq('id', currentPass.id)
       .single();
 
@@ -851,26 +851,35 @@ export default function HostConsolePage() {
     }
 
     const currentGamesRemaining = freshPass?.games_remaining ?? currentPass.games_remaining ?? 1;
+    const currentGamesPlayed = freshPass?.games_played ?? 0;
     const newGamesRemaining = Math.max(0, currentGamesRemaining - 1);
+    const newGamesPlayed = currentGamesPlayed + 1;
 
-    console.log('[END GAME] Decrementing games_remaining:', currentGamesRemaining, '->', newGamesRemaining, 'for pass:', currentPass.id);
+    console.log('[END GAME] Updating pass counters:', {
+      games_remaining: `${currentGamesRemaining} -> ${newGamesRemaining}`,
+      games_played: `${currentGamesPlayed} -> ${newGamesPlayed}`,
+      pass_id: currentPass.id
+    });
 
     const { error: updatePassError } = await supabase
       .from('party_passes')
-      .update({ games_remaining: newGamesRemaining })
+      .update({
+        games_remaining: newGamesRemaining,
+        games_played: newGamesPlayed,
+      })
       .eq('id', currentPass.id);
 
     if (updatePassError) {
-      console.error('[END GAME] Failed to update games_remaining:', updatePassError);
+      console.error('[END GAME] Failed to update pass counters:', updatePassError);
     } else {
-      console.log('[END GAME] games_remaining updated to:', newGamesRemaining);
+      console.log('[END GAME] Pass counters updated successfully');
     }
 
-    // Update local pass state and ref to reflect the decrement
+    // Update local pass state and ref to reflect the changes
     if (passRef.current) {
-      passRef.current = { ...passRef.current, games_remaining: newGamesRemaining };
+      passRef.current = { ...passRef.current, games_remaining: newGamesRemaining, games_played: newGamesPlayed };
     }
-    setPass((prev) => prev ? { ...prev, games_remaining: newGamesRemaining } : null);
+    setPass((prev) => prev ? { ...prev, games_remaining: newGamesRemaining, games_played: newGamesPlayed } : null);
     setGame((prev) => (prev ? { ...prev, status: 'finished' } : null));
     gameRef.current = gameRef.current ? { ...gameRef.current, status: 'finished' } : null;
 
@@ -934,18 +943,35 @@ export default function HostConsolePage() {
 
   // Start a new game using the NEXT pre-generated question set via API
   const startNewGame = useCallback(async () => {
-    if (!pass || pass.games_remaining <= 0) {
+    // CRITICAL: Use passRef to avoid stale closure
+    const currentPass = passRef.current;
+    const currentGame = gameRef.current;
+
+    if (!currentPass || currentPass.games_remaining <= 0) {
       alert('No games remaining on this pass!');
       return;
     }
 
-    console.log('[NEW GAME] Starting new game via API for party:', partyCode);
+    // IMPORTANT: Mark the current game as finished FIRST to prevent resuming it
+    if (currentGame && currentGame.status !== 'finished' && currentGame.status !== 'abandoned') {
+      console.log('[NEW GAME] Marking current game as finished:', currentGame.id);
+      const { error: finishError } = await supabase
+        .from('party_games')
+        .update({ status: 'finished', ended_at: new Date().toISOString() })
+        .eq('id', currentGame.id);
+
+      if (finishError) {
+        console.error('[NEW GAME] Failed to finish current game:', finishError);
+      }
+    }
+
+    console.log('[NEW GAME] Starting new game via API for party:', partyCode, 'games_remaining:', currentPass.games_remaining);
 
     const response = await fetch('/api/party/game', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        party_pass_id: pass.id,
+        party_pass_id: currentPass.id,
         party_code: partyCode,
         timer_seconds: selectedTimer,
         action: 'create',
