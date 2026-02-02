@@ -3,13 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { createClient } from '@supabase/supabase-js';
 import { PartyPass, getPassTimeRemaining, PASS_CONFIGS } from '@/types/party';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 function SuccessContent() {
   const searchParams = useSearchParams();
@@ -33,21 +27,22 @@ function SuccessContent() {
       const maxAttempts = 10;
 
       while (attempts < maxAttempts) {
-        const { data, error: fetchError } = await supabase
-          .from('party_passes')
-          .select('*')
-          .eq('stripe_session_id', sessionId)
-          .single();
+        try {
+          const response = await fetch(`/api/party/pass-by-session?session_id=${encodeURIComponent(sessionId)}`);
 
-        if (data) {
-          setPass(data);
-          setLoading(false);
-          return;
-        }
+          if (response.ok) {
+            const data = await response.json();
+            setPass(data);
+            setLoading(false);
+            return;
+          }
 
-        if (fetchError && fetchError.code !== 'PGRST116') {
-          // PGRST116 = no rows found, which is expected while processing
-          console.error('Fetch error:', fetchError);
+          if (response.status !== 404) {
+            // 404 = not found yet, which is expected while processing
+            console.error('Fetch error:', response.status);
+          }
+        } catch (err) {
+          console.error('Fetch error:', err);
         }
 
         attempts++;
