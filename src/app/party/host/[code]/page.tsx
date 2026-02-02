@@ -44,6 +44,8 @@ export default function HostConsolePage() {
   const router = useRouter();
 
   // Pass & Game state
+  // Using refs to avoid stale closure issues in callbacks
+  const gameRef = useRef<PartyGame | null>(null);
   const [pass, setPass] = useState<PartyPass | null>(null);
   const [game, setGame] = useState<PartyGame | null>(null);
   const [players, setPlayers] = useState<PartyPlayer[]>([]);
@@ -157,6 +159,7 @@ export default function HostConsolePage() {
         if (gameData) {
           // Resume existing game
           setGame(gameData);
+          gameRef.current = gameData; // CRITICAL: Update ref immediately
           console.log('[LOAD] Resuming existing game:', gameData.id, '| Game #', gameData.game_number || '?');
 
           // Fetch all questions for this game from database
@@ -191,6 +194,7 @@ export default function HostConsolePage() {
           if (response.ok && result.game) {
             console.log('[LOAD] Created game #', result.game_number, ':', result.game.id);
             setGame(result.game);
+            gameRef.current = result.game; // CRITICAL: Update ref immediately
 
             // Fetch all questions for this game from database
             const cache = await fetchQuestions(result.game.question_ids);

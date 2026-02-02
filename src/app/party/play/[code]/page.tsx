@@ -129,12 +129,28 @@ export default function PlayerGamePage() {
           timer_seconds: number;
         };
         // Sync game_id from host to ensure we're in the same game
-        if (data.game_id && playerState) {
+        if (data.game_id && playerState && data.game_id !== playerState.game_id) {
+          const oldGameId = playerState.game_id;
           const updatedState = { ...playerState, game_id: data.game_id };
           setPlayerState(updatedState);
           playerStateRef.current = updatedState; // CRITICAL: Update ref immediately for handleAnswer
           sessionStorage.setItem('party_player', JSON.stringify(updatedState));
           console.log('[PLAYER] Synced game_id from host:', data.game_id);
+
+          // CRITICAL: Also update party_players table so leaderboard works
+          fetch('/api/party/sync-game', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              player_id: playerState.player_id,
+              old_game_id: oldGameId,
+              new_game_id: data.game_id,
+            }),
+          }).then(res => res.json()).then(result => {
+            console.log('[PLAYER] Synced player record in DB:', result);
+          }).catch(err => {
+            console.error('[PLAYER] Failed to sync player in DB:', err);
+          });
         }
         // Reset scores for new game
         setLeaderboard([]);
