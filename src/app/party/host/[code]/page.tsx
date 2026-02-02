@@ -138,6 +138,18 @@ export default function HostConsolePage() {
   // End game early confirmation
   const [showEndGameEarlyConfirm, setShowEndGameEarlyConfirm] = useState(false);
 
+  // Admin debug mode - only show debug info if admin PIN was entered
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
+
+  // Host peek at answer feature
+  const [peekingAtAnswer, setPeekingAtAnswer] = useState(false);
+
+  // Check for admin authentication on mount (matches superadmin/admin-test pages)
+  useEffect(() => {
+    const isAuth = sessionStorage.getItem('superadmin_authenticated') === 'true';
+    setIsAdminAuthenticated(isAuth);
+  }, []);
+
   // Load party pass and game data
   // Question sets are PRE-GENERATED at purchase time - no complex tracking needed!
   useEffect(() => {
@@ -399,6 +411,7 @@ export default function HostConsolePage() {
 
       setCurrentQuestion(question);
       setShowingAnswer(false);
+      setPeekingAtAnswer(false); // Reset peek state for new question
       setAnswerStats({ total: 0, correct: 0, distribution: {} });
 
       // Use selectedTimer; if manual (0), don't start timer
@@ -1279,11 +1292,11 @@ export default function HostConsolePage() {
                 : 'Waiting for players...'}
             </button>
 
-            {/* Debug: Show current question IDs */}
-            {game?.question_ids && (
+            {/* Debug: Show current question IDs - Only if admin authenticated */}
+            {isAdminAuthenticated && game?.question_ids && (
               <div className="mt-4 p-3 bg-gray-900/50 rounded-lg text-xs text-gray-500">
                 <details>
-                  <summary className="cursor-pointer">🔍 Debug: Current Question IDs (click to expand)</summary>
+                  <summary className="cursor-pointer">🔧 Debug: Current Question IDs (click to expand)</summary>
                   <div className="mt-2 font-mono break-all">
                     Game ID: {game.id}<br/>
                     Questions: [{game.question_ids.slice(0, 10).join(', ')}{game.question_ids.length > 10 ? ', ...' : ''}]
@@ -1311,6 +1324,19 @@ export default function HostConsolePage() {
                   <div className="text-sm text-purple-200 mt-1">
                     You control the game — you are NOT playing. Advance questions with the buttons below.
                   </div>
+                  {/* Peek at Answer Button */}
+                  {!showingAnswer && (
+                    <button
+                      onClick={() => setPeekingAtAnswer(!peekingAtAnswer)}
+                      className={`mt-3 px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                        peekingAtAnswer
+                          ? 'bg-green-600 text-white'
+                          : 'bg-purple-700 hover:bg-purple-600 text-purple-200'
+                      }`}
+                    >
+                      {peekingAtAnswer ? `✓ Answer: ${currentQuestion?.correctAnswer}` : '👁️ Peek at Answer'}
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -1348,14 +1374,16 @@ export default function HostConsolePage() {
                 </div>
               )}
 
-              {/* DEBUG PANEL - Remove after debugging */}
-              <div className="bg-purple-900/50 border border-purple-500 rounded-lg p-2 mb-4 text-xs">
-                <div className="font-bold text-purple-300 mb-1">HOST DEBUG INFO:</div>
-                <div>Question ID: <span className="text-yellow-400 font-mono">{currentQuestion.id}</span></div>
-                <div>Correct Answer: <span className="text-green-400 font-mono">{currentQuestion.correctAnswer}</span></div>
-                <div>Q Index: <span className="text-yellow-400 font-mono">{game.current_question_index}</span></div>
-                <div>Game ID: <span className="text-yellow-400 font-mono">{game.id.slice(0, 8)}...</span></div>
-              </div>
+              {/* DEBUG PANEL - Only visible if admin PIN authenticated via SuperAdmin */}
+              {isAdminAuthenticated && (
+                <div className="bg-purple-900/50 border border-purple-500 rounded-lg p-2 mb-4 text-xs">
+                  <div className="font-bold text-purple-300 mb-1">🔧 HOST DEBUG INFO:</div>
+                  <div>Question ID: <span className="text-yellow-400 font-mono">{currentQuestion.id}</span></div>
+                  <div>Correct Answer: <span className="text-green-400 font-mono">{currentQuestion.correctAnswer}</span></div>
+                  <div>Q Index: <span className="text-yellow-400 font-mono">{game.current_question_index}</span></div>
+                  <div>Game ID: <span className="text-yellow-400 font-mono">{game.id.slice(0, 8)}...</span></div>
+                </div>
+              )}
 
               {/* Category Badge */}
               <div className="text-center mb-4">

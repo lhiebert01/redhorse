@@ -41,6 +41,59 @@ export default function SuperAdminPage() {
   });
   const [backfillStatus, setBackfillStatus] = useState<string | null>(null);
 
+  // Party Stats modal
+  const [showPartyStats, setShowPartyStats] = useState(false);
+  const [partyStatsLoading, setPartyStatsLoading] = useState(false);
+  const [partyStats, setPartyStats] = useState<{
+    passes: {
+      total: number;
+      byType: Record<string, number>;
+      totalGamesAllowed: number;
+      totalGamesPlayed: number;
+      totalGamesRemaining: number;
+    };
+    games: {
+      total: number;
+      completed: number;
+      inProgress: number;
+    };
+    players: {
+      total: number;
+      avgPerGame: number;
+    };
+    passList: Array<{
+      party_code: string;
+      pass_type: string;
+      games_allowed: number;
+      games_played: number;
+      games_remaining: number;
+      total_players: number;
+      created_at: string;
+      expires_at: string;
+      is_expired: boolean;
+    }>;
+  } | null>(null);
+
+  const fetchPartyStats = async () => {
+    setPartyStatsLoading(true);
+    try {
+      const response = await fetch('/api/admin/party-stats', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin: SUPERADMIN_PIN }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setPartyStats(data);
+      } else {
+        console.error('Error fetching party stats:', data.error);
+      }
+    } catch (error) {
+      console.error('Error fetching party stats:', error);
+    }
+    setPartyStatsLoading(false);
+  };
+
   const handlePinSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (pin === SUPERADMIN_PIN) {
@@ -168,6 +221,15 @@ export default function SuperAdminPage() {
             </p>
           </div>
           <div className="flex items-center gap-3 flex-wrap">
+            <button
+              onClick={() => {
+                setShowPartyStats(true);
+                fetchPartyStats();
+              }}
+              className="bg-orange-700 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors"
+            >
+              🎮 Party Stats
+            </button>
             <a
               href="/admin-test"
               className="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors"
@@ -488,6 +550,160 @@ export default function SuperAdminPage() {
                   Close
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Party Stats Modal */}
+      {showPartyStats && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
+          <div className="bg-gray-900 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-orange-400">🎮 Party Trivia Stats</h2>
+                <button
+                  onClick={() => setShowPartyStats(false)}
+                  className="text-gray-400 hover:text-white text-2xl"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {partyStatsLoading ? (
+                <div className="text-center py-12">
+                  <div className="text-4xl animate-bounce">🎮</div>
+                  <p className="text-gray-400 mt-4">Loading stats...</p>
+                </div>
+              ) : partyStats ? (
+                <div className="space-y-6">
+                  {/* Summary Cards */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="bg-orange-900/30 border border-orange-700 rounded-xl p-4 text-center">
+                      <div className="text-3xl font-bold text-orange-400">{partyStats.passes.total}</div>
+                      <div className="text-sm text-gray-400">Passes Purchased</div>
+                    </div>
+                    <div className="bg-blue-900/30 border border-blue-700 rounded-xl p-4 text-center">
+                      <div className="text-3xl font-bold text-blue-400">{partyStats.games.total}</div>
+                      <div className="text-sm text-gray-400">Games Created</div>
+                    </div>
+                    <div className="bg-green-900/30 border border-green-700 rounded-xl p-4 text-center">
+                      <div className="text-3xl font-bold text-green-400">{partyStats.games.completed}</div>
+                      <div className="text-sm text-gray-400">Games Completed</div>
+                    </div>
+                    <div className="bg-purple-900/30 border border-purple-700 rounded-xl p-4 text-center">
+                      <div className="text-3xl font-bold text-purple-400">{partyStats.players.total}</div>
+                      <div className="text-sm text-gray-400">Total Players</div>
+                    </div>
+                  </div>
+
+                  {/* Pass Type Breakdown */}
+                  <div className="bg-gray-800 rounded-xl p-4">
+                    <h3 className="text-lg font-bold text-white mb-3">📊 Passes by Type</h3>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                      {Object.entries(partyStats.passes.byType).map(([type, count]) => (
+                        <div key={type} className="bg-gray-900 rounded-lg p-3 text-center">
+                          <div className="text-xl font-bold text-yellow-400">{count}</div>
+                          <div className="text-xs text-gray-400 capitalize">{type} Pass</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Games Usage */}
+                  <div className="bg-gray-800 rounded-xl p-4">
+                    <h3 className="text-lg font-bold text-white mb-3">🎯 Games Usage</h3>
+                    <div className="grid grid-cols-3 gap-4 text-center">
+                      <div>
+                        <div className="text-2xl font-bold text-green-400">{partyStats.passes.totalGamesAllowed}</div>
+                        <div className="text-xs text-gray-400">Games Allowed</div>
+                      </div>
+                      <div>
+                        <div className="text-2xl font-bold text-blue-400">{partyStats.passes.totalGamesPlayed}</div>
+                        <div className="text-xs text-gray-400">Games Played</div>
+                      </div>
+                      <div>
+                        <div className="text-2xl font-bold text-orange-400">{partyStats.passes.totalGamesRemaining}</div>
+                        <div className="text-xs text-gray-400">Games Remaining</div>
+                      </div>
+                    </div>
+                    <div className="mt-3">
+                      <div className="h-3 bg-gray-700 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-green-500 to-blue-500"
+                          style={{
+                            width: `${partyStats.passes.totalGamesAllowed > 0
+                              ? (partyStats.passes.totalGamesPlayed / partyStats.passes.totalGamesAllowed) * 100
+                              : 0}%`
+                          }}
+                        />
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1 text-center">
+                        {partyStats.passes.totalGamesAllowed > 0
+                          ? Math.round((partyStats.passes.totalGamesPlayed / partyStats.passes.totalGamesAllowed) * 100)
+                          : 0}% games used
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Pass List Table */}
+                  <div className="bg-gray-800 rounded-xl p-4">
+                    <h3 className="text-lg font-bold text-white mb-3">📋 Pass Details</h3>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="text-gray-400 border-b border-gray-700">
+                            <th className="text-left py-2 px-2">Code</th>
+                            <th className="text-left py-2 px-2">Type</th>
+                            <th className="text-center py-2 px-2">Games</th>
+                            <th className="text-center py-2 px-2">Players</th>
+                            <th className="text-center py-2 px-2">Status</th>
+                            <th className="text-left py-2 px-2">Created</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {partyStats.passList.map((pass) => (
+                            <tr key={pass.party_code} className="border-b border-gray-700/50 hover:bg-gray-700/30">
+                              <td className="py-2 px-2 font-mono text-yellow-400">{pass.party_code}</td>
+                              <td className="py-2 px-2 capitalize">{pass.pass_type}</td>
+                              <td className="py-2 px-2 text-center">
+                                <span className="text-green-400">{pass.games_played}</span>
+                                <span className="text-gray-500"> / </span>
+                                <span className="text-gray-300">{pass.games_allowed}</span>
+                              </td>
+                              <td className="py-2 px-2 text-center text-purple-400">{pass.total_players}</td>
+                              <td className="py-2 px-2 text-center">
+                                {pass.is_expired ? (
+                                  <span className="text-red-400 text-xs">Expired</span>
+                                ) : pass.games_remaining === 0 ? (
+                                  <span className="text-orange-400 text-xs">Used Up</span>
+                                ) : (
+                                  <span className="text-green-400 text-xs">Active</span>
+                                )}
+                              </td>
+                              <td className="py-2 px-2 text-gray-400 text-xs">
+                                {new Date(pass.created_at).toLocaleDateString()}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* Refresh Button */}
+                  <button
+                    onClick={fetchPartyStats}
+                    className="w-full bg-orange-700 hover:bg-orange-600 text-white py-3 rounded-lg font-bold transition-colors"
+                  >
+                    🔄 Refresh Stats
+                  </button>
+                </div>
+              ) : (
+                <div className="text-center py-12 text-gray-400">
+                  No stats available
+                </div>
+              )}
             </div>
           </div>
         </div>
