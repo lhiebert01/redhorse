@@ -52,11 +52,17 @@ ${zodiacSign ? `\n✨ I'm a ${zodiacElement} ${zodiacSign}!` : ''}
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Check if zodiac card exists
-  const hasZodiacCard = zodiacSign && zodiacElement;
-  const zodiacCardUrl = hasZodiacCard
+  // Check if zodiac card exists - fallback to Fire Horse if no zodiac
+  const hasPersonalZodiac = zodiacSign && zodiacElement;
+  const zodiacCardUrl = hasPersonalZodiac
     ? `/assets/zodiac-badges/${zodiacElement?.toLowerCase()}-${zodiacSign?.toLowerCase()}.jpeg`
-    : null;
+    : `/assets/zodiac-badges/fire-horse.jpeg`; // Fallback to Fire Horse
+  const cardDisplayName = hasPersonalZodiac
+    ? `${zodiacElement} ${zodiacSign}`
+    : 'Fire Horse 2026';
+  const cardFileName = hasPersonalZodiac
+    ? `${zodiacElement}-${zodiacSign}-2026.jpeg`
+    : 'Fire-Horse-2026.jpeg';
 
   return (
     <div className="fixed inset-0 bg-gradient-to-b from-black via-red-950 to-black z-50 overflow-y-auto">
@@ -111,42 +117,62 @@ ${zodiacSign ? `\n✨ I'm a ${zodiacElement} ${zodiacSign}!` : ''}
             </div>
           )}
 
-          {/* Zodiac Card Section */}
-          {hasZodiacCard && zodiacCardUrl && (
-            <div className="bg-gradient-to-r from-purple-900/50 to-blue-900/50 rounded-2xl p-6 mb-6 border border-purple-500/30">
-              <h2 className="text-xl font-bold text-purple-300 mb-4">
-                🎁 Your Special Gift: {zodiacElement} {zodiacSign} Card
-              </h2>
-              <div className="flex flex-col md:flex-row items-center gap-6">
-                <div className="relative">
-                  <img
-                    src={zodiacCardUrl}
-                    alt={`${zodiacElement} ${zodiacSign}`}
-                    className="w-48 h-48 object-cover rounded-xl shadow-lg border-2 border-purple-400/50"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = 'none';
-                    }}
-                  />
-                  <div className="absolute -top-2 -right-2 bg-yellow-500 text-black text-xs font-bold px-2 py-1 rounded-full">
-                    FREE!
-                  </div>
-                </div>
-                <div className="text-left flex-1">
-                  <p className="text-gray-300 mb-3">
-                    As a thank you for playing, download your personalized{' '}
-                    <span className="text-purple-300 font-bold">{zodiacElement} {zodiacSign}</span> digital card!
-                  </p>
-                  <a
-                    href={zodiacCardUrl}
-                    download={`${zodiacElement}-${zodiacSign}-2026.jpeg`}
-                    className="inline-block bg-purple-600 hover:bg-purple-500 px-6 py-3 rounded-xl font-bold transition-all"
-                  >
-                    📥 Download Your Card
-                  </a>
+          {/* Zodiac Card Section - Always shows (Fire Horse fallback if no zodiac) */}
+          <div className={`rounded-2xl p-6 mb-6 border ${
+            hasPersonalZodiac
+              ? 'bg-gradient-to-r from-purple-900/50 to-blue-900/50 border-purple-500/30'
+              : 'bg-gradient-to-r from-red-900/50 to-orange-900/50 border-red-500/30'
+          }`}>
+            <h2 className={`text-xl font-bold mb-4 ${
+              hasPersonalZodiac ? 'text-purple-300' : 'text-yellow-400'
+            }`}>
+              🎁 Your Special Gift: {cardDisplayName} Card
+            </h2>
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <div className="relative">
+                <img
+                  src={zodiacCardUrl}
+                  alt={cardDisplayName}
+                  className={`w-48 h-48 object-cover rounded-xl shadow-lg border-2 ${
+                    hasPersonalZodiac ? 'border-purple-400/50' : 'border-yellow-400/50'
+                  }`}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none';
+                  }}
+                />
+                <div className="absolute -top-2 -right-2 bg-yellow-500 text-black text-xs font-bold px-2 py-1 rounded-full">
+                  FREE!
                 </div>
               </div>
+              <div className="text-left flex-1">
+                <p className="text-gray-300 mb-3">
+                  {hasPersonalZodiac ? (
+                    <>
+                      As a thank you for playing, download your personalized{' '}
+                      <span className="text-purple-300 font-bold">{cardDisplayName}</span> digital card!
+                    </>
+                  ) : (
+                    <>
+                      As a thank you for playing, download the{' '}
+                      <span className="text-yellow-400 font-bold">Fire Horse 2026</span> digital card!{' '}
+                      <span className="text-gray-400 text-sm">(Enter your birth year next time to get your personal zodiac card!)</span>
+                    </>
+                  )}
+                </p>
+                <a
+                  href={zodiacCardUrl}
+                  download={cardFileName}
+                  className={`inline-block px-6 py-3 rounded-xl font-bold transition-all ${
+                    hasPersonalZodiac
+                      ? 'bg-purple-600 hover:bg-purple-500'
+                      : 'bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-500 hover:to-orange-400'
+                  }`}
+                >
+                  📥 Download Your Card
+                </a>
+              </div>
             </div>
-          )}
+          </div>
 
           {/* Red Horse Oracle Promotion */}
           <div className="bg-gradient-to-r from-red-900/60 to-orange-900/60 rounded-2xl p-6 mb-6 border-2 border-red-500/50">
