@@ -97,6 +97,16 @@ export default function HostConsolePage() {
 
   // Timer configuration (0 = manual/no timer)
   const [selectedTimer, setSelectedTimer] = useState(30);
+
+  // Score mode: 'reset' = start fresh each game, 'accumulate' = carry over from previous games
+  const scoreModeRef = useRef<'reset' | 'accumulate'>('reset');
+  const [scoreMode, setScoreMode] = useState<'reset' | 'accumulate'>('reset');
+
+  // Keep scoreModeRef in sync
+  const updateScoreMode = (mode: 'reset' | 'accumulate') => {
+    scoreModeRef.current = mode;
+    setScoreMode(mode);
+  };
   const TIMER_OPTIONS = [
     { value: 30, label: '30 sec' },
     { value: 60, label: '60 sec' },
@@ -1142,6 +1152,20 @@ export default function HostConsolePage() {
                   ? '📋 Manual Mode: You control when to reveal answers and move to next question'
                   : `⏰ Each question will auto-end after ${selectedTimer} seconds`}
               </p>
+            </div>
+
+            {/* Score Mode Settings */}
+            <div className="bg-gradient-to-r from-purple-900/30 to-indigo-900/30 rounded-xl p-4 mb-6 border border-purple-600/30">
+              <label className="flex items-center justify-center gap-3 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={scoreMode === 'reset'}
+                  onChange={(e) => updateScoreMode(e.target.checked ? 'reset' : 'accumulate')}
+                  className="w-5 h-5 rounded border-purple-500 text-purple-500 focus:ring-purple-500 cursor-pointer"
+                />
+                <span className="text-lg font-bold">🔄 Zero out scores when starting new game</span>
+                <span className="text-gray-400 text-sm">(uncheck to keep scores from previous games)</span>
+              </label>
             </div>
 
             {/* Games Remaining Info */}

@@ -112,18 +112,36 @@ export async function POST(request: NextRequest) {
       answer_given: answer_given,
     });
 
-    // Trim whitespace and compare
-    const trimmedAnswer = String(answer_given).trim();
-    const trimmedCorrect = String(question.correctAnswer).trim();
-    const isCorrect = trimmedAnswer === trimmedCorrect;
+    // Normalize and compare answers
+    // - Trim whitespace
+    // - Normalize unicode (handle different dash types, etc.)
+    // - Case-insensitive comparison as fallback
+    const normalizeAnswer = (str: string): string => {
+      return String(str)
+        .trim()
+        .normalize('NFKC') // Normalize unicode characters
+        .replace(/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D]/g, '-') // Normalize all dash types to regular dash
+        .replace(/\s+/g, ' '); // Normalize whitespace
+    };
+
+    const trimmedAnswer = normalizeAnswer(answer_given);
+    const trimmedCorrect = normalizeAnswer(question.correctAnswer);
+
+    // Try exact match first, then case-insensitive match
+    const exactMatch = trimmedAnswer === trimmedCorrect;
+    const caseInsensitiveMatch = trimmedAnswer.toLowerCase() === trimmedCorrect.toLowerCase();
+    const isCorrect = exactMatch || caseInsensitiveMatch;
 
     console.log('[ANSWER API] Comparison:', {
+      originalAnswer: answer_given,
+      originalCorrect: question.correctAnswer,
       trimmedAnswer,
       trimmedCorrect,
+      exactMatch,
+      caseInsensitiveMatch,
       isCorrect,
       answerLength: trimmedAnswer.length,
       correctLength: trimmedCorrect.length,
-      exactMatch: answer_given === question.correctAnswer,
     });
 
     // Get current streak (count previous correct answers in a row)
