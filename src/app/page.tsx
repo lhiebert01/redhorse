@@ -334,6 +334,41 @@ export default function Home() {
           </p>
         </div>
 
+        {/* 🏈 SUPER BOWL TIE-IN */}
+        <div className="w-full bg-gradient-to-r from-blue-900/60 via-red-900/60 to-green-900/60 border-2 border-yellow-500 rounded-2xl p-4 mb-6">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <span className="text-2xl">🏈</span>
+            <span className="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full animate-pulse">
+              SUPER BOWL LX IN 6 DAYS!
+            </span>
+            <span className="text-2xl">🐴</span>
+          </div>
+          <p className="text-center text-white font-bold text-lg mb-1">
+            <span className="text-blue-400">Patriots</span>
+            <span className="mx-2">vs</span>
+            <span className="text-green-400">Seahawks</span>
+            <span className="mx-2">—</span>
+            <span className="text-yellow-300">Feb 8</span>
+          </p>
+          <p className="text-center text-yellow-300 text-sm mb-3">
+            🔥 Get Your Lucky Numbers Before Kickoff! 🎲
+          </p>
+          <div className="flex flex-col sm:flex-row gap-2 justify-center">
+            <a
+              href={paymentLink}
+              className="bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-bold px-4 py-2 rounded-lg text-sm text-center hover:scale-105 transition-transform"
+            >
+              🎲 Get Lucky Numbers — $8.88
+            </a>
+            <a
+              href="/party"
+              className="bg-gradient-to-r from-red-600 to-red-500 text-white font-bold px-4 py-2 rounded-lg text-sm text-center hover:scale-105 transition-transform"
+            >
+              🎉 Host Pre-Game Trivia
+            </a>
+          </div>
+        </div>
+
         {/* Product Card */}
         <div className="w-full border-glow bg-black/80 backdrop-blur-sm p-6 rounded-2xl space-y-5 mb-6">
 
