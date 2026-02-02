@@ -14,7 +14,7 @@ import {
   isPassValid,
   PASS_CONFIGS,
 } from '@/types/party';
-import { Confetti } from '@/components/party/Celebration';
+import { Confetti, BouncingHorse } from '@/components/party/Celebration';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -54,8 +54,15 @@ export default function SoloPlayPage() {
 
   // Player setup
   const [nickname, setNickname] = useState('');
-  const [birthYear, setBirthYear] = useState('');
+  const [birthYear, setBirthYear] = useState<number | ''>('');
   const [timerSetting, setTimerSetting] = useState<TimerOption>(30);
+
+  // Generate year options for dropdown (current year - 5 down to 1920)
+  const currentYear = new Date().getFullYear();
+  const yearOptions: number[] = [];
+  for (let year = currentYear - 5; year >= 1920; year--) {
+    yearOptions.push(year);
+  }
   const [hasJoined, setHasJoined] = useState(false);
   const [zodiacInfo, setZodiacInfo] = useState<{ sign: string; element: string } | null>(null);
 
@@ -137,9 +144,9 @@ export default function SoloPlayPage() {
 
   // Handle nickname and birth year submission
   const handleJoin = useCallback(() => {
-    if (!nickname.trim() || !birthYear) return;
+    if (!nickname.trim() || birthYear === '') return;
 
-    const year = parseInt(birthYear);
+    const year = typeof birthYear === 'number' ? birthYear : parseInt(birthYear);
     if (isNaN(year) || year < 1900 || year > new Date().getFullYear()) {
       alert('Please enter a valid birth year');
       return;
@@ -155,90 +162,42 @@ export default function SoloPlayPage() {
     if (!pass) return;
 
     try {
-      // Fetch fresh pass data
-      const { data: freshPass, error: passError } = await supabase
-        .from('party_passes')
-        .select('*')
-        .eq('id', pass.id)
-        .single();
-
-      if (passError || !freshPass) {
-        setError('Failed to load pass');
-        return;
-      }
-
-      if (freshPass.games_remaining <= 0) {
-        setError('No games remaining on this pass');
-        return;
-      }
-
-      // Get the next question set
-      const gamesPlayed = freshPass.games_played || 0;
-      const questionSets = freshPass.question_sets;
-      const gameNumber = gamesPlayed + 1;
-
-      let questionIds: number[];
-      if (questionSets && Array.isArray(questionSets) && questionSets.length > gamesPlayed) {
-        questionIds = questionSets[gamesPlayed];
-      } else {
-        // Legacy fallback - generate random IDs
-        questionIds = Array.from({ length: 20 }, () => Math.floor(Math.random() * 400) + 1);
-      }
-
-      // Limit to questions per game setting
-      const questionsPerGame = freshPass.settings?.questions_per_game || 20;
-      questionIds = questionIds.slice(0, questionsPerGame);
-
-      // Create the game
-      const { data: game, error: gameError } = await supabase
-        .from('party_games')
-        .insert({
-          party_pass_id: pass.id,
+      // Call API to create solo game (uses service role key to bypass RLS)
+      const response = await fetch('/api/party/solo-game', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pass_id: pass.id,
           timer_seconds: timerSetting,
-          questions_per_game: questionsPerGame,
-          question_ids: questionIds,
-          game_number: gameNumber,
-          status: 'playing',
-          started_at: new Date().toISOString(),
-        })
-        .select()
-        .single();
+          questions_per_game: pass.settings?.questions_per_game || 20,
+        }),
+      });
 
-      if (gameError || !game) {
-        console.error('Error creating game:', gameError);
-        setError('Failed to start game');
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error creating game:', errorData);
+        setError(errorData.error || 'Failed to start game');
         return;
       }
 
-      // Update pass: increment games_played, decrement games_remaining
-      await supabase
-        .from('party_passes')
-        .update({
-          games_played: gameNumber,
-          games_remaining: freshPass.games_remaining - 1,
-        })
-        .eq('id', pass.id);
+      const { game, pass: updatedPass } = await response.json();
 
       // Update local pass state
-      setPass({
-        ...freshPass,
-        games_played: gameNumber,
-        games_remaining: freshPass.games_remaining - 1,
-      });
+      setPass(updatedPass);
 
       setCurrentGameId(game.id);
       setCurrentQuestionIndex(0);
       setGameStats({
         totalPoints: 0,
         correctAnswers: 0,
-        totalQuestions: questionsPerGame,
+        totalQuestions: game.questions_per_game || 20,
         bestStreak: 0,
         fastestAnswerMs: null,
       });
       setCurrentStreak(0);
 
       // Load first question
-      await loadQuestion(questionIds[0]);
+      await loadQuestion(game.question_ids[0]);
       setGamePhase('playing');
     } catch (err) {
       console.error('Error starting game:', err);
@@ -246,17 +205,20 @@ export default function SoloPlayPage() {
     }
   }, [pass, timerSetting]);
 
-  // Load a question by ID
+  // Load a question by ID using API route
   const loadQuestion = async (questionId: number) => {
     try {
-      const { data: question, error } = await supabase
-        .from('party_questions')
-        .select('*')
-        .eq('id', questionId)
-        .single();
+      const response = await fetch(`/api/party/questions?ids=${questionId}`);
+      if (!response.ok) {
+        console.error('Error loading question');
+        return;
+      }
 
-      if (error || !question) {
-        console.error('Error loading question:', error);
+      const data = await response.json();
+      const question = data.questions?.[0];
+
+      if (!question) {
+        console.error('Question not found:', questionId);
         return;
       }
 
@@ -304,7 +266,7 @@ export default function SoloPlayPage() {
     }
   }, [selectedAnswer, currentGameId, currentQuestion, zodiacInfo, timerSetting]);
 
-  // Record answer to database
+  // Record answer to database via API
   const recordAnswer = async (
     answerGiven: string,
     correct: boolean,
@@ -317,19 +279,22 @@ export default function SoloPlayPage() {
     if (!currentGameId || !currentQuestion) return;
 
     try {
-      await supabase.from('party_answers').insert({
-        party_game_id: currentGameId,
-        player_id: 'solo', // Special player ID for solo play
-        question_index: currentQuestionIndex,
-        question_id: currentQuestion.id,
-        answer_given: answerGiven,
-        is_correct: correct,
-        answer_time_ms: answerTimeMs,
-        base_points: basePoints,
-        speed_bonus: speedBonus,
-        streak_bonus: streakBonus,
-        total_points: totalPoints,
-        current_streak: correct ? currentStreak + 1 : 0,
+      await fetch('/api/party/solo-answer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          game_id: currentGameId,
+          question_index: currentQuestionIndex,
+          question_id: currentQuestion.id,
+          answer_given: answerGiven,
+          is_correct: correct,
+          answer_time_ms: answerTimeMs,
+          base_points: basePoints,
+          speed_bonus: speedBonus,
+          streak_bonus: streakBonus,
+          total_points: totalPoints,
+          current_streak: correct ? currentStreak + 1 : 0,
+        }),
       });
     } catch (err) {
       console.error('Error recording answer:', err);
@@ -376,62 +341,55 @@ export default function SoloPlayPage() {
   const nextQuestion = useCallback(async () => {
     if (!pass || !currentGameId) return;
 
-    // Get the game to check question_ids
-    const { data: game } = await supabase
-      .from('party_games')
-      .select('question_ids, questions_per_game')
-      .eq('id', currentGameId)
-      .single();
+    // Get the game to check question_ids via API
+    try {
+      const response = await fetch(`/api/party/solo-finish?game_id=${currentGameId}`);
+      if (!response.ok) return;
 
-    if (!game) return;
+      const game = await response.json();
+      if (!game) return;
 
-    const nextIndex = currentQuestionIndex + 1;
-    const totalQuestions = game.questions_per_game || game.question_ids.length;
+      const nextIndex = currentQuestionIndex + 1;
+      const totalQuestions = game.questions_per_game || game.question_ids.length;
 
-    if (nextIndex >= totalQuestions) {
-      // Game finished
-      await finishGame();
-    } else {
-      // Load next question
-      setCurrentQuestionIndex(nextIndex);
-      await loadQuestion(game.question_ids[nextIndex]);
-      setGamePhase('playing');
+      if (nextIndex >= totalQuestions) {
+        // Game finished
+        await finishGame();
+      } else {
+        // Load next question
+        setCurrentQuestionIndex(nextIndex);
+        await loadQuestion(game.question_ids[nextIndex]);
+        setGamePhase('playing');
+      }
+    } catch (err) {
+      console.error('Error getting next question:', err);
     }
   }, [pass, currentGameId, currentQuestionIndex]);
 
-  // Finish the game
+  // Finish the game via API
   const finishGame = async () => {
     if (!currentGameId) return;
 
     try {
-      // Update game status
-      await supabase
-        .from('party_games')
-        .update({
-          status: 'finished',
-          ended_at: new Date().toISOString(),
-        })
-        .eq('id', currentGameId);
-
-      // Save score
-      await supabase.from('party_scores').insert({
-        party_game_id: currentGameId,
-        player_id: 'solo',
-        nickname: nickname,
-        zodiac_sign: zodiacInfo?.sign,
-        zodiac_element: zodiacInfo?.element,
-        total_points: gameStats.totalPoints,
-        correct_answers: gameStats.correctAnswers,
-        total_questions: gameStats.totalQuestions,
-        accuracy_percent: Math.round((gameStats.correctAnswers / gameStats.totalQuestions) * 100),
-        best_streak: gameStats.bestStreak,
-        fastest_answer_ms: gameStats.fastestAnswerMs,
-        rank: 1, // Solo play is always rank 1
+      await fetch('/api/party/solo-finish', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          game_id: currentGameId,
+          nickname,
+          zodiac_sign: zodiacInfo?.sign,
+          zodiac_element: zodiacInfo?.element,
+          total_points: gameStats.totalPoints,
+          correct_answers: gameStats.correctAnswers,
+          total_questions: gameStats.totalQuestions,
+          best_streak: gameStats.bestStreak,
+          fastest_answer_ms: gameStats.fastestAnswerMs,
+        }),
       });
 
       setGamePhase('finished');
       setShowCelebration(true);
-      setTimeout(() => setShowCelebration(false), 5000);
+      setTimeout(() => setShowCelebration(false), 10000); // Increased celebration time
     } catch (err) {
       console.error('Error finishing game:', err);
     }
@@ -554,15 +512,16 @@ export default function SoloPlayPage() {
                 <label className="block text-sm text-gray-400 mb-2">
                   Birth Year (for zodiac)
                 </label>
-                <input
-                  type="number"
+                <select
                   value={birthYear}
-                  onChange={(e) => setBirthYear(e.target.value)}
-                  placeholder="e.g., 1990"
-                  className="w-full px-4 py-3 bg-black border-2 border-gray-600 rounded-xl focus:border-purple-400 focus:outline-none text-lg"
-                  min="1900"
-                  max={new Date().getFullYear()}
-                />
+                  onChange={(e) => setBirthYear(e.target.value ? parseInt(e.target.value) : '')}
+                  className="w-full px-4 py-3 bg-black border-2 border-gray-600 rounded-xl text-xl focus:border-purple-400 focus:outline-none"
+                >
+                  <option value="">— Select Year —</option>
+                  {yearOptions.map((year) => (
+                    <option key={year} value={year}>{year}</option>
+                  ))}
+                </select>
               </div>
 
               <button
@@ -874,18 +833,40 @@ export default function SoloPlayPage() {
         {/* FINISHED PHASE */}
         {gamePhase === 'finished' && (
           <div className="text-center relative">
-            {showCelebration && <Confetti count={80} />}
+            {showCelebration && <Confetti count={80} durationMultiplier={2.5} />}
 
-            {/* Victory Header */}
-            <div className="mb-6">
-              <div className="text-7xl mb-2 animate-bounce">🏆</div>
-              <h1 className="text-4xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-400 to-yellow-400">
-                Game Complete!
-              </h1>
+            {/* Victory Header with BouncingHorse */}
+            <div className="mb-4">
+              {showCelebration ? (
+                <BouncingHorse
+                  size="medium"
+                  showFrame={true}
+                  showRotatingMessages={true}
+                  showShareButton={true}
+                  partyCode={partyCode}
+                />
+              ) : (
+                <>
+                  <div className="text-7xl mb-2">🏆</div>
+                  <h1 className="text-4xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-400 to-yellow-400">
+                    Game Complete!
+                  </h1>
+                </>
+              )}
+            </div>
+
+            {/* Congratulations Message - BIG and COLORFUL */}
+            <div className="bg-gradient-to-br from-red-800/60 via-orange-700/50 to-yellow-600/40 rounded-2xl p-6 mb-4 border-2 border-yellow-500/50 shadow-lg shadow-yellow-500/20">
+              <p className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-300 to-red-300 mb-2">
+                🔥 GREAT JOB, {nickname.toUpperCase()}! 🐴
+              </p>
+              <p className="text-lg text-yellow-200">
+                {zodiacInfo?.element} {zodiacInfo?.sign} • May the Fire Horse bring you fortune in 2026!
+              </p>
             </div>
 
             {/* Final Score */}
-            <div className="bg-gradient-to-r from-yellow-900/50 to-red-900/50 rounded-xl p-6 mb-6 border-2 border-yellow-500">
+            <div className="bg-gradient-to-r from-yellow-900/50 to-red-900/50 rounded-xl p-6 mb-4 border-2 border-yellow-500">
               <div className="text-sm text-gray-400 mb-1">Final Score</div>
               <div className="text-6xl font-bold text-yellow-400">
                 {gameStats.totalPoints}
@@ -897,7 +878,7 @@ export default function SoloPlayPage() {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-2 gap-4 mb-4">
               <div className="bg-gray-900/50 rounded-xl p-4 border border-gray-700">
                 <div className="text-3xl mb-1">🔥</div>
                 <div className="text-2xl font-bold text-yellow-400">{gameStats.bestStreak}</div>
@@ -914,19 +895,46 @@ export default function SoloPlayPage() {
               </div>
             </div>
 
-            {/* Zodiac Sign */}
-            <div className="bg-gradient-to-r from-purple-900/40 to-pink-900/40 rounded-xl p-4 mb-6 border border-purple-500/30">
-              <p className="text-lg text-purple-300">
-                Great job, {nickname}! 🐴
-              </p>
-              <p className="text-sm text-gray-300 mt-1">
-                {zodiacInfo?.element} {zodiacInfo?.sign} • May the Fire Horse bring you fortune!
-              </p>
+            {/* Fire Horse Intro - Once in 60 Years */}
+            <div className="bg-gradient-to-b from-red-900/30 to-orange-900/20 rounded-xl p-4 mb-4 border border-red-500/30">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 mb-2">
+                  🔥 Fire Horse 火马年 🔥
+                </div>
+                <div className="text-sm font-semibold text-yellow-400 mb-2">
+                  A Once-in-60-Year Opportunity
+                </div>
+                <p className="text-sm text-gray-300">
+                  The Fire Horse returns only once every 60 years. Its blazing energy can{' '}
+                  <span className="text-green-400">ignite your wealth</span>,{' '}
+                  <span className="text-red-400">amplify your power</span>,{' '}
+                  <span className="text-pink-400">transform your love life</span>, or{' '}
+                  <span className="text-blue-400">strengthen your protection</span>.
+                </p>
+              </div>
+            </div>
+
+            {/* Cross-Promotion: Red Horse Oracle */}
+            <div className="bg-gradient-to-r from-purple-900/40 to-red-900/40 rounded-xl p-4 mb-4 border border-purple-500/30">
+              <div className="text-center">
+                <p className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-red-400">
+                  🔮 Get Your 2026 Fire Horse Oracle
+                </p>
+                <p className="text-sm text-gray-300 mt-2">
+                  Only 888 Limited Edition prophecies per zodiac sign!
+                </p>
+                <Link
+                  href="/"
+                  className="inline-block mt-3 px-6 py-2 bg-gradient-to-r from-purple-600 to-red-600 hover:from-purple-500 hover:to-red-500 rounded-lg font-bold text-sm"
+                >
+                  Discover Your Prophecy → $8.88
+                </Link>
+              </div>
             </div>
 
             {/* Games Remaining */}
             {pass && pass.games_remaining > 0 && (
-              <div className="bg-green-900/30 rounded-xl p-4 mb-6 border border-green-500/30">
+              <div className="bg-green-900/30 rounded-xl p-4 mb-4 border border-green-500/30">
                 <p className="text-green-300">
                   🎮 You have {pass.games_remaining} game{pass.games_remaining !== 1 ? 's' : ''} remaining!
                 </p>
