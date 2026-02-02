@@ -51,11 +51,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Find an active game for this party (host creates the game, players just join)
+    // Include 'showing_answer' so players can join even when host is revealing answers
     const { data: game, error: gameError } = await supabase
       .from('party_games')
       .select('*')
       .eq('party_pass_id', pass.id)
-      .in('status', ['lobby', 'playing'])
+      .in('status', ['lobby', 'playing', 'showing_answer'])
       .order('created_at', { ascending: false })
       .limit(1)
       .single();

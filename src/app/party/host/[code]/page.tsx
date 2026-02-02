@@ -288,6 +288,28 @@ export default function HostConsolePage() {
       console.log('[START GAME] Old answers cleared successfully');
     }
 
+    // CRITICAL: Force-sync ALL players in this party to the current game
+    // This fixes the issue where players have stale party_game_id from old games
+    console.log('[START GAME] Force-syncing all party players to game:', currentGame.id);
+    const { data: allPassGames } = await supabase
+      .from('party_games')
+      .select('id')
+      .eq('party_pass_id', pass.id);
+
+    if (allPassGames && allPassGames.length > 0) {
+      const allGameIds = allPassGames.map(g => g.id);
+      const { error: syncError, count: syncCount } = await supabase
+        .from('party_players')
+        .update({ party_game_id: currentGame.id })
+        .in('party_game_id', allGameIds);
+
+      if (syncError) {
+        console.error('[START GAME] Failed to sync players:', syncError);
+      } else {
+        console.log('[START GAME] Synced players to current game. Updated count:', syncCount);
+      }
+    }
+
     // Reset game state in database
     await supabase
       .from('party_games')
