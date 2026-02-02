@@ -605,12 +605,42 @@ export default function HostConsolePage() {
       });
     }
 
-    // Calculate leaderboard from ALL answers so far
-    console.log('[SHOW ANSWER] Querying answers for game:', currentGame.id);
-    const { data: allAnswers, error: allAnswersErr } = await supabase
-      .from('party_answers')
-      .select('player_id, total_points')
-      .eq('party_game_id', currentGame.id);
+    // Calculate leaderboard - check score mode for accumulation
+    const currentScoreMode = scoreModeRef.current;
+    console.log('[SHOW ANSWER] Score mode:', currentScoreMode, 'Game:', currentGame.id);
+
+    let allAnswers: { player_id: string; total_points: number }[] | null = null;
+    let allAnswersErr: Error | null = null;
+
+    if (currentScoreMode === 'accumulate') {
+      // Get ALL games for this party pass to accumulate scores
+      const currentPass = passRef.current;
+      if (currentPass) {
+        const { data: allGames } = await supabase
+          .from('party_games')
+          .select('id')
+          .eq('party_pass_id', currentPass.id);
+
+        if (allGames && allGames.length > 0) {
+          const gameIds = allGames.map(g => g.id);
+          console.log('[SHOW ANSWER] Accumulate mode - querying', gameIds.length, 'games');
+          const { data, error } = await supabase
+            .from('party_answers')
+            .select('player_id, total_points')
+            .in('party_game_id', gameIds);
+          allAnswers = data;
+          allAnswersErr = error as Error | null;
+        }
+      }
+    } else {
+      // Reset mode - only current game
+      const { data, error } = await supabase
+        .from('party_answers')
+        .select('player_id, total_points')
+        .eq('party_game_id', currentGame.id);
+      allAnswers = data;
+      allAnswersErr = error as Error | null;
+    }
 
     console.log('[SHOW ANSWER] Answers found:', allAnswers?.length || 0, 'error:', allAnswersErr);
 
