@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { PASS_CONFIGS, PassType } from '@/types/party';
 
@@ -8,8 +8,41 @@ import { PASS_CONFIGS, PassType } from '@/types/party';
 const PARTY_PASS_TYPES: PassType[] = ['day', 'weekend', 'festival'];
 const SOLO_PASS = PASS_CONFIGS['solo'];
 
+// Super Bowl date calculation
+const SUPER_BOWL_DATE = new Date('2026-02-08T23:59:59');
+
+function getDaysUntilSuperBowl(): number {
+  const now = new Date();
+  const diffTime = SUPER_BOWL_DATE.getTime() - now.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
+}
+
+function shouldShowSuperBowlBanner(): boolean {
+  const now = new Date();
+  // Hide after Feb 8, 2026 (show through game day, hide Feb 9+)
+  const hideAfter = new Date('2026-02-09T00:00:00');
+  return now < hideAfter;
+}
+
 export default function PartyLandingPage() {
   const [selectedPass, setSelectedPass] = useState<PassType>('weekend');
+  const [daysUntilSuperBowl, setDaysUntilSuperBowl] = useState<number>(getDaysUntilSuperBowl());
+  const [showSuperBowlBanner, setShowSuperBowlBanner] = useState<boolean>(true);
+
+  // Update countdown on mount and check if banner should show
+  useEffect(() => {
+    setDaysUntilSuperBowl(getDaysUntilSuperBowl());
+    setShowSuperBowlBanner(shouldShowSuperBowlBanner());
+
+    // Update every hour
+    const interval = setInterval(() => {
+      setDaysUntilSuperBowl(getDaysUntilSuperBowl());
+      setShowSuperBowlBanner(shouldShowSuperBowlBanner());
+    }, 60 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
   const [partyCode, setPartyCode] = useState('');
   const [showJoinForm, setShowJoinForm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -133,55 +166,61 @@ export default function PartyLandingPage() {
           </div>
         </div>
 
-        {/* 🏈 SUPER BOWL TIE-IN BANNER */}
-        <div className="mb-8 bg-gradient-to-r from-blue-900/60 via-red-900/60 to-green-900/60 border-2 border-yellow-500 rounded-2xl p-5 relative overflow-hidden">
-          {/* Football pattern overlay */}
-          <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'url(/assets/party-marketing/FireHorse-SuperBowl-Party-Image.jpeg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+        {/* 🏈 SUPER BOWL TIE-IN BANNER - Auto-hides after Feb 8, 2026 */}
+        {showSuperBowlBanner && (
+          <div className="mb-8 bg-gradient-to-r from-blue-900/60 via-red-900/60 to-green-900/60 border-2 border-yellow-500 rounded-2xl p-5 relative overflow-hidden">
+            {/* Football pattern overlay */}
+            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'url(/assets/party-marketing/FireHorse-SuperBowl-Party-Image.jpeg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
 
-          <div className="relative z-10">
-            <div className="flex items-center justify-center gap-2 mb-3">
-              <span className="text-3xl">🏈</span>
-              <span className="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full animate-pulse">
-                ⏰ SUPER BOWL LX IN 6 DAYS — FEB 8!
-              </span>
-              <span className="text-3xl">🐴</span>
-            </div>
-
-            <h2 className="text-xl md:text-2xl font-bold text-center mb-2">
-              <span className="text-blue-400">Patriots</span>
-              <span className="text-white mx-2">vs</span>
-              <span className="text-green-400">Seahawks</span>
-            </h2>
-
-            <p className="text-center text-yellow-300 font-bold text-lg mb-3">
-              🔥 Boost Your Super Bowl Luck with Fire Horse Fortune! 🔥
-            </p>
-
-            <div className="grid md:grid-cols-2 gap-4 mb-4">
-              <div className="bg-black/50 rounded-xl p-3 text-center">
-                <p className="text-white font-bold mb-1">🎲 GET LUCKY NUMBERS</p>
-                <p className="text-gray-300 text-sm mb-2">Your Fire Horse Oracle includes 6 lucky numbers for your Super Bowl bets!</p>
-                <Link
-                  href="/"
-                  className="inline-block bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-bold px-4 py-2 rounded-lg text-sm hover:scale-105 transition-transform"
-                >
-                  Get Oracle — $8.88
-                </Link>
-              </div>
-              <div className="bg-black/50 rounded-xl p-3 text-center">
-                <p className="text-white font-bold mb-1">🎉 PRE-GAME PARTY</p>
-                <p className="text-gray-300 text-sm mb-2">Host Fire Horse Trivia before kickoff — the ultimate CNY × Super Bowl mashup!</p>
-                <span className="inline-block bg-gradient-to-r from-red-600 to-red-500 text-white font-bold px-4 py-2 rounded-lg text-sm">
-                  ↓ Get Your Pass Below
+            <div className="relative z-10">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <span className="text-3xl">🏈</span>
+                <span className="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full animate-pulse">
+                  {daysUntilSuperBowl <= 0
+                    ? '🏈 SUPER BOWL LX TODAY!'
+                    : daysUntilSuperBowl === 1
+                      ? '⏰ SUPER BOWL LX TOMORROW — FEB 8!'
+                      : `⏰ SUPER BOWL LX IN ${daysUntilSuperBowl} DAYS — FEB 8!`}
                 </span>
+                <span className="text-3xl">🐴</span>
               </div>
-            </div>
 
-            <p className="text-center text-gray-400 text-xs">
-              CNY 2026 (Jan 29) + Super Bowl LX (Feb 8) = The luckiest week of the decade! 🐴🏈
-            </p>
+              <h2 className="text-xl md:text-2xl font-bold text-center mb-2">
+                <span className="text-blue-400">Patriots</span>
+                <span className="text-white mx-2">vs</span>
+                <span className="text-green-400">Seahawks</span>
+              </h2>
+
+              <p className="text-center text-yellow-300 font-bold text-lg mb-3">
+                🔥 Boost Your Super Bowl Luck with Fire Horse Fortune! 🔥
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-4 mb-4">
+                <div className="bg-black/50 rounded-xl p-3 text-center">
+                  <p className="text-white font-bold mb-1">🎲 GET LUCKY NUMBERS</p>
+                  <p className="text-gray-300 text-sm mb-2">Your Fire Horse Oracle includes 6 lucky numbers for your Super Bowl bets!</p>
+                  <Link
+                    href="/"
+                    className="inline-block bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-bold px-4 py-2 rounded-lg text-sm hover:scale-105 transition-transform"
+                  >
+                    Get Oracle — $8.88
+                  </Link>
+                </div>
+                <div className="bg-black/50 rounded-xl p-3 text-center">
+                  <p className="text-white font-bold mb-1">🎉 PRE-GAME PARTY</p>
+                  <p className="text-gray-300 text-sm mb-2">Host Fire Horse Trivia before kickoff — the ultimate CNY × Super Bowl mashup!</p>
+                  <span className="inline-block bg-gradient-to-r from-red-600 to-red-500 text-white font-bold px-4 py-2 rounded-lg text-sm">
+                    ↓ Get Your Pass Below
+                  </span>
+                </div>
+              </div>
+
+              <p className="text-center text-gray-400 text-xs">
+                Super Bowl LX (Feb 8) + CNY 2026 (Feb 17) = Fire Horse Fortune! 🐴🏈
+              </p>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* SOLO PLAY - Featured Option */}
         <div className="mb-8 bg-gradient-to-r from-purple-900/40 to-pink-900/40 border-2 border-purple-500 rounded-2xl p-6">

@@ -19,12 +19,31 @@ const FADE_DURATION = 4000;           // 4 seconds for extra smooth fade
 const MAIN_DISPLAY_DURATION = 18000;  // 18 seconds for main chart
 const GRID_DISPLAY_DURATION = 12000;  // 12 seconds for grid images
 
+// Super Bowl date calculation
+const SUPER_BOWL_DATE = new Date('2026-02-08T23:59:59');
+
+function getDaysUntilSuperBowl(): number {
+  const now = new Date();
+  const diffTime = SUPER_BOWL_DATE.getTime() - now.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
+}
+
+function shouldShowSuperBowlBanner(): boolean {
+  const now = new Date();
+  // Hide after Feb 8, 2026 (show through game day, hide Feb 9+)
+  const hideAfter = new Date('2026-02-09T00:00:00');
+  return now < hideAfter;
+}
+
 export default function Home() {
   const paymentLink = process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK || '#';
   const [activeIndex, setActiveIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
   const [showWhyPrice, setShowWhyPrice] = useState(false);
   const [showInstallModal, setShowInstallModal] = useState(false);
+  const [daysUntilSuperBowl, setDaysUntilSuperBowl] = useState<number>(getDaysUntilSuperBowl());
+  const [showSuperBowlBanner, setShowSuperBowlBanner] = useState<boolean>(true);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const cycleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -59,6 +78,20 @@ export default function Home() {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, []); // Empty dependency - only runs once on mount
+
+  // Update Super Bowl countdown on mount
+  useEffect(() => {
+    setDaysUntilSuperBowl(getDaysUntilSuperBowl());
+    setShowSuperBowlBanner(shouldShowSuperBowlBanner());
+
+    // Update every hour
+    const interval = setInterval(() => {
+      setDaysUntilSuperBowl(getDaysUntilSuperBowl());
+      setShowSuperBowlBanner(shouldShowSuperBowlBanner());
+    }, 60 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <main className="min-h-screen bg-fire-gradient relative overflow-hidden">
@@ -334,40 +367,46 @@ export default function Home() {
           </p>
         </div>
 
-        {/* 🏈 SUPER BOWL TIE-IN */}
-        <div className="w-full bg-gradient-to-r from-blue-900/60 via-red-900/60 to-green-900/60 border-2 border-yellow-500 rounded-2xl p-4 mb-6">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <span className="text-2xl">🏈</span>
-            <span className="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full animate-pulse">
-              SUPER BOWL LX IN 6 DAYS!
-            </span>
-            <span className="text-2xl">🐴</span>
+        {/* 🏈 SUPER BOWL TIE-IN - Auto-hides after Feb 8, 2026 */}
+        {showSuperBowlBanner && (
+          <div className="w-full bg-gradient-to-r from-blue-900/60 via-red-900/60 to-green-900/60 border-2 border-yellow-500 rounded-2xl p-4 mb-6">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <span className="text-2xl">🏈</span>
+              <span className="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full animate-pulse">
+                {daysUntilSuperBowl <= 0
+                  ? '🏈 SUPER BOWL LX TODAY!'
+                  : daysUntilSuperBowl === 1
+                    ? 'SUPER BOWL LX TOMORROW!'
+                    : `SUPER BOWL LX IN ${daysUntilSuperBowl} DAYS!`}
+              </span>
+              <span className="text-2xl">🐴</span>
+            </div>
+            <p className="text-center text-white font-bold text-lg mb-1">
+              <span className="text-blue-400">Patriots</span>
+              <span className="mx-2">vs</span>
+              <span className="text-green-400">Seahawks</span>
+              <span className="mx-2">—</span>
+              <span className="text-yellow-300">Feb 8</span>
+            </p>
+            <p className="text-center text-yellow-300 text-sm mb-3">
+              🔥 Get Your Lucky Numbers Before Kickoff! 🎲
+            </p>
+            <div className="flex flex-col sm:flex-row gap-2 justify-center">
+              <a
+                href={paymentLink}
+                className="bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-bold px-4 py-2 rounded-lg text-sm text-center hover:scale-105 transition-transform"
+              >
+                🎲 Get Lucky Numbers — $8.88
+              </a>
+              <a
+                href="/party"
+                className="bg-gradient-to-r from-red-600 to-red-500 text-white font-bold px-4 py-2 rounded-lg text-sm text-center hover:scale-105 transition-transform"
+              >
+                🎉 Host Pre-Game Trivia
+              </a>
+            </div>
           </div>
-          <p className="text-center text-white font-bold text-lg mb-1">
-            <span className="text-blue-400">Patriots</span>
-            <span className="mx-2">vs</span>
-            <span className="text-green-400">Seahawks</span>
-            <span className="mx-2">—</span>
-            <span className="text-yellow-300">Feb 8</span>
-          </p>
-          <p className="text-center text-yellow-300 text-sm mb-3">
-            🔥 Get Your Lucky Numbers Before Kickoff! 🎲
-          </p>
-          <div className="flex flex-col sm:flex-row gap-2 justify-center">
-            <a
-              href={paymentLink}
-              className="bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-bold px-4 py-2 rounded-lg text-sm text-center hover:scale-105 transition-transform"
-            >
-              🎲 Get Lucky Numbers — $8.88
-            </a>
-            <a
-              href="/party"
-              className="bg-gradient-to-r from-red-600 to-red-500 text-white font-bold px-4 py-2 rounded-lg text-sm text-center hover:scale-105 transition-transform"
-            >
-              🎉 Host Pre-Game Trivia
-            </a>
-          </div>
-        </div>
+        )}
 
         {/* Product Card */}
         <div className="w-full border-glow bg-black/80 backdrop-blur-sm p-6 rounded-2xl space-y-5 mb-6">
