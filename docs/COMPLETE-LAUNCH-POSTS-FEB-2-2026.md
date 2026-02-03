@@ -231,7 +231,7 @@ Anyone hosting a Super Bowl or CNY party this week? 🎉
 After weeks of development, I'm releasing a multiplayer trivia game that combines Chinese zodiac wisdom with modern party entertainment.
 
 𝗪𝗛𝗔𝗧 𝗜𝗧 𝗜𝗦:
-Fire Horse Trivia is a Kahoot-style quiz game featuring 400 questions about Chinese zodiac, CNY traditions, and cultural knowledge. Up to 20 players can compete in real-time using just their phones - no app download required.
+Fire Horse Trivia is a multiplayer quiz game featuring 400 questions about Chinese zodiac, CNY traditions, and cultural knowledge. Up to 20 players can compete in real-time using just their phones - no app download required.
 
 𝗪𝗛𝗬 𝗡𝗢𝗪:
 2026 is the Year of the Fire Horse (丙午年) - a cosmic event that occurs only once every 60 years. The last Fire Horse year was 1966; the next won't be until 2086.
@@ -393,7 +393,7 @@ Hey everyone!
 Just shipped a new product: Fire Horse Trivia
 
 **What it is:**
-A Kahoot-style multiplayer trivia game with 400 questions about Chinese zodiac and CNY traditions. Up to 20 players, real-time scoring, works on any phone without an app.
+A multiplayer trivia game with 400 questions about Chinese zodiac and CNY traditions. Up to 20 players, real-time scoring, works on any phone without an app.
 
 **Why I built it:**
 2026 is the Year of the Fire Horse - only happens once every 60 years. I wanted to create something that celebrates this rare moment while also being genuinely fun.

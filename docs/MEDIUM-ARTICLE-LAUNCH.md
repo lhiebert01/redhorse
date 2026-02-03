@@ -36,7 +36,7 @@ This alignment — Super Bowl LX followed by the Year of the Fire Horse — only
 
 ## What is Fire Horse Trivia?
 
-It's a Kahoot-style multiplayer trivia game designed for parties and gatherings.
+It's a multiplayer trivia game designed for parties and gatherings.
 
 **The basics:**
 - 400 expert questions across 16 categories

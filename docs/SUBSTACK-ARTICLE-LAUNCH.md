@@ -46,7 +46,7 @@ I thought that deserved something special.
 
 ## 🎮 What I Built
 
-**Fire Horse Trivia** is basically Kahoot for Chinese New Year.
+**Fire Horse Trivia** is a multiplayer quiz game for Chinese New Year parties.
 
 - 400 questions across 16 categories
 - 2-20 players compete on their phones
