@@ -28,9 +28,9 @@ But here's what most people don't realize: it's happening during the **Year of t
 - Current: **2026**
 - Next: **2086** (will you even be around?)
 
-Chinese New Year 2026 started on January 29th. Super Bowl LX is February 8th. Valentine's Day is February 14th.
+Super Bowl LX is February 8th. Chinese New Year 2026 starts February 17th.
 
-This is the **luckiest week of the decade**, and I wanted to build something to celebrate it.
+This alignment — Super Bowl LX followed by the Year of the Fire Horse — only happens once every 60 years. I wanted to build something to celebrate it.
 
 ---
 

@@ -336,8 +336,8 @@ Get ready for the second half!
 
 The Fire Horse Year delivered!
 
-Next up: Valentine's Day (Feb 14)
-Get your Love Oracle → redhorseoracle.com
+Next up: Chinese New Year (Feb 17)
+Get your Fire Horse Oracle → redhorseoracle.com
 
 #SuperBowl #SuperBowlLX
 ```
@@ -360,9 +360,8 @@ I built Red Horse Oracle to help people harness this rare energy:
 And for teams looking for a unique activity, Fire Horse Trivia lets you host a CNY-themed trivia party with 400 questions and live scoring.
 
 The timing couldn't be better:
-• CNY 2026: January 29
 • Super Bowl LX: February 8
-• Valentine's Day: February 14
+• CNY 2026: February 17 (Fire Horse Year begins)
 
 If you're planning a Super Bowl party or team event, check it out:
 → redhorseoracle.com/party

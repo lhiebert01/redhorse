@@ -136,9 +136,8 @@ The Fire Horse (丙午年) is known for fierce independence and unstoppable ener
 4. **Multiplayer Trivia** - 400 questions for parties and events
 
 **The timing:**
-- CNY 2026: January 29
 - Super Bowl LX: February 8
-- Valentine's Day: February 14
+- CNY 2026: February 17 (Fire Horse Year begins)
 - Fire Horse energy is peaking!
 
 Try the free reading first: redhorseoracle.com/free

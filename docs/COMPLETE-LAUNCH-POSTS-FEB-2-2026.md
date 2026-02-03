@@ -106,7 +106,7 @@ Here's why the timing is PERFECT 👇
 **Tweet 2:**
 ```
 Super Bowl LX: February 8, 2026
-Chinese New Year: Started January 29, 2026
+Chinese New Year: Starts February 17, 2026
 
 Both happening during the Year of the Fire Horse (丙午年)
 
@@ -236,10 +236,9 @@ Fire Horse Trivia is a Kahoot-style quiz game featuring 400 questions about Chin
 𝗪𝗛𝗬 𝗡𝗢𝗪:
 2026 is the Year of the Fire Horse (丙午年) - a cosmic event that occurs only once every 60 years. The last Fire Horse year was 1966; the next won't be until 2086.
 
-And this week, we have a unique alignment:
-• Chinese New Year 2026: January 29
+And this month, we have an incredible alignment:
 • Super Bowl LX: February 8
-• Valentine's Day: February 14
+• Chinese New Year 2026: February 17 (Year of the Fire Horse begins)
 
 𝗨𝗦𝗘 𝗖𝗔𝗦𝗘𝗦:
 • Super Bowl watch party pre-game entertainment

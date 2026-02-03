@@ -98,13 +98,12 @@ Here's why this week is so special:
 
 | Date | Event |
 |------|-------|
-| Jan 29 | Chinese New Year 2026 began (Year of the Fire Horse) |
 | **Feb 2** | **Today — Fire Horse Trivia launches!** |
 | Feb 8 | Super Bowl LX (Patriots vs Seahawks) |
-| Feb 12 | Lantern Festival (peak of CNY celebrations) |
-| Feb 14 | Valentine's Day |
+| Feb 17 | Chinese New Year 2026 (Year of the Fire Horse begins) |
+| Mar 3 | Lantern Festival (peak of CNY celebrations) |
 
-CNY + Super Bowl + Valentine's Day all in one stretch. The Fire Horse energy is OFF THE CHARTS.
+Super Bowl LX followed by Chinese New Year 2026 — the Year of the Fire Horse. This cosmic alignment won't happen again for 60 years!
 
 ---
 
