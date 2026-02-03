@@ -50,17 +50,18 @@
 
 **Full tracking:** `docs/LAUNCH-TRACKER-FEB-2026.md`
 
-### Scheduled (Tuesday, February 4)
+### NEXT PRIORITY: Product Hunt Launch
+
+- [ ] **Product Hunt** - Launch ASAP (before Super Bowl Feb 8 for maximum visibility)
+- [ ] Listing ready: `docs/PRODUCT-HUNT-LISTING.md`
+
+### Also Scheduled
 
 - [ ] LinkedIn Post 2 (Team Building angle)
 - [ ] Reddit: r/ChineseZodiac (with image)
 - [ ] Reddit: r/SideProject (text only)
 - [ ] Reddit: r/IndieHackers (text only)
 - [ ] Substack article
-
-### Scheduled (Week of February 10-14)
-
-- [ ] Product Hunt launch
 
 ### Key Dates
 
