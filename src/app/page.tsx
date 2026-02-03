@@ -590,7 +590,10 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Charitable Giving - AI for Good */}
+        {/* HIDDEN FOR NOW - Charitable Giving - AI for Good
+            To re-enable: Remove this comment block
+            Future: Change to 8.88% of net proceeds instead of 20%
+
         <div className="w-full bg-gradient-to-br from-purple-950/40 via-black/60 to-blue-950/40 backdrop-blur-sm border border-purple-500/40 rounded-xl p-5 mb-6">
           <div className="text-center mb-4">
             <span className="text-3xl">👁️</span>
@@ -599,17 +602,15 @@ export default function Home() {
             </h3>
           </div>
 
-          {/* Greek Philosophy Quote */}
           <div className="bg-black/40 rounded-lg p-3 mb-4 border-l-2 border-purple-400">
             <p className="text-gray-300 text-sm italic leading-relaxed">
               &quot;In ancient Greece, the blind seer <span className="text-purple-300 font-semibold">Tiresias</span> saw further than any mortal. The Greeks believed those without physical sight possessed the greatest <span className="text-fire-gold font-semibold">inner vision</span>.&quot;
             </p>
           </div>
 
-          {/* AFB Donation */}
           <div className="bg-purple-900/30 border border-purple-500/30 rounded-xl p-4 text-center">
             <p className="text-white text-sm font-bold mb-2">
-              🤍 20% of Every Oracle Supports
+              🤍 8.88% of Net Proceeds Supports
             </p>
             <p className="text-purple-300 text-lg font-bold mb-1">
               American Foundation for the Blind
@@ -626,7 +627,6 @@ export default function Home() {
             </p>
           </div>
 
-          {/* AI for Good Badge */}
           <div className="flex justify-center gap-3 mt-4">
             <span className="bg-purple-900/50 border border-purple-500/50 text-purple-300 text-xs px-3 py-1.5 rounded-full">
               🤖 AI for Good
@@ -636,6 +636,7 @@ export default function Home() {
             </span>
           </div>
         </div>
+        END HIDDEN SECTION */}
 
         {/* Social Proof */}
         <div className="text-center mb-6 bg-black/40 backdrop-blur-sm border border-red-900/50 rounded-xl p-4">

@@ -358,7 +358,10 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
         </div>
       </div>
 
-      {/* ========== CHARITABLE GIVING THANK YOU ========== */}
+      {/* ========== HIDDEN FOR NOW - CHARITABLE GIVING THANK YOU ==========
+          To re-enable: Remove this comment block
+          Future: Change to 8.88% of net proceeds instead of 20%
+
       <div className="w-full bg-gradient-to-br from-purple-950/40 via-black/60 to-blue-950/40 border border-purple-500/40 rounded-2xl p-5">
         <div className="text-center">
           <span className="text-3xl">👁️</span>
@@ -374,7 +377,7 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
 
           <div className="bg-purple-900/30 border border-purple-500/30 rounded-xl p-4">
             <p className="text-white text-sm font-bold mb-1">
-              🤍 20% of your purchase supports
+              🤍 8.88% of net proceeds supports
             </p>
             <p className="text-purple-300 text-lg font-bold mb-2">
               American Foundation for the Blind
@@ -398,6 +401,7 @@ export default function TalismanDisplay({ prophecy }: TalismanDisplayProps) {
           </div>
         </div>
       </div>
+      END HIDDEN SECTION */}
     </div>
   );
 }
