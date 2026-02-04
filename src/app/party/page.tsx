@@ -119,11 +119,19 @@ export default function PartyLandingPage() {
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-block mb-4">
-            <span className="text-sm text-gray-400 hover:text-white">
-              ← Back to Red Horse Oracle
-            </span>
-          </Link>
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <Link href="/" className="inline-block">
+              <span className="text-sm text-gray-400 hover:text-white">
+                ← Back to Red Horse Oracle
+              </span>
+            </Link>
+            <span className="text-gray-600">|</span>
+            <Link href="/vip" className="inline-block">
+              <span className="text-sm text-gray-500 hover:text-fire-gold">
+                🎫 VIP Pass?
+              </span>
+            </Link>
+          </div>
 
           <div className="inline-block bg-red-600 text-white text-sm font-bold px-4 py-1.5 rounded-full mb-3 animate-pulse">
             🔥 2026 IS THE YEAR TO CELEBRATE! 🔥

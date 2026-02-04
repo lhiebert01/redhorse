@@ -278,6 +278,12 @@ export default function SuperAdminPage() {
             </p>
           </div>
           <div className="flex items-center gap-3 flex-wrap">
+            <a
+              href="/superadmin/vip"
+              className="bg-yellow-700 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors"
+            >
+              🎫 VIP Passes
+            </a>
             <button
               onClick={() => {
                 setShowPartyStats(true);

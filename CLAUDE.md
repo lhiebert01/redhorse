@@ -3563,4 +3563,175 @@ This is especially important for:
 
 ---
 
+## Session Update: February 4, 2026 - VIP Pass System for Influencer Marketing
+
+### Current Status: VIP PASS SYSTEM COMPLETE
+
+### Major Feature: VIP Pass System
+
+Built a complete VIP pass system for influencer marketing outreach, allowing influencers to test the full Red Horse Oracle experience without payment.
+
+#### VIP Pass Capabilities (1 Pass = 3 Entitlements)
+
+Each VIP pass grants:
+1. **Generate 1 AI Oracle** ($8.88 value) - Full prophecy with Gemini 3 Pro
+2. **Play 1 Solo Trivia Game** ($2.88 value) - 20 questions, full scoring
+3. **Host 1 Party Game** ($8.88 value) - Up to 20 players
+
+**Total Value:** $20.64 per VIP pass
+
+#### VIP Pass Features
+
+- **Custom codes** - Create memorable codes like KCLOVE, CHAOS, LOCALVIP
+- **30-day expiration** (configurable)
+- **Usage tracking** - See which entitlements have been used
+- **Recipient tracking** - Store influencer name, platform, notes
+- **Message templates** - Pre-written outreach messages with auto-inserted codes
+
+### New Pages & Routes
+
+| Page | URL | Purpose |
+|------|-----|---------|
+| VIP Room | `/vip` | User-facing VIP code entry and entitlement selection |
+| VIP Management | `/superadmin/vip` | Admin interface to generate and track VIP passes |
+
+### New API Routes
+
+| Route | Method | Purpose |
+|-------|--------|---------|
+| `/api/vip/generate` | POST | Create new VIP pass (admin only) |
+| `/api/vip/validate` | GET | Check if VIP code is valid |
+| `/api/vip/use-oracle` | POST | Generate VIP oracle (marks as used) |
+| `/api/vip/use-solo` | POST | Create VIP solo game pass |
+| `/api/vip/use-hosted` | POST | Create VIP hosted game pass |
+| `/api/vip/list` | POST | List all VIP passes (admin only) |
+
+### Database Migration Required
+
+Run in Supabase SQL Editor:
+```sql
+-- File: docs/migrations/004_vip_passes.sql
+
+CREATE TABLE IF NOT EXISTS vip_passes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  code VARCHAR(20) UNIQUE NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  expires_at TIMESTAMPTZ NOT NULL,
+  recipient_name VARCHAR(100),
+  recipient_platform VARCHAR(50),
+  notes TEXT,
+  oracle_used BOOLEAN DEFAULT FALSE,
+  oracle_used_at TIMESTAMPTZ,
+  oracle_prophecy_id UUID REFERENCES prophecies(id),
+  solo_used BOOLEAN DEFAULT FALSE,
+  solo_used_at TIMESTAMPTZ,
+  solo_game_id UUID,
+  hosted_used BOOLEAN DEFAULT FALSE,
+  hosted_used_at TIMESTAMPTZ,
+  hosted_party_pass_id UUID REFERENCES party_passes(id),
+  status VARCHAR(20) DEFAULT 'active'
+);
+
+CREATE INDEX idx_vip_passes_code ON vip_passes(code);
+```
+
+### Message Templates
+
+Pre-built outreach templates with `{{CODE}}` placeholder:
+
+1. **Instagram DM - Local Influencer** - Friendly local angle
+2. **Instagram DM - Content Creator** - Pitch angle with budget mention
+3. **Email - Business Pitch** - Professional email with subject line
+4. **CNY Follow-up** - Short reminder for Chinese New Year angle
+5. **Custom** - Blank template for customization
+
+### SuperAdmin VIP Management Features
+
+Access: `/superadmin/vip` (PIN: 142857)
+
+**Dashboard Stats:**
+- Total passes created
+- Active / Expired / Revoked
+- Oracle used / Solo used / Hosted used
+- Fully used (3/3)
+
+**Create Pass Form:**
+- Code style: Word-based (FIRE42), Random (A7B3C9D2), or Custom
+- Recipient name (optional)
+- Platform: Instagram, Email, Twitter, TikTok, Other
+- Expiration days (default 30)
+- Notes
+
+**Message Generator:**
+- Select template
+- Auto-fills `{{CODE}}` and `{{NAME}}`
+- Copy to clipboard button
+- Edit before copying
+
+### User-Facing VIP Entry Points
+
+**Landing Page:**
+- "🎫 VIP?" link next to Install App button (top-left)
+
+**Party Page:**
+- "🎫 VIP Pass?" link next to Back to Home link
+
+### VIP Room Flow (`/vip`)
+
+1. **Enter Code** - Simple input field
+2. **View Entitlements** - Shows what's available and what's been used
+3. **Select Action** - Click USE button for Oracle, Solo, or Hosted
+4. **Oracle Form** - Enter birthday and choose mode (if using oracle)
+5. **Redirect** - Automatically sent to reveal page or game
+
+### New Files Created
+
+| File | Purpose |
+|------|---------|
+| `src/types/vip.ts` | VIP pass TypeScript interfaces |
+| `src/constants/vip-templates.ts` | Message templates and code generator |
+| `src/app/vip/page.tsx` | VIP Room page |
+| `src/app/superadmin/vip/page.tsx` | VIP management dashboard |
+| `src/app/api/vip/generate/route.ts` | Create VIP pass API |
+| `src/app/api/vip/validate/route.ts` | Validate VIP code API |
+| `src/app/api/vip/use-oracle/route.ts` | Use oracle entitlement API |
+| `src/app/api/vip/use-solo/route.ts` | Use solo game entitlement API |
+| `src/app/api/vip/use-hosted/route.ts` | Use hosted game entitlement API |
+| `src/app/api/vip/list/route.ts` | List all VIP passes API |
+| `docs/migrations/004_vip_passes.sql` | Database migration |
+
+### Quick Reference
+
+**Create VIP Pass:**
+1. Go to `/superadmin/vip` (PIN: 142857)
+2. Click "+ Create VIP Pass"
+3. Choose code style and enter details
+4. Click "Create Pass"
+5. Copy generated message with code
+
+**Send to Influencer:**
+1. Select message template (Instagram DM, Email, etc.)
+2. Enter recipient name
+3. Click "Copy Message to Clipboard"
+4. Paste into Instagram DM or email
+
+**Track Usage:**
+- View table showing all passes
+- Usage columns show 🔮/🎮/🎉 with ✓ for used
+
+### Example Outreach Workflow
+
+```
+1. Create VIP code: KCLOVE (for Emma, Instagram)
+2. Copy Instagram DM template:
+   "Hi! I'm a local KC developer..."
+   "Your VIP Code: KCLOVE"
+   "Redeem here: redhorseoracle.com/vip"
+3. Send DM to @kansascityplaces.em
+4. Track: See if Emma uses Oracle, Solo, or Hosted
+5. Follow up if no usage after 3 days
+```
+
+---
+
 *火马年 2026 - Year of the Fire Horse*
