@@ -284,6 +284,12 @@ export default function SuperAdminPage() {
             >
               🎫 VIP Passes
             </a>
+            <a
+              href="/superadmin/influencers"
+              className="bg-purple-700 hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors"
+            >
+              🌟 Influencers
+            </a>
             <button
               onClick={() => {
                 setShowPartyStats(true);

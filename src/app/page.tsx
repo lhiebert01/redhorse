@@ -181,6 +181,13 @@ export default function Home() {
         >
           🎫 VIP?
         </a>
+        <a
+          href="/partner"
+          className="text-gray-500 hover:text-purple-400 text-xs px-2 py-2 transition-all duration-300"
+          title="Become an Influencer/Partner"
+        >
+          🌟 Partner?
+        </a>
       </div>
 
       {/* Install App Modal */}

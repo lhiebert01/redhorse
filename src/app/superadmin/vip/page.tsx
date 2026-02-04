@@ -241,6 +241,12 @@ export default function VIPManagementPage() {
               + Create VIP Pass
             </button>
             <Link
+              href="/superadmin/influencers"
+              className="bg-purple-700 hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors"
+            >
+              🌟 Influencers
+            </Link>
+            <Link
               href="/superadmin"
               className="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors"
             >

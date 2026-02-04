@@ -131,6 +131,12 @@ export default function PartyLandingPage() {
                 🎫 VIP Pass?
               </span>
             </Link>
+            <span className="text-gray-600">|</span>
+            <Link href="/partner" className="inline-block">
+              <span className="text-sm text-gray-500 hover:text-purple-400">
+                🌟 Partner with Us?
+              </span>
+            </Link>
           </div>
 
           <div className="inline-block bg-red-600 text-white text-sm font-bold px-4 py-1.5 rounded-full mb-3 animate-pulse">
