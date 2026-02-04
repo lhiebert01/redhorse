@@ -100,6 +100,10 @@ async function sendEmailNotification(data: {
   message: string;
   applicationId: string;
 }) {
+  // Use Resend's shared domain for quick setup, or custom domain if verified
+  // To use custom domain: verify redhorseoracle.com in Resend dashboard
+  const fromAddress = process.env.RESEND_FROM_EMAIL || 'Red Horse Oracle <onboarding@resend.dev>';
+
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -107,27 +111,32 @@ async function sendEmailNotification(data: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: 'Red Horse Oracle <notifications@redhorseoracle.com>',
+      from: fromAddress,
       to: NOTIFICATION_EMAIL,
       subject: `🌟 New Influencer Application: ${data.name}`,
       html: `
-        <h2>New Influencer/Partner Application</h2>
-        <p><strong>From:</strong> ${data.name}</p>
-        <p><strong>Email:</strong> <a href="mailto:${data.email}">${data.email}</a></p>
-        ${data.platform ? `<p><strong>Platform:</strong> ${data.platform}</p>` : ''}
-        ${data.handle ? `<p><strong>Handle:</strong> ${data.handle}</p>` : ''}
-        ${data.followerCount ? `<p><strong>Followers:</strong> ${data.followerCount}</p>` : ''}
-        <hr>
-        <h3>Their Message:</h3>
-        <p style="white-space: pre-wrap; background: #f5f5f5; padding: 15px; border-radius: 8px;">${data.message}</p>
-        <hr>
-        <p><small>Application ID: ${data.applicationId}</small></p>
-        <p><small>View all applications at: <a href="https://redhorseoracle.com/superadmin/influencers">SuperAdmin Dashboard</a></small></p>
+        <h2>🔥 New Influencer/Partner Application</h2>
+        <div style="background: #1a1a1a; color: #fff; padding: 20px; border-radius: 12px; font-family: sans-serif;">
+          <p><strong style="color: #fbbf24;">From:</strong> ${data.name}</p>
+          <p><strong style="color: #fbbf24;">Email:</strong> <a href="mailto:${data.email}" style="color: #60a5fa;">${data.email}</a></p>
+          ${data.platform ? `<p><strong style="color: #fbbf24;">Platform:</strong> ${data.platform}</p>` : ''}
+          ${data.handle ? `<p><strong style="color: #fbbf24;">Handle:</strong> ${data.handle}</p>` : ''}
+          ${data.followerCount ? `<p><strong style="color: #fbbf24;">Followers:</strong> ${data.followerCount}</p>` : ''}
+          <hr style="border-color: #333; margin: 20px 0;">
+          <h3 style="color: #fbbf24;">Their Proposal:</h3>
+          <p style="white-space: pre-wrap; background: #262626; padding: 15px; border-radius: 8px; border-left: 4px solid #fbbf24;">${data.message}</p>
+          <hr style="border-color: #333; margin: 20px 0;">
+          <p style="text-align: center;">
+            <a href="https://redhorseoracle.com/superadmin/influencers" style="display: inline-block; background: #fbbf24; color: #000; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;">View All Applications →</a>
+          </p>
+          <p style="color: #666; font-size: 12px; text-align: center; margin-top: 20px;">Application ID: ${data.applicationId}</p>
+        </div>
       `,
     }),
   });
 
   if (!response.ok) {
-    throw new Error(`Resend API error: ${response.status}`);
+    const errorText = await response.text();
+    throw new Error(`Resend API error: ${response.status} - ${errorText}`);
   }
 }
