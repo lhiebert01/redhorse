@@ -163,8 +163,8 @@ export default function Home() {
         </svg>
       </a>
 
-      {/* Top Left Buttons - Install App & VIP Pass */}
-      <div className="absolute top-4 left-4 z-20 flex items-center gap-2">
+      {/* Top Left Buttons - Install App, VIP Pass & Partner */}
+      <div className="absolute top-4 left-4 z-20 flex items-center gap-2 flex-wrap">
         <button
           onClick={() => setShowInstallModal(true)}
           className="bg-fire-gold/90 hover:bg-fire-gold text-black font-bold text-xs px-3 py-2 rounded-lg transition-all duration-300 flex items-center gap-1.5 shadow-lg"
@@ -174,19 +174,21 @@ export default function Home() {
           </svg>
           Install App
         </button>
+        <span className="text-gray-600 hidden sm:inline">|</span>
         <a
           href="/vip"
-          className="text-gray-500 hover:text-fire-gold text-xs px-2 py-2 transition-all duration-300"
+          className="bg-fire-gold/10 hover:bg-fire-gold/20 border border-fire-gold/30 hover:border-fire-gold text-fire-gold text-sm px-3 py-1.5 rounded-lg transition-all duration-300"
           title="VIP Pass Entry"
         >
-          🎫 VIP?
+          🎫 VIP Pass?
         </a>
+        <span className="text-gray-600 hidden sm:inline">|</span>
         <a
           href="/partner"
-          className="text-gray-500 hover:text-purple-400 text-xs px-2 py-2 transition-all duration-300"
+          className="bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 hover:border-purple-500 text-purple-400 text-sm px-3 py-1.5 rounded-lg transition-all duration-300"
           title="Become an Influencer/Partner"
         >
-          🌟 Partner?
+          🌟 Partner with Us?
         </a>
       </div>
 
