@@ -173,14 +173,6 @@ export default function Home() {
 
           {/* All Buttons on ONE ROW */}
           <div className="flex items-center justify-center gap-2 flex-wrap">
-            {/* GET YOUR ORACLE */}
-            <a
-              href="/free"
-              className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-bold text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-full transition-all duration-300 shadow-lg shadow-green-500/30 whitespace-nowrap"
-            >
-              🔮 GET ORACLE
-            </a>
-
             {/* HOST A PARTY */}
             <a
               href="/party"
