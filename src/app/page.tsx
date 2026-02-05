@@ -345,23 +345,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* CNY 2026 Promo Banner - Sticky */}
-      <div className="sticky top-0 z-50 bg-gradient-to-r from-red-900 via-red-800 to-red-900 border-b-2 border-fire-gold/50 py-2 px-4">
-        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 text-center">
-          <span className="text-fire-gold font-bold text-sm sm:text-base animate-pulse">
-            🔥 2026 IS HERE — TAKE ACTION! 🐴
-          </span>
-          <div className="flex gap-3">
-            <a href="/party" className="bg-red-600 hover:bg-red-500 text-white text-xs sm:text-sm font-bold px-3 py-1 rounded-full transition-colors animate-bounce">
-              🎉 HOST A PARTY!
-            </a>
-            <a href="/free" className="bg-green-600 hover:bg-green-500 text-white text-xs sm:text-sm font-bold px-3 py-1 rounded-full transition-colors">
-              🔮 GET YOUR ORACLE
-            </a>
-          </div>
-        </div>
-      </div>
-
       {/* Added pb-12 to ensure footer isn't covered by fixed ticker */}
       <div className="max-w-lg mx-auto px-4 py-8 pb-12 flex flex-col items-center min-h-screen relative z-10">
         {/* Hero Title */}
