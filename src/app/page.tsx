@@ -163,10 +163,9 @@ export default function Home() {
         </svg>
       </a>
 
-      {/* Top Header Bar - Always visible below browser chrome */}
+      {/* Top Header Bar - All buttons on ONE ROW */}
       <div className="sticky top-0 z-30 w-full bg-black/90 backdrop-blur-sm border-b border-gray-800">
-        <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between flex-wrap gap-2">
-          {/* Left side - Install App */}
+        <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-center gap-3">
           <button
             onClick={() => setShowInstallModal(true)}
             className="bg-fire-gold hover:bg-yellow-400 text-black font-bold text-sm px-4 py-2 rounded-lg transition-all duration-300 flex items-center gap-2 shadow-lg"
@@ -176,24 +175,20 @@ export default function Home() {
             </svg>
             Install App
           </button>
-
-          {/* Right side - VIP & Partner */}
-          <div className="flex items-center gap-3">
-            <a
-              href="/vip"
-              className="bg-fire-gold/20 hover:bg-fire-gold/40 border-2 border-fire-gold text-fire-gold font-bold text-sm px-4 py-2 rounded-lg transition-all duration-300 shadow-lg"
-              title="VIP Pass Entry"
-            >
-              🎫 VIP Pass?
-            </a>
-            <a
-              href="/partner"
-              className="bg-purple-600/20 hover:bg-purple-600/40 border-2 border-purple-500 text-purple-300 font-bold text-sm px-4 py-2 rounded-lg transition-all duration-300 shadow-lg"
-              title="Become an Influencer/Partner"
-            >
-              🌟 Partner with Us?
-            </a>
-          </div>
+          <a
+            href="/vip"
+            className="bg-fire-gold/20 hover:bg-fire-gold/40 border-2 border-fire-gold text-fire-gold font-bold text-sm px-4 py-2 rounded-lg transition-all duration-300 shadow-lg"
+            title="VIP Pass Entry"
+          >
+            🎫 VIP Pass?
+          </a>
+          <a
+            href="/partner"
+            className="bg-purple-600/20 hover:bg-purple-600/40 border-2 border-purple-500 text-purple-300 font-bold text-sm px-4 py-2 rounded-lg transition-all duration-300 shadow-lg"
+            title="Become an Influencer/Partner"
+          >
+            🌟 Partner with Us?
+          </a>
         </div>
       </div>
 
