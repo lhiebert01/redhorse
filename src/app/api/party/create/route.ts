@@ -35,6 +35,7 @@ export async function POST(request: NextRequest) {
         },
       ],
       mode: 'payment',
+      allow_promotion_codes: true, // Enable promo codes (e.g., PRODUCTHUNT)
       success_url: `${process.env.NEXT_PUBLIC_APP_URL}/party/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/party`,
       metadata: {

@@ -96,23 +96,24 @@ The Fire Horse Year won't come again for 60 years. How will you celebrate?
 
 ---
 
-## 🚀 NEXT PRIORITY: Product Hunt Launch
+## 🚀 Product Hunt Launch
 
-**Status:** 📅 LAUNCH ASAP (before Super Bowl Feb 8)
+**Status:** ✅ SCHEDULED - Friday, February 6, 2026 (12:01 AM PT)
 
-**Why now:** Maximum visibility before Super Bowl weekend
+**Link:** https://www.producthunt.com/posts/red-horse-oracle
 
-**Listing ready:** `docs/PRODUCT-HUNT-LISTING.md`
-
-**Best launch time:** 12:01 AM PT (Product Hunt resets at midnight Pacific)
+**Promo Code:** `PRODUCTHUNT` (20% off Fire Horse Trivia party passes only)
+- Note: Promo applies to /party games only, NOT the $8.88 Oracle (auspicious number)
 
 **Checklist:**
-- [ ] Create/verify Product Hunt maker account
-- [ ] Prepare all images (thumbnail 240x240, gallery 1270x760)
-- [ ] Submit product at midnight PT
-- [ ] Post first comment immediately after launch
-- [ ] Share launch link on Twitter, LinkedIn, Facebook
-- [ ] Respond to every comment within 30 minutes
+- [x] Create/verify Product Hunt maker account
+- [x] Prepare all images (thumbnail 240x240, gallery 1270x760)
+- [x] Submit product
+- [x] Write first comment
+- [x] Add shoutouts (Claude Code, Gemini 3 Pro, Vercel, Supabase, Stripe, Next.js, Tailwind)
+- [ ] Create PRODUCTHUNT coupon in Stripe (20% off, expires Feb 28)
+- [ ] Share launch link on Twitter, LinkedIn, Facebook (Feb 6)
+- [ ] Respond to every comment within 30 minutes (Feb 6)
 
 ---
 
