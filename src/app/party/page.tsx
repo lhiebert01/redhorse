@@ -8,21 +8,30 @@ import { PASS_CONFIGS, PassType } from '@/types/party';
 const PARTY_PASS_TYPES: PassType[] = ['day', 'weekend', 'festival'];
 const SOLO_PASS = PASS_CONFIGS['solo'];
 
-// Super Bowl date calculation
-const SUPER_BOWL_DATE = new Date('2026-02-08T23:59:59');
+// Super Bowl date: February 8, 2026
+const SUPER_BOWL_YEAR = 2026;
+const SUPER_BOWL_MONTH = 1; // February (0-indexed)
+const SUPER_BOWL_DAY = 8;
 
 function getDaysUntilSuperBowl(): number {
   const now = new Date();
-  const diffTime = SUPER_BOWL_DATE.getTime() - now.getTime();
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  return diffDays;
+  // Get today's date at midnight (ignore time)
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  // Super Bowl date at midnight
+  const superBowlDate = new Date(SUPER_BOWL_YEAR, SUPER_BOWL_MONTH, SUPER_BOWL_DAY);
+
+  // Calculate difference in days
+  const diffTime = superBowlDate.getTime() - today.getTime();
+  const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays; // 0 = today, 1 = tomorrow, 3 = Feb 5 to Feb 8
 }
 
 function shouldShowSuperBowlBanner(): boolean {
   const now = new Date();
-  // Hide after Feb 8, 2026 (show through game day, hide Feb 9+)
-  const hideAfter = new Date('2026-02-09T00:00:00');
-  return now < hideAfter;
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  // Hide starting Feb 9, 2026 (day after Super Bowl)
+  const hideDate = new Date(SUPER_BOWL_YEAR, SUPER_BOWL_MONTH, SUPER_BOWL_DAY + 1); // Feb 9
+  return today < hideDate;
 }
 
 export default function PartyLandingPage() {
