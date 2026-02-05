@@ -111,7 +111,7 @@ The Fire Horse Year won't come again for 60 years. How will you celebrate?
 - [x] Submit product
 - [x] Write first comment
 - [x] Add shoutouts (Claude Code, Gemini 3 Pro, Vercel, Supabase, Stripe, Next.js, Tailwind)
-- [ ] Create PRODUCTHUNT coupon in Stripe (20% off, expires Feb 28)
+- [x] Create PRODUCTHUNT coupon in Stripe (20% off, expires Feb 28) ✅ TESTED
 - [ ] Share launch link on Twitter, LinkedIn, Facebook (Feb 6)
 - [ ] Respond to every comment within 30 minutes (Feb 6)
 
