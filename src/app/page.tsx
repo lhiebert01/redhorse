@@ -163,51 +163,55 @@ export default function Home() {
         </svg>
       </a>
 
-      {/* Top Header Bar - THREE GROUPS on ONE ROW */}
-      <div className="sticky top-0 z-30 w-full bg-gradient-to-r from-red-900/95 via-black/95 to-red-900/95 backdrop-blur-sm border-b-2 border-fire-gold/50">
-        <div className="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between">
-          {/* GROUP 1: Install App (left) */}
+      {/* Top Header Bar - ALL BUTTONS ON SINGLE ROW */}
+      <div className="sticky top-0 z-30 w-full bg-gradient-to-r from-red-900/95 via-black/95 to-red-900/95 backdrop-blur-sm border-b-2 border-fire-gold/50 overflow-x-auto">
+        <div className="flex items-center justify-center gap-2 px-4 py-2.5 min-w-max">
+          {/* Install App */}
           <button
             onClick={() => setShowInstallModal(true)}
-            className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white font-bold text-sm px-4 py-2.5 rounded-full transition-all duration-300 flex items-center gap-2 shadow-lg border border-gray-500"
+            className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white font-bold text-xs px-3 py-2 rounded-full transition-all duration-300 flex items-center gap-1.5 shadow-lg border border-gray-500 whitespace-nowrap"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
             </svg>
-            Install App
+            Install
           </button>
 
-          {/* GROUP 2: Main Actions (center) */}
-          <div className="flex items-center gap-3">
-            <a
-              href="/free"
-              className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-bold text-sm px-5 py-2.5 rounded-full transition-all duration-300 shadow-lg shadow-green-500/30 flex items-center gap-2"
-            >
-              🔮 GET YOUR ORACLE
-            </a>
-            <a
-              href="/party"
-              className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-bold text-sm px-5 py-2.5 rounded-full transition-all duration-300 shadow-lg shadow-red-500/30 flex items-center gap-2 animate-pulse"
-            >
-              🎉 HOST A PARTY
-            </a>
-          </div>
+          <span className="text-gray-600 text-lg">|</span>
 
-          {/* GROUP 3: VIP & Partner (right) */}
-          <div className="flex items-center gap-3">
-            <a
-              href="/vip"
-              className="bg-gradient-to-r from-yellow-600 to-fire-gold hover:from-yellow-500 hover:to-yellow-400 text-black font-bold text-sm px-5 py-2.5 rounded-full transition-all duration-300 shadow-lg shadow-yellow-500/30 flex items-center gap-2"
-            >
-              🎫 VIP PASS
-            </a>
-            <a
-              href="/partner"
-              className="bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white font-bold text-sm px-5 py-2.5 rounded-full transition-all duration-300 shadow-lg shadow-purple-500/30 flex items-center gap-2"
-            >
-              🌟 PARTNER?
-            </a>
-          </div>
+          {/* GET YOUR ORACLE */}
+          <a
+            href="/free"
+            className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-bold text-xs px-3 py-2 rounded-full transition-all duration-300 shadow-lg shadow-green-500/30 whitespace-nowrap"
+          >
+            🔮 GET ORACLE
+          </a>
+
+          {/* HOST A PARTY */}
+          <a
+            href="/party"
+            className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-bold text-xs px-3 py-2 rounded-full transition-all duration-300 shadow-lg shadow-red-500/30 animate-pulse whitespace-nowrap"
+          >
+            🎉 HOST PARTY
+          </a>
+
+          <span className="text-gray-600 text-lg">|</span>
+
+          {/* VIP PASS */}
+          <a
+            href="/vip"
+            className="bg-gradient-to-r from-yellow-600 to-fire-gold hover:from-yellow-500 hover:to-yellow-400 text-black font-bold text-xs px-3 py-2 rounded-full transition-all duration-300 shadow-lg shadow-yellow-500/30 whitespace-nowrap"
+          >
+            🎫 VIP PASS
+          </a>
+
+          {/* PARTNER */}
+          <a
+            href="/partner"
+            className="bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white font-bold text-xs px-3 py-2 rounded-full transition-all duration-300 shadow-lg shadow-purple-500/30 whitespace-nowrap"
+          >
+            🌟 PARTNER
+          </a>
         </div>
       </div>
 
