@@ -121,6 +121,8 @@ Hey Product Hunt! 👋
 
 I built Red Horse Oracle for the Year of the Fire Horse 2026 — a once-in-60-year cosmic event.
 
+🔮 **Get your Oracle:** redhorseoracle.com
+
 **Why I built this:**
 The Fire Horse (丙午年) is the most powerful zodiac combination. I wanted to create something meaningful for this rare moment while respecting user privacy.
 
@@ -136,7 +138,7 @@ The Fire Horse (丙午年) is the most powerful zodiac combination. I wanted to 
 
 🎁 **Product Hunt Special:** Use code `PRODUCTHUNT` for 20% off Fire Horse Trivia party passes through Feb 28! → redhorseoracle.com/party
 
-Try the free reading: redhorseoracle.com/free
+Try the free reading first: redhorseoracle.com/free
 ```
 
 ---
