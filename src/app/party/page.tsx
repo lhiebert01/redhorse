@@ -115,28 +115,57 @@ export default function PartyLandingPage() {
         }}
       />
 
+      {/* PARTY PROMO BANNER - Blue/Purple theme for distinction */}
+      <div className="sticky top-0 z-30 w-full bg-gradient-to-r from-blue-900/95 via-purple-900/95 to-blue-900/95 backdrop-blur-sm border-b-2 border-cyan-400 shadow-lg shadow-purple-900/50">
+        <div className="max-w-6xl mx-auto px-4 py-3">
+          {/* Promo Text */}
+          <p className="text-center text-cyan-300 font-bold text-sm mb-2 animate-pulse">
+            🎉 FIRE HORSE TRIVIA — BE THE PARTY LEGEND! 🐴
+          </p>
+
+          {/* All Buttons on ONE ROW */}
+          <div className="flex items-center justify-center gap-2 flex-wrap">
+            {/* BACK TO ORACLE */}
+            <Link
+              href="/"
+              className="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white font-bold text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-full transition-all duration-300 shadow-lg whitespace-nowrap"
+            >
+              ← ORACLE
+            </Link>
+
+            {/* GET YOUR ORACLE */}
+            <Link
+              href="/free"
+              className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-bold text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-full transition-all duration-300 shadow-lg shadow-green-500/30 whitespace-nowrap"
+            >
+              🔮 GET ORACLE
+            </Link>
+
+            <span className="text-cyan-400/50 text-lg hidden sm:inline">|</span>
+
+            {/* VIP PASS */}
+            <Link
+              href="/vip"
+              className="bg-gradient-to-r from-yellow-500 to-fire-gold hover:from-yellow-400 hover:to-yellow-300 text-black font-bold text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-full transition-all duration-300 shadow-lg shadow-yellow-500/30 whitespace-nowrap"
+            >
+              🎫 VIP PASS
+            </Link>
+
+            {/* PARTNER */}
+            <Link
+              href="/partner"
+              className="bg-gradient-to-r from-pink-600 to-purple-500 hover:from-pink-500 hover:to-purple-400 text-white font-bold text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-full transition-all duration-300 shadow-lg shadow-pink-500/30 whitespace-nowrap"
+            >
+              🌟 PARTNER
+            </Link>
+          </div>
+        </div>
+      </div>
+
       {/* Content */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-3 mb-4 flex-wrap">
-            <Link href="/" className="inline-block">
-              <span className="bg-gray-800/80 hover:bg-gray-700 border border-gray-600 hover:border-gray-500 text-gray-300 hover:text-white text-sm font-medium px-4 py-2 rounded-lg transition-all duration-300">
-                ← Back to Red Horse Oracle
-              </span>
-            </Link>
-            <Link href="/vip" className="inline-block">
-              <span className="bg-fire-gold/20 hover:bg-fire-gold/40 border-2 border-fire-gold text-fire-gold font-bold text-sm px-4 py-2 rounded-lg transition-all duration-300 shadow-lg">
-                🎫 VIP Pass?
-              </span>
-            </Link>
-            <Link href="/partner" className="inline-block">
-              <span className="bg-purple-600/20 hover:bg-purple-600/40 border-2 border-purple-500 text-purple-300 font-bold text-sm px-4 py-2 rounded-lg transition-all duration-300 shadow-lg">
-                🌟 Partner with Us?
-              </span>
-            </Link>
-          </div>
-
           <div className="inline-block bg-red-600 text-white text-sm font-bold px-4 py-1.5 rounded-full mb-3 animate-pulse">
             🔥 2026 IS THE YEAR TO CELEBRATE! 🔥
           </div>
