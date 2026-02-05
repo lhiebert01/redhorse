@@ -202,17 +202,27 @@ export default function Home() {
           </a>
         </div>
 
-        {/* ROW 2: Install App - Right Side */}
+        {/* ROW 2: Install App - Right Side with Hover Tooltip */}
         <div className="flex justify-end px-4 pb-2">
-          <button
-            onClick={() => setShowInstallModal(true)}
-            className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white font-bold text-xs px-3 py-1.5 rounded-full transition-all duration-300 flex items-center gap-1.5 shadow-lg border border-gray-500"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-            </svg>
-            Install App
-          </button>
+          <div className="relative group">
+            <button
+              onClick={() => setShowInstallModal(true)}
+              className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white font-bold text-xs px-3 py-1.5 rounded-full transition-all duration-300 flex items-center gap-1.5 shadow-lg border border-gray-500"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+              </svg>
+              Install App
+            </button>
+            {/* Hover Tooltip */}
+            <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block w-64 z-50">
+              <div className="bg-gray-900 border border-fire-gold/50 text-white text-xs p-3 rounded-lg shadow-xl">
+                <p className="font-bold text-fire-gold mb-1">📲 PWA Install Note:</p>
+                <p className="text-gray-300">To get updates, you&apos;ll need to <span className="text-yellow-400 font-bold">delete and reinstall</span> the app from your home screen.</p>
+              </div>
+              <div className="absolute bottom-0 right-4 transform translate-y-1/2 rotate-45 w-2 h-2 bg-gray-900 border-r border-b border-fire-gold/50"></div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -315,6 +325,13 @@ export default function Home() {
                 <span className="bg-black/50 text-white px-2 py-1 rounded">✓ App Icon</span>
                 <span className="bg-black/50 text-white px-2 py-1 rounded">✓ No Browser Bar</span>
               </div>
+            </div>
+
+            {/* Update Note */}
+            <div className="bg-yellow-900/30 border border-yellow-500/50 rounded-xl p-3 mb-4">
+              <p className="text-yellow-400 text-xs text-center">
+                <span className="font-bold">⚠️ UPDATE NOTE:</span> To get the latest version, <span className="font-bold text-yellow-300">delete and reinstall</span> the app from your home screen.
+              </p>
             </div>
 
             {/* Close Button */}
