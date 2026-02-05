@@ -119,21 +119,19 @@ export default function PartyLandingPage() {
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-4 mb-4">
+          <div className="flex items-center justify-center gap-3 mb-4 flex-wrap">
             <Link href="/" className="inline-block">
-              <span className="text-sm text-gray-400 hover:text-white">
+              <span className="bg-gray-800/80 hover:bg-gray-700 border border-gray-600 hover:border-gray-500 text-gray-300 hover:text-white text-sm font-medium px-4 py-2 rounded-lg transition-all duration-300">
                 ← Back to Red Horse Oracle
               </span>
             </Link>
-            <span className="text-gray-600">|</span>
             <Link href="/vip" className="inline-block">
-              <span className="text-sm text-gray-500 hover:text-fire-gold">
+              <span className="bg-fire-gold/20 hover:bg-fire-gold/40 border-2 border-fire-gold text-fire-gold font-bold text-sm px-4 py-2 rounded-lg transition-all duration-300 shadow-lg">
                 🎫 VIP Pass?
               </span>
             </Link>
-            <span className="text-gray-600">|</span>
             <Link href="/partner" className="inline-block">
-              <span className="text-sm text-gray-500 hover:text-purple-400">
+              <span className="bg-purple-600/20 hover:bg-purple-600/40 border-2 border-purple-500 text-purple-300 font-bold text-sm px-4 py-2 rounded-lg transition-all duration-300 shadow-lg">
                 🌟 Partner with Us?
               </span>
             </Link>

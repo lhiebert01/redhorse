@@ -163,33 +163,38 @@ export default function Home() {
         </svg>
       </a>
 
-      {/* Top Left Buttons - Install App, VIP Pass & Partner */}
-      <div className="absolute top-4 left-4 z-20 flex items-center gap-2 flex-wrap">
-        <button
-          onClick={() => setShowInstallModal(true)}
-          className="bg-fire-gold/90 hover:bg-fire-gold text-black font-bold text-xs px-3 py-2 rounded-lg transition-all duration-300 flex items-center gap-1.5 shadow-lg"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-          </svg>
-          Install App
-        </button>
-        <span className="text-gray-600 hidden sm:inline">|</span>
-        <a
-          href="/vip"
-          className="bg-fire-gold/10 hover:bg-fire-gold/20 border border-fire-gold/30 hover:border-fire-gold text-fire-gold text-sm px-3 py-1.5 rounded-lg transition-all duration-300"
-          title="VIP Pass Entry"
-        >
-          🎫 VIP Pass?
-        </a>
-        <span className="text-gray-600 hidden sm:inline">|</span>
-        <a
-          href="/partner"
-          className="bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 hover:border-purple-500 text-purple-400 text-sm px-3 py-1.5 rounded-lg transition-all duration-300"
-          title="Become an Influencer/Partner"
-        >
-          🌟 Partner with Us?
-        </a>
+      {/* Top Header Bar - Always visible below browser chrome */}
+      <div className="sticky top-0 z-30 w-full bg-black/90 backdrop-blur-sm border-b border-gray-800">
+        <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between flex-wrap gap-2">
+          {/* Left side - Install App */}
+          <button
+            onClick={() => setShowInstallModal(true)}
+            className="bg-fire-gold hover:bg-yellow-400 text-black font-bold text-sm px-4 py-2 rounded-lg transition-all duration-300 flex items-center gap-2 shadow-lg"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+            Install App
+          </button>
+
+          {/* Right side - VIP & Partner */}
+          <div className="flex items-center gap-3">
+            <a
+              href="/vip"
+              className="bg-fire-gold/20 hover:bg-fire-gold/40 border-2 border-fire-gold text-fire-gold font-bold text-sm px-4 py-2 rounded-lg transition-all duration-300 shadow-lg"
+              title="VIP Pass Entry"
+            >
+              🎫 VIP Pass?
+            </a>
+            <a
+              href="/partner"
+              className="bg-purple-600/20 hover:bg-purple-600/40 border-2 border-purple-500 text-purple-300 font-bold text-sm px-4 py-2 rounded-lg transition-all duration-300 shadow-lg"
+              title="Become an Influencer/Partner"
+            >
+              🌟 Partner with Us?
+            </a>
+          </div>
+        </div>
       </div>
 
       {/* Install App Modal */}
