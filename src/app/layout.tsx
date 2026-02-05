@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
 
-// Production domain
-const siteUrl = 'https://redhorseoracle.com';
+// Production domain (with www - site redirects here)
+const siteUrl = 'https://www.redhorseoracle.com';
 
 export const metadata: Metadata = {
   title: 'Red Horse Oracle | Year of the Fire Horse 2026 | AI Zodiac Prophecy',

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-const siteUrl = 'https://redhorseoracle.com';
+const siteUrl = 'https://www.redhorseoracle.com';
 
 export const metadata: Metadata = {
   title: 'Fire Horse Trivia | CNY 2026 Party Game | Red Horse Oracle',
