@@ -119,7 +119,7 @@ export default function PartyLandingPage() {
       <div className="sticky top-0 z-30 w-full bg-gradient-to-r from-blue-900/95 via-purple-900/95 to-blue-900/95 backdrop-blur-sm border-b-2 border-cyan-400 shadow-lg shadow-purple-900/50">
         <div className="max-w-6xl mx-auto px-4 py-3">
           {/* Promo Text */}
-          <p className="text-center text-cyan-300 font-bold text-sm mb-2 animate-pulse">
+          <p className="text-center text-white font-black text-2xl sm:text-3xl mb-3 animate-pulse drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
             🎉 FIRE HORSE TRIVIA — BE THE PARTY LEGEND! 🐴
           </p>
 

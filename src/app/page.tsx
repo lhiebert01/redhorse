@@ -167,7 +167,7 @@ export default function Home() {
       <div className="sticky top-0 z-30 w-full bg-gradient-to-r from-yellow-900/90 via-red-900/95 to-yellow-900/90 backdrop-blur-sm border-b-2 border-fire-gold shadow-lg shadow-red-900/50">
         <div className="max-w-6xl mx-auto px-4 py-3">
           {/* Promo Text */}
-          <p className="text-center text-fire-gold font-bold text-sm mb-2 animate-pulse">
+          <p className="text-center text-white font-black text-2xl sm:text-3xl mb-3 animate-pulse drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
             🔥 2026 IS HERE — TAKE ACTION! 🐴
           </p>
 
