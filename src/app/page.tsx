@@ -163,64 +163,71 @@ export default function Home() {
         </svg>
       </a>
 
-      {/* Top Header Bar - TWO ROWS */}
-      <div className="sticky top-0 z-30 w-full bg-gradient-to-r from-red-900/95 via-black/95 to-red-900/95 backdrop-blur-sm border-b-2 border-fire-gold/50">
-        {/* ROW 1: 4 Main Buttons */}
-        <div className="flex items-center justify-center gap-3 px-4 py-2.5">
-          {/* GET YOUR ORACLE */}
-          <a
-            href="/free"
-            className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-bold text-sm px-5 py-2.5 rounded-full transition-all duration-300 shadow-lg shadow-green-500/30 whitespace-nowrap"
-          >
-            🔮 GET YOUR ORACLE
-          </a>
+      {/* PROMO BANNER - All Buttons in ONE Row */}
+      <div className="sticky top-0 z-30 w-full bg-gradient-to-r from-yellow-900/90 via-red-900/95 to-yellow-900/90 backdrop-blur-sm border-b-2 border-fire-gold shadow-lg shadow-red-900/50">
+        <div className="max-w-6xl mx-auto px-4 py-3">
+          {/* Promo Text */}
+          <p className="text-center text-fire-gold font-bold text-sm mb-2 animate-pulse">
+            🔥 2026 IS HERE — TAKE ACTION! 🐴
+          </p>
 
-          {/* HOST A PARTY */}
-          <a
-            href="/party"
-            className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-bold text-sm px-5 py-2.5 rounded-full transition-all duration-300 shadow-lg shadow-red-500/30 animate-pulse whitespace-nowrap"
-          >
-            🎉 HOST A PARTY
-          </a>
-
-          <span className="text-gray-500 text-xl mx-1">|</span>
-
-          {/* VIP PASS */}
-          <a
-            href="/vip"
-            className="bg-gradient-to-r from-yellow-600 to-fire-gold hover:from-yellow-500 hover:to-yellow-400 text-black font-bold text-sm px-5 py-2.5 rounded-full transition-all duration-300 shadow-lg shadow-yellow-500/30 whitespace-nowrap"
-          >
-            🎫 VIP PASS
-          </a>
-
-          {/* PARTNER */}
-          <a
-            href="/partner"
-            className="bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white font-bold text-sm px-5 py-2.5 rounded-full transition-all duration-300 shadow-lg shadow-purple-500/30 whitespace-nowrap"
-          >
-            🌟 PARTNER
-          </a>
-        </div>
-
-        {/* ROW 2: Install App - Right Side with Hover Tooltip */}
-        <div className="flex justify-end px-4 pb-2">
-          <div className="relative group">
-            <button
-              onClick={() => setShowInstallModal(true)}
-              className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white font-bold text-xs px-3 py-1.5 rounded-full transition-all duration-300 flex items-center gap-1.5 shadow-lg border border-gray-500"
+          {/* All Buttons on ONE ROW */}
+          <div className="flex items-center justify-center gap-2 flex-wrap">
+            {/* GET YOUR ORACLE */}
+            <a
+              href="/free"
+              className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-bold text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-full transition-all duration-300 shadow-lg shadow-green-500/30 whitespace-nowrap"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-              </svg>
-              Install App
-            </button>
-            {/* Hover Tooltip */}
-            <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block w-64 z-50">
-              <div className="bg-gray-900 border border-fire-gold/50 text-white text-xs p-3 rounded-lg shadow-xl">
-                <p className="font-bold text-fire-gold mb-1">📲 PWA Install Note:</p>
-                <p className="text-gray-300">To get updates, you&apos;ll need to <span className="text-yellow-400 font-bold">delete and reinstall</span> the app from your home screen.</p>
+              🔮 GET ORACLE
+            </a>
+
+            {/* HOST A PARTY */}
+            <a
+              href="/party"
+              className="bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-500 hover:to-orange-400 text-white font-bold text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-full transition-all duration-300 shadow-lg shadow-red-500/30 animate-bounce whitespace-nowrap"
+            >
+              🎉 HOST PARTY
+            </a>
+
+            <span className="text-fire-gold/50 text-lg hidden sm:inline">|</span>
+
+            {/* VIP PASS */}
+            <a
+              href="/vip"
+              className="bg-gradient-to-r from-yellow-500 to-fire-gold hover:from-yellow-400 hover:to-yellow-300 text-black font-bold text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-full transition-all duration-300 shadow-lg shadow-yellow-500/30 whitespace-nowrap"
+            >
+              🎫 VIP PASS
+            </a>
+
+            {/* PARTNER */}
+            <a
+              href="/partner"
+              className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-500 hover:to-pink-400 text-white font-bold text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-full transition-all duration-300 shadow-lg shadow-purple-500/30 whitespace-nowrap"
+            >
+              🌟 PARTNER
+            </a>
+
+            <span className="text-fire-gold/50 text-lg hidden sm:inline">|</span>
+
+            {/* INSTALL APP with Tooltip */}
+            <div className="relative group">
+              <button
+                onClick={() => setShowInstallModal(true)}
+                className="bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white font-bold text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-full transition-all duration-300 flex items-center gap-1.5 shadow-lg border border-gray-500 whitespace-nowrap"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                Install
+              </button>
+              {/* Hover Tooltip */}
+              <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block w-64 z-50">
+                <div className="bg-gray-900 border border-fire-gold/50 text-white text-xs p-3 rounded-lg shadow-xl">
+                  <p className="font-bold text-fire-gold mb-1">📲 PWA Install Note:</p>
+                  <p className="text-gray-300">To get updates, you&apos;ll need to <span className="text-yellow-400 font-bold">delete and reinstall</span> the app from your home screen.</p>
+                </div>
+                <div className="absolute bottom-0 right-4 transform translate-y-1/2 rotate-45 w-2 h-2 bg-gray-900 border-r border-b border-fire-gold/50"></div>
               </div>
-              <div className="absolute bottom-0 right-4 transform translate-y-1/2 rotate-45 w-2 h-2 bg-gray-900 border-r border-b border-fire-gold/50"></div>
             </div>
           </div>
         </div>
