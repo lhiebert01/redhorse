@@ -5,29 +5,41 @@ import './globals.css';
 const siteUrl = 'https://redhorseoracle.com';
 
 export const metadata: Metadata = {
-  title: 'Red Horse Oracle | AI-Powered Fire Horse Prophecy 2026',
+  title: 'Red Horse Oracle | Year of the Fire Horse 2026 | AI Zodiac Prophecy',
   description:
-    'The world\'s first Google Gemini 3 Pro zodiac app with COMPLETE Privacy by Design. Get personalized lucky numbers, power mottos, love decrees, or protective mantras. Fire Horse returns every 60 years. $8.88',
+    'Red Horse Oracle: World\'s first Google Gemini 3 Pro Chinese Zodiac app with Privacy by Design. Get your authenticated 888 Limited Edition Fire Horse prophecy for CNY 2026. Lucky numbers, power mottos, love decrees & protective mantras. The Fire Horse returns only once every 60 years (1966→2026→2086). $8.88',
   keywords: [
     'Fire Horse 2026',
+    'Year of the Fire Horse',
+    'Year of the Fire Horse 2026',
     'Chinese Zodiac 2026',
+    'Chinese New Year 2026',
+    'CNY 2026',
     'Lucky Numbers',
     'AI Oracle',
-    'Google Gemini',
+    'Google Gemini 3 Pro',
+    'Gemini 3 Pro',
     'Privacy by Design',
     'Year of the Horse',
-    'Chinese New Year 2026',
     'Fortune Telling',
     'Prophecy',
     'Digital Talisman',
     'Zodiac Forecast',
+    'Red Horse Oracle',
+    'Fire Horse Oracle',
+    '888 Limited Edition',
+    'Authenticated Oracle',
+    'Chinese Zodiac AI',
+    'Fire Horse Prophecy',
+    'Lunar New Year 2026',
+    '丙午年',
   ],
   authors: [{ name: 'Red Horse Oracle' }],
   metadataBase: new URL(siteUrl),
   openGraph: {
-    title: 'Red Horse Oracle | AI Fire Horse Prophecy 2026',
+    title: 'Red Horse Oracle | Year of the Fire Horse 2026 | Google Gemini 3 Pro AI',
     description:
-      'World\'s first Google Gemini 3 Pro zodiac app with COMPLETE Privacy by Design. Fire Horse returns every 60 years. Get your sacred prophecy for $8.88',
+      'Get your authenticated 888 Limited Edition Fire Horse prophecy! World\'s first Google Gemini 3 Pro Chinese Zodiac app with Privacy by Design. CNY 2026 - Fire Horse returns only once every 60 years. $8.88',
     type: 'website',
     locale: 'en_US',
     siteName: 'Red Horse Oracle',
@@ -37,14 +49,14 @@ export const metadata: Metadata = {
         url: '/assets/Fire-Horse-2026-Chart-v3.jpeg',
         width: 1200,
         height: 630,
-        alt: 'Year of the Fire Horse 2026 - All 12 Chinese Zodiac Animals - AI Oracle',
+        alt: 'Year of the Fire Horse 2026 - Red Horse Oracle - Chinese Zodiac AI Prophecy - Google Gemini 3 Pro',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Red Horse Oracle | AI Fire Horse 2026',
-    description: 'World\'s first Gemini 3 Pro zodiac app with Privacy by Design. Fire Horse returns every 60 years. $8.88',
+    title: 'Red Horse Oracle | Year of the Fire Horse 2026 🔥🐴',
+    description: 'Authenticated 888 Limited Edition AI Prophecy! Google Gemini 3 Pro + Privacy by Design. Fire Horse returns only every 60 years. CNY 2026. $8.88',
     images: ['/assets/Fire-Horse-2026-Chart-v3.jpeg'],
     creator: '@redhorseoracle',
   },
@@ -71,12 +83,13 @@ export const metadata: Metadata = {
   },
 };
 
-// Structured Data (JSON-LD) for SEO
+// Structured Data (JSON-LD) for SEO and AI Agents
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   name: 'Red Horse Oracle',
-  description: 'AI-powered Chinese zodiac prophecy generator for the Year of the Fire Horse 2026',
+  alternateName: ['Fire Horse Oracle', 'Red Horse Oracle 2026', 'Fire Horse Prophecy'],
+  description: 'Red Horse Oracle is the world\'s first Google Gemini 3 Pro powered Chinese Zodiac prophecy app with complete Privacy by Design. Get your authenticated 888 Limited Edition Fire Horse prophecy for the Year of the Fire Horse 2026 (CNY 2026). Features include personalized lucky numbers, power mottos, love decrees, and protective mantras. The Fire Horse returns only once every 60 years (1966→2026→2086).',
   url: siteUrl,
   applicationCategory: 'Entertainment',
   operatingSystem: 'Web',
@@ -84,7 +97,8 @@ const structuredData = {
     '@type': 'Offer',
     price: '8.88',
     priceCurrency: 'USD',
-    description: 'Personalized Fire Horse prophecy with AI-generated talisman artwork',
+    description: 'Authenticated 888 Limited Edition Fire Horse prophecy with AI-generated talisman artwork',
+    availability: 'https://schema.org/LimitedAvailability',
   },
   creator: {
     '@type': 'Organization',
@@ -92,14 +106,18 @@ const structuredData = {
     url: siteUrl,
   },
   featureList: [
-    'Google Gemini 3 Pro AI',
-    'Privacy by Design',
+    'Google Gemini 3 Pro AI Image Generation',
+    'Privacy by Design - Zero PII Stored',
+    'Authenticated 888 Limited Edition Oracles',
     'Lucky Numbers Generation',
     'Power Mottos',
     'Love Decrees',
     'Protective Mantras',
     'Chinese Zodiac Forecasts',
+    'Year of the Fire Horse 2026',
+    'CNY 2026 Celebrations',
   ],
+  keywords: 'Fire Horse 2026, Year of the Fire Horse, Chinese Zodiac 2026, CNY 2026, Google Gemini 3 Pro, Privacy by Design, 888 Limited Edition, Red Horse Oracle, AI Oracle, Chinese New Year 2026',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

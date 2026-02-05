@@ -8,7 +8,35 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/', '/admin-test'],
+        disallow: [
+          '/api/',
+          '/admin-test',
+          '/superadmin',
+          '/superadmin/',
+          '/preview-loading',
+          '/collections-grid',
+        ],
+      },
+      // Explicitly allow AI crawlers
+      {
+        userAgent: 'GPTBot',
+        allow: '/',
+        disallow: ['/api/', '/admin-test', '/superadmin'],
+      },
+      {
+        userAgent: 'ChatGPT-User',
+        allow: '/',
+        disallow: ['/api/', '/admin-test', '/superadmin'],
+      },
+      {
+        userAgent: 'Anthropic-AI',
+        allow: '/',
+        disallow: ['/api/', '/admin-test', '/superadmin'],
+      },
+      {
+        userAgent: 'Claude-Web',
+        allow: '/',
+        disallow: ['/api/', '/admin-test', '/superadmin'],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
