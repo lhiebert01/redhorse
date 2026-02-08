@@ -30,7 +30,7 @@ const nextConfig = {
             value: 'redhorse-omega.vercel.app',
           },
         ],
-        destination: 'https://redhorseoracle.com/:path*',
+        destination: 'https://www.redhorseoracle.com/:path*',
         permanent: true,
       },
     ];
