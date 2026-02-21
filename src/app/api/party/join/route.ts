@@ -10,7 +10,7 @@ const supabase = createClient(
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { party_code, nickname, birth_year } = body;
+    const { party_code, nickname, birth_year, birth_month, birth_day } = body;
 
     // Validate inputs
     if (!party_code || party_code.length !== 6) {
@@ -141,11 +141,13 @@ export async function POST(request: NextRequest) {
       console.log('Deleted stale player from old game:', stalePlayer.id);
     }
 
-    // Calculate zodiac if birth year provided
+    // Calculate zodiac if birth year provided (with optional month/day for accuracy)
     let zodiacSign = null;
     let zodiacElement = null;
     if (birth_year && birth_year >= 1920 && birth_year <= 2020) {
-      const zodiac = getZodiacFromYear(birth_year);
+      const month = birth_month && birth_month >= 1 && birth_month <= 12 ? birth_month : undefined;
+      const day = birth_day && birth_day >= 1 && birth_day <= 31 ? birth_day : undefined;
+      const zodiac = getZodiacFromYear(birth_year, month, day);
       zodiacSign = zodiac.sign;
       zodiacElement = zodiac.element;
     }

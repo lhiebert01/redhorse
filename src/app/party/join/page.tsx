@@ -13,6 +13,8 @@ function JoinForm() {
 
   const [partyCode, setPartyCode] = useState(initialCode);
   const [nickname, setNickname] = useState('');
+  const [birthMonth, setBirthMonth] = useState<number | ''>('');
+  const [birthDay, setBirthDay] = useState<number | ''>('');
   const [birthYear, setBirthYear] = useState<number | ''>('');
   const [zodiac, setZodiac] = useState<{ sign: string; element: string } | null>(
     null
@@ -20,15 +22,28 @@ function JoinForm() {
   const [error, setError] = useState('');
   const [isJoining, setIsJoining] = useState(false);
 
-  // Calculate zodiac when birth year changes
+  // Month names for dropdown
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
+  ];
+
+  // Days in selected month (accounts for leap years)
+  const daysInMonth = birthMonth && birthYear
+    ? new Date(Number(birthYear), Number(birthMonth), 0).getDate()
+    : 31;
+
+  // Calculate zodiac when birth date changes
   useEffect(() => {
     if (birthYear && birthYear >= 1920 && birthYear <= 2020) {
-      const result = getZodiacFromYear(birthYear);
+      const month = birthMonth !== '' ? Number(birthMonth) : undefined;
+      const day = birthDay !== '' ? Number(birthDay) : undefined;
+      const result = getZodiacFromYear(birthYear, month, day);
       setZodiac(result);
     } else {
       setZodiac(null);
     }
-  }, [birthYear]);
+  }, [birthYear, birthMonth, birthDay]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,6 +72,8 @@ function JoinForm() {
           party_code: partyCode.toUpperCase(),
           nickname: nickname.trim(),
           birth_year: birthYear || null,
+          birth_month: birthMonth || null,
+          birth_day: birthDay || null,
         }),
       });
 
@@ -132,26 +149,47 @@ function JoinForm() {
         </p>
       </div>
 
-      {/* Birth Year (Optional) */}
+      {/* Birthday (Optional) */}
       <div>
         <label className="block text-sm text-gray-400 mb-2">
-          Birth Year{' '}
+          Birthday{' '}
           <span className="text-gray-600">(optional, for zodiac display)</span>
         </label>
-        <select
-          value={birthYear}
-          onChange={(e) =>
-            setBirthYear(e.target.value ? parseInt(e.target.value) : '')
-          }
-          className="w-full px-4 py-3 bg-black border-2 border-gray-600 rounded-xl text-xl focus:border-blue-400 focus:outline-none"
-        >
-          <option value="">— Skip —</option>
-          {yearOptions.map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
+        <div className="grid grid-cols-3 gap-2">
+          <select
+            value={birthMonth}
+            onChange={(e) => setBirthMonth(e.target.value ? parseInt(e.target.value) : '')}
+            className="w-full px-2 py-3 bg-black border-2 border-gray-600 rounded-xl text-sm focus:border-blue-400 focus:outline-none"
+          >
+            <option value="">Month</option>
+            {monthNames.map((name, i) => (
+              <option key={i + 1} value={i + 1}>{name}</option>
+            ))}
+          </select>
+          <select
+            value={birthDay}
+            onChange={(e) => setBirthDay(e.target.value ? parseInt(e.target.value) : '')}
+            className="w-full px-2 py-3 bg-black border-2 border-gray-600 rounded-xl text-sm focus:border-blue-400 focus:outline-none"
+          >
+            <option value="">Day</option>
+            {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((d) => (
+              <option key={d} value={d}>{d}</option>
+            ))}
+          </select>
+          <select
+            value={birthYear}
+            onChange={(e) => setBirthYear(e.target.value ? parseInt(e.target.value) : '')}
+            className="w-full px-2 py-3 bg-black border-2 border-gray-600 rounded-xl text-sm focus:border-blue-400 focus:outline-none"
+          >
+            <option value="">Year</option>
+            {yearOptions.map((year) => (
+              <option key={year} value={year}>{year}</option>
+            ))}
+          </select>
+        </div>
+        <p className="text-xs text-gray-600 mt-1">
+          Month &amp; day ensure accurate zodiac for Jan/Feb birthdays
+        </p>
 
         {/* Zodiac Preview */}
         {zodiac && (

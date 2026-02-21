@@ -78,6 +78,8 @@ export default function SoloPlayPage() {
 
   // Player setup
   const [nickname, setNickname] = useState('');
+  const [birthMonth, setBirthMonth] = useState<number | ''>('');
+  const [birthDay, setBirthDay] = useState<number | ''>('');
   const [birthYear, setBirthYear] = useState<number | ''>('');
   const [timerSetting, setTimerSetting] = useState<TimerOption>(30);
 
@@ -87,6 +89,17 @@ export default function SoloPlayPage() {
   for (let year = currentYear - 5; year >= 1920; year--) {
     yearOptions.push(year);
   }
+
+  // Month names for dropdown
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
+  ];
+
+  // Days in selected month (accounts for leap years)
+  const daysInMonth = birthMonth && birthYear
+    ? new Date(Number(birthYear), Number(birthMonth), 0).getDate()
+    : 31;
   const [hasJoined, setHasJoined] = useState(false);
   const [zodiacInfo, setZodiacInfo] = useState<{ sign: string; element: string } | null>(null);
 
@@ -178,7 +191,7 @@ export default function SoloPlayPage() {
     }
   }, [partyCode]);
 
-  // Handle nickname and birth year submission
+  // Handle nickname and birth date submission
   const handleJoin = useCallback(() => {
     if (!nickname.trim()) return;
 
@@ -186,13 +199,15 @@ export default function SoloPlayPage() {
     if (birthYear !== '') {
       const year = typeof birthYear === 'number' ? birthYear : parseInt(String(birthYear));
       if (!isNaN(year) && year >= 1900 && year <= new Date().getFullYear()) {
-        const zodiac = getZodiacFromYear(year);
+        const month = birthMonth !== '' ? Number(birthMonth) : undefined;
+        const day = birthDay !== '' ? Number(birthDay) : undefined;
+        const zodiac = getZodiacFromYear(year, month, day);
         setZodiacInfo(zodiac);
       }
     }
 
     setHasJoined(true);
-  }, [nickname, birthYear]);
+  }, [nickname, birthYear, birthMonth, birthDay]);
 
   // Start a new game
   const startGame = useCallback(async () => {
@@ -655,18 +670,43 @@ export default function SoloPlayPage() {
 
               <div>
                 <label className="block text-sm text-gray-400 mb-2">
-                  Birth Year (for zodiac)
+                  Birthday <span className="text-gray-600">(optional, for zodiac)</span>
                 </label>
-                <select
-                  value={birthYear}
-                  onChange={(e) => setBirthYear(e.target.value ? parseInt(e.target.value) : '')}
-                  className="w-full px-4 py-3 bg-black border-2 border-gray-600 rounded-xl text-xl focus:border-purple-400 focus:outline-none"
-                >
-                  <option value="">— Select Year —</option>
-                  {yearOptions.map((year) => (
-                    <option key={year} value={year}>{year}</option>
-                  ))}
-                </select>
+                <div className="grid grid-cols-3 gap-2">
+                  <select
+                    value={birthMonth}
+                    onChange={(e) => setBirthMonth(e.target.value ? parseInt(e.target.value) : '')}
+                    className="w-full px-2 py-3 bg-black border-2 border-gray-600 rounded-xl text-sm focus:border-purple-400 focus:outline-none"
+                  >
+                    <option value="">Month</option>
+                    {monthNames.map((name, i) => (
+                      <option key={i + 1} value={i + 1}>{name}</option>
+                    ))}
+                  </select>
+                  <select
+                    value={birthDay}
+                    onChange={(e) => setBirthDay(e.target.value ? parseInt(e.target.value) : '')}
+                    className="w-full px-2 py-3 bg-black border-2 border-gray-600 rounded-xl text-sm focus:border-purple-400 focus:outline-none"
+                  >
+                    <option value="">Day</option>
+                    {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((d) => (
+                      <option key={d} value={d}>{d}</option>
+                    ))}
+                  </select>
+                  <select
+                    value={birthYear}
+                    onChange={(e) => setBirthYear(e.target.value ? parseInt(e.target.value) : '')}
+                    className="w-full px-2 py-3 bg-black border-2 border-gray-600 rounded-xl text-sm focus:border-purple-400 focus:outline-none"
+                  >
+                    <option value="">Year</option>
+                    {yearOptions.map((year) => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>
+                </div>
+                <p className="text-xs text-gray-600 mt-1">
+                  Month &amp; day ensure accurate zodiac for Jan/Feb birthdays
+                </p>
               </div>
 
               <button
