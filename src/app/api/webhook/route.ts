@@ -10,7 +10,7 @@ import { withRetry } from '@/lib/utils/retry';
 import { FocusMode } from '@/constants/modes';
 import { EDITION_CONFIG } from '@/constants/editions';
 import { ZodiacAnimal } from '@/constants/zodiac-data';
-import { PassType, generatePartyCode } from '@/types/party';
+import { PassType, generatePartyCode, PASS_CONFIGS } from '@/types/party';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60; // Allow up to 60 seconds for AI generation
@@ -353,11 +353,13 @@ export async function POST(request: Request) {
 async function handlePartyPassPurchase(session: any, supabase: any) {
   try {
     const passType = session.metadata.pass_type as PassType;
-    const durationHours = parseInt(session.metadata.duration_hours || '24');
-    const maxGames = parseInt(session.metadata.max_games || '5');
+    const passConfig = PASS_CONFIGS[passType];
+    const durationHours = parseInt(session.metadata.duration_hours || String(passConfig?.durationHours || 24));
+    const maxGames = parseInt(session.metadata.max_games || String(passConfig?.maxGames || 5));
+    const isSolo = passConfig?.isSolo ?? false;
     const email = session.customer_details?.email || '';
 
-    console.log(`Processing party pass purchase: ${passType} for ${email}`);
+    console.log(`Processing party pass purchase: ${passType}${isSolo ? ' (SOLO)' : ''} for ${email}`);
 
     // Check for existing pass (idempotency)
     const { data: existingPass } = await supabase
@@ -404,6 +406,10 @@ async function handlePartyPassPurchase(session: any, supabase: any) {
     const expiresAt = new Date();
     expiresAt.setHours(expiresAt.getHours() + durationHours);
 
+    // PRE-GENERATE ALL QUESTION SETS AT PURCHASE TIME
+    const questionsPerGame = 20;
+    const questionSets = generateQuestionSets(maxGames, questionsPerGame);
+
     // Create party pass record
     const { data: pass, error: insertError } = await supabase
       .from('party_passes')
@@ -416,11 +422,14 @@ async function handlePartyPassPurchase(session: any, supabase: any) {
         expires_at: expiresAt.toISOString(),
         games_remaining: maxGames,
         games_total: maxGames,
+        games_played: 0,
+        question_sets: questionSets,
         settings: {
           timer_seconds: 30,
-          questions_per_game: 20,
+          questions_per_game: questionsPerGame,
         },
         is_active: true,
+        is_solo: isSolo,
       })
       .select()
       .single();
@@ -435,23 +444,25 @@ async function handlePartyPassPurchase(session: any, supabase: any) {
       return NextResponse.json({ error: 'Failed to create party pass' }, { status: 500 });
     }
 
-    console.log(`Party pass created: ${partyCode} (${passType}) - expires ${expiresAt.toISOString()}`);
+    console.log(`Party pass created: ${partyCode} (${passType}${isSolo ? ', solo' : ''}) - expires ${expiresAt.toISOString()}`);
 
-    // Create initial game in lobby state
-    const questionIds = generateRandomQuestionIds(20);
-    const { error: gameError } = await supabase
-      .from('party_games')
-      .insert({
-        party_pass_id: pass.id,
-        timer_seconds: 30,
-        questions_per_game: 20,
-        question_ids: questionIds,
-        status: 'lobby',
-      });
+    // For party passes (not solo), create initial game in lobby state
+    // Solo players create the game when they start playing
+    if (!isSolo) {
+      const { error: gameError } = await supabase
+        .from('party_games')
+        .insert({
+          party_pass_id: pass.id,
+          timer_seconds: 30,
+          questions_per_game: questionsPerGame,
+          question_ids: questionSets[0],
+          game_number: 1,
+          status: 'lobby',
+        });
 
-    if (gameError) {
-      console.error('Failed to create initial game:', gameError);
-      // Don't fail the webhook - pass is created, game can be created later
+      if (gameError) {
+        console.error('Failed to create initial game:', gameError);
+      }
     }
 
     return NextResponse.json({
@@ -465,19 +476,31 @@ async function handlePartyPassPurchase(session: any, supabase: any) {
   }
 }
 
-// Generate random question IDs for party games
-function generateRandomQuestionIds(count: number): number[] {
+// Generate all question sets for a party pass (non-redundant across games)
+function generateQuestionSets(numGames: number, questionsPerGame: number = 20): number[][] {
   const totalQuestions = 400;
-  const ids: number[] = [];
-  const used = new Set<number>();
+  const totalNeeded = numGames * questionsPerGame;
 
-  while (ids.length < count && ids.length < totalQuestions) {
-    const id = Math.floor(Math.random() * totalQuestions) + 1;
-    if (!used.has(id)) {
-      used.add(id);
-      ids.push(id);
-    }
+  // Fisher-Yates shuffle for true randomness
+  const available = Array.from({ length: totalQuestions }, (_, i) => i + 1);
+  for (let i = available.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [available[i], available[j]] = [available[j], available[i]];
   }
 
-  return ids;
+  const allIds = available.slice(0, Math.min(totalNeeded, totalQuestions));
+
+  // If we need more than 400, cycle
+  while (allIds.length < totalNeeded) {
+    allIds.push(available[allIds.length % totalQuestions]);
+  }
+
+  // Split into sets
+  const questionSets: number[][] = [];
+  for (let i = 0; i < numGames; i++) {
+    const start = i * questionsPerGame;
+    questionSets.push(allIds.slice(start, start + questionsPerGame));
+  }
+
+  return questionSets;
 }
