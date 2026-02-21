@@ -91,6 +91,8 @@ export default function PartyLandingPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSoloLoading, setIsSoloLoading] = useState(false);
   const [existingSoloCode, setExistingSoloCode] = useState<string | null>(null);
+  const [soloCodeInput, setSoloCodeInput] = useState('');
+  const [showSoloCodeInput, setShowSoloCodeInput] = useState(false);
 
   const handleHostClick = async () => {
     setIsLoading(true);
@@ -367,6 +369,60 @@ export default function PartyLandingPage() {
             </div>
           </div>
         </div>
+
+        {/* Resume Solo Pass */}
+        {!existingSoloCode && (
+          <div className="mb-8 text-center">
+            {!showSoloCodeInput ? (
+              <button
+                onClick={() => setShowSoloCodeInput(true)}
+                className="text-purple-400 hover:text-purple-300 font-bold text-sm underline"
+              >
+                Already have a Solo Pass? Enter your code to resume →
+              </button>
+            ) : (
+              <div className="bg-purple-900/30 border border-purple-500/40 rounded-xl p-4 max-w-md mx-auto">
+                <div className="text-sm font-bold text-purple-300 mb-3">Enter Your Solo Pass Code</div>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (soloCodeInput.length === 6) {
+                      window.location.href = `/party/solo/${soloCodeInput.toUpperCase()}`;
+                    }
+                  }}
+                  className="flex gap-2"
+                >
+                  <input
+                    type="text"
+                    value={soloCodeInput}
+                    onChange={(e) => setSoloCodeInput(e.target.value.toUpperCase().slice(0, 6))}
+                    placeholder="ABC123"
+                    className="flex-1 px-4 py-3 bg-black border-2 border-purple-600 rounded-xl text-center text-2xl font-mono tracking-widest focus:border-purple-400 focus:outline-none"
+                    maxLength={6}
+                    autoFocus
+                  />
+                  <button
+                    type="submit"
+                    disabled={soloCodeInput.length !== 6}
+                    className={`px-6 py-3 rounded-xl font-bold transition-all ${
+                      soloCodeInput.length === 6
+                        ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500'
+                        : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                    }`}
+                  >
+                    GO →
+                  </button>
+                </form>
+                <button
+                  onClick={() => { setShowSoloCodeInput(false); setSoloCodeInput(''); }}
+                  className="mt-2 text-xs text-gray-500 hover:text-gray-300"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Divider */}
         <div className="flex items-center gap-4 mb-8">
