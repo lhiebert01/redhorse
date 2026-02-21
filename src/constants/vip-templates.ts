@@ -9,11 +9,11 @@ export const VIP_MESSAGE_TEMPLATES: MessageTemplate[] = [
     name: 'Instagram DM - Local Influencer',
     description: 'Friendly local angle for KC/local influencers',
     platform: 'instagram',
-    body: `Hi! I'm a local KC developer. I built a multiplayer party game (Fire Horse Trivia) specifically for the rare overlap of Super Bowl LX and the Year of the Fire Horse.
+    body: `Hi! I'm a local KC developer. I built a multiplayer party game (Fire Horse Trivia) for the Year of the Fire Horse 2026 — which only happens once every 60 years.
 
-It's like "Kahoot" for your watch party—perfect for killing time before kickoff this Sunday or for Lunar New Year dinners next week.
+It's perfect for game nights, Lunar New Year gatherings, or just a fun group challenge.
 
-I created a free VIP Host Pass just for you. I'd love for you to use it to host a game for your actual friends this weekend.
+I created a free VIP Host Pass just for you. I'd love for you to use it to host a game with your friends.
 
 Your VIP Code: {{CODE}}
 Redeem here: redhorseoracle.com/vip
@@ -29,7 +29,7 @@ Cheers!`,
     platform: 'instagram',
     body: `Hey {{NAME}} - huge fan of your content!
 
-I built a brutally hard trivia game for the "Year of the Fire Horse" (which overlaps with the Super Bowl this year).
+I built a brutally hard trivia game for the "Year of the Fire Horse" — a once-in-60-years zodiac event happening RIGHT NOW in 2026.
 
 The Pitch: You play a Solo Round and try to beat the AI's leaderboard. If you fail, you have to roast yourself. 😂
 
@@ -47,7 +47,7 @@ If you vibe with the chaos, I have budget for a quick Skit/Challenge video. Let 
     subject: 'Paid Content Idea: Man vs. The Impossible Quiz 🤖',
     body: `Hey {{NAME}} - huge fan.
 
-I built a brutally hard trivia game for the "Year of the Fire Horse" (which overlaps with the Super Bowl this year).
+I built a brutally hard trivia game for the "Year of the Fire Horse" — a once-in-60-years zodiac event happening RIGHT NOW in 2026 (next one isn't until 2086!).
 
 The Pitch: You play a Solo Round and try to beat the AI's leaderboard. If you fail, you have to roast yourself.
 
@@ -55,24 +55,24 @@ Here is a free pass to test it:
 VIP Code: {{CODE}}
 Link: redhorseoracle.com/vip (Select Solo Play)
 
-If you vibe with the chaos, I have budget for a quick Skit/Challenge video for this Sunday. Let me know!
+If you vibe with the chaos, I have budget for a quick Skit/Challenge video. Let me know!
 
 Best,
 Lindsay`,
   },
   {
-    id: 'cny_followup',
-    name: 'Follow-up - CNY Angle',
-    description: 'Follow-up message pivoting to Chinese New Year',
+    id: 'followup',
+    name: 'Follow-up - Reminder',
+    description: 'Friendly follow-up reminder about unused VIP code',
     platform: 'universal',
-    body: `Hope you survived the Super Bowl! 🏈
+    body: `Hey {{NAME}}! Just a quick follow-up.
 
-Just a reminder that the code I sent also works for Chinese New Year (Feb 17) if you need a fun activity for next week.
+The Year of the Fire Horse is happening NOW and only comes around every 60 years (next one: 2086!). Perfect timing for some unique content.
 
 Your VIP Code: {{CODE}}
 Link: redhorseoracle.com/vip
 
-The Fire Horse only comes around every 60 years, so this is a rare content opportunity!`,
+It takes about 2 minutes to try. Would love to hear what you think!`,
   },
   {
     id: 'custom',
@@ -81,7 +81,7 @@ The Fire Horse only comes around every 60 years, so this is a rare content oppor
     platform: 'universal',
     body: `Hi {{NAME}}!
 
-I'd love to invite you to try Red Horse Oracle - a Fire Horse themed experience for 2026.
+I'd love to invite you to try Red Horse Oracle — a Fire Horse themed experience for the once-in-60-years Year of the Fire Horse 2026.
 
 Your exclusive VIP Code: {{CODE}}
 Redeem at: redhorseoracle.com/vip

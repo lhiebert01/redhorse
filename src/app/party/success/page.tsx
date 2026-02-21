@@ -98,72 +98,22 @@ function SuccessContent() {
   const joinLink = `https://redhorseoracle.com/party/join?code=${pass.party_code}`;
   const shareMessage = `🎉 Join my Fire Horse Trivia party!\n\n🔥 Direct Link: ${joinLink}\n\nOr go to: redhorseoracle.com/party\n📱 Enter code: ${pass.party_code}\n\n#FireHorse2026 #CNY2026`;
 
-  // Solo pass - different UI
+  // Solo pass - save to localStorage and auto-redirect straight into the game
   if (isSolo) {
+    try {
+      localStorage.setItem('solo_pass_code', pass.party_code);
+      localStorage.setItem('solo_pass_expires', pass.expires_at);
+    } catch {}
+    router.replace(`/party/solo/${pass.party_code}`);
     return (
-      <div className="text-center py-10">
-        <div className="text-6xl mb-4">🎯</div>
-        <h1 className="text-3xl font-bold mb-2">Solo Pass Ready!</h1>
-        <p className="text-gray-400 mb-8">
-          Your {passConfig.name} is activated
-        </p>
-
-        {/* Party Code Display */}
-        <div className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-2xl p-8 mb-8 max-w-md mx-auto border border-purple-500/30">
-          <div className="text-sm text-gray-400 mb-2">Your Solo Play Code</div>
-          <div className="text-5xl font-mono font-bold tracking-widest text-purple-400 mb-4">
-            {pass.party_code}
-          </div>
-          <div className="text-sm text-gray-400">
-            Save this code to access your games
-          </div>
-        </div>
-
-        {/* Pass Details */}
-        <div className="bg-gray-900/50 rounded-xl p-6 mb-8 max-w-md mx-auto">
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div>
-              <div className="text-2xl font-bold text-yellow-400">
-                {passConfig.durationHours}h
-              </div>
-              <div className="text-xs text-gray-400">Duration</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-yellow-400">
-                {pass.games_remaining}
-              </div>
-              <div className="text-xs text-gray-400">Games Left</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-yellow-400">20</div>
-              <div className="text-xs text-gray-400">Questions/Game</div>
-            </div>
-          </div>
-          <div className="mt-4 text-sm text-gray-400">
-            Expires in: {timeRemaining.hours}h {timeRemaining.minutes}m
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex flex-col gap-4 max-w-md mx-auto">
-          <Link
-            href={`/party/solo/${pass.party_code}`}
-            className="py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-xl font-bold text-xl shadow-lg hover:shadow-purple-500/30"
-          >
-            START PLAYING →
-          </Link>
-
-          <Link
-            href="/party"
-            className="py-3 bg-gray-700 hover:bg-gray-600 rounded-xl font-bold"
-          >
-            Back to Party Home
-          </Link>
-        </div>
-
-        {/* Tips */}
-        <div className="mt-8 text-sm text-gray-500 max-w-md mx-auto">
-          <p>💡 Tip: You can play at your own pace - choose timed or manual mode!</p>
+      <div className="text-center py-20">
+        <div className="text-6xl animate-bounce mb-4">🎯</div>
+        <h1 className="text-2xl font-bold mb-2">Starting your game...</h1>
+        <p className="text-gray-400">Taking you to Solo Play now</p>
+        <div className="mt-6 flex justify-center gap-2">
+          <div className="w-3 h-3 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+          <div className="w-3 h-3 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+          <div className="w-3 h-3 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
         </div>
       </div>
     );

@@ -52,10 +52,45 @@ export default function PartyLandingPage() {
 
     return () => clearInterval(interval);
   }, []);
+
+  // Check for existing solo pass in localStorage
+  useEffect(() => {
+    try {
+      const savedCode = localStorage.getItem('solo_pass_code');
+      const savedExpires = localStorage.getItem('solo_pass_expires');
+      if (savedCode && savedExpires) {
+        const expiresAt = new Date(savedExpires);
+        if (expiresAt > new Date()) {
+          // Pass still valid - verify it's still active via API
+          fetch(`/api/party/pass-by-code?code=${encodeURIComponent(savedCode)}`)
+            .then(res => res.ok ? res.json() : null)
+            .then(data => {
+              if (data && data.is_solo && data.games_remaining > 0 && new Date(data.expires_at) > new Date()) {
+                setExistingSoloCode(savedCode);
+              } else {
+                // Pass exhausted or expired - clear localStorage
+                localStorage.removeItem('solo_pass_code');
+                localStorage.removeItem('solo_pass_expires');
+              }
+            })
+            .catch(() => {
+              // Network error - still show the button based on localStorage
+              setExistingSoloCode(savedCode);
+            });
+        } else {
+          // Expired - clean up
+          localStorage.removeItem('solo_pass_code');
+          localStorage.removeItem('solo_pass_expires');
+        }
+      }
+    } catch {}
+  }, []);
+
   const [partyCode, setPartyCode] = useState('');
   const [showJoinForm, setShowJoinForm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSoloLoading, setIsSoloLoading] = useState(false);
+  const [existingSoloCode, setExistingSoloCode] = useState<string | null>(null);
 
   const handleHostClick = async () => {
     setIsLoading(true);
@@ -296,18 +331,39 @@ export default function PartyLandingPage() {
               </div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-purple-300 mb-2">{SOLO_PASS.priceDisplay}</div>
-              <button
-                onClick={handleSoloClick}
-                disabled={isSoloLoading}
-                className={`px-8 py-4 rounded-xl font-bold text-lg transition-all ${
-                  isSoloLoading
-                    ? 'bg-gray-600 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 shadow-lg hover:shadow-purple-500/30'
-                }`}
-              >
-                {isSoloLoading ? 'Starting...' : 'PLAY SOLO →'}
-              </button>
+              {existingSoloCode ? (
+                <>
+                  <div className="text-sm font-bold text-green-400 mb-2">You have an active pass!</div>
+                  <a
+                    href={`/party/solo/${existingSoloCode}`}
+                    className="block px-8 py-4 rounded-xl font-bold text-lg transition-all bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 shadow-lg hover:shadow-green-500/30 mb-3"
+                  >
+                    CONTINUE PLAYING →
+                  </a>
+                  <button
+                    onClick={handleSoloClick}
+                    disabled={isSoloLoading}
+                    className="text-sm text-gray-400 hover:text-white underline"
+                  >
+                    {isSoloLoading ? 'Starting...' : 'Buy another pass'}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div className="text-4xl font-bold text-purple-300 mb-2">{SOLO_PASS.priceDisplay}</div>
+                  <button
+                    onClick={handleSoloClick}
+                    disabled={isSoloLoading}
+                    className={`px-8 py-4 rounded-xl font-bold text-lg transition-all ${
+                      isSoloLoading
+                        ? 'bg-gray-600 cursor-not-allowed'
+                        : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 shadow-lg hover:shadow-purple-500/30'
+                    }`}
+                  >
+                    {isSoloLoading ? 'Starting...' : 'PLAY SOLO →'}
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>

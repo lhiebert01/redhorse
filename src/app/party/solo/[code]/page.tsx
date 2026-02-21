@@ -142,6 +142,12 @@ export default function SoloPlayPage() {
 
         // Check if pass is still valid
         if (!isPassValid(passData)) {
+          // Clear localStorage since pass is no longer usable
+          try {
+            localStorage.removeItem('solo_pass_code');
+            localStorage.removeItem('solo_pass_expires');
+          } catch {}
+
           if (passData.games_remaining <= 0) {
             setError('This pass has no games remaining.');
           } else if (new Date(passData.expires_at) < new Date()) {
@@ -153,6 +159,12 @@ export default function SoloPlayPage() {
         }
 
         setPass(passData);
+
+        // Save to localStorage so /party page can detect active pass
+        try {
+          localStorage.setItem('solo_pass_code', partyCode);
+          localStorage.setItem('solo_pass_expires', passData.expires_at);
+        } catch {}
       } catch (err) {
         console.error('Error fetching pass:', err);
         setError('Failed to load pass. Please try again.');

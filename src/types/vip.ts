@@ -54,7 +54,7 @@ export interface VIPValidationResult {
 }
 
 // Message template types
-export type MessageTemplateType = 'instagram_local' | 'instagram_creator' | 'email_pitch' | 'cny_followup' | 'custom';
+export type MessageTemplateType = 'instagram_local' | 'instagram_creator' | 'email_pitch' | 'cny_followup' | 'followup' | 'custom';
 
 export interface MessageTemplate {
   id: MessageTemplateType;
