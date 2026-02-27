@@ -9,4 +9,4 @@ export const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 // Model constants - using Gemini 3.1 Pro for high quality
 export const TEXT_MODEL = 'gemini-3.1-pro-preview';
-export const IMAGE_MODEL = 'gemini-3-pro-image-preview';
+export const IMAGE_MODEL = 'gemini-3.1-pro-image-preview';
