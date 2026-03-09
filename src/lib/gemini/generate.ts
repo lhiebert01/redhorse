@@ -1,4 +1,4 @@
-import { ai, TEXT_MODEL, IMAGE_MODEL } from './client';
+import { ai, TEXT_MODELS, IMAGE_MODEL } from './client';
 import { buildTextPrompt, buildImagePrompt } from './prompts';
 import { GenerateOptions, GenerationResult } from '@/types/prophecy';
 import { PRODUCT_MODES } from '@/constants/modes';
@@ -36,22 +36,34 @@ export async function generateProphecy(options: GenerateOptions): Promise<Genera
       accurateMainText = 'DESTINY AWAITS';
   }
 
-  // Step 1: Generate text content using Gemini 3.1 Pro
-  // AI will generate the full_reading (personalized prophecy), but main_text uses our accurate data
-  console.log('Generating text content with Gemini 3.1 Pro...');
+  // Step 1: Generate text content — Flash first for speed, Pro as fallback
   const textPrompt = buildTextPrompt(options);
+  let textResponseText: string | undefined;
+  let lastTextError: Error | null = null;
 
-  const textResponse = await ai.models.generateContent({
-    model: TEXT_MODEL,
-    contents: textPrompt,
-    config: {
-      responseMimeType: 'application/json',
-    },
-  });
+  for (const model of TEXT_MODELS) {
+    try {
+      console.log(`[Text] Trying model: ${model}`);
+      const textResponse = await ai.models.generateContent({
+        model,
+        contents: textPrompt,
+        config: {
+          responseMimeType: 'application/json',
+        },
+      });
 
-  const textResponseText = textResponse.text;
+      textResponseText = textResponse.text;
+      if (!textResponseText) throw new Error('No text returned from Gemini');
+      console.log(`[Text] Success with model: ${model}`);
+      break;
+    } catch (err) {
+      console.error(`[Text] Model ${model} failed:`, err instanceof Error ? err.message : err);
+      lastTextError = err instanceof Error ? err : new Error(String(err));
+    }
+  }
+
   if (!textResponseText) {
-    throw new Error('No text returned from Gemini');
+    throw lastTextError || new Error('All text models failed');
   }
 
   // Parse JSON from response
