@@ -114,8 +114,8 @@ Each talisman is a **one-of-a-kind masterpiece** of Chinese zodiac artwork, pers
 | Database | Supabase (PostgreSQL) |
 | Storage | Supabase Storage |
 | Payments | Stripe Payment Links (LIVE) |
-| AI Text | Google Gemini 3 Pro |
-| AI Images | Google Gemini 3 Pro (Native) |
+| AI Text | Google Gemini (`gemini-3-flash-preview`) |
+| AI Images | Google Gemini (`gemini-3-pro-image-preview`) |
 | Analytics | Google Analytics 4 (GA4) |
 | Hosting | Vercel Edge Network |
 
@@ -258,7 +258,7 @@ All 12 animals with authentic representations:
 - **[docs/FEATURES.md](./docs/FEATURES.md)** - Detailed feature documentation
 - **[docs/DESIGN.md](./docs/DESIGN.md)** - Design philosophy and UX principles
 - **[docs/ANNOUNCEMENT.md](./docs/ANNOUNCEMENT.md)** - Press release and introduction
-- **[docs/RELEASE-NOTES.md](./docs/RELEASE-NOTES.md)** - Version history and changelog (v1.5.0)
+- **[docs/RELEASE-NOTES.md](./docs/RELEASE-NOTES.md)** - Version history and changelog (v1.6.0)
 
 ## Deployment
 

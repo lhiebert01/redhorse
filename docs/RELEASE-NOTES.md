@@ -1,5 +1,93 @@
 # Red Horse Oracle - Release Notes
 
+## Version 1.6.0 - Gemini Model Migration & Webhook Fix (March 9, 2026)
+
+**Status:** PRODUCTION LIVE
+**Release Date:** March 9, 2026
+
+---
+
+### Highlights
+
+Emergency fix after Google deprecated `gemini-3-pro-preview` (text model) on March 9, 2026. The image model (`gemini-3-pro-image-preview`) was NOT deprecated — only the text model. An incorrect automated fix broke the webhook for ~9 hours by converting the single model export to an array with a fallback loop, which crashed the Vercel serverless function.
+
+---
+
+### Root Cause
+
+Google deprecated the text model `gemini-3-pro-preview`. A Claude Code session attempted to fix this by:
+1. Changing `TEXT_MODEL` (string) to `TEXT_MODELS` (array) in `client.ts`
+2. Adding a for-loop fallback pattern in `generate.ts`
+3. Incorrectly changing `IMAGE_MODEL` to `gemini-3.1-pro-image-preview` (does not exist)
+
+This caused the Vercel function to crash with empty `""` responses on every Stripe webhook delivery. Two customer orders were stuck as "processing" in Supabase and required manual cleanup.
+
+---
+
+### Fixes Applied
+
+#### Text Model Migration
+- `TEXT_MODEL` changed from `gemini-3-pro-preview` to `gemini-3-flash-preview`
+- Kept as a **single string export** — no arrays, no fallback chains
+
+#### Image Model Preserved
+- `IMAGE_MODEL` remains `gemini-3-pro-image-preview` (was never deprecated)
+- Reverted incorrect change to non-existent `gemini-3.1-pro-image-preview`
+
+#### Webhook Retry Logic
+- Added retry logic for failed prophecy records (status `'failed'` → delete and re-process)
+- Existing "processing" records still skip to prevent race conditions
+
+#### Fixed Deprecated Meta Tag
+- Changed `apple-mobile-web-app-capable` to `mobile-web-app-capable` in `layout.tsx`
+
+#### CLAUDE.md Updated
+- Added critical "DO NOT BREAK" instructions at the top of CLAUDE.md
+- Documents exact model names, what not to change, and why
+- Describes the March 9 incident to prevent recurrence
+
+---
+
+### Modified Files
+
+| File | Changes |
+|------|---------|
+| `src/lib/gemini/client.ts` | `TEXT_MODEL` = `gemini-3-flash-preview` (single string, not array) |
+| `src/lib/gemini/generate.ts` | Reverted to single model call (no for-loop) |
+| `src/app/api/webhook/route.ts` | Added retry logic for failed prophecy records |
+| `src/app/layout.tsx` | Fixed deprecated meta tag |
+| `CLAUDE.md` | Added critical model configuration rules and incident documentation |
+
+---
+
+### Correct Model Configuration (as of March 9, 2026)
+
+```typescript
+// src/lib/gemini/client.ts
+export const TEXT_MODEL = 'gemini-3-flash-preview';       // Was gemini-3-pro-preview (deprecated)
+export const IMAGE_MODEL = 'gemini-3-pro-image-preview';  // NOT deprecated, still works
+```
+
+---
+
+### Lessons Learned
+
+1. **Never convert single exports to arrays** — changes the import contract across files
+2. **Never guess model names** — `gemini-3.1-pro-image-preview` does not exist
+3. **Webhook functions crash silently** — empty response `""` means the function died during init or execution
+4. **Stuck "processing" records block retries** — Stripe resends webhooks, but idempotency check skips them
+5. **Always ask before changing model configuration** — the app processes real payments
+
+---
+
+### Database Cleanup Required
+
+After the fix, two stuck records needed manual deletion from Supabase `prophecies` table:
+- Records with status `'processing'` and null `main_text`/`image_url`
+- After deletion, resending the Stripe webhook successfully generated the prophecies
+
+---
+
 ## Version 1.5.0 - Google Analytics & Admin Enhancements (January 20, 2026)
 
 **Status:** PRODUCTION LIVE
@@ -592,6 +680,7 @@ This release marks the **production launch** of Red Horse Oracle, the world's fi
 
 | Version | Date | Description |
 |---------|------|-------------|
+| 1.6.0 | Mar 9, 2026 | Gemini model migration, webhook crash fix, CLAUDE.md safety rules |
 | 1.5.0 | Jan 20, 2026 | Google Analytics 4, Admin enhancements, date validation |
 | 1.4.0 | Jan 19, 2026 | Celebrity quotes, viral share content, quote descriptions |
 | 1.3.0 | Jan 18, 2026 | Rotating backgrounds, LinkedIn share, marketing assets |

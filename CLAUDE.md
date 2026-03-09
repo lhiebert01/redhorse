@@ -1,5 +1,68 @@
 # Claude Code Guide for Red Horse Oracle
 
+## STOP — READ THIS BEFORE TOUCHING ANY CODE
+
+### The #1 Rule: DO NOT CHANGE WORKING CODE WITHOUT EXPLICIT USER APPROVAL
+
+This application is **LIVE IN PRODUCTION** processing real Stripe payments ($8.88 each). Breaking this app means **real customers cannot receive the product they paid for**. Webhook failures cause cascading problems: stuck Supabase records, failed Stripe retries, and hours of manual cleanup.
+
+### Gemini Model Configuration — NEVER CHANGE WITHOUT ASKING
+
+These are the **exact model names** that work. They are correct as of March 9, 2026.
+
+| Purpose | Model ID | File |
+|---------|----------|------|
+| Text Generation | `gemini-3-flash-preview` | `src/lib/gemini/client.ts` |
+| Image Generation | `gemini-3-pro-image-preview` | `src/lib/gemini/client.ts` |
+
+**Location:** `src/lib/gemini/client.ts` exports `TEXT_MODEL` and `IMAGE_MODEL`.
+
+**CRITICAL RULES:**
+1. `TEXT_MODEL` is a **single string**, NOT an array. Do NOT convert it to an array or add fallback chains.
+2. `IMAGE_MODEL` uses `gemini-3-pro-image-preview`. There is NO `gemini-3.1-pro-image-preview`. That model does NOT exist and will 404.
+3. `generate.ts` uses `TEXT_MODEL` directly in a single API call. Do NOT add for-loops, fallback chains, or try/catch retry patterns around the model selection.
+4. If Google deprecates a model, **ask the user first** before changing anything. Do NOT guess replacement model names.
+
+### What Happened (March 9, 2026 Incident)
+
+Google deprecated `gemini-3-pro-preview` (text only). A Claude session "helpfully" made these changes without understanding the consequences:
+- Changed `TEXT_MODEL` (string) to `TEXT_MODELS` (array) in `client.ts`
+- Added a for-loop fallback pattern in `generate.ts`
+- Changed `IMAGE_MODEL` to `gemini-3.1-pro-image-preview` (DOES NOT EXIST)
+
+**Result:** The Vercel serverless function crashed on every webhook call, returning empty `""` responses to Stripe. Two paid customers had stuck orders. It took **9 hours** to diagnose and fix across 4 applications.
+
+### Architecture — Understand Before Changing
+
+```
+Stripe Payment → Webhook (route.ts) → Generate Prophecy (generate.ts) → Gemini API (client.ts)
+                                     → Upload to Supabase Storage
+                                     → Update prophecy record to "completed"
+```
+
+The webhook is a **Vercel serverless function** with a 60-second timeout. If the function crashes during module initialization (e.g., bad import, missing export), Stripe gets an empty response and marks it as failed. Stripe retries failed webhooks, but if a "processing" record already exists in Supabase, the retry is skipped (idempotency check).
+
+### DO NOT
+
+- Change model names without explicit user approval
+- Convert single exports to arrays (e.g., `TEXT_MODEL` to `TEXT_MODELS`)
+- Add fallback/retry patterns around model selection (the model either works or it doesn't)
+- Change the structure of `client.ts` exports — `generate.ts` imports them directly
+- Guess model names — verify they exist first
+- Make "improvements" to working webhook code — the webhook processes real payments
+- Change Stripe webhook logic without understanding the full idempotency flow
+- Push to main without confirming the change with the user — this auto-deploys to Vercel
+
+### DO
+
+- Ask before changing any model configuration
+- Test changes locally before pushing (the app auto-deploys on push to main)
+- Keep `client.ts` simple: single string exports, no arrays, no fallback chains
+- If a model is deprecated, tell the user and let them decide the replacement
+- Read this file AND `generate.ts` AND `client.ts` before making AI-related changes
+
+---
+
 ## ⚠️ IP PROTECTION - READ FIRST
 
 **OK to share publicly:**
