@@ -190,16 +190,16 @@ curl -X POST "https://redhorseoracle.com/api/party/game" \
 | **Domain** | GoDaddy (redhorseoracle.com) | Annual | ~$15/year |
 | **Git/CI** | GitHub | Free | Free |
 | **AI Text** | Gemini 3.1 Pro Preview | Pay-as-you-go | ~$0.01/request |
-| **AI Image** | Gemini 3.1 Pro Image Preview | Pay-as-you-go | **$0.134/image** |
+| **AI Image** | Gemini 3 Pro Image Preview | Pay-as-you-go | **$0.134/image** |
 
 ### AI Models (Google Gemini)
 
-> **Note:** `gemini-3-pro-preview` and `gemini-3-pro-image-preview` were deprecated by Google on March 9, 2026. Migrated to 3.1 Pro.
+> **Note:** Only `gemini-3-pro-preview` (text) was deprecated March 9, 2026. The image model `gemini-3-pro-image-preview` still works. There is NO `gemini-3.1-pro-image-preview`.
 
 | Purpose | Model ID | Cost |
 |---------|----------|------|
 | **Text Generation** | `gemini-3.1-pro-preview` | $1.25/1M input, $5.00/1M output |
-| **Image Generation** | `gemini-3.1-pro-image-preview` | $0.134/image (1K/2K), $0.24/image (4K) |
+| **Image Generation** | `gemini-3-pro-image-preview` | $0.134/image (1K/2K), $0.24/image (4K) |
 
 **Package:** `@google/genai` (NOT `@google/generative-ai`)
 **Client:** `src/lib/gemini/client.ts`
@@ -208,7 +208,7 @@ curl -X POST "https://redhorseoracle.com/api/party/game" \
 
 | Component | Cost |
 |-----------|------|
-| Gemini 3.1 Pro Image (1K/2K) | $0.134 |
+| Gemini 3 Pro Image (1K/2K) | $0.134 |
 | Gemini 3.1 Pro Text | ~$0.01 |
 | Stripe (2.9% + $0.30) | $0.56 |
 | **Total Cost** | **$0.71** |
@@ -357,12 +357,12 @@ GA4 is implemented in `src/app/layout.tsx` using raw `<script>` tags in `<head>`
 
 ## AI Image Generation
 
-### Models Used (Gemini 3.1 Pro)
+### Models Used
 
-> **Note:** `gemini-3-pro-preview` and `gemini-3-pro-image-preview` were deprecated March 9, 2026.
+> **Note:** Only `gemini-3-pro-preview` (text) was deprecated March 9, 2026. The image model is NOT deprecated.
 
-- **Text Generation:** `gemini-3.1-pro-preview`
-- **Image Generation:** `gemini-3.1-pro-image-preview`
+- **Text Generation:** `gemini-3.1-pro-preview` (migrated from 3-pro)
+- **Image Generation:** `gemini-3-pro-image-preview` (Nano Banana Pro — still works, no 3.1 version exists)
 
 ### Package
 Using `@google/genai` (NOT `@google/generative-ai`)
@@ -380,7 +380,7 @@ const response = await ai.models.generateContent({
 
 // Image generation
 const response = await ai.models.generateContent({
-  model: 'gemini-3.1-pro-image-preview',
+  model: 'gemini-3-pro-image-preview',
   contents: [imagePrompt],
   config: {
     responseModalities: ['TEXT', 'IMAGE'],
@@ -678,7 +678,7 @@ const birthDate = dobField?.text?.value || dobField?.dropdown?.value || '';
 
 This project's Gemini implementation is modeled after `C:\src\neo-storyteller`:
 - Same `@google/genai` package
-- Same Gemini models (migrated to `gemini-3.1-pro-preview` and `gemini-3.1-pro-image-preview` after March 9, 2026 deprecation)
+- Same Gemini models (`gemini-3.1-pro-preview` for text, `gemini-3-pro-image-preview` for images)
 - Similar API structure for content generation
 
 ---

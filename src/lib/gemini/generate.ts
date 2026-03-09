@@ -81,8 +81,8 @@ export async function generateProphecy(options: GenerateOptions): Promise<Genera
     };
   }
 
-  // Step 2: Generate image using Gemini 3.1 Pro Image
-  console.log('Generating talisman image with Gemini 3.1 Pro Image...');
+  // Step 2: Generate image using Gemini 3 Pro Image (Nano Banana Pro)
+  console.log('Generating talisman image with Gemini 3 Pro Image...');
   const imagePrompt = buildImagePrompt({
     focusMode: options.focusMode,
     mainText: textData.main_text,
