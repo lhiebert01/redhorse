@@ -74,10 +74,9 @@ export async function POST(request: Request) {
         return NextResponse.json({ received: true, skipped: true, reason: 'already_processing' });
       }
 
-      // Status is 'failed' - we could retry, but for now just log and skip
-      // to avoid double-charging complexity
-      console.log(`Prophecy previously failed for session ${session.id}, skipping duplicate`);
-      return NextResponse.json({ received: true, skipped: true, reason: 'previously_failed' });
+      // Status is 'failed' - delete the failed record and retry generation
+      console.log(`Prophecy previously failed for session ${session.id}, retrying...`);
+      await supabase.from('prophecies').delete().eq('id', existingProphecy.id);
     }
 
     // Calculate zodiac
