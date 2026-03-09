@@ -7,6 +7,6 @@ if (!process.env.GEMINI_API_KEY) {
 // Initialize Gemini AI client
 export const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-// Model constants - using Gemini 3 Pro (3.1 returns 404 NOT_FOUND)
-export const TEXT_MODEL = 'gemini-3-pro-preview';
-export const IMAGE_MODEL = 'gemini-3-pro-image-preview';
+// Model constants - migrated to 3.1 after gemini-3-pro deprecation (March 9, 2026)
+export const TEXT_MODEL = 'gemini-3.1-pro-preview';
+export const IMAGE_MODEL = 'gemini-3.1-pro-image-preview';

@@ -36,9 +36,9 @@ export async function generateProphecy(options: GenerateOptions): Promise<Genera
       accurateMainText = 'DESTINY AWAITS';
   }
 
-  // Step 1: Generate text content using Gemini 3 Pro
+  // Step 1: Generate text content using Gemini 3.1 Pro
   // AI will generate the full_reading (personalized prophecy), but main_text uses our accurate data
-  console.log('Generating text content with Gemini 3 Pro...');
+  console.log('Generating text content with Gemini 3.1 Pro...');
   const textPrompt = buildTextPrompt(options);
 
   const textResponse = await ai.models.generateContent({
@@ -81,8 +81,8 @@ export async function generateProphecy(options: GenerateOptions): Promise<Genera
     };
   }
 
-  // Step 2: Generate image using Gemini 3 Pro Image
-  console.log('Generating talisman image with Gemini 3 Pro Image...');
+  // Step 2: Generate image using Gemini 3.1 Pro Image
+  console.log('Generating talisman image with Gemini 3.1 Pro Image...');
   const imagePrompt = buildImagePrompt({
     focusMode: options.focusMode,
     mainText: textData.main_text,
@@ -93,11 +93,9 @@ export async function generateProphecy(options: GenerateOptions): Promise<Genera
 
   const imageResponse = await ai.models.generateContent({
     model: IMAGE_MODEL,
-    contents: {
-      parts: [{ text: imagePrompt }],
-    },
+    contents: [imagePrompt],
     config: {
-      responseModalities: ['image', 'text'],
+      responseModalities: ['TEXT', 'IMAGE'],
       imageConfig: {
         aspectRatio: '9:16',
         imageSize: '2K',
@@ -105,10 +103,10 @@ export async function generateProphecy(options: GenerateOptions): Promise<Genera
     },
   });
 
-  // Extract image from response
+  // Extract image from response — skip thinking-mode interim images
   let imageData: string | null = null;
   for (const part of imageResponse.candidates?.[0]?.content?.parts || []) {
-    if (part.inlineData?.data) {
+    if (part.inlineData?.data && !part.thought) {
       imageData = part.inlineData.data;
       break;
     }
