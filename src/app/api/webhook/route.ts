@@ -1,5 +1,6 @@
 import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
+import { waitUntil } from '@vercel/functions';
 import { verifyWebhookSignature, extractCustomFields } from '@/lib/stripe/webhooks';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { generateProphecy } from '@/lib/gemini/generate';
@@ -9,11 +10,11 @@ import { validateFocusMode } from '@/lib/utils/validation';
 import { withRetry } from '@/lib/utils/retry';
 import { FocusMode } from '@/constants/modes';
 import { EDITION_CONFIG } from '@/constants/editions';
-import { ZodiacAnimal } from '@/constants/zodiac-data';
+import { ZodiacAnimal, ZodiacElement } from '@/constants/zodiac-data';
 import { PassType, generatePartyCode, PASS_CONFIGS } from '@/types/party';
 
 export const runtime = 'nodejs';
-export const maxDuration = 60; // Allow up to 60 seconds for AI generation
+export const maxDuration = 60; // Allow up to 60 seconds for background AI generation
 
 export async function POST(request: Request) {
   const body = await request.text();
@@ -42,7 +43,7 @@ export async function POST(request: Request) {
   const session = event.data.object;
   const supabase = createAdminClient();
 
-  // Check if this is a party pass purchase
+  // Check if this is a party pass purchase (fast path — no AI needed)
   if (session.metadata?.product_type === 'party_pass') {
     return handlePartyPassPurchase(session, supabase);
   }
@@ -84,7 +85,6 @@ export async function POST(request: Request) {
     const fireHorseReading = getFireHorseReading(zodiac.animal, zodiac.element);
 
     // Get edition number for this zodiac sign + mode combination (count existing + 1)
-    // Each zodiac + mode combo has 888 editions (e.g., 888 Metal Rat Wealth, 888 Metal Rat Power, etc.)
     const { count: existingCount } = await supabase
       .from('prophecies')
       .select('*', { count: 'exact', head: true })
@@ -127,8 +127,60 @@ export async function POST(request: Request) {
       throw insertError;
     }
 
-    console.log(`Created prophecy record: ${prophecy.id}`);
+    console.log(`Created prophecy record: ${prophecy.id} — returning 200 to Stripe, generating in background`);
 
+    // RETURN 200 IMMEDIATELY — do heavy AI work in background via waitUntil()
+    // The reveal page polls for status changes (real-time + 3s fallback)
+    waitUntil(
+      generateAndSaveProphecy(
+        prophecy.id,
+        birthDate,
+        focusMode,
+        zodiac,
+        fireHorseReading,
+        editionNumber,
+        totalEditions,
+        session.id,
+      )
+    );
+
+    return NextResponse.json({ received: true, prophecy_id: prophecy.id });
+
+  } catch (error) {
+    console.error('Webhook setup failed:', error);
+
+    // Try to update status to failed
+    try {
+      await supabase
+        .from('prophecies')
+        .update({
+          status: 'failed',
+          error_message: error instanceof Error ? error.message : 'Unknown error',
+        })
+        .eq('stripe_session_id', session.id);
+    } catch (updateErr) {
+      console.error('Failed to update error status:', updateErr);
+    }
+
+    // Still return 200 to Stripe to prevent infinite retries
+    return NextResponse.json({ received: true });
+  }
+}
+
+// Background: AI generation, image processing, uploads, DB update
+async function generateAndSaveProphecy(
+  prophecyId: string,
+  birthDate: string,
+  focusMode: FocusMode,
+  zodiac: { animal: ZodiacAnimal; element: ZodiacElement },
+  fireHorseReading: { relation: string; advice: string },
+  editionNumber: number,
+  totalEditions: number,
+  stripeSessionId: string,
+) {
+  const supabase = createAdminClient();
+
+  try {
     // Generate prophecy content with retry logic
     const result = await withRetry(
       () =>
@@ -152,14 +204,14 @@ export async function POST(request: Request) {
 
     // Convert base64 to buffer
     const rawImageBuffer = Buffer.from(result.imageData, 'base64');
-    const rawImagePath = `${prophecy.id}.png`;
-    const brandedImagePath = `${prophecy.id}-branded.png`;
-    const shareableImagePath = `${prophecy.id}-shareable.png`;
-    const certificateId = prophecy.id.slice(0, 8).toUpperCase();
+    const rawImagePath = `${prophecyId}.png`;
+    const brandedImagePath = `${prophecyId}-branded.png`;
+    const shareableImagePath = `${prophecyId}-shareable.png`;
+    const certificateId = prophecyId.slice(0, 8).toUpperCase();
 
     // Metadata to attach to storage objects for querying
     const imageMetadata = {
-      prophecy_id: prophecy.id,
+      prophecy_id: prophecyId,
       edition_number: String(editionNumber),
       total_editions: String(totalEditions),
       zodiac_sign: zodiac.animal,
@@ -285,13 +337,13 @@ export async function POST(request: Request) {
         status: 'completed',
         completed_at: new Date().toISOString(),
       })
-      .eq('id', prophecy.id);
+      .eq('id', prophecyId);
 
     if (updateError) {
       console.error('Database update error:', updateError);
     }
 
-    console.log(`Prophecy completed successfully: ${prophecy.id}`);
+    console.log(`Prophecy completed successfully: ${prophecyId}`);
 
     // Track paid oracle generation for analytics (non-blocking)
     try {
@@ -323,14 +375,14 @@ export async function POST(request: Request) {
           });
       }
     } catch (analyticsErr) {
-      // Don't fail the webhook for analytics errors
+      // Don't fail for analytics errors
       console.error('Analytics tracking error (non-fatal):', analyticsErr);
     }
 
   } catch (error) {
-    console.error('Prophecy generation failed:', error);
+    console.error(`Background prophecy generation failed for ${prophecyId}:`, error);
 
-    // Try to update status to failed
+    // Update status to failed so the next Stripe retry can pick it up
     try {
       await supabase
         .from('prophecies')
@@ -338,17 +390,14 @@ export async function POST(request: Request) {
           status: 'failed',
           error_message: error instanceof Error ? error.message : 'Unknown error',
         })
-        .eq('stripe_session_id', session.id);
+        .eq('id', prophecyId);
     } catch (updateErr) {
       console.error('Failed to update error status:', updateErr);
     }
   }
-
-  // Always return 200 to Stripe to acknowledge receipt
-  return NextResponse.json({ received: true });
 }
 
-// Handle party pass purchases
+// Handle party pass purchases (fast — no AI needed, no background processing required)
 async function handlePartyPassPurchase(session: any, supabase: any) {
   try {
     const passType = session.metadata.pass_type as PassType;
