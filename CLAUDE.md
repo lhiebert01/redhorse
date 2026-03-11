@@ -35,12 +35,18 @@ Google deprecated `gemini-3-pro-preview` (text only). A Claude session "helpfull
 ### Architecture — Understand Before Changing
 
 ```
-Stripe Payment → Webhook (route.ts) → Generate Prophecy (generate.ts) → Gemini API (client.ts)
-                                     → Upload to Supabase Storage
-                                     → Update prophecy record to "completed"
+Stripe Payment → Webhook (route.ts) → Idempotency check → Create "processing" record
+                                     → Return 200 to Stripe immediately (~1-2s)
+                                     → Background (via waitUntil):
+                                       → Generate Prophecy (generate.ts) → Gemini API (client.ts)
+                                       → Generate branded + shareable images
+                                       → Upload to Supabase Storage
+                                       → Update prophecy record to "completed"
 ```
 
-The webhook is a **Vercel serverless function** with a 60-second timeout. If the function crashes during module initialization (e.g., bad import, missing export), Stripe gets an empty response and marks it as failed. Stripe retries failed webhooks, but if a "processing" record already exists in Supabase, the retry is skipped (idempotency check).
+The webhook uses `waitUntil()` from `@vercel/functions` to return 200 to Stripe immediately after creating the pending record, then continues AI generation in the background. The reveal page handles async completion via Supabase real-time subscriptions + 3-second polling fallback + 15-second minimum loading animation.
+
+The webhook is a **Vercel serverless function** with a 60-second timeout (`maxDuration = 60`). If the function crashes during module initialization (e.g., bad import, missing export), Stripe gets an empty response and marks it as failed. If background generation fails, the record is set to `'failed'` status so Stripe's retry can re-trigger it. Idempotency checks prevent double processing (`already_completed`, `already_processing`, `duplicate_key`).
 
 ### DO NOT
 
@@ -52,6 +58,7 @@ The webhook is a **Vercel serverless function** with a 60-second timeout. If the
 - Make "improvements" to working webhook code — the webhook processes real payments
 - Change Stripe webhook logic without understanding the full idempotency flow
 - Push to main without confirming the change with the user — this auto-deploys to Vercel
+- Do heavy synchronous work before returning 200 to Stripe — use `waitUntil()` for anything slow
 
 ### DO
 
@@ -60,6 +67,16 @@ The webhook is a **Vercel serverless function** with a 60-second timeout. If the
 - Keep `client.ts` simple: single string exports, no arrays, no fallback chains
 - If a model is deprecated, tell the user and let them decide the replacement
 - Read this file AND `generate.ts` AND `client.ts` before making AI-related changes
+- Use `waitUntil()` from `@vercel/functions` for any slow background work in API routes
+- Return 200 to Stripe as fast as possible — all heavy processing goes in `waitUntil()`
+
+### Webhook Timeout Fix (March 11, 2026)
+
+The webhook previously did ALL work synchronously (AI generation + image processing + uploads) before returning 200 to Stripe. Average response time was **12 seconds**, max **22 seconds** — causing a **44% first-attempt failure rate**.
+
+**Fix:** Use `waitUntil()` to return 200 immediately after creating the `'processing'` record, then generate the prophecy in the background. The reveal page already handles async completion via Supabase real-time subscriptions + 3-second polling.
+
+**Key dependency:** `@vercel/functions` package provides `waitUntil()` for Next.js 14. (Next.js 15+ has `after()` from `next/server` which does the same thing.)
 
 ---
 

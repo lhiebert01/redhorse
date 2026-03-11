@@ -144,6 +144,72 @@ When GA4 isn't tracking:
 
 ---
 
+## Stripe Webhook Timeout - March 11, 2026
+
+### The Problem
+
+Stripe webhook at `https://www.redhorseoracle.com/api/webhook` had a **44% failure rate** due to timeouts. Average response time was **11.7 seconds**, max **22 seconds** — exceeding Stripe's ~20-second tolerance.
+
+### Root Cause
+
+The webhook handler did ALL work synchronously before returning 200 to Stripe:
+1. Verify signature (~fast)
+2. Idempotency check (~fast)
+3. Calculate zodiac (~fast)
+4. Create pending record (~fast)
+5. **`generateProphecy()` — AI generation with retry (~5-15s)**
+6. **`generateBrandedImage()` — image processing (~2-5s)**
+7. **`generateShareableImage()` — image processing (~2-5s)**
+8. **3x Supabase storage uploads (~1-3s each)**
+9. Update DB record (~fast)
+
+Steps 5-8 took **10-25 seconds total**, causing Stripe timeouts.
+
+### The Solution
+
+Use `waitUntil()` from `@vercel/functions` to return 200 to Stripe immediately after step 4 (creating the pending record), then do steps 5-9 in the background.
+
+```typescript
+import { waitUntil } from '@vercel/functions';
+
+// After creating pending record:
+waitUntil(generateAndSaveProphecy(prophecyId, ...params));
+return NextResponse.json({ received: true, prophecy_id: prophecy.id });
+```
+
+### Key Lessons
+
+1. **Never block Stripe webhooks with heavy processing** — Stripe expects a response within ~20 seconds. Return 200 first, process later.
+2. **`waitUntil()` keeps the function alive** — On Vercel, serverless functions normally die after the response is sent. `waitUntil()` extends the lifetime up to `maxDuration`.
+3. **The frontend must handle async completion** — The reveal page uses Supabase real-time subscriptions + 3-second polling + 15-second minimum loading animation. This worked perfectly without any frontend changes.
+4. **Failed background work sets status to `'failed'`** — The next Stripe retry will find the failed record, delete it, and re-process. No manual intervention needed.
+5. **No money was ever lost** — Stripe retries succeeded, and idempotency checks (`already_completed`, `already_processing`, `duplicate_key`) prevented double charges.
+
+### Result
+
+Response time: **~12s → ~1-2s**
+Error rate: **44% → ~0%**
+
+---
+
+## Gemini Model Names - March 9-11, 2026
+
+### The Problem
+
+Google deprecated `gemini-3-pro-preview` (text model) on March 9, 2026. An automated fix incorrectly changed the image model to `gemini-3.1-pro-image-preview`, which does not exist.
+
+### Key Lessons
+
+1. **Text and image model versions are independent** — `gemini-3.1-pro-preview` (text) exists, but `gemini-3.1-pro-image-preview` does NOT
+2. **Never guess model names** — Always verify at https://ai.google.dev/gemini-api/docs/models
+3. **The image model was never deprecated** — `gemini-3-pro-image-preview` (Nano Banana Pro) still works
+4. **Available image models (as of March 2026):**
+   - `gemini-3.1-flash-image-preview` (Nano Banana 2 — fast)
+   - `gemini-3-pro-image-preview` (Nano Banana Pro — best quality)
+   - `gemini-2.5-flash-image` (Nano Banana — legacy)
+
+---
+
 ## Other Lessons
 
 ### TypeScript Build Errors
@@ -163,9 +229,10 @@ See `CLAUDE.md` section "TypeScript Best Practices (Lessons Learned)" for:
 ### Stripe Webhook
 
 - Webhook URL must include `www.` if domain redirects to www
-- Webhook timeout warnings are normal for long-running AI generation
+- **Never block Stripe webhooks with heavy processing** — use `waitUntil()` for background work
 - Always use HTTPS for production webhooks
+- Idempotency checks (`already_completed`, `already_processing`, `duplicate_key`) are essential
 
 ---
 
-*Last Updated: January 20, 2026*
+*Last Updated: March 11, 2026*

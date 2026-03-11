@@ -1,5 +1,97 @@
 # Red Horse Oracle - Release Notes
 
+## Version 1.7.0 - Webhook Timeout Fix & Gemini Model Update (March 11, 2026)
+
+**Status:** PRODUCTION LIVE
+**Release Date:** March 11, 2026
+
+---
+
+### Highlights
+
+Fixed the **44% Stripe webhook failure rate** caused by synchronous AI generation blocking the HTTP response. Also updated the text model from `gemini-3-flash-preview` to `gemini-3.1-pro-preview` for better quality.
+
+---
+
+### Webhook Timeout Fix
+
+**Problem:** The Stripe webhook handler did all work synchronously — AI generation (5-15s), image processing (4-10s), and storage uploads (3-9s) — before returning 200. Average response time was **11.7 seconds**, max **22 seconds**, exceeding Stripe's ~20-second tolerance. This caused a **44% first-attempt failure rate** on webhook deliveries. No money was lost (Stripe retries succeeded, and idempotency checks prevented double processing), but half of first attempts failed.
+
+**Fix:** Use `waitUntil()` from `@vercel/functions` to return 200 to Stripe immediately (~1-2s) after creating the pending DB record, then continue AI generation in the background.
+
+**Before:**
+```
+Stripe → Verify → Idempotency → Zodiac → Insert record → AI generation (5-15s)
+       → Image processing (4-10s) → Upload (3-9s) → Return 200 (10-25s total)
+```
+
+**After:**
+```
+Stripe → Verify → Idempotency → Zodiac → Insert record → Return 200 (~1-2s)
+                                          └→ Background: AI → Images → Upload → Update DB
+```
+
+**Why this is safe:**
+- The reveal page already handles async completion via Supabase real-time subscriptions + 3-second polling fallback
+- The reveal page has a 15-second minimum loading animation (mystical UX), giving the background plenty of time
+- Failed background generation sets status to `'failed'`, so Stripe's retry can re-trigger it
+- All idempotency checks preserved: `already_completed`, `already_processing`, `duplicate_key`
+
+**Expected result:** Response time ~12s → ~1-2s, error rate 44% → ~0%
+
+---
+
+### Gemini Model Update
+
+Updated `TEXT_MODEL` from `gemini-3-flash-preview` to `gemini-3.1-pro-preview` for improved text generation quality. The image model `gemini-3-pro-image-preview` remains unchanged (still works, was never deprecated).
+
+**Important lesson:** Only the TEXT model `gemini-3-pro-preview` was deprecated on March 9, 2026. The IMAGE model `gemini-3-pro-image-preview` (Nano Banana Pro) still works. There is NO `gemini-3.1-pro-image-preview` — that model does not exist and returns 404.
+
+---
+
+### Modified Files
+
+| File | Changes |
+|------|---------|
+| `src/app/api/webhook/route.ts` | Async webhook: return 200 immediately, `waitUntil()` for background generation |
+| `src/lib/gemini/client.ts` | `TEXT_MODEL` updated to `gemini-3.1-pro-preview` |
+| `src/lib/gemini/generate.ts` | Image API format: array contents, uppercase modalities, skip thinking images |
+| `CLAUDE.md` | Updated architecture diagram, added webhook timeout fix docs, model notes |
+| `README.md` | Updated tech stack, webhook description |
+| `docs/RELEASE-NOTES.md` | This release |
+| `docs/LESSONS-LEARNED.md` | Added webhook timeout and Gemini model lessons |
+| `package.json` | Added `@vercel/functions` dependency |
+
+---
+
+### New Dependencies
+
+| Package | Version | Purpose |
+|---------|---------|---------|
+| `@vercel/functions` | ^1.x | `waitUntil()` for background processing after HTTP response |
+
+---
+
+### Correct Model Configuration (as of March 11, 2026)
+
+```typescript
+// src/lib/gemini/client.ts
+export const TEXT_MODEL = 'gemini-3.1-pro-preview';      // Upgraded from gemini-3-flash-preview
+export const IMAGE_MODEL = 'gemini-3-pro-image-preview';  // NOT deprecated, still works
+```
+
+---
+
+### Lessons Learned
+
+1. **Never block Stripe webhooks with heavy processing** — Return 200 immediately, do slow work in background
+2. **Use `waitUntil()` from `@vercel/functions`** for background work in Next.js 14 Vercel serverless functions
+3. **Google's text and image model versions are independent** — `gemini-3.1-pro-preview` exists but `gemini-3.1-pro-image-preview` does NOT
+4. **Always verify model names exist** before changing them — check https://ai.google.dev/gemini-api/docs/models
+5. **The reveal page's async architecture saved us** — real-time subscriptions + polling meant no frontend changes needed
+
+---
+
 ## Version 1.6.0 - Gemini Model Migration & Webhook Fix (March 9, 2026)
 
 **Status:** PRODUCTION LIVE
@@ -680,6 +772,7 @@ This release marks the **production launch** of Red Horse Oracle, the world's fi
 
 | Version | Date | Description |
 |---------|------|-------------|
+| 1.7.0 | Mar 11, 2026 | Webhook timeout fix (44% → ~0%), Gemini 3.1 Pro text model, `waitUntil()` |
 | 1.6.0 | Mar 9, 2026 | Gemini model migration, webhook crash fix, CLAUDE.md safety rules |
 | 1.5.0 | Jan 20, 2026 | Google Analytics 4, Admin enhancements, date validation |
 | 1.4.0 | Jan 19, 2026 | Celebrity quotes, viral share content, quote descriptions |
