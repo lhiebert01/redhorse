@@ -10,4 +10,4 @@ export const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 // Model constants - migrated after gemini-3-pro-preview text deprecation (March 9, 2026)
 // Only text model was deprecated — image model is still gemini-3-pro.
 export const TEXT_MODEL = 'gemini-3-flash-preview';
-export const IMAGE_MODEL = 'gemini-3-pro-image-preview';
+export const IMAGE_MODEL = 'gemini-3-pro-image';

@@ -53,8 +53,8 @@ OUTPUT_DIR = Path(__file__).parent.parent / 'public' / 'assets' / 'zodiac-badges
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Model for image generation - same as TypeScript code uses
-# gemini-3-pro-image-preview is the high quality model
-IMAGE_MODEL = 'gemini-3-pro-image-preview'
+# gemini-3-pro-image is the high quality model
+IMAGE_MODEL = 'gemini-3-pro-image'
 
 # ============================================================================
 # TEST DATA - Just 3 images to test
