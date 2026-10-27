@@ -36,6 +36,9 @@ CREATE POLICY "Allow public read access to questions"
   ON party_questions FOR SELECT
   USING (true);
 
+-- Explicit API grants (new tables get none from Oct 30, 2026); matches production.
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.party_questions TO anon, authenticated, service_role;
+
 -- Clear existing questions (if re-running)
 TRUNCATE TABLE party_questions;
 

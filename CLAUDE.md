@@ -3823,3 +3823,5 @@ Access: `/superadmin/vip` (PIN: 142857)
 ---
 
 *火马年 2026 - Year of the Fire Horse*
+
+Supabase (from Oct 30, 2026): every CREATE TABLE/VIEW in public must include, in the same migration, explicit GRANTs for the API roles it needs, ENABLE ROW LEVEL SECURITY, and its policies; serial sequences need GRANT USAGE, SELECT; RPC functions need GRANT EXECUTE. New objects get no API access by default. Run npm run check:grants before committing. This Supabase project (red-horse-oracle, ykptxslgxlsbvpbeujfu) is shared with joy-of-chemistry and quiz-game; its grants backfill lives here.
