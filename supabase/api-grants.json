@@ -1,0 +1,24 @@
+{
+  "_note": "Least privilege for the API roles (Nov 2, 2026). Shared by redhorse, quiz-game and joy-of-chemistry. Every entry is a call the browser makes with the public key; server routes use the service role. party_games UPDATE, party_players UPDATE, party_answers DELETE and party_scores INSERT are attempted by the party host page but no policy allows them, so row-level security blocks them; the grants are kept so the app behaves exactly as before. prophecies SELECT serves /reveal, /superadmin and /api/prophecy/[id] (public-key client).",
+  "project": "ykptxslgxlsbvpbeujfu",
+  "allowed": {
+    "anon": {
+      "party_passes": ["SELECT"],
+      "party_games": ["SELECT", "UPDATE"],
+      "party_answers": ["DELETE", "SELECT"],
+      "party_players": ["SELECT", "UPDATE"],
+      "party_scores": ["INSERT", "SELECT"],
+      "prophecies": ["SELECT"]
+    },
+    "authenticated": {
+      "party_passes": ["SELECT"],
+      "party_games": ["SELECT", "UPDATE"],
+      "party_answers": ["DELETE", "SELECT"],
+      "party_players": ["SELECT", "UPDATE"],
+      "party_scores": ["INSERT", "SELECT"],
+      "prophecies": ["SELECT"],
+      "chemistry_profiles": ["SELECT", "UPDATE"],
+      "chemistry_usage": ["INSERT", "SELECT", "UPDATE"]
+    }
+  }
+}
