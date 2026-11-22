@@ -3,9 +3,6 @@
   "project": "ykptxslgxlsbvpbeujfu",
   "allowed": {
     "anon": {
-      "party_passes": [
-        "SELECT"
-      ],
       "party_games": [
         "SELECT",
         "UPDATE"
@@ -20,16 +17,10 @@
       ],
       "party_scores": [
         "INSERT",
-        "SELECT"
-      ],
-      "prophecies": [
         "SELECT"
       ]
     },
     "authenticated": {
-      "party_passes": [
-        "SELECT"
-      ],
       "party_games": [
         "SELECT",
         "UPDATE"
@@ -44,9 +35,6 @@
       ],
       "party_scores": [
         "INSERT",
-        "SELECT"
-      ],
-      "prophecies": [
         "SELECT"
       ],
       "chemistry_profiles": [
